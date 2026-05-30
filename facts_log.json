@@ -1,19 +1,22 @@
 {
     "used_titles": [
         "Honey lasts FOREVER?!",
-        "Honey Never Spoils"
+        "Honey Never Spoils",
+        "வேர்க்கடலை வெடிமருந்தா?!",
+        "Peanuts in Dynamite"
     ],
     "used_keywords": [
         "Tamil Facts",
         "Did You Know"
     ],
     "used_categories": {
-        "🎲 Random Amazing Facts": 1
+        "🎲 Random Amazing Facts": 2
     },
     "last_7_days_stories": [
-        "Honey lasts FOREVER?!"
+        "Honey lasts FOREVER?!",
+        "வேர்க்கடலை வெடிமருந்தா?!"
     ],
-    "total_uploaded": 1,
+    "total_uploaded": 2,
     "last_upload": "2026-05-30",
     "history": [
         {
@@ -28,6 +31,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGrMQFD1cSrd6pinVLo2jJqCjoAO-vxsq8X3j9wD0CfAB2rWt3J7ei6p-ifQOPw1InkvwXxqR63MpXffxFCqZ9_dhblChUQH94neLZY2NoGeJbr6Pwz4z1-C3X2p3PbNDng6T9mig=="
+        },
+        {
+            "date": "2026-05-30",
+            "title": "வேர்க்கடலை வெடிமருந்தா?!",
+            "news_headline": "Peanuts in Dynamite",
+            "category": "🎲 Random Amazing Facts",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFRq_ltIs8V-cCp2XrOGJbIw0rHlLeMV86rbZmxeKAG9l_QWveQlAjdLKcbgF-5Mq9W2JRBDd8awn5XZqXV6hCbH6Ffr5rxmjJcAOtPjg8SmJ8e5DW8EFSfSnkD5rNp2jczZosKJ03Q4XPiPu44Jb1bVCzIzKISdfnjkQ=="
         }
     ]
 }
