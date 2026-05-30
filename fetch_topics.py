@@ -21,18 +21,18 @@ def fetch_facts_for_category(category):
     client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = f"""
-    Search the web for 5 highly engaging, trending, and useful tutorial topics about how to use popular apps or websites in the category: "{category}".
-    Each topic must focus on a specific, popular app or website (e.g., "How to use Blinkit", "How to use CapCut for transitions", "How to book train tickets on IRCTC website", etc.) that is highly relevant to Indian/global viewers and suitable for a 45-55 second educational Tamil YouTube Short tutorial.
+    Search the web for 5 highly engaging, amazing, and true facts/stories related to the category: "{category}".
+    These facts must be fascinating, relatively unknown, and highly suitable for a 45-55 second faceless Tamil infotainment YouTube Short.
     
-    CRITICAL REQUIREMENT: For each tutorial topic, you MUST provide the real, active official landing/login URL of that app or website (e.g., https://blinkit.com, https://www.capcut.com, or https://www.irctc.co.in) to use as the source. We will capture a live screenshot of this website for the video, so the URL MUST be active, direct, and precise!
+    CRITICAL REQUIREMENT: For each fact, you MUST search for and provide a real, highly reputable source URL (like Wikipedia, NASA, Encyclopaedia Britannica, National Geographic, Nature, BBC, etc.) that contains the fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
-    Return ONLY a JSON list of 5 tutorial topics matching this schema:
+    Return ONLY a JSON list of 5 facts matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the tutorial (e.g. How to use Blinkit)",
-        "description": "A step-by-step summary in English of how to use this app/website (login, search, select, checkout/complete), optimized for a quick 45-55s educational guide.",
-        "source_url": "Direct official landing/login URL of the app/website (e.g. https://blinkit.com)",
-        "source_name": "Name of the app/website (e.g. Blinkit, CapCut, IRCTC)",
+        "title": "Short descriptive English title of the fact (e.g. Moon Dust Smell)",
+        "description": "A rich, detailed 2-3 sentence explanation of the fact in English, containing all the key scientific or historical data points.",
+        "source_url": "Direct URL to Wikipedia, NASA, NatGeo, or official source documenting this specific fact",
+        "source_name": "Name of the source (e.g. Wikipedia, BBC, NASA)",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "category": "{category}"
       }}

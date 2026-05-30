@@ -43,46 +43,46 @@ def format_description(ai_description, script, hashtags, slot="Slot A", source_u
     template_idx = desc_seed % 3
 
     templates = [
-        f"""உங்களுக்கு புதிய trending apps & websites-ஐ பயன்படுத்த தெரியவில்லையா? 💡 எளிய தமிழில் கற்றுக்கொள்ள சப்ஸ்கிரைப் பண்ணுங்க!
+        f"""உங்களுக்கு தெரியுமா? 💡 சுவாரசியமான அன்றாட உண்மைகளை தமிழில் தெரிந்து கொள்ள சப்ஸ்கிரைப் பண்ணுங்க!
 🚀 JOIN TELEGRAM GROUP → Channel Page-ல Link இருக்கு!
 ━━━━━━━━━━━━━━━━━━━━━━
-📲 {clean_summary}
+💡 {clean_summary}
 ━━━━━━━━━━━━━━━━━━━━━━
 {source_str}━━━━━━━━━━━━━━━━━━━━━━
-Daily App Tutorials & Tech Tips:
-• புதிய மற்றும் பயனுள்ள செயலிகள் 📦
-• வீடியோ எடிட்டிங் டிப்ஸ் 🎬
-• பயனுள்ள அரசு இணையதளங்கள் 🌐
+Daily Informative Facts:
+• அறிவியல் உண்மைகள் 🧪
+• விசித்திரமான தகவல்கள் 🌍
+• உடல் நலம் & விண்வெளி 🧠
 
 Join our community!
-💬 Simple Tips by VJ-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
+💬 VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
 
 ⚠️ DISCLOSURE: This video uses AI-assisted voice cloning (vj.wav) and visual generation tools. Topic selection, research, editing, and analysis are managed by VJ.
 
 {hashtag_str}
-#SimpleTipsByVJ #AppTutorials #TamilTech #DidYouKnow #facts #Shorts""",
+#தெரியுமா #TamilFacts #VJVideos #GeneralKnowledge #DidYouKnow #facts #Shorts""",
 
         f"""⚡ {clean_summary}
 {source_str}
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-📬 புதிய செயலிகள் மற்றும் மொபைல் டிப்ஸ்களை எளிய தமிழில் தினமும் பார்க்க சப்ஸ்கிரைப் பண்ணுங்க:
+📬 சுவாரசியமான வீடியோக்களை தினமும் பார்க்க சப்ஸ்கிரைப் பண்ணுங்க:
 → Telegram Group-ல சேர channel cover-ல இருக்கற link-ஐ கிளிக் பண்ணுங்க!
 
 ⚠️ DISCLOSURE: AI voice cloning and generation tools are used in production. Editorial control, final adjustments, and scripting by VJ.
 
 {hashtag_str}
-#TamilTechTips #AppGuide #SimpleTipsByVJ #trendingapps""",
+#தமிழ்உண்மைகள் #AruvomAriviyal #SimpleTipsByVJ #didyouknowfacts""",
 
-        f"""இன்னைக்கு ஒரு பயனுள்ள செயலி பத்தி பார்க்கலாம்! 👇 {clean_summary}
+        f"""இன்னைக்கு ஒரு சுவாரசியமான விஷயம் பார்க்கலாம்! 👇 {clean_summary}
 {source_str}
 ━━━━━━━━━━━━━━━━━━━━━━
-🧠 தினசரி பயனுள்ள மொபைல் & வெப்சைட் டிப்ஸ்களை பெற VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
+🧠 தினசரி அறிவு சார்ந்த உண்மைகளை பெற VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
 📲 Telegram group link profile home page-ல இருக்கு!
 
 ⚠️ DISCLOSURE: AI synthetic voiceover and generative art are utilized. Video production and direction curated by VJ.
 
 {hashtag_str}
-#techintamil #simplehacks #tutorialintamil #appguide #websiteguide"""
+#factsintamil #gk #amazingfacts #sciencefacts #historyfacts"""
     ]
 
     return templates[template_idx]

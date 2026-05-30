@@ -14,95 +14,94 @@ def get_slot_info():
     hour = ist_now.hour
     
     daily_categories = {
-        "Mon": "📦 Delivery & Shopping Apps",            # Blinkit, Zepto, Zomato, Swiggy
-        "Tue": "🎬 Photo & Video Editors",             # CapCut, VN Editor, Canva
-        "Wed": "💳 FinTech & Payment Apps",             # GPay, PhonePe, Paytm, CRED
-        "Thu": "✈️ Travel & Booking Apps",              # IRCTC, MakeMyTrip, Uber, Ola
-        "Fri": "🤖 AI & Productivity Tools",            # ChatGPT, Gemini, Notion
-        "Sat": "🌐 Government & Utility Websites",      # EPFO portal, Passport Seva, Aadhaar portal
-        "Sun": "📱 Social Media & Tech Hacks"           # WhatsApp, Telegram, Instagram
+        "Mon": "🧪 Science & Space",      # Black holes, DNA, quantum physics
+        "Tue": "🏛️ History & Culture",   # Ancient Tamil history, world wonders
+        "Wed": "💊 Health & Body",        # Why we yawn, brain facts, human body
+        "Thu": "🌍 World & Geography",   # Oceans, strange countries, climate
+        "Fri": "💻 Technology & AI",      # Internet, AI, futuristic tech
+        "Sat": "🧠 Psychology & Mind",    # Brain tricks, illusions, memory
+        "Sun": "🎲 Random Amazing Facts"   # Mind-blowing miscellaneous facts
     }
     
     if hour < 12:
         slot = "Slot A (Morning)"
-        category = daily_categories.get(day_name, "📦 Delivery & Shopping Apps")
+        category = daily_categories.get(day_name, "🎲 Random Amazing Facts")
     else:
         slot = "Slot B (Evening)"
         # Alternate category for evening slots to keep audience engaged
         evening_categories = {
-            "Mon": "📱 Social Media & Tech Hacks",
-            "Tue": "📦 Delivery & Shopping Apps",
-            "Wed": "🎬 Photo & Video Editors",
-            "Thu": "💳 FinTech & Payment Apps",
-            "Fri": "✈️ Travel & Booking Apps",
-            "Sat": "🤖 AI & Productivity Tools",
-            "Sun": "🌐 Government & Utility Websites"
+            "Mon": "🎲 Random Amazing Facts",
+            "Tue": "🧪 Science & Space",
+            "Wed": "🏛️ History & Culture",
+            "Thu": "💊 Health & Body",
+            "Fri": "🌍 World & Geography",
+            "Sat": "💻 Technology & AI",
+            "Sun": "🧠 Psychology & Mind"
         }
-        category = evening_categories.get(day_name, "📦 Delivery & Shopping Apps")
+        category = evening_categories.get(day_name, "🎲 Random Amazing Facts")
         
     return day_name, slot, category
 
 SERIES_MAP = {
-    "Slot A": {"name": "Simple Tips by VJ", "tagline": "How to Use Trending Apps & Websites!"},
-    "Slot B": {"name": "Simple Tips by VJ", "tagline": "Daily Tech Tips & Digital Hacks!"},
+    "Slot A": {"name": "Simple Tips by VJ", "tagline": "உங்களுக்கு தெரியுமா? Amazing Daily Facts!"},
+    "Slot B": {"name": "Simple Tips by VJ", "tagline": "ஆச்சரியமான தகவல்கள்! Mind-Blowing Facts!"},
 }
 
 def get_series_identity(slot):
     for key, val in SERIES_MAP.items():
         if key in slot:
             return val
-    return {"name": "Simple Tips by VJ", "tagline": "How to Use Trending Apps & Websites!"}
+    return {"name": "Simple Tips by VJ", "tagline": "உங்களுக்கு தெரியுமா? Amazing Daily Facts!"}
 
 def get_category_prompt_enhancement(category, slot):
     """
-    Returns specific instructions and formatting for the given Tamil tutorial category.
+    Returns specific instructions and formatting for the given Tamil fact category.
     """
-    base_instructions = "FOCUS: High engagement, helpful digital tutorials. The hook must immediately address a common user goal or problem. Keep the tone friendly, helpful, and highly conversational (Tanglish)."
+    base_instructions = "FOCUS: High engagement, curiosity-inducing facts. The hook must immediately grab the Tamil viewer's attention. Keep the tone friendly and conversational (Tanglish)."
     
     enhancements = {
-        "📦 Delivery & Shopping Apps": f"""
+        "🧪 Science & Space": f"""
             {base_instructions}
-            CATEGORY: Delivery & Shopping Apps (e.g. Blinkit, Zepto, Zomato, Swiggy)
-            GOAL: Teach how to login, find products/discounts, and place a fast delivery order.
-            HOOK TEMPLATE (Tamil): "உங்களுக்கு Blinkit-ல 10 minutes-ல grocery order பண்ணணுமா? அப்போ இந்த video-வை பாருங்க!..."
+            CATEGORY: Science & Space
+            GOAL: Explain a mind-blowing science or space fact in simple, engaging Tanglish. E.g., black holes, gravity anomalies, or DNA secrets.
+            HOOK TEMPLATE (Tamil): "உங்களுக்கு தெரியுமா? இந்த ஒரு விஷயம் gravity-யையே cheat பண்ணும்! [Topic] பத்தி இந்த shocking fact..."
         """,
-        "🎬 Photo & Video Editors": f"""
+        "🏛️ History & Culture": f"""
             {base_instructions}
-            CATEGORY: Photo & Video Editors (e.g. CapCut, VN Editor, Canva)
-            GOAL: Explain step-by-step how to login, import video, apply a trending effect/transition, and export it.
-            HOOK TEMPLATE (Tamil): "CapCut-ல trending video transitions edit பண்ணுறது இவ்வளவு easy-ஆ? வாங்க பார்க்கலாம்!..."
+            CATEGORY: History & Culture
+            GOAL: Share an intriguing fact about ancient Tamil history, lost kingdoms, or world monuments with high historical significance.
+            HOOK TEMPLATE (Tamil): "நம்ம தமிழ் வரலாற்றிலேயே யாருக்கும் தெரியாத ஒரு பெரிய ரகசியம்... [Topic] பத்தி உங்களுக்கு தெரியுமா?"
         """,
-        "💳 FinTech & Payment Apps": f"""
+        "💊 Health & Body": f"""
             {base_instructions}
-            CATEGORY: FinTech & Payment Apps (e.g. GPay, PhonePe, Paytm, CRED)
-            GOAL: Guide users on setting up accounts, linking banks, scanning QR codes safely, or paying utility bills.
-            HOOK TEMPLATE (Tamil): "GPay-ல bank account link பண்ணும்போது error வருதா? இந்த quick solution-ஐ பாருங்க!..."
+            CATEGORY: Health & Body
+            GOAL: Share a fascinating biology or health hack/fact. Why we yawn, how our brain works under stress, or a mysterious body response.
+            HOOK TEMPLATE (Tamil): "நம்ம உடம்புல நடக்குற இந்த ஒரு விஷயம், doctors-க்கே ஒரு பெரிய mystery-ஆ இருக்கு! [Topic] பத்தி உங்களுக்கு தெரியுமா?"
         """,
-        "✈️ Travel & Booking Apps": f"""
+        "🌍 World & Geography": f"""
             {base_instructions}
-            CATEGORY: Travel & Booking Apps (e.g. IRCTC, Uber, Ola, MakeMyTrip)
-            GOAL: Teach how to register, login, enter destinations, pick seats/rides, and book tickets.
-            HOOK TEMPLATE (Tamil): "IRCTC website-ல tatkal ticket phone-லேயே book பண்ணுறது எப்படின்னு தெரியுமா?!..."
+            CATEGORY: World & Geography
+            GOAL: Focus on mysterious locations, bizarre islands, geographical wonders, or climate secrets around the globe.
+            HOOK TEMPLATE (Tamil): "உலகத்திலேயே இப்படி ஒரு இடம் இருக்குனு உங்களுக்கு தெரியுமா? இங்க நடக்குறது எல்லாமே magic மாதிரி..."
         """,
-        "🤖 AI & Productivity Tools": f"""
+        "💻 Technology & AI": f"""
             {base_instructions}
-            CATEGORY: AI & Productivity Tools (e.g. ChatGPT, Gemini, Notion)
-            GOAL: Guide the audience through prompt engineering, starting a chat, using templates, and automating daily work.
-            HOOK TEMPLATE (Tamil): "ChatGPT-யை வச்சு உங்களோட daily office work-ஐ 10x speed-ஆ மாத்தலாம்! எப்படின்னு பாருங்க!..."
+            CATEGORY: Technology & AI
+            GOAL: Present futuristic tech, how the internet works in deep oceans, AI breakthroughs, or legendary inventions that changed the world.
+            HOOK TEMPLATE (Tamil): "இனிமேல் நம்ம mobile-ல screen-ஏ தேவைப்படாது! [Topic] பத்தி ஒரு mind-blowing tech update..."
         """,
-        "🌐 Government & Utility Websites": f"""
+        "🧠 Psychology & Mind": f"""
             {base_instructions}
-            CATEGORY: Government & Utility Websites (e.g. EPFO portal, Passport Seva, Aadhaar portal)
-            GOAL: Provide clear guidance on accessing services, registering, logging in via OTP, and downloading documents.
-            HOOK TEMPLATE (Tamil): "உங்களோட Aadhaar card-ல address change பண்ணணுமா? இந்த simple website-ஐ பாருங்க!..."
+            CATEGORY: Psychology & Mind
+            GOAL: Share psychology facts, cognitive biases, memory tricks, or visual illusion explanations.
+            HOOK TEMPLATE (Tamil): "நம்ம brain நம்மளையே எப்படி ஏமாத்துதுனு உங்களுக்கு தெரியுமா? இந்த psychology trick-ஐ பாருங்க..."
         """,
-        "📱 Social Media & Tech Hacks": f"""
+        "🎲 Random Amazing Facts": f"""
             {base_instructions}
-            CATEGORY: Social Media & Tech Hacks (e.g. WhatsApp, Telegram, Instagram)
-            GOAL: Teach hidden features, custom settings, registration/login, privacy configurations, or group setups.
-            HOOK TEMPLATE (Tamil): "WhatsApp-ல யாருக்கும் தெரியாத 3 secret settings! உடனே try பண்ணி பாருங்க!..."
+            CATEGORY: Random Amazing Facts
+            GOAL: Highlight an incredibly bizarre, highly viral miscellaneous fact from anywhere in the world.
+            HOOK TEMPLATE (Tamil): "உலகத்திலேயே ரொம்ப விசித்திரமான ஒரு விஷயம்... இத கேட்டா நீங்க கண்டிப்பா நம்ப மாட்டீங்க!"
         """
     }
     
-    return enhancements.get(category, enhancements.get("📦 Delivery & Shopping Apps"))
-
+    return enhancements.get(category, enhancements.get("🎲 Random Amazing Facts"))
