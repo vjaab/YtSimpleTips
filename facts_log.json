@@ -9,24 +9,28 @@
         "Octopus-க்கு எதுக்கு 3 Hearts?",
         "Octopus Has Three Hearts",
         "Giraffes-க்கு lightning-ஆ?!",
-        "Giraffes and Lightning"
+        "Giraffes and Lightning",
+        "Mobile Video Editing சூப்பர் ஈஸி!",
+        "How to Use CapCut for Beginners"
     ],
     "used_keywords": [
         "Tamil Facts",
         "Did You Know"
     ],
     "used_categories": {
-        "🎲 Random Amazing Facts": 5
+        "🎲 Random Amazing Facts": 5,
+        "📱 Social Media & Tech Hacks": 1
     },
     "last_7_days_stories": [
         "Honey lasts FOREVER?!",
         "வேர்க்கடலை வெடிமருந்தா?!",
         "Owl Nest-ல Snake?!",
         "Octopus-க்கு எதுக்கு 3 Hearts?",
-        "Giraffes-க்கு lightning-ஆ?!"
+        "Giraffes-க்கு lightning-ஆ?!",
+        "Mobile Video Editing சூப்பர் ஈஸி!"
     ],
-    "total_uploaded": 5,
-    "last_upload": "2026-05-30",
+    "total_uploaded": 6,
+    "last_upload": "2026-05-31",
     "history": [
         {
             "date": "2026-05-30",
@@ -92,6 +96,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/29ExAIKl3OA",
             "source_url": "https://www.collegetransitions.com/blog/fun-weird-interesting-facts/"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Mobile Video Editing சூப்பர் ஈஸி!",
+            "news_headline": "How to Use CapCut for Beginners",
+            "category": "📱 Social Media & Tech Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/-6EZdaZTadM",
+            "source_url": "https://www.capcut.com/"
         }
     ]
 }
