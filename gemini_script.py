@@ -19,11 +19,11 @@ Language Rules:
 1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in TANGLISH (Tamil words in Tamil script, mixed with English words in English alphabet where natural, e.g. "DNA", "brain", "NASA", "gravity", "neurons"). This is exactly how young Tamil speakers talk and ensures the TTS handles the pronunciation naturally.
    Example: "உங்களுக்கு தெரியுமா? நம்ம brain-ல almost 86 billion neurons இருக்கு..."
 2. Subtitles (`subtitle_chunks` text): Write in clean TAMIL script for Tamil words and plain English for English terms so the captions look highly premium and professional. Keep each subtitle chunk very short (1 to 3 words maximum!).
-3. Visual prompts (`nano_visual_prompt`): MUST be written in English so Imagen 4.0 understands it perfectly.
+3. Visual prompts (`nano_visual_prompt`): MUST be written in English so Imagen 4.0 understands it perfectly. Specify highly authentic and culturally resonant South Indian or Tamil elements where human faces, clothing, nature, or urban settings are depicted. Use Dravidian/South Indian features, ethnic details, clothing (like dhotis, saris where relevant), and local settings (e.g., traditional houses, local streets, South Indian flora) to make the content feel highly native and relatable to a Tamil audience.
 Constraint Checklist:
 - No Fluff: Do not say "வணக்கம் நண்பர்களே", "In this video", "Today we talk about". Start immediately with the hook!
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks, italics, ALL CAPS) to guide pronunciation emphasis.
-- CTAs: At the end of every script, ask a provocative question to drive comments, then say verbatim: "Channel Page-ல இருக்கற Telegram group-ல join பண்ணுங்க. Daily informative content-க்கு VJ Videos-க்கு Subscribe பண்ணுங்க!"
+- CTAs: At the end of every script, ask a provocative question in Tanglish to drive comments. Do NOT tell or ask the viewer to subscribe, follow, or share in the spoken voiceover script. End the script strictly on the question.
 """
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
@@ -145,7 +145,7 @@ CRITICAL SUBTITLE RULE:
 The `subtitle_chunks` array MUST break the script down into extremely small chunks of EXACTLY 1 to 3 words maximum.
 The `text` field MUST be written in clean Tamil Unicode characters (where appropriate) mixed with basic English words.
 The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
-`nano_visual_prompt` MUST be in English and specify a rich photorealistic scene description for Imagen. E.g. "Close up photo of water droplets floating in mid-air inside a mysterious room, dramatic side lighting, photorealistic 8k, aspect ratio 9:16". No text in the image.
+`nano_visual_prompt` MUST be in English and specify a rich photorealistic scene description for Imagen. E.g. "Close up photo of water droplets floating in mid-air inside a mysterious room, dramatic side lighting, photorealistic 8k, aspect ratio 9:16". No text in the image. Inject South Indian/Tamil features, realistic Dravidian characteristics, ethnic attire (like dhotis, saris), and traditional/modern local environments (Chennai streets, South Indian villages, ancient temples) where people or settings are featured to make it highly resonant for the Tamil audience.
 
 Return ONLY the final JSON object matching the schema. No markdown wrapping. No explanations."""
 
@@ -233,7 +233,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "problem_context": "The Context (3-10s): Introduce the mystery or setup in Tanglish. Approx 20 words.",
   "solution_tech": "The Fact Escalation (10-40s): Explain the mind-blowing science or detail in Tanglish. Under 80 words.",
   "retention_loop": "The Retention Loop (40-48s): Seamless bridge/cliffhanger back to start. Approx 15 words.",
-  "outro_cta": "CTA: Subscribe call in Tanglish. Approx 15 words.",
+  "outro_cta": "CTA: Provocative question to drive comments in Tanglish. Approx 15 words. STRICTLY DO NOT mention subscribe, follow or share.",
   "script": "The FULL unified voiceover script in Tanglish combining all parts. Approx 110-130 words. STRICT MAXIMUM 130 words.",
   "hook_text": "The first 5-8 words of the script.",
   "relevant_links": ["Source url"],

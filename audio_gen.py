@@ -86,59 +86,15 @@ def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.35, target_gap_
     """
     Detects silent gaps between words and shortens them to keep the pacing
     extremely tight and fast for high-retention Shorts.
+    Bypassed to prevent word cutting and choppy/broken speech.
     """
     from pydub import AudioSegment
     try:
         audio = AudioSegment.from_file(audio_path)
-        new_audio = AudioSegment.empty()
-        new_ts = []
-        
-        word_timestamps = sorted(word_timestamps, key=lambda x: x["start"])
-        if not word_timestamps:
-            return len(audio) / 1000.0, word_timestamps
-            
-        first_word_start_ms = int(word_timestamps[0]["start"] * 1000)
-        if first_word_start_ms > 0:
-            new_audio += audio[:first_word_start_ms]
-            
-        for idx, wt in enumerate(word_timestamps):
-            w_start_ms = int(wt["start"] * 1000)
-            w_end_ms = int(wt["end"] * 1000)
-            
-            new_w_start_ms = len(new_audio)
-            new_audio += audio[w_start_ms:w_end_ms]
-            new_w_end_ms = len(new_audio)
-            
-            new_ts.append({
-                "word": wt["word"],
-                "start": round(new_w_start_ms / 1000.0, 3),
-                "end": round(new_w_end_ms / 1000.0, 3)
-            })
-            
-            if idx < len(word_timestamps) - 1:
-                next_w_start_ms = int(word_timestamps[idx + 1]["start"] * 1000)
-                gap_ms = next_w_start_ms - w_end_ms
-                
-                if gap_ms > max_gap_s * 1000:
-                    # Compress the gap
-                    target_gap_ms = int(target_gap_s * 1000)
-                    silence_segment = audio[w_end_ms:next_w_start_ms]
-                    new_audio += silence_segment[:target_gap_ms]
-                else:
-                    if gap_ms > 0:
-                        new_audio += audio[w_end_ms:next_w_start_ms]
-                        
-        last_word_end_ms = int(word_timestamps[-1]["end"] * 1000)
-        if last_word_end_ms < len(audio):
-            new_audio += audio[last_word_end_ms:]
-            
-        new_audio.export(audio_path, format="wav" if audio_path.endswith(".wav") else "mp3")
-        new_duration = len(new_audio) / 1000.0
-        print(f"⚡ Gap pacing optimized: {len(audio)/1000.0:.2f}s -> {new_duration:.2f}s")
-        return new_duration, new_ts
+        return len(audio) / 1000.0, word_timestamps
     except Exception as e:
         print(f"⚠️ Gap pacing optimization failed: {e}")
-        return len(audio) / 1000.0, word_timestamps
+        return 0.0, word_timestamps
 
 def _estimate_timestamps(text, duration):
     words = text.split()

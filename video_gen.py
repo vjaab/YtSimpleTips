@@ -396,37 +396,13 @@ def create_video(audio_path, script_json, chunks, output_path=None):
 
     final_video = VideoClip(make_final_frame, duration=audio_duration)
     
-    # Outro CTA segment (3 seconds card appended for Shorts)
-    if not is_longform:
-        cta_duration = 3.0
-        cta_img = Image.new("RGBA", (FRAME_W, FRAME_H), (10, 10, 15, 255))
-        cta_draw = ImageDraw.Draw(cta_img)
+    # Compose everything
+    comp_clips = [final_video, vignette]
+    if header_clip:
+        comp_clips.append(header_clip)
         
-        # Subtitle box subscribe
-        cta_font = get_font_for_text("SUBSCRIBE", 65, "extrabold")
-        cta_draw.rounded_rectangle([200, FRAME_H // 2 - 80, FRAME_W - 200, FRAME_H // 2 + 80], radius=40, fill=(204, 255, 0, 255))
-        cta_draw.text((FRAME_W // 2, FRAME_H // 2), "SUBSCRIBE", fill=(0, 0, 0, 255), font=cta_font, anchor="mm")
-        
-        cta_sub_font = get_font_for_text("VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!", 38, "bold")
-        cta_draw.text((FRAME_W // 2, FRAME_H // 2 + 200), "VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!", fill=(220, 220, 220, 255), font=cta_sub_font, anchor="mm")
-        
-        cta_clip = ImageClip(np.array(cta_img.convert("RGB"))).with_duration(cta_duration)
-        
-        # Compose everything
-        comp_clips = [final_video, vignette]
-        if header_clip:
-            comp_clips.append(header_clip)
-            
-        main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
-        final_render = concatenate_videoclips([main_composition, cta_clip], method="compose")
-    else:
-        # Longform overlay floating CTA during last 5 seconds
-        comp_clips = [final_video, vignette]
-        if header_clip:
-            comp_clips.append(header_clip)
-            
-        main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
-        final_render = main_composition
+    main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
+    final_render = main_composition
         
     final_render = final_render.with_audio(final_audio)
     
