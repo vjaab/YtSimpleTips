@@ -12,6 +12,17 @@ def build_chunks(word_timestamps, subtitle_chunks):
     """
     if not word_timestamps:
         return []
+        
+    # Flatten subtitle_chunks to handle nested lists returned by Gemini
+    flat_subtitle_chunks = []
+    for gc in subtitle_chunks or []:
+        if isinstance(gc, list):
+            for item in gc:
+                if isinstance(item, dict):
+                    flat_subtitle_chunks.append(item)
+        elif isinstance(gc, dict):
+            flat_subtitle_chunks.append(gc)
+    subtitle_chunks = flat_subtitle_chunks
     
     if not subtitle_chunks or len(subtitle_chunks) < 3:
         if subtitle_chunks and len(subtitle_chunks) < 3:

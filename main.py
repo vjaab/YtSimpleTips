@@ -201,7 +201,16 @@ def run_pipeline(forced_category=None):
 
     # ── STEP 5: Build Word Visual Chunks ──
     log_message("STEP 5: Matching word timestamps to visual chunks...")
-    sub_chunks = script_data.get("subtitle_chunks", [])
+    raw_sub_chunks = script_data.get("subtitle_chunks", [])
+    sub_chunks = []
+    for sc in raw_sub_chunks:
+        if isinstance(sc, list):
+            for item in sc:
+                if isinstance(item, dict):
+                    sub_chunks.append(item)
+        elif isinstance(sc, dict):
+            sub_chunks.append(sc)
+            
     for sc in sub_chunks:
         if "text" in sc:
             sc["text"] = clean_tts_text(sc["text"])
