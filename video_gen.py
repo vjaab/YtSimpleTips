@@ -17,7 +17,7 @@ from moviepy import (
 from pydub import AudioSegment
 
 from config import (
-    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME
+    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS
 )
 from infographic_gen import build_infographic_clip, get_font_for_text
 
@@ -364,7 +364,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if not active_chunk and chunks and t > chunks[-1]["end"]:
             active_chunk = chunks[-1]
             
-        if active_chunk:
+        if ENABLE_KINETIC_CAPTIONS and active_chunk:
             word_status_list = []
             for w in active_chunk.get("words", []):
                 is_active = w["start"] - 0.05 <= t <= w["end"] + 0.05

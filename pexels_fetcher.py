@@ -117,28 +117,29 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         visual_type = None
         source = "Failed"
         
-        # 1. Try Pexels Stock Video first (high-retention b-roll)
-        visual_path = fetch_pexels_media(clean_query, media_type="video", aspect_ratio=aspect_ratio)
-        if visual_path:
-            visual_type = "video"
-            source = "Pexels Video"
-            
-        # 2. Try Pexels Stock Photo
-        if not visual_path:
-            visual_path = fetch_pexels_media(clean_query, media_type="photo", aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "photo"
-                source = "Pexels Photo"
-                
-        # 3. Fallback to Imagen-3 Generation
-        if not visual_path and prompt:
-            print("     → Pexels failed. Generating custom Imagen background...")
-            output_jpg = os.path.join(OUTPUT_DIR, f"nano_fallback_{cid}_{TODAY}.jpg")
+        # 1. Try Imagen-3 Generation first (custom, 100% relevant visual)
+        if prompt:
+            print("     → Generating custom Imagen background...")
+            output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
             visual_path = _generate_imagen_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Imagen AI"
                 time.sleep(2)  # rate limit cooling
+                
+        # 2. Fallback to Pexels Stock Video if Imagen fails or no prompt
+        if not visual_path:
+            visual_path = fetch_pexels_media(clean_query, media_type="video", aspect_ratio=aspect_ratio)
+            if visual_path:
+                visual_type = "video"
+                source = "Pexels Video"
+                
+        # 3. Fallback to Pexels Stock Photo
+        if not visual_path:
+            visual_path = fetch_pexels_media(clean_query, media_type="photo", aspect_ratio=aspect_ratio)
+            if visual_path:
+                visual_type = "photo"
+                source = "Pexels Photo"
                 
         # 4. Graceful degradation: propagate last visual
         if not visual_path:

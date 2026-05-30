@@ -43,7 +43,7 @@ TARGET_AUDIO_DURATION = (40, 55)  # Optimized for Tamil Shorts audience
 ENABLE_LONGFORM = False
 
 # Engagement & Retention Pillars (Faceless Info Channels 2026)
-ENABLE_KINETIC_CAPTIONS = True
+ENABLE_KINETIC_CAPTIONS = False
 ENABLE_AUDIO_DUCKING = True
 ENABLE_PERIODIC_CUTS = True
 ENABLE_EVIDENCE_SCREENSHOTS = True
