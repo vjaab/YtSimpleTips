@@ -170,7 +170,8 @@ def _send_photo(photo_path, caption=""):
 
 def send_upload_consent(thumbnail_path, title, duration_sec):
     """
-    Sends the generated thumbnail to Telegram and asks for upload confirmation.
+    Sends the compiled video status and thumbnail to Telegram as a notification
+    and automatically returns True to auto-approve the upload.
     """
     if not BOT_TOKEN or not CHAT_ID:
         print("Telegram not configured — auto-approving upload.")
@@ -183,7 +184,7 @@ def send_upload_consent(thumbnail_path, title, duration_sec):
         f"🎬 <b>VJ Videos - Video Compiled!</b>\n\n"
         f"📌 <b>Title:</b> {title}\n"
         f"⏱ <b>Duration:</b> {duration_str}\n\n"
-        f"Upload to VJ Videos YouTube Channel?"
+        f"🚀 <i>Auto-uploading to VJ Videos YouTube Channel now...</i>"
     )
 
     try:
@@ -195,62 +196,7 @@ def send_upload_consent(thumbnail_path, title, duration_sec):
         print(f"Telegram photo send failed: {e}")
         _send_message(caption)
 
-    keyboard = {"inline_keyboard": [[
-        {"text": "✅ YES — Upload Now",  "callback_data": "UPLOAD_YES"},
-        {"text": "❌ NO — Skip Upload",  "callback_data": "UPLOAD_NO"},
-    ]]}
-    msg = _send_message("👆 Tap your choice:", reply_markup=keyboard)
-    consent_msg_id = msg.get("message_id")
-
-    deadline = time.time() + 300
-    last_update_id = None
-    stale = _get_updates()
-    if stale:
-        last_update_id = stale[-1]["update_id"] + 1
-
-    while time.time() < deadline:
-        try:
-            updates = _get_updates(offset=last_update_id)
-        except Exception as e:
-            print(f"Telegram poll error: {e}")
-            time.sleep(5)
-            continue
-
-        for update in updates:
-            last_update_id = update["update_id"] + 1
-
-            if "callback_query" in update:
-                cb = update["callback_query"]
-                if str(cb["message"]["chat"]["id"]) == str(CHAT_ID):
-                    data = cb["data"]
-                    if data == "UPLOAD_YES":
-                        _answer_callback(cb["id"], "Uploading to YouTube... 🚀")
-                        if consent_msg_id:
-                            _edit_message(consent_msg_id, "🚀 <b>Uploading to YouTube VJ Videos...</b>")
-                        return True
-                    elif data == "UPLOAD_NO":
-                        _answer_callback(cb["id"], "Upload skipped.")
-                        if consent_msg_id:
-                            _edit_message(consent_msg_id, "❌ <b>Upload skipped by user.</b>")
-                        return False
-
-            elif "message" in update:
-                m = update["message"]
-                if str(m["chat"]["id"]) == str(CHAT_ID) and "text" in m:
-                    txt = m["text"].strip().lower()
-                    if txt in ("yes", "y", "upload"):
-                        _send_message("🚀 <b>Uploading to YouTube VJ Videos...</b>")
-                        return True
-                    elif txt in ("no", "n", "skip"):
-                        _send_message("❌ <b>Upload skipped.</b>")
-                        return False
-
-        time.sleep(3)
-
-    print("Upload consent timed out — skipping upload.")
-    if consent_msg_id:
-        _edit_message(consent_msg_id, "⏰ <b>Timed out — upload skipped.</b>")
-    return False
+    return True
 
 def notify_telegram(message, emoji="ℹ️"):
     if BOT_TOKEN and CHAT_ID:
