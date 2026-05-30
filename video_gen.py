@@ -17,7 +17,7 @@ from moviepy import (
 from pydub import AudioSegment
 
 from config import (
-    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS
+    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS, ENABLE_WATERMARK
 )
 from infographic_gen import build_infographic_clip, get_font_for_text
 
@@ -330,24 +330,26 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     vignette = _gradient_overlay(audio_duration)
     
     # Generate Header bar watermark
-    header_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-    header_draw = ImageDraw.Draw(header_img)
-    
-    logo_path = os.path.join(ASSETS_DIR, "logo.png")
-    if not os.path.exists(logo_path):
-        logo_path = "/Users/vijayakumarjermansraj/Desktop/google_antigravity/yt_did_you_know_by_vj/assets/logo.png"
+    header_clip = None
+    if ENABLE_WATERMARK:
+        header_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+        header_draw = ImageDraw.Draw(header_img)
         
-    if os.path.exists(logo_path):
-        try:
-            logo = Image.open(logo_path).convert("RGBA").resize((120, 120), Image.LANCZOS)
-            header_img.paste(logo, (50, 40))
-        except:
-            pass
+        logo_path = os.path.join(ASSETS_DIR, "logo.png")
+        if not os.path.exists(logo_path):
+            logo_path = "/Users/vijayakumarjermansraj/Desktop/google_antigravity/yt_did_you_know_by_vj/assets/logo.png"
             
-    header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
-    header_draw.text((190, 80), "Simple Tips by VJ", fill=(255, 255, 255, 255), font=header_font)
-    
-    header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
+        if os.path.exists(logo_path):
+            try:
+                logo = Image.open(logo_path).convert("RGBA").resize((120, 120), Image.LANCZOS)
+                header_img.paste(logo, (50, 40))
+            except:
+                pass
+                
+        header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
+        header_draw.text((190, 80), "Simple Tips by VJ", fill=(255, 255, 255, 255), font=header_font)
+        
+        header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
     # Frame Assembly Loop
     def make_final_frame(t):
@@ -411,11 +413,19 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         cta_clip = ImageClip(np.array(cta_img.convert("RGB"))).with_duration(cta_duration)
         
         # Compose everything
-        main_composition = CompositeVideoClip([final_video, vignette, header_clip], size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
+        comp_clips = [final_video, vignette]
+        if header_clip:
+            comp_clips.append(header_clip)
+            
+        main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
         final_render = concatenate_videoclips([main_composition, cta_clip], method="compose")
     else:
         # Longform overlay floating CTA during last 5 seconds
-        main_composition = CompositeVideoClip([final_video, vignette, header_clip], size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
+        comp_clips = [final_video, vignette]
+        if header_clip:
+            comp_clips.append(header_clip)
+            
+        main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
         final_render = main_composition
         
     final_render = final_render.with_audio(final_audio)
