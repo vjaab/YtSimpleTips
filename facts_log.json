@@ -1,155 +1,37 @@
 {
     "used_titles": [
-        "Honey lasts FOREVER?!",
-        "Honey Never Spoils",
-        "வேர்க்கடலை வெடிமருந்தா?!",
-        "Peanuts in Dynamite",
-        "Owl Nest-ல Snake?!",
-        "Snakes in Owl Nests",
-        "Octopus-க்கு எதுக்கு 3 Hearts?",
-        "Octopus Has Three Hearts",
-        "Giraffes-க்கு lightning-ஆ?!",
-        "Giraffes and Lightning",
-        "Mobile Video Editing சூப்பர் ஈஸி!",
-        "How to Use CapCut for Beginners",
-<<<<<<< Updated upstream
-        "IRCTC Ticket: Easy Booking!",
-        "How to book train tickets on the IRCTC app"
-=======
-        "Tongue Prints?!🤯",
-        "Unique Tongue Prints"
->>>>>>> Stashed changes
+        "Earthquake ஏன் வருது?!",
+        "Giraffes and Lightning Strikes"
     ],
     "used_keywords": [
+        "Tectonic Plates",
+        "Tamil Facts",
         "Did You Know",
-        "Tamil Facts"
+        "Earthquake"
     ],
     "used_categories": {
-<<<<<<< Updated upstream
-        "🎲 Random Amazing Facts": 5,
-        "📱 Social Media & Tech Hacks": 2
-=======
-        "🎲 Random Amazing Facts": 6,
-        "📱 Social Media & Tech Hacks": 1
->>>>>>> Stashed changes
+        "🌍 Earth Science": 1
     },
     "last_7_days_stories": [
-        "Honey lasts FOREVER?!",
-        "வேர்க்கடலை வெடிமருந்தா?!",
-        "Owl Nest-ல Snake?!",
-        "Octopus-க்கு எதுக்கு 3 Hearts?",
-        "Giraffes-க்கு lightning-ஆ?!",
-        "Mobile Video Editing சூப்பர் ஈஸி!",
-<<<<<<< Updated upstream
-        "IRCTC Ticket: Easy Booking!"
-=======
-        "Tongue Prints?!🤯"
->>>>>>> Stashed changes
+        "Earthquake ஏன் வருது?!"
     ],
-    "total_uploaded": 7,
+    "total_uploaded": 1,
     "last_upload": "2026-05-30",
     "history": [
         {
             "date": "2026-05-30",
-            "title": "Honey lasts FOREVER?!",
-            "news_headline": "Honey Never Spoils",
-            "category": "🎲 Random Amazing Facts",
+            "title": "Earthquake ஏன் வருது?!",
+            "news_headline": "Giraffes and Lightning Strikes",
+            "category": "🌍 Earth Science",
             "keywords": [
                 "Tamil Facts",
-                "Did You Know"
+                "Did You Know",
+                "Earthquake",
+                "Tectonic Plates"
             ],
             "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "pending_upload",
-            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGrMQFD1cSrd6pinVLo2jJqCjoAO-vxsq8X3j9wD0CfAB2rWt3J7ei6p-ifQOPw1InkvwXxqR63MpXffxFCqZ9_dhblChUQH94neLZY2NoGeJbr6Pwz4z1-C3X2p3PbNDng6T9mig=="
-        },
-        {
-            "date": "2026-05-30",
-            "title": "வேர்க்கடலை வெடிமருந்தா?!",
-            "news_headline": "Peanuts in Dynamite",
-            "category": "🎲 Random Amazing Facts",
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "pending_upload",
-            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFRq_ltIs8V-cCp2XrOGJbIw0rHlLeMV86rbZmxeKAG9l_QWveQlAjdLKcbgF-5Mq9W2JRBDd8awn5XZqXV6hCbH6Ffr5rxmjJcAOtPjg8SmJ8e5DW8EFSfSnkD5rNp2jczZosKJ03Q4XPiPu44Jb1bVCzIzKISdfnjkQ=="
-        },
-        {
-            "date": "2026-05-30",
-            "title": "Owl Nest-ல Snake?!",
-            "news_headline": "Snakes in Owl Nests",
-            "category": "🎲 Random Amazing Facts",
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "https://youtu.be/TC_NjIGgDBo",
-            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG7iFM-tG5TD7Tyo2oYEjBqDqhfEXBgQGyW1LbKL2CFf_Dr-R5pF4YBBHS-mt7ICm3WE5Ssk5ziaFPp2djeC6VI8ZkzoBiOVp-1nFMBTO19VfIxIH1nUpHL-nOztCRWpe8wz2V5Q38="
-        },
-        {
-            "date": "2026-05-30",
-            "title": "Octopus-க்கு எதுக்கு 3 Hearts?",
-            "news_headline": "Octopus Has Three Hearts",
-            "category": "🎲 Random Amazing Facts",
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "https://youtu.be/0IqM3oDJm04",
-            "source_url": "https://www.nationalgeographic.com/animals/invertebrates/facts/octopus"
-        },
-        {
-            "date": "2026-05-30",
-            "title": "Giraffes-க்கு lightning-ஆ?!",
-            "news_headline": "Giraffes and Lightning",
-            "category": "🎲 Random Amazing Facts",
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "https://youtu.be/29ExAIKl3OA",
-            "source_url": "https://www.collegetransitions.com/blog/fun-weird-interesting-facts/"
-        },
-        {
-            "date": "2026-05-31",
-            "title": "Mobile Video Editing சூப்பர் ஈஸி!",
-            "news_headline": "How to Use CapCut for Beginners",
-            "category": "📱 Social Media & Tech Hacks",
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "https://youtu.be/-6EZdaZTadM",
-            "source_url": "https://www.capcut.com/"
-        },
-        {
-            "date": "2026-05-30",
-<<<<<<< Updated upstream
-            "title": "IRCTC Ticket: Easy Booking!",
-            "news_headline": "How to book train tickets on the IRCTC app",
-            "category": "📱 Social Media & Tech Hacks",
-=======
-            "title": "Tongue Prints?!🤯",
-            "news_headline": "Unique Tongue Prints",
-            "category": "🎲 Random Amazing Facts",
->>>>>>> Stashed changes
-            "keywords": [
-                "Tamil Facts",
-                "Did You Know"
-            ],
-            "voice_used": "VJ_Cloned_Voice",
-<<<<<<< Updated upstream
-            "youtube_url": "https://youtu.be/Dc7ieZF_LyQ",
-            "source_url": "https://www.irctc.co.in"
-=======
-            "youtube_url": "https://youtu.be/2IwWn2WkHtk",
+            "youtube_url": "https://youtu.be/V_TlMIHYlak",
             "source_url": "https://www.rd.com/list/weird-facts/"
->>>>>>> Stashed changes
         }
     ]
 }
