@@ -339,15 +339,20 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if not os.path.exists(logo_path):
             logo_path = "/Users/vijayakumarjermansraj/Desktop/google_antigravity/yt_did_you_know_by_vj/assets/logo.png"
             
+        logo_pasted = False
         if os.path.exists(logo_path):
             try:
                 logo = Image.open(logo_path).convert("RGBA").resize((120, 120), Image.LANCZOS)
                 header_img.paste(logo, (50, 40))
+                logo_pasted = True
             except:
                 pass
                 
         header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
-        header_draw.text((190, 80), "Simple Tips by VJ", fill=(255, 255, 255, 255), font=header_font)
+        text_x = 190 if logo_pasted else 50
+        # Draw premium drop shadow for text readability under any background
+        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(0, 0, 0, 180), font=header_font)
+        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 255), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
