@@ -12,16 +12,26 @@
         "Giraffes and Lightning",
         "Mobile Video Editing சூப்பர் ஈஸி!",
         "How to Use CapCut for Beginners",
+<<<<<<< Updated upstream
         "IRCTC Ticket: Easy Booking!",
         "How to book train tickets on the IRCTC app"
+=======
+        "Tongue Prints?!🤯",
+        "Unique Tongue Prints"
+>>>>>>> Stashed changes
     ],
     "used_keywords": [
-        "Tamil Facts",
-        "Did You Know"
+        "Did You Know",
+        "Tamil Facts"
     ],
     "used_categories": {
+<<<<<<< Updated upstream
         "🎲 Random Amazing Facts": 5,
         "📱 Social Media & Tech Hacks": 2
+=======
+        "🎲 Random Amazing Facts": 6,
+        "📱 Social Media & Tech Hacks": 1
+>>>>>>> Stashed changes
     },
     "last_7_days_stories": [
         "Honey lasts FOREVER?!",
@@ -30,7 +40,11 @@
         "Octopus-க்கு எதுக்கு 3 Hearts?",
         "Giraffes-க்கு lightning-ஆ?!",
         "Mobile Video Editing சூப்பர் ஈஸி!",
+<<<<<<< Updated upstream
         "IRCTC Ticket: Easy Booking!"
+=======
+        "Tongue Prints?!🤯"
+>>>>>>> Stashed changes
     ],
     "total_uploaded": 7,
     "last_upload": "2026-05-30",
@@ -115,16 +129,27 @@
         },
         {
             "date": "2026-05-30",
+<<<<<<< Updated upstream
             "title": "IRCTC Ticket: Easy Booking!",
             "news_headline": "How to book train tickets on the IRCTC app",
             "category": "📱 Social Media & Tech Hacks",
+=======
+            "title": "Tongue Prints?!🤯",
+            "news_headline": "Unique Tongue Prints",
+            "category": "🎲 Random Amazing Facts",
+>>>>>>> Stashed changes
             "keywords": [
                 "Tamil Facts",
                 "Did You Know"
             ],
             "voice_used": "VJ_Cloned_Voice",
+<<<<<<< Updated upstream
             "youtube_url": "https://youtu.be/Dc7ieZF_LyQ",
             "source_url": "https://www.irctc.co.in"
+=======
+            "youtube_url": "https://youtu.be/2IwWn2WkHtk",
+            "source_url": "https://www.rd.com/list/weird-facts/"
+>>>>>>> Stashed changes
         }
     ]
 }
