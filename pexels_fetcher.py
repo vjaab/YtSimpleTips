@@ -102,13 +102,19 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         
         # Formulate a search query from the English prompt or subtitle text
         # If prompt is present, clean it up as a query, else use clean chunk text
-        clean_query = "technology"
+        clean_query = ""
         if prompt:
-            # Take first 3 descriptive words from English prompt
-            words = [w.strip(",.!?\"'") for w in prompt.split() if w.lower() not in ["a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "9:16", "vertical"]]
+            # Strip common filler/UI words to get meaningful keywords for stock footage search
+            fillers = {
+                "a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "9:16", "vertical",
+                "premium", "app", "ui", "mockup", "screenshot", "design", "vector", "realistic", "illustration",
+                "photo", "image", "representing", "representation", "showing", "displays", "displaying", "screen",
+                "mockups", "template", "concept", "close-up", "close", "up", "person", "man", "woman", "human", "face"
+            }
+            words = [w.strip(",.!?\"'") for w in prompt.split() if w.lower() not in fillers]
             clean_query = " ".join(words[:3])
-        else:
-            # Fallback to topic generic query
+            
+        if not clean_query or len(clean_query.strip()) < 3:
             clean_query = generic_query
             
         print(f"  [{i+1}/{len(chunks)}] Resolving visuals for: '{text[:40]}...' (Query: '{clean_query}')")
