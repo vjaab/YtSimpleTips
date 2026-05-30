@@ -5,21 +5,24 @@
         "வேர்க்கடலை வெடிமருந்தா?!",
         "Peanuts in Dynamite",
         "Owl Nest-ல Snake?!",
-        "Snakes in Owl Nests"
+        "Snakes in Owl Nests",
+        "Octopus-க்கு எதுக்கு 3 Hearts?",
+        "Octopus Has Three Hearts"
     ],
     "used_keywords": [
         "Did You Know",
         "Tamil Facts"
     ],
     "used_categories": {
-        "🎲 Random Amazing Facts": 3
+        "🎲 Random Amazing Facts": 4
     },
     "last_7_days_stories": [
         "Honey lasts FOREVER?!",
         "வேர்க்கடலை வெடிமருந்தா?!",
-        "Owl Nest-ல Snake?!"
+        "Owl Nest-ல Snake?!",
+        "Octopus-க்கு எதுக்கு 3 Hearts?"
     ],
-    "total_uploaded": 3,
+    "total_uploaded": 4,
     "last_upload": "2026-05-30",
     "history": [
         {
@@ -60,6 +63,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/TC_NjIGgDBo",
             "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG7iFM-tG5TD7Tyo2oYEjBqDqhfEXBgQGyW1LbKL2CFf_Dr-R5pF4YBBHS-mt7ICm3WE5Ssk5ziaFPp2djeC6VI8ZkzoBiOVp-1nFMBTO19VfIxIH1nUpHL-nOztCRWpe8wz2V5Q38="
+        },
+        {
+            "date": "2026-05-30",
+            "title": "Octopus-க்கு எதுக்கு 3 Hearts?",
+            "news_headline": "Octopus Has Three Hearts",
+            "category": "🎲 Random Amazing Facts",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/0IqM3oDJm04",
+            "source_url": "https://www.nationalgeographic.com/animals/invertebrates/facts/octopus"
         }
     ]
 }
