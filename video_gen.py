@@ -164,7 +164,7 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
     by1 = y_pos - pad_y
     by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
     
-    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=15, fill=(0, 0, 0, 220))
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=15, fill=(10, 10, 15, 230), outline=(204, 255, 0, 90), width=2)
     
     # Draw word by word
     word_idx = 0
@@ -377,6 +377,14 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 pil_frame.alpha_composite(pil_sub)
                 frame = np.array(pil_frame.convert("RGB"))
                 
+        # Draw dynamic glowing progress bar at the very bottom edge
+        progress_w = int(FRAME_W * (t / audio_duration))
+        if progress_w > 0:
+            pil_frame = Image.fromarray(frame).convert("RGBA")
+            p_draw = ImageDraw.Draw(pil_frame)
+            p_draw.rectangle([0, FRAME_H - 12, progress_w, FRAME_H], fill=(204, 255, 0, 255))
+            frame = np.array(pil_frame.convert("RGB"))
+            
         return frame
 
     final_video = VideoClip(make_final_frame, duration=audio_duration)
