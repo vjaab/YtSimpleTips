@@ -11,7 +11,9 @@
         "Giraffes-க்கு lightning-ஆ?!",
         "Giraffes and Lightning",
         "Mobile Video Editing சூப்பர் ஈஸி!",
-        "How to Use CapCut for Beginners"
+        "How to Use CapCut for Beginners",
+        "IRCTC Ticket: Easy Booking!",
+        "How to book train tickets on the IRCTC app"
     ],
     "used_keywords": [
         "Tamil Facts",
@@ -19,7 +21,7 @@
     ],
     "used_categories": {
         "🎲 Random Amazing Facts": 5,
-        "📱 Social Media & Tech Hacks": 1
+        "📱 Social Media & Tech Hacks": 2
     },
     "last_7_days_stories": [
         "Honey lasts FOREVER?!",
@@ -27,10 +29,11 @@
         "Owl Nest-ல Snake?!",
         "Octopus-க்கு எதுக்கு 3 Hearts?",
         "Giraffes-க்கு lightning-ஆ?!",
-        "Mobile Video Editing சூப்பர் ஈஸி!"
+        "Mobile Video Editing சூப்பர் ஈஸி!",
+        "IRCTC Ticket: Easy Booking!"
     ],
-    "total_uploaded": 6,
-    "last_upload": "2026-05-31",
+    "total_uploaded": 7,
+    "last_upload": "2026-05-30",
     "history": [
         {
             "date": "2026-05-30",
@@ -109,6 +112,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/-6EZdaZTadM",
             "source_url": "https://www.capcut.com/"
+        },
+        {
+            "date": "2026-05-30",
+            "title": "IRCTC Ticket: Easy Booking!",
+            "news_headline": "How to book train tickets on the IRCTC app",
+            "category": "📱 Social Media & Tech Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/Dc7ieZF_LyQ",
+            "source_url": "https://www.irctc.co.in"
         }
     ]
 }
