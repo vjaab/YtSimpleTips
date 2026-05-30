@@ -1,0 +1,135 @@
+name: VJ Videos Tamil Shorts Pipeline
+
+on:
+  schedule:
+    # ── 2 SHORTS PER DAY — ROTATING UPLOAD TIME ──
+    # Triggers daily at 02:30 UTC (08:00 IST) and 12:30 UTC (18:00 IST)
+    - cron: '30 2 * * *'
+    - cron: '30 12 * * *'
+  workflow_dispatch: # Allow manual triggers from GitHub Actions UI
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120 # 2 hours max (plenty since no lip-sync/avatar rendering)
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    
+    steps:
+      - name: Compute Upload Delay (Rotating Schedule)
+        id: delay
+        run: |
+          WEEK=$(date -u +%V)
+          DOW=$(date -u +%u)
+          YEAR=$(date -u +%Y)
+          HOUR=$(date -u +%H)
+          SEED=$((YEAR * 371 + WEEK * 53 + DOW * 97 + HOUR * 13))
+          HASH=$(( (SEED * 2654435761) ^ (SEED >> 3) ))
+          # Rotate delay from 0 to 3600 seconds (0 to 1 hour max) to keep publish time slightly varied
+          DELAY_SECONDS=$(( (HASH % 3600 + 3600) % 3600 ))
+          DELAY_MINS=$(( DELAY_SECONDS / 60 ))
+          echo "delay_seconds=$DELAY_SECONDS" >> $GITHUB_OUTPUT
+          echo "🕐 Today's upload delay: ${DELAY_MINS}m"
+          
+      - name: Wait for Rotating Upload Time
+        if: github.event_name == 'schedule'
+        run: |
+          DELAY=${{ steps.delay.outputs.delay_seconds }}
+          echo "⏳ Sleeping ${DELAY}s to hit today's rotated upload window..."
+          sleep $DELAY
+          echo "✅ Upload window reached. Starting pipeline."
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          df -h
+         
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk espeak-ng wget
+          
+      - name: Verify FFmpeg Installation
+        run: ffmpeg -version
+          
+      - name: Install Project Python Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install "numpy<2.0"
+          pip install -r requirements.txt
+          pip install --upgrade imageio imageio-ffmpeg moviepy
+          
+      - name: Install Playwright Chromium (Screenshot Evidence)
+        run: npx -y playwright install --with-deps chromium
+
+      - name: Setup Environment Secrets (.env)
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}" >> .env
+          echo "ELEVENLABS_VOICE_ID=${{ secrets.ELEVENLABS_VOICE_ID }}" >> .env
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+          echo "KAGGLE_USERNAME=${{ secrets.KAGGLE_USERNAME }}" >> .env
+          echo "KAGGLE_KEY=${{ secrets.KAGGLE_KEY }}" >> .env
+          
+      - name: Setup YouTube Auth Files
+        run: |
+          echo '${{ secrets.CLIENT_SECRET_JSON }}' > client_secret.json
+          echo '${{ secrets.TOKEN_JSON }}' > token.json
+          
+      - name: Setup Kaggle Credentials
+        run: |
+          mkdir -p ~/.kaggle
+          echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+          
+      - name: Run Pipeline (Kaggle GPU Priority)
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          python main.py --now
+         
+      - name: Commit Updated Tracking File & Logs
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Pull latest changes first
+          git pull origin main --rebase --autostash || echo "Pull skipped"
+          
+          git add facts_log.json || echo "Facts log missing"
+          if [ -d "logs" ]; then
+            git add logs/*.txt 2>/dev/null || echo "No logs to commit"
+          fi
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "[Bot] Auto-update VJ Videos facts logs"
+            
+            for i in {1..5}; do
+              echo "Push attempt $i..."
+              if git push origin main; then
+                echo "✅ Successfully pushed logs."
+                exit 0
+              fi
+              sleep 10
+              git pull origin main --rebase
+            done
+            echo "❌ Failed to push logs after 5 attempts."
+          else
+            echo "✅ No changes to logs detected."
+          fi

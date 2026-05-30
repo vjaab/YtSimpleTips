@@ -1,0 +1,197 @@
+"""
+nano_scene_gen.py — Per-Sentence "Nano-Scene" Visual Generation Engine.
+Generates one Imagen 4.0 background image per subtitle chunk (sentence) for high-retention Shorts.
+"""
+
+import os
+import time
+import random
+from datetime import datetime
+from google import genai
+from config import GEMINI_API_KEY, OUTPUT_DIR
+
+TODAY = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+client = genai.Client(api_key=GEMINI_API_KEY)
+
+def _generate_missing_prompts(chunks, headline, style_guide, aspect_ratio="9:16"):
+    """
+    For chunks that don't have a nano_visual_prompt, use Gemini Flash to batch-generate
+    visual prompts for all of them in one call.
+    """
+    missing = [c for c in chunks if not c.get("nano_visual_prompt")]
+    if not missing:
+        return chunks
+
+    print(f"  🎨 Generating nano-scene prompts for {len(missing)} chunks without prompts...")
+
+    chunk_list = "\n".join([
+        f"[{c.get('chunk_id', i+1)}] \"{c.get('text', '')}\""
+        for i, c in enumerate(missing)
+    ])
+
+    format_desc = "16:9 landscape format" if aspect_ratio == "16:9" else "9:16 vertical format"
+    prompt = f"""You are a cinematic visual director for YouTube Shorts.
+
+HEADLINE/FACT: {headline}
+VISUAL STYLE: {style_guide}
+
+For each sentence below, generate a specific, cinematic IMAGE PROMPT in English that visually represents
+EXACTLY what is being spoken in that sentence. The image will be used as a fullscreen background.
+
+RULES:
+- Each prompt must be SPECIFIC to the sentence content (not generic)
+- NO text in images. NO faces of real people. NO watermarks.
+- Photorealistic, cinematic lighting, {format_desc}, 8K quality
+- Include relevant objects, environments, or symbolic imagery
+- Keep each prompt under 80 words
+
+SENTENCES:
+{chunk_list}
+
+Return ONLY a JSON array of objects, one per sentence, in order:
+[
+  {{"chunk_id": 1, "prompt": "Cinematic close-up of..."}},
+  ...
+]"""
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+            config=genai.types.GenerateContentConfig(temperature=0.7)
+        )
+        raw = response.text.strip()
+        if "[" in raw and "]" in raw:
+            raw = raw[raw.find("["):raw.rfind("]") + 1]
+
+        import json
+        prompts = json.loads(raw)
+
+        prompt_map = {p.get("chunk_id", i + 1): p.get("prompt", "") for i, p in enumerate(prompts)}
+        for c in missing:
+            cid = c.get("chunk_id", 0)
+            if cid in prompt_map and prompt_map[cid]:
+                c["nano_visual_prompt"] = prompt_map[cid]
+            else:
+                c["nano_visual_prompt"] = (
+                    f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
+                    f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
+                )
+        print(f"  ✅ Generated {len(prompts)} nano-scene prompts via Gemini Flash.")
+    except Exception as e:
+        print(f"  ⚠️ Batch prompt generation failed: {e}. Using fallback prompts.")
+        for c in missing:
+            c["nano_visual_prompt"] = (
+                f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
+                f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
+            )
+
+    return chunks
+
+def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
+    """Generate a single image via Imagen 4.0."""
+    models_to_try = [
+        "imagen-3.0-generate-002",
+        "imagen-3.0-fast-generate-001",
+    ]
+
+    for model_name in models_to_try:
+        try:
+            result = client.models.generate_images(
+                model=model_name,
+                prompt=prompt,
+                config=genai.types.GenerateImagesConfig(
+                    number_of_images=1,
+                    aspect_ratio=aspect_ratio,
+                    output_mime_type="image/jpeg",
+                ),
+            )
+            for gen_img in result.generated_images:
+                with open(output_path, "wb") as f:
+                    f.write(gen_img.image.image_bytes)
+                return output_path
+        except Exception as e:
+            err_str = str(e).lower()
+            if "429" in err_str:
+                print(f"  ⏳ Imagen rate limited or quota exhausted on {model_name}. Trying next...")
+                continue
+            else:
+                print(f"  ⚠️ Imagen failed ({model_name}): {e}")
+                break
+
+    return None
+
+def generate_nano_scene_visuals(chunks, headline, style_guide="highly detailed, dramatic lighting, rich color palette, cinematic photography, photorealistic", aspect_ratio="9:16"):
+    """
+    Main entry point: generates one Imagen background image per chunk.
+    """
+    if not chunks:
+        return chunks
+
+    total = len(chunks)
+    print(f"\n🎬 NANO-SCENE ENGINE: Generating {total} per-sentence backgrounds...")
+
+    chunks = _generate_missing_prompts(chunks, headline, style_guide, aspect_ratio=aspect_ratio)
+
+    last_successful_path = None
+    generated_count = 0
+    reused_count = 0
+
+    for i, chunk in enumerate(chunks):
+        cid = chunk.get("chunk_id", i + 1)
+        prompt = chunk.get("nano_visual_prompt", "")
+
+        if not prompt:
+            if last_successful_path:
+                chunk["visual_path"] = last_successful_path
+                chunk["visual_type"] = "photo"
+                chunk["source"] = "Nano-Scene (reused)"
+                reused_count += 1
+            continue
+
+        output_path = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
+        print(f"  [{i + 1}/{total}] Generating: {prompt[:70]}...")
+
+        path = _generate_imagen_image(prompt, output_path, aspect_ratio=aspect_ratio)
+
+        if path:
+            chunk["visual_path"] = path
+            chunk["visual_type"] = "photo"
+            chunk["source"] = "Nano-Scene (Imagen)"
+            chunk["relevance_score"] = 10
+            last_successful_path = path
+            generated_count += 1
+        elif last_successful_path:
+            chunk["visual_path"] = last_successful_path
+            chunk["visual_type"] = "photo"
+            chunk["source"] = "Nano-Scene (reused)"
+            chunk["relevance_score"] = 7
+            reused_count += 1
+        else:
+            chunk["visual_path"] = None
+            chunk["visual_type"] = None
+            chunk["source"] = "Failed"
+            chunk["relevance_score"] = 0
+
+        # Small sleep to throttle requests
+        if i < total - 1 and path:
+            time.sleep(3)
+
+    print(f"\n  ✅ Nano-Scene Generation Complete: {generated_count} generated, {reused_count} reused.")
+    _fill_visual_gaps(chunks)
+
+    return chunks
+
+def _fill_visual_gaps(chunks):
+    """Forward-fill: propagate the last successful visual to any gap chunks."""
+    last_path = None
+    last_type = "photo"
+    for c in chunks:
+        if c.get("visual_path"):
+            last_path = c["visual_path"]
+            last_type = c.get("visual_type", "photo")
+        elif last_path:
+            c["visual_path"] = last_path
+            c["visual_type"] = last_type
+            c["source"] = c.get("source", "Nano-Scene (gap-filled)")

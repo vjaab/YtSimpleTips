@@ -1,0 +1,30 @@
+# Core AI
+google-genai>=1.64.0
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+
+# Video & Visual Rendering
+moviepy>=2.2.1
+pillow>=11.0.0
+imageio-ffmpeg
+opencv-python-headless
+numpy>=1.26.0,<2.0.0
+rapidfuzz
+
+# Audio & Voice Cloning
+pydub
+audioop-lts; python_version >= '3.13'
+soundfile
+mutagen
+stable-ts
+edge-tts
+elevenlabs
+
+# Infra & Scraping
+python-dotenv
+requests
+feedparser
+schedule
+pytz
+kaggle
