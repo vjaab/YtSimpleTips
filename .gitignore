@@ -3,6 +3,7 @@ venv*/
 __pycache__/
 token.json
 client_secret.json
+client_secret_ytsimpletips.json
 output/
 logs/
 job_data.json
