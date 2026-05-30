@@ -7,22 +7,25 @@
         "Owl Nest-ல Snake?!",
         "Snakes in Owl Nests",
         "Octopus-க்கு எதுக்கு 3 Hearts?",
-        "Octopus Has Three Hearts"
+        "Octopus Has Three Hearts",
+        "Giraffes-க்கு lightning-ஆ?!",
+        "Giraffes and Lightning"
     ],
     "used_keywords": [
-        "Did You Know",
-        "Tamil Facts"
+        "Tamil Facts",
+        "Did You Know"
     ],
     "used_categories": {
-        "🎲 Random Amazing Facts": 4
+        "🎲 Random Amazing Facts": 5
     },
     "last_7_days_stories": [
         "Honey lasts FOREVER?!",
         "வேர்க்கடலை வெடிமருந்தா?!",
         "Owl Nest-ல Snake?!",
-        "Octopus-க்கு எதுக்கு 3 Hearts?"
+        "Octopus-க்கு எதுக்கு 3 Hearts?",
+        "Giraffes-க்கு lightning-ஆ?!"
     ],
-    "total_uploaded": 4,
+    "total_uploaded": 5,
     "last_upload": "2026-05-30",
     "history": [
         {
@@ -76,6 +79,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/0IqM3oDJm04",
             "source_url": "https://www.nationalgeographic.com/animals/invertebrates/facts/octopus"
+        },
+        {
+            "date": "2026-05-30",
+            "title": "Giraffes-க்கு lightning-ஆ?!",
+            "news_headline": "Giraffes and Lightning",
+            "category": "🎲 Random Amazing Facts",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/29ExAIKl3OA",
+            "source_url": "https://www.collegetransitions.com/blog/fun-weird-interesting-facts/"
         }
     ]
 }
