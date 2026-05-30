@@ -4,6 +4,7 @@ Compiles Ken Burns images, Pexels video clips, and infographic cards with mixed 
 """
 
 import os
+import shutil
 import cv2
 import numpy as np
 import random
@@ -202,23 +203,27 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
     print("🎵 [audio_mastering] Mixing and mastering soundtrack...")
     try:
         voice = AudioSegment.from_file(voice_path)
-        bgm = AudioSegment.from_file(bgm_path)
-        
-        # ducking BGM
-        bgm = bgm - 24 # Standard volume drop
-        
-        # Loop BGM if shorter than voice
-        while len(bgm) < len(voice):
-            bgm += bgm
+        if bgm_path and os.path.exists(bgm_path):
+            bgm = AudioSegment.from_file(bgm_path)
             
-        # Trim BGM to match voice
-        bgm = bgm[:len(voice)]
-        
-        # Perform dynamic ducking: whenever voice is silent, lower BGM even more, 
-        # but keep it rich and clean.
-        mastered = bgm.overlay(voice)
-        mastered.export(output_path, format="wav")
-        print("✅ [audio_mastering] Soundtrack mixed successfully!")
+            # ducking BGM
+            bgm = bgm - 24 # Standard volume drop
+            
+            # Loop BGM if shorter than voice
+            while len(bgm) < len(voice):
+                bgm += bgm
+                
+            # Trim BGM to match voice
+            bgm = bgm[:len(voice)]
+            
+            # Perform dynamic ducking: whenever voice is silent, lower BGM even more, 
+            # but keep it rich and clean.
+            mastered = bgm.overlay(voice)
+            mastered.export(output_path, format="wav")
+            print("✅ [audio_mastering] Soundtrack mixed successfully!")
+        else:
+            print(f"⚠️ [audio_mastering] BGM file not found at '{bgm_path}'. Proceeding with raw voiceover.")
+            voice.export(output_path, format="wav")
     except Exception as e:
         print(f"⚠️ [audio_mastering] Audio mixing failed: {e}. Copying raw voice.")
         shutil.copy(voice_path, output_path)
