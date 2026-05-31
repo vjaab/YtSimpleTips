@@ -1,22 +1,26 @@
 {
     "used_titles": [
         "Earthquake ஏன் வருது?!",
-        "Giraffes and Lightning Strikes"
+        "Giraffes and Lightning Strikes",
+        "Brain's SHOCKING Secret!",
+        "Love and OCD: A Neurochemical Connection"
     ],
     "used_keywords": [
         "Tectonic Plates",
-        "Tamil Facts",
+        "Earthquake",
         "Did You Know",
-        "Earthquake"
+        "Tamil Facts"
     ],
     "used_categories": {
-        "🌍 Earth Science": 1
+        "🌍 Earth Science": 1,
+        "🧠 Psychology & Mind": 1
     },
     "last_7_days_stories": [
-        "Earthquake ஏன் வருது?!"
+        "Earthquake ஏன் வருது?!",
+        "Brain's SHOCKING Secret!"
     ],
-    "total_uploaded": 1,
-    "last_upload": "2026-05-30",
+    "total_uploaded": 2,
+    "last_upload": "2026-05-31",
     "history": [
         {
             "date": "2026-05-30",
@@ -32,6 +36,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/V_TlMIHYlak",
             "source_url": "https://www.rd.com/list/weird-facts/"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Brain's SHOCKING Secret!",
+            "news_headline": "Love and OCD: A Neurochemical Connection",
+            "category": "🧠 Psychology & Mind",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG6bzFQwmaXIbVHh2fJXwb2twASIry3wMOymKR2TvnRprVDNTjErhfajS9jVpEsRJQ1hDowg6_oOY4kXSnH0u-2r10rGkVI552AyB6x4k1qJxVAyKbePZBkR_64CO5AwG_SFcgRRuBrgSyP46i_4bL2_RhfTiwUBBSdBjYAEB4P9JD5LnIixecYIPQpu5AJ_61-yqTobpOh"
         }
     ]
 }
