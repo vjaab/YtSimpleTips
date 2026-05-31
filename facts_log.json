@@ -7,26 +7,29 @@
         "Mistakes = Trust?!",
         "The Pratfall Effect",
         "Venus: Day > Year?!",
-        "Diamonds on Other Planets"
+        "Diamonds on Other Planets",
+        "Venus: Day > Year?!",
+        "Space Dust Collection"
     ],
     "used_keywords": [
-        "Tectonic Plates",
         "Tamil Facts",
         "Did You Know",
+        "Tectonic Plates",
         "Earthquake"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
         "🧠 Psychology & Mind": 2,
-        "🧪 Science & Space": 1
+        "🧪 Science & Space": 2
     },
     "last_7_days_stories": [
         "Earthquake ஏன் வருது?!",
         "Brain's SHOCKING Secret!",
         "Mistakes = Trust?!",
+        "Venus: Day > Year?!",
         "Venus: Day > Year?!"
     ],
-    "total_uploaded": 4,
+    "total_uploaded": 5,
     "last_upload": "2026-05-31",
     "history": [
         {
@@ -82,6 +85,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://www.rmg.co.uk/stories/topics/15-awe-inspiring-space-and-astronomy-discoveries"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Venus: Day > Year?!",
+            "news_headline": "Space Dust Collection",
+            "category": "🧪 Science & Space",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://www.rmg.co.uk/stories/topics/day-longer-than-year-venus"
         }
     ]
 }
