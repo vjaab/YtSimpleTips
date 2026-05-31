@@ -81,6 +81,10 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
     if not youtube:
         return False, "Failed to authenticate with YouTube API"
 
+    # YouTube API does not allow angle brackets '<' and '>' in video titles.
+    # Sanitize the title by removing them to prevent 400 Bad Request errors.
+    title = title.replace("<", "").replace(">", "").strip()
+
     body = {
         "snippet": {
             "title":                title[:100],

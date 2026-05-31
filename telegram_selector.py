@@ -30,7 +30,7 @@ def _send_message(text, parse_mode="HTML", reply_markup=None):
         print(f"⚠️ Telegram sendMessage failed: {e}")
         if parse_mode == "HTML":
             print("🔄 Retrying Telegram sendMessage without HTML parsing...")
-            payload["parse_mode"] = None
+            payload.pop("parse_mode", None)
             try:
                 r = requests.post(f"{BASE_URL}/sendMessage", json=payload, timeout=15)
                 r.raise_for_status()
@@ -164,17 +164,33 @@ def send_topic_selection(articles):
 def _send_photo(photo_path, caption=""):
     if not BOT_TOKEN or not CHAT_ID:
         return {}
+    data = {"chat_id": CHAT_ID, "caption": caption, "parse_mode": "HTML"}
     try:
         with open(photo_path, "rb") as f:
             r = requests.post(
                 f"{BASE_URL}/sendPhoto",
-                data={"chat_id": CHAT_ID, "caption": caption, "parse_mode": "HTML"},
+                data=data,
                 files={"photo": f},
                 timeout=30
             )
+            r.raise_for_status()
         return r.json().get("result", {})
     except Exception as e:
         print(f"⚠️ Telegram sendPhoto failed: {e}")
+        print("🔄 Retrying Telegram sendPhoto without HTML parsing...")
+        data.pop("parse_mode", None)
+        try:
+            with open(photo_path, "rb") as f:
+                r = requests.post(
+                    f"{BASE_URL}/sendPhoto",
+                    data=data,
+                    files={"photo": f},
+                    timeout=30
+                )
+                r.raise_for_status()
+            return r.json().get("result", {})
+        except Exception as re:
+            print(f"⚠️ Telegram sendPhoto retry failed: {re}")
         return {}
 
 def send_upload_consent(thumbnail_path, title, duration_sec):
