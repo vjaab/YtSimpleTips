@@ -28,35 +28,42 @@ def _generate_imagen_background(prompt_context):
     models_to_try = [
         "imagen-4.0-generate-001",
         "imagen-4.0-fast-generate-001",
-        "imagen-3.0-generate-002",
     ]
     
-    for model_name in models_to_try:
-        try:
-            result = client.models.generate_images(
-                model=model_name,
-                prompt=prompt,
-                config=genai.types.GenerateImagesConfig(
-                    number_of_images=1,
-                    aspect_ratio="16:9",
-                    output_mime_type="image/jpeg",
+    attempts = 0
+    while attempts < 3:
+        for model_name in models_to_try:
+            try:
+                result = client.models.generate_images(
+                    model=model_name,
+                    prompt=prompt,
+                    config=genai.types.GenerateImagesConfig(
+                        number_of_images=1,
+                        aspect_ratio="16:9",
+                        output_mime_type="image/jpeg",
+                    )
                 )
-            )
-            for gen_img in result.generated_images:
-                img_data = gen_img.image.image_bytes
-                temp_path = os.path.join(OUTPUT_DIR, f"temp_thumb_bg_{int(time.time())}.jpg")
-                with open(temp_path, "wb") as f:
-                    f.write(img_data)
-                print(f"✅ [thumbnail] Background generated with {model_name}")
-                return Image.open(temp_path)
-        except Exception as e:
-            err_str = str(e).lower()
-            if "429" in err_str:
-                print(f"⏳ [thumbnail] Rate limited on {model_name}. Trying next...")
-                continue
-            else:
-                print(f"⚠️ [thumbnail] {model_name} failed: {e}. Trying next...")
-                continue
+                for gen_img in result.generated_images:
+                    img_data = gen_img.image.image_bytes
+                    temp_path = os.path.join(OUTPUT_DIR, f"temp_thumb_bg_{int(time.time())}.jpg")
+                    with open(temp_path, "wb") as f:
+                        f.write(img_data)
+                    print(f"✅ [thumbnail] Background generated with {model_name}")
+                    return Image.open(temp_path)
+            except Exception as e:
+                err_str = str(e).lower()
+                if "429" in err_str:
+                    sleep_time = 15 + attempts * 10
+                    print(f"⏳ [thumbnail] Rate limited (429) on {model_name}. Retrying attempt {attempts+1}/3 in {sleep_time}s...")
+                    time.sleep(sleep_time)
+                    break  # Break out of model loop to retry after sleeping
+                else:
+                    print(f"⚠️ [thumbnail] {model_name} failed: {e}. Trying next...")
+                    continue
+        else:
+            # Completed the model loop without breaking (no 429 encountered)
+            break
+        attempts += 1
         
     print("⚠️ [thumbnail] All Imagen models failed. Using solid dark fallback.")
     return Image.new("RGB", (THUMB_W, THUMB_H), (15, 15, 22))

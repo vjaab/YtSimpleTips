@@ -96,29 +96,37 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
         "imagen-4.0-fast-generate-001",
     ]
 
-    for model_name in models_to_try:
-        try:
-            result = client.models.generate_images(
-                model=model_name,
-                prompt=prompt,
-                config=genai.types.GenerateImagesConfig(
-                    number_of_images=1,
-                    aspect_ratio=aspect_ratio,
-                    output_mime_type="image/jpeg",
-                ),
-            )
-            for gen_img in result.generated_images:
-                with open(output_path, "wb") as f:
-                    f.write(gen_img.image.image_bytes)
-                return output_path
-        except Exception as e:
-            err_str = str(e).lower()
-            if "429" in err_str:
-                print(f"  ⏳ Imagen rate limited or quota exhausted on {model_name}. Trying next...")
-                continue
-            else:
-                print(f"  ⚠️ Imagen failed ({model_name}): {e}")
-                break
+    attempts = 0
+    while attempts < 3:
+        for model_name in models_to_try:
+            try:
+                result = client.models.generate_images(
+                    model=model_name,
+                    prompt=prompt,
+                    config=genai.types.GenerateImagesConfig(
+                        number_of_images=1,
+                        aspect_ratio=aspect_ratio,
+                        output_mime_type="image/jpeg",
+                    ),
+                )
+                for gen_img in result.generated_images:
+                    with open(output_path, "wb") as f:
+                        f.write(gen_img.image.image_bytes)
+                    return output_path
+            except Exception as e:
+                err_str = str(e).lower()
+                if "429" in err_str:
+                    sleep_time = 15 + attempts * 10
+                    print(f"  ⏳ Imagen rate limited (429) on {model_name}. Retrying attempt {attempts+1}/3 in {sleep_time}s...")
+                    time.sleep(sleep_time)
+                    break  # Break out of model loop to retry after sleeping
+                else:
+                    print(f"  ⚠️ Imagen failed ({model_name}): {e}")
+                    continue  # Try next model
+        else:
+            # Completed the model loop without breaking (no 429 encountered)
+            break
+        attempts += 1
 
     return None
 
