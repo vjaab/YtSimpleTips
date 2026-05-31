@@ -136,7 +136,9 @@ def run_pipeline(forced_category=None):
             continue
             
         script_data["slot"] = slot
-        title = script_data.get("title", "Tamil Fact!")
+        title = script_data.get("title") or ""
+        if not str(title).strip():
+            title = script_data.get("original_news_headline") or "Tamil Fact!"
         script = script_data.get("script", "")
         fact_headline = script_data.get("original_news_headline")
         fact_url = script_data.get("original_news_url")
