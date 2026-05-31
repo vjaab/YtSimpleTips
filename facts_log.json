@@ -9,27 +9,30 @@
         "Venus: Day > Year?!",
         "Diamonds on Other Planets",
         "Venus: Day > Year?!",
-        "Space Dust Collection"
+        "Space Dust Collection",
+        "Ocean's SHOCKING Oxygen Secret!",
+        "Oceans Produce Most of Earth's Oxygen"
     ],
     "used_keywords": [
         "Tamil Facts",
-        "Did You Know",
         "Tectonic Plates",
+        "Did You Know",
         "Earthquake"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
         "🧠 Psychology & Mind": 2,
-        "🧪 Science & Space": 2
+        "🧪 Science & Space": 3
     },
     "last_7_days_stories": [
         "Earthquake ஏன் வருது?!",
         "Brain's SHOCKING Secret!",
         "Mistakes = Trust?!",
         "Venus: Day > Year?!",
-        "Venus: Day > Year?!"
+        "Venus: Day > Year?!",
+        "Ocean's SHOCKING Oxygen Secret!"
     ],
-    "total_uploaded": 5,
+    "total_uploaded": 6,
     "last_upload": "2026-05-31",
     "history": [
         {
@@ -98,6 +101,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://www.rmg.co.uk/stories/topics/day-longer-than-year-venus"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Ocean's SHOCKING Oxygen Secret!",
+            "news_headline": "Oceans Produce Most of Earth's Oxygen",
+            "category": "🧪 Science & Space",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/JQD2IZ8sYBU",
+            "source_url": "https://www.vedantu.com/blog/amazing-facts-in-science"
         }
     ]
 }
