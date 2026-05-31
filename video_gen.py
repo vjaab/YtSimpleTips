@@ -93,7 +93,9 @@ def build_ken_burns(img_path, duration):
         clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
         
     # Apply slow progressive scale (zoom from 1.0 to 1.10)
-    clip = clip.resized(lambda t: 1.0 + 0.10 * (t / duration))
+    # Guard against zero or extremely small duration to prevent NaN division
+    safe_duration = max(0.1, duration) if duration else 1.0
+    clip = clip.resized(lambda t: 1.0 + 0.10 * (t / safe_duration))
     return clip
 
 def _gradient_overlay(duration):
