@@ -28,6 +28,15 @@ def _send_message(text, parse_mode="HTML", reply_markup=None):
         return r.json().get("result", {})
     except Exception as e:
         print(f"⚠️ Telegram sendMessage failed: {e}")
+        if parse_mode == "HTML":
+            print("🔄 Retrying Telegram sendMessage without HTML parsing...")
+            payload["parse_mode"] = None
+            try:
+                r = requests.post(f"{BASE_URL}/sendMessage", json=payload, timeout=15)
+                r.raise_for_status()
+                return r.json().get("result", {})
+            except Exception as re:
+                print(f"⚠️ Telegram sendMessage retry failed: {re}")
         return {}
 
 def _get_updates(offset=None):
