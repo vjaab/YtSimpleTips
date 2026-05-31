@@ -5,24 +5,28 @@
         "Brain's SHOCKING Secret!",
         "Love and OCD: A Neurochemical Connection",
         "Mistakes = Trust?!",
-        "The Pratfall Effect"
+        "The Pratfall Effect",
+        "Venus: Day > Year?!",
+        "Diamonds on Other Planets"
     ],
     "used_keywords": [
-        "Did You Know",
         "Tectonic Plates",
-        "Earthquake",
-        "Tamil Facts"
+        "Tamil Facts",
+        "Did You Know",
+        "Earthquake"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
-        "🧠 Psychology & Mind": 2
+        "🧠 Psychology & Mind": 2,
+        "🧪 Science & Space": 1
     },
     "last_7_days_stories": [
         "Earthquake ஏன் வருது?!",
         "Brain's SHOCKING Secret!",
-        "Mistakes = Trust?!"
+        "Mistakes = Trust?!",
+        "Venus: Day > Year?!"
     ],
-    "total_uploaded": 3,
+    "total_uploaded": 4,
     "last_upload": "2026-05-31",
     "history": [
         {
@@ -65,6 +69,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/vmSdlD0AeVw",
             "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG_nzkcbSTbUCLQ_etGqcCNBLnbe8kS8W3VSwxlETA7aXqsjki1TZlgDvL-c5vWUtjEIntYZkMFvfLAPZ39K6INW3BcXktV3NKcGppLTfhEsrcRZZ026_bBYHVazWcqjzx6ch3w07asksax2HjAcePqYhhcsbPqc6u5GHYEImpYoZaMHmuQ-1-GOsW84jJN66bKgEu_IuqN2phr0x0sDHj5StUruNNk"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Venus: Day > Year?!",
+            "news_headline": "Diamonds on Other Planets",
+            "category": "🧪 Science & Space",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://www.rmg.co.uk/stories/topics/15-awe-inspiring-space-and-astronomy-discoveries"
         }
     ]
 }
