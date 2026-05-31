@@ -17,7 +17,8 @@ from moviepy import (
 from pydub import AudioSegment
 
 from config import (
-    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS, ENABLE_WATERMARK
+    ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS, ENABLE_WATERMARK,
+    ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS
 )
 from infographic_gen import build_infographic_clip, get_font_for_text
 
@@ -77,8 +78,8 @@ def _prepare_evidence_canvas(img, url=None):
         
     return canvas
 
-def build_ken_burns(img_path, duration):
-    """Builds a smooth zoom-in Ken Burns effect clip for static background images."""
+def build_ken_burns(img_path, duration, zoom_direction=None):
+    """Builds a smooth Ken Burns effect clip with randomized zoom direction."""
     clip = ImageClip(img_path).with_duration(duration)
     w, h = clip.size
     
@@ -92,10 +93,19 @@ def build_ken_burns(img_path, duration):
         x1 = (w - target_w) // 2
         clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
         
-    # Apply slow progressive scale (zoom from 1.0 to 1.10)
     # Guard against zero or extremely small duration to prevent NaN division
     safe_duration = max(0.1, duration) if duration else 1.0
-    clip = clip.resized(lambda t: 1.0 + 0.10 * (t / safe_duration))
+    
+    # Randomize zoom direction for visual variety
+    if zoom_direction is None:
+        zoom_direction = random.choice(["in", "out"])
+    
+    if zoom_direction == "out":
+        # Zoom out: start at 1.10x and settle to 1.0x
+        clip = clip.resized(lambda t: 1.10 - 0.10 * (t / safe_duration))
+    else:
+        # Zoom in: start at 1.0x and grow to 1.10x
+        clip = clip.resized(lambda t: 1.0 + 0.10 * (t / safe_duration))
     return clip
 
 def _gradient_overlay(duration):
@@ -201,28 +211,36 @@ def canvas_to_clip(pil_img):
     return np.array(pil_img.convert("RGBA"))
 
 def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
-    """Mixes voiceover with background music performing high-fidelity dynamic ducking."""
+    """Mixes voiceover with background music using dynamic ducking for premium sound."""
     print("🎵 [audio_mastering] Mixing and mastering soundtrack...")
     try:
         voice = AudioSegment.from_file(voice_path)
         if bgm_path and os.path.exists(bgm_path):
             bgm = AudioSegment.from_file(bgm_path)
             
-            # ducking BGM
-            bgm = bgm - 24 # Standard volume drop
-            
             # Loop BGM if shorter than voice
             while len(bgm) < len(voice):
                 bgm += bgm
-                
-            # Trim BGM to match voice
             bgm = bgm[:len(voice)]
             
-            # Perform dynamic ducking: whenever voice is silent, lower BGM even more, 
-            # but keep it rich and clean.
-            mastered = bgm.overlay(voice)
+            # Dynamic ducking: analyze voice loudness per 500ms window
+            # During voice activity: BGM at -22dB; during silence: BGM rises to -14dB
+            chunk_ms = 500
+            ducked_bgm = AudioSegment.empty()
+            for i in range(0, len(bgm), chunk_ms):
+                voice_chunk = voice[i:i+chunk_ms]
+                bgm_chunk = bgm[i:i+chunk_ms]
+                if voice_chunk.dBFS > -40:  # Voice is active
+                    ducked_bgm += bgm_chunk - 22
+                else:  # Silence — let BGM breathe
+                    ducked_bgm += bgm_chunk - 14
+            
+            # Gentle fade-in (300ms) and fade-out (500ms) for polish
+            ducked_bgm = ducked_bgm.fade_in(300).fade_out(500)
+            
+            mastered = ducked_bgm.overlay(voice)
             mastered.export(output_path, format="wav")
-            print("✅ [audio_mastering] Soundtrack mixed successfully!")
+            print("✅ [audio_mastering] Soundtrack mixed with dynamic ducking!")
         else:
             print(f"⚠️ [audio_mastering] BGM file not found at '{bgm_path}'. Proceeding with raw voiceover.")
             voice.export(output_path, format="wav")
@@ -269,11 +287,18 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     print("🎬 Assembling fullscreen background clips...")
     background_clips = []
     
+    # Track chunk boundaries for flash transitions
+    chunk_boundaries = []
+    
     for i, chunk in enumerate(chunks):
         c_start = chunk["start"]
         c_dur = chunk["duration"]
         vpath = chunk.get("visual_path")
         has_info = chunk.get("has_infographic", False)
+        
+        # Track boundary for flash transition (skip first chunk)
+        if i > 0:
+            chunk_boundaries.append(c_start)
         
         # 1. Overlay infographic card if flagged
         if has_info:
@@ -295,8 +320,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 c_clip = ImageClip(np.array(canvas)).with_duration(c_dur).with_start(c_start)
                 background_clips.append(c_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
-                # Ken burns zoom
-                c_clip = build_ken_burns(vpath, c_dur).with_start(c_start)
+                # Ken burns zoom with randomized direction for visual variety
+                zoom_dir = "in" if i % 2 == 0 else "out"
+                c_clip = build_ken_burns(vpath, c_dur, zoom_direction=zoom_dir).with_start(c_start)
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Pexels vertical video
@@ -345,12 +371,39 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
+    # ── EMOJI OVERLAY CONFIG ──
+    # Emojis appear at key retention moments: hook (0-2s), reveal (~15s), CTA (last 5s)
+    emoji_moments = []
+    if ENABLE_EMOJI_OVERLAYS:
+        emoji_pool_hook = ["🤯", "😱", "⚡"]
+        emoji_pool_reveal = ["🧠", "💡", "🔥"]
+        emoji_pool_cta = ["💬", "👇", "🚀"]
+        emoji_moments = [
+            {"start": 0.5, "end": 2.0, "emoji": random.choice(emoji_pool_hook), "x": FRAME_W - 180, "y": 200},
+            {"start": audio_duration * 0.3, "end": audio_duration * 0.3 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": 80, "y": 250},
+            {"start": audio_duration * 0.55, "end": audio_duration * 0.55 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": FRAME_W - 200, "y": 300},
+            {"start": audio_duration - 5.0, "end": audio_duration - 3.0, "emoji": random.choice(emoji_pool_cta), "x": FRAME_W - 180, "y": 220},
+        ]
+    
     # Frame Assembly Loop
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
         
-        # Draw subtitles
-        subtitle_img = None
+        # ── Flash transition effect (white flash at chunk boundaries) ──
+        if ENABLE_FLASH_TRANSITIONS:
+            flash_duration = 0.066  # ~2 frames at 30fps
+            for boundary_t in chunk_boundaries:
+                if boundary_t <= t < boundary_t + flash_duration:
+                    # Blend white flash with decreasing intensity
+                    flash_progress = (t - boundary_t) / flash_duration
+                    flash_alpha = 1.0 - flash_progress  # Fades from white to normal
+                    white = np.full_like(frame, 255)
+                    frame = np.clip(frame * (1 - flash_alpha) + white * flash_alpha, 0, 255).astype(np.uint8)
+                    break
+        
+        pil_frame = Image.fromarray(frame).convert("RGBA")
+        
+        # ── Draw subtitles ──
         active_chunk = None
         for chunk in chunks:
             if chunk["start"] <= t <= chunk["end"]:
@@ -370,22 +423,38 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 })
                 
             if word_status_list:
-                # Render subtitle image array
                 sub_arr = render_subtitle_frame(word_status_list)
-                # Combine subtitle over the frame using PIL compositing
-                pil_frame = Image.fromarray(frame).convert("RGBA")
                 pil_sub = Image.fromarray(sub_arr).convert("RGBA")
                 pil_frame.alpha_composite(pil_sub)
-                frame = np.array(pil_frame.convert("RGB"))
+        
+        # ── Emoji reaction overlays ──
+        if ENABLE_EMOJI_OVERLAYS:
+            for em in emoji_moments:
+                if em["start"] <= t <= em["end"]:
+                    try:
+                        em_progress = (t - em["start"]) / (em["end"] - em["start"])
+                        # Pop-in scale: fast grow then settle
+                        scale = min(1.0, em_progress * 3.0) if em_progress < 0.33 else 1.0
+                        # Fade out in last 30%
+                        alpha = 1.0 if em_progress < 0.7 else (1.0 - em_progress) / 0.3
+                        
+                        emoji_size = int(90 * scale)
+                        if emoji_size > 10:
+                            em_font = get_font_for_text(em["emoji"], emoji_size, "bold")
+                            em_draw = ImageDraw.Draw(pil_frame)
+                            # Drop shadow
+                            em_draw.text((em["x"]+3, em["y"]+3), em["emoji"], fill=(0,0,0,int(180*alpha)), font=em_font)
+                            em_draw.text((em["x"], em["y"]), em["emoji"], fill=(255,255,255,int(255*alpha)), font=em_font)
+                    except Exception:
+                        pass
                 
-        # Draw dynamic glowing progress bar at the very bottom edge
+        # ── Dynamic glowing progress bar ──
         progress_w = int(FRAME_W * (t / audio_duration))
         if progress_w > 0:
-            pil_frame = Image.fromarray(frame).convert("RGBA")
             p_draw = ImageDraw.Draw(pil_frame)
             p_draw.rectangle([0, FRAME_H - 12, progress_w, FRAME_H], fill=(204, 255, 0, 255))
-            frame = np.array(pil_frame.convert("RGB"))
             
+        frame = np.array(pil_frame.convert("RGB"))
         return frame
 
     final_video = VideoClip(make_final_frame, duration=audio_duration)
@@ -404,7 +473,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     print(f"🎬 [video_gen] Exporting final video: {output_path}...")
     final_render.write_videofile(
         output_path, fps=30, codec="libx264", audio_codec="aac",
-        threads=4, preset="ultrafast", ffmpeg_params=["-pix_fmt", "yuv420p"]
+        threads=4, preset="medium", ffmpeg_params=["-pix_fmt", "yuv420p", "-b:v", "8M"]
     )
     
     try:

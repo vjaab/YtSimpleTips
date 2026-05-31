@@ -15,7 +15,7 @@ from infographic_gen import get_font_for_text
 THUMB_W, THUMB_H = 1280, 720  # Standard YouTube 16:9 Thumbnail size
 
 def _generate_imagen_background(prompt_context):
-    """Generates an eye-catching background image via Imagen."""
+    """Generates an eye-catching background image via Imagen 4.0."""
     print(f"🎨 [thumbnail] Generating background for context: {prompt_context[:50]}...")
     client = genai.Client(api_key=GEMINI_API_KEY)
     
@@ -25,26 +25,40 @@ def _generate_imagen_background(prompt_context):
         "No text, no watermarks, no faces."
     )
     
-    try:
-        result = client.models.generate_images(
-            model="imagen-3.0-generate-002",
-            prompt=prompt,
-            config=genai.types.GenerateImagesConfig(
-                number_of_images=1,
-                aspect_ratio="16:9",
-                output_mime_type="image/jpeg",
+    models_to_try = [
+        "imagen-4.0-generate-001",
+        "imagen-4.0-fast-generate-001",
+        "imagen-3.0-generate-002",
+    ]
+    
+    for model_name in models_to_try:
+        try:
+            result = client.models.generate_images(
+                model=model_name,
+                prompt=prompt,
+                config=genai.types.GenerateImagesConfig(
+                    number_of_images=1,
+                    aspect_ratio="16:9",
+                    output_mime_type="image/jpeg",
+                )
             )
-        )
-        for gen_img in result.generated_images:
-            img_data = gen_img.image.image_bytes
-            temp_path = os.path.join(OUTPUT_DIR, f"temp_thumb_bg_{int(time.time())}.jpg")
-            with open(temp_path, "wb") as f:
-                f.write(img_data)
-            return Image.open(temp_path)
-    except Exception as e:
-        print(f"⚠️ [thumbnail] Imagen background generation failed: {e}. Reusing default visual.")
+            for gen_img in result.generated_images:
+                img_data = gen_img.image.image_bytes
+                temp_path = os.path.join(OUTPUT_DIR, f"temp_thumb_bg_{int(time.time())}.jpg")
+                with open(temp_path, "wb") as f:
+                    f.write(img_data)
+                print(f"✅ [thumbnail] Background generated with {model_name}")
+                return Image.open(temp_path)
+        except Exception as e:
+            err_str = str(e).lower()
+            if "429" in err_str:
+                print(f"⏳ [thumbnail] Rate limited on {model_name}. Trying next...")
+                continue
+            else:
+                print(f"⚠️ [thumbnail] {model_name} failed: {e}. Trying next...")
+                continue
         
-    # Fallback solid dark canvas
+    print("⚠️ [thumbnail] All Imagen models failed. Using solid dark fallback.")
     return Image.new("RGB", (THUMB_W, THUMB_H), (15, 15, 22))
 
 def generate_thumbnail(script_json):
@@ -109,7 +123,19 @@ def generate_thumbnail(script_json):
         draw.text((80, y), line, fill=(255, 215, 0, 255), font=font_title) # Gold yellow text
         y += lh + 50
         
-    # 4. Shocked emoji overlay on bottom right
+    # 4. Trending fire badge in top-right corner
+    try:
+        badge_fire = "🔥 TRENDING"
+        font_fire = get_font_for_text(badge_fire, 32, "extrabold")
+        fb = font_fire.getbbox(badge_fire)
+        fbw, fbh = fb[2] - fb[0], fb[3] - fb[1]
+        fx, fy = THUMB_W - fbw - 100, 80
+        draw.rounded_rectangle([fx-20, fy-10, fx+fbw+20, fy+fbh+10], radius=15, fill=(255, 69, 0, 240))
+        draw.text((fx, fy-2), badge_fire, fill=(255, 255, 255, 255), font=font_fire)
+    except Exception:
+        pass
+    
+    # 5. Shocked emoji overlay on bottom right
     try:
         font_emoji = get_font_for_text("😱", 130, "bold")
         ex, ey = THUMB_W - 250, THUMB_H - 220
@@ -119,7 +145,7 @@ def generate_thumbnail(script_json):
     except:
         pass
         
-    # 5. Branding strip on bottom
+    # 6. Branding strip on bottom
     draw.rectangle([0, THUMB_H-12, THUMB_W, THUMB_H], fill=(255, 215, 0, 255))
     
     # Save JPEG

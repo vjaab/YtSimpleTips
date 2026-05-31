@@ -75,7 +75,7 @@ def get_authenticated_service():
         print(f"❌ YouTube auth failed: {e}")
         return None
 
-def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="22", comment_hook=None):
+def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="27", comment_hook=None):
     """Uploads the generated Shorts video to YouTube with Tamil metadata and Altered Content flag."""
     youtube = get_authenticated_service()
     if not youtube:
@@ -86,7 +86,7 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
             "title":                title[:100],
             "description":          description[:5000],
             "tags":                 tags[:15],
-            "categoryId":           category_id,  # 22 = People & Blogs (great for infotainment)
+            "categoryId":           category_id,  # 27 = Education (higher CPM for infotainment)
             "defaultLanguage":      "ta",
             "defaultAudioLanguage": "ta",
         },
