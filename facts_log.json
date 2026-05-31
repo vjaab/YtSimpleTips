@@ -3,23 +3,26 @@
         "Earthquake ஏன் வருது?!",
         "Giraffes and Lightning Strikes",
         "Brain's SHOCKING Secret!",
-        "Love and OCD: A Neurochemical Connection"
+        "Love and OCD: A Neurochemical Connection",
+        "Mistakes = Trust?!",
+        "The Pratfall Effect"
     ],
     "used_keywords": [
+        "Did You Know",
         "Tectonic Plates",
         "Earthquake",
-        "Did You Know",
         "Tamil Facts"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
-        "🧠 Psychology & Mind": 1
+        "🧠 Psychology & Mind": 2
     },
     "last_7_days_stories": [
         "Earthquake ஏன் வருது?!",
-        "Brain's SHOCKING Secret!"
+        "Brain's SHOCKING Secret!",
+        "Mistakes = Trust?!"
     ],
-    "total_uploaded": 2,
+    "total_uploaded": 3,
     "last_upload": "2026-05-31",
     "history": [
         {
@@ -49,6 +52,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG6bzFQwmaXIbVHh2fJXwb2twASIry3wMOymKR2TvnRprVDNTjErhfajS9jVpEsRJQ1hDowg6_oOY4kXSnH0u-2r10rGkVI552AyB6x4k1qJxVAyKbePZBkR_64CO5AwG_SFcgRRuBrgSyP46i_4bL2_RhfTiwUBBSdBjYAEB4P9JD5LnIixecYIPQpu5AJ_61-yqTobpOh"
+        },
+        {
+            "date": "2026-05-31",
+            "title": "Mistakes = Trust?!",
+            "news_headline": "The Pratfall Effect",
+            "category": "🧠 Psychology & Mind",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/vmSdlD0AeVw",
+            "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG_nzkcbSTbUCLQ_etGqcCNBLnbe8kS8W3VSwxlETA7aXqsjki1TZlgDvL-c5vWUtjEIntYZkMFvfLAPZ39K6INW3BcXktV3NKcGppLTfhEsrcRZZ026_bBYHVazWcqjzx6ch3w07asksax2HjAcePqYhhcsbPqc6u5GHYEImpYoZaMHmuQ-1-GOsW84jJN66bKgEu_IuqN2phr0x0sDHj5StUruNNk"
         }
     ]
 }
