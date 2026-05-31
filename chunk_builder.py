@@ -119,15 +119,27 @@ def redistribute_to_audio_duration(chunks, audio_duration):
     if not chunks:
         return chunks
 
-    last_chunk = chunks[-1]
-    last_chunk["end"] = max(last_chunk["end"], audio_duration, last_chunk["start"] + 0.1)
-    last_chunk["duration"] = last_chunk["end"] - last_chunk["start"]
-
+    # 1. Enforce chronological non-overlap (push starts forward if needed)
     for i in range(len(chunks) - 1):
         if chunks[i]["end"] > chunks[i+1]["start"]:
              chunks[i+1]["start"] = chunks[i]["end"]
              if chunks[i+1]["end"] < chunks[i+1]["start"] + 0.1:
                  chunks[i+1]["end"] = chunks[i+1]["start"] + 0.1
              chunks[i+1]["duration"] = chunks[i+1]["end"] - chunks[i+1]["start"]
+
+    # 2. Force the first chunk to start exactly at 0.0s
+    chunks[0]["start"] = 0.0
+    chunks[0]["duration"] = chunks[0]["end"] - chunks[0]["start"]
+
+    # 3. Connect all chunks sequentially to eliminate any remaining gaps
+    for i in range(len(chunks) - 1):
+        chunks[i]["end"] = chunks[i+1]["start"]
+        chunks[i]["duration"] = chunks[i]["end"] - chunks[i]["start"]
+        chunks[i+1]["duration"] = chunks[i+1]["end"] - chunks[i+1]["start"]
+
+    # 4. Enforce that the last chunk covers the total audio duration
+    last_chunk = chunks[-1]
+    last_chunk["end"] = max(last_chunk["end"], audio_duration, last_chunk["start"] + 0.1)
+    last_chunk["duration"] = last_chunk["end"] - last_chunk["start"]
 
     return chunks
