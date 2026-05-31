@@ -8,6 +8,7 @@ import shutil
 import cv2
 import numpy as np
 import random
+import math
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from moviepy import (
@@ -109,20 +110,8 @@ def build_ken_burns(img_path, duration, zoom_direction=None):
     return clip
 
 def _gradient_overlay(duration):
-    """Draws a subtle dark top/bottom vignette to enhance caption readability."""
+    """Draws a subtle transparent vignette to preserve the bright whiteboard theme."""
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    
-    # Bottom vignette for subtitles (lower third)
-    for y in range(int(FRAME_H * 0.55), FRAME_H):
-        alpha = int(220 * ((y - FRAME_H * 0.55) / (FRAME_H * 0.45)))
-        draw.line([0, y, FRAME_W, y], fill=(0, 0, 0, alpha))
-        
-    # Top vignette for branding / title
-    for y in range(0, int(FRAME_H * 0.20)):
-        alpha = int(180 * ((int(FRAME_H * 0.20) - y) / (FRAME_H * 0.20)))
-        draw.line([0, y, FRAME_W, y], fill=(0, 0, 0, alpha))
-        
     return ImageClip(np.array(img)).with_duration(duration)
 
 def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0):
@@ -206,6 +195,62 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
             word_idx += 1
             
     return canvas_to_clip(img)
+
+def render_whiteboard_caption(text, progress=1.0):
+    """Renders a high-impact whiteboard-style English keyword/phrase caption with electric yellow highlighter."""
+    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    text = text.upper().strip()
+    if not text:
+        return np.array(img)
+        
+    base_size = int(72 * (FRAME_W / 1080.0))
+    font = get_font_for_text(text, base_size, "extrabold")
+    
+    # Calculate bounds
+    bbox = font.getbbox(text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    cx = (FRAME_W - tw) // 2
+    cy = int(FRAME_H * 0.72)
+    
+    # Breathing animation scale effect
+    scale = 1.0 + 0.04 * math.sin(min(1.0, progress) * math.pi)
+    
+    # Highlight backing pill
+    pad_x = int(35 * (FRAME_W / 1080.0))
+    pad_y = int(18 * (FRAME_W / 1080.0))
+    hx1 = cx - pad_x
+    hy1 = cy - pad_y
+    hx2 = cx + tw + pad_x
+    hy2 = cy + th + pad_y
+    
+    # Pop animation: scale up highlighter based on scale factor
+    if scale != 1.0:
+        center_x = (hx1 + hx2) / 2
+        center_y = (hy1 + hy2) / 2
+        hw = (hx2 - hx1) * scale
+        hh = (hy2 - hy1) * scale
+        hx1 = int(center_x - hw / 2)
+        hx2 = int(center_x + hw / 2)
+        hy1 = int(center_y - hh / 2)
+        hy2 = int(center_y + hh / 2)
+        
+        # Scale text size as well
+        font = get_font_for_text(text, int(base_size * scale), "extrabold")
+        bbox = font.getbbox(text)
+        tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        cx = (FRAME_W - tw) // 2
+        cy = int(center_y - th / 2)
+    
+    # Highlighter color: Electric neon yellow/green (204, 255, 0, 255)
+    draw.rounded_rectangle([hx1, hy1, hx2, hy2], radius=15, fill=(204, 255, 0, 255))
+    
+    # Clean black marker text
+    draw.text((cx, cy), text, fill=(10, 10, 10, 255), font=font)
+    
+    return np.array(img)
 
 def canvas_to_clip(pil_img):
     return np.array(pil_img.convert("RGBA"))
@@ -304,8 +349,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if has_info:
             card_clip, overlay_clip = build_infographic_clip(chunk, (255, 215, 0), is_longform=is_longform)
             if card_clip:
-                # Add dark backing clip for the card
-                dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(10, 10, 15), duration=c_dur).with_start(c_start)
+                # Add whiteboard backing clip for the card
+                dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
                 background_clips.append(dark_bg)
                 background_clips.append(overlay_clip)
                 background_clips.append(card_clip)
@@ -347,8 +392,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 c_clip = c_clip.resized((FRAME_W, FRAME_H))
                 background_clips.append(c_clip)
         else:
-            # Fallback color clip
-            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(10, 10, 15), duration=c_dur).with_start(c_start)
+            # Fallback whiteboard color clip
+            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
             background_clips.append(c_clip)
 
     # Compile the base composited backgrounds
@@ -365,9 +410,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
         header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
         text_x = 50
-        # Draw premium drop shadow for text readability under any background
-        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(0, 0, 0, 180), font=header_font)
-        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 255), font=header_font)
+        # Draw premium light theme text watermark
+        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(200, 200, 200, 100), font=header_font)
+        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(40, 40, 40, 255), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
@@ -414,16 +459,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             active_chunk = chunks[-1]
             
         if ENABLE_KINETIC_CAPTIONS and active_chunk:
-            word_status_list = []
-            for w in active_chunk.get("words", []):
-                is_active = w["start"] - 0.05 <= t <= w["end"] + 0.05
-                word_status_list.append({
-                    "word": w["word"],
-                    "is_active": is_active
-                })
-                
-            if word_status_list:
-                sub_arr = render_subtitle_frame(word_status_list)
+            chunk_text = active_chunk.get("english_caption", active_chunk.get("text", ""))
+            if chunk_text:
+                chunk_dur = max(0.1, active_chunk["end"] - active_chunk["start"])
+                progress = (t - active_chunk["start"]) / chunk_dur
+                sub_arr = render_whiteboard_caption(chunk_text, progress)
                 pil_sub = Image.fromarray(sub_arr).convert("RGBA")
                 pil_frame.alpha_composite(pil_sub)
         
