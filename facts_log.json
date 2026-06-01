@@ -11,18 +11,21 @@
         "Venus: Day > Year?!",
         "Space Dust Collection",
         "Ocean's SHOCKING Oxygen Secret!",
-        "Oceans Produce Most of Earth's Oxygen"
+        "Oceans Produce Most of Earth's Oxygen",
+        "Honey: 3000 Years Fresh?!",
+        "Honey Never Spoils"
     ],
     "used_keywords": [
-        "Tamil Facts",
         "Tectonic Plates",
         "Did You Know",
-        "Earthquake"
+        "Earthquake",
+        "Tamil Facts"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
         "🧠 Psychology & Mind": 2,
-        "🧪 Science & Space": 3
+        "🧪 Science & Space": 3,
+        "🎲 Random Amazing Facts": 1
     },
     "last_7_days_stories": [
         "Earthquake ஏன் வருது?!",
@@ -30,10 +33,11 @@
         "Mistakes = Trust?!",
         "Venus: Day > Year?!",
         "Venus: Day > Year?!",
-        "Ocean's SHOCKING Oxygen Secret!"
+        "Ocean's SHOCKING Oxygen Secret!",
+        "Honey: 3000 Years Fresh?!"
     ],
-    "total_uploaded": 6,
-    "last_upload": "2026-05-31",
+    "total_uploaded": 7,
+    "last_upload": "2026-06-01",
     "history": [
         {
             "date": "2026-05-30",
@@ -114,6 +118,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/JQD2IZ8sYBU",
             "source_url": "https://www.vedantu.com/blog/amazing-facts-in-science"
+        },
+        {
+            "date": "2026-06-01",
+            "title": "Honey: 3000 Years Fresh?!",
+            "news_headline": "Honey Never Spoils",
+            "category": "🎲 Random Amazing Facts",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/3uBWG7y07us",
+            "source_url": "https://www.youtube.com/watch?v=m7k-P_fuIUo"
         }
     ]
 }
