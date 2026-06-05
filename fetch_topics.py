@@ -8,31 +8,31 @@ from topic_tracker import check_story_uniqueness
 
 def fetch_facts_for_category(category):
     """
-    Uses Gemini Search Grounding to find 5 fresh, high-engagement, true facts
+    Uses Gemini Search Grounding to find 5 fresh, high-utility, actionable tips/hacks
     for the selected category.
-    Returns a list of structured fact articles.
+    Returns a list of structured tip articles.
     """
-    print(f"📡 [fetch_topics] Fetching trending facts for category '{category}' using Gemini Search Grounding...")
+    print(f"📡 [fetch_topics] Fetching trending tips and hacks for category '{category}' using Gemini Search Grounding...")
     
     if not GEMINI_API_KEY:
-        print("⚠️ Gemini API Key missing! Cannot fetch facts.")
+        print("⚠️ Gemini API Key missing! Cannot fetch tips.")
         return []
         
     client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = f"""
-    Search the web for 5 highly engaging, amazing, and true facts/stories related to the category: "{category}".
-    These facts must be fascinating, relatively unknown, and highly suitable for a 45-55 second faceless Tamil infotainment YouTube Short.
+    Search the web for 5 highly useful, practical, and true life hacks, tips, or guidelines related to the category: "{category}".
+    These tips must be actionable, interesting, and highly suitable for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
-    CRITICAL REQUIREMENT: For each fact, you MUST search for and provide a real, highly reputable source URL (like Wikipedia, NASA, Encyclopaedia Britannica, National Geographic, Nature, BBC, etc.) that contains the fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each tip/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, life hack publication, scientific study, or official guide) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
-    Return ONLY a JSON list of 5 facts matching this schema:
+    Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the fact (e.g. Moon Dust Smell)",
-        "description": "A rich, detailed 2-3 sentence explanation of the fact in English, containing all the key scientific or historical data points.",
-        "source_url": "Direct URL to Wikipedia, NASA, NatGeo, or official source documenting this specific fact",
-        "source_name": "Name of the source (e.g. Wikipedia, BBC, NASA)",
+        "title": "Short descriptive English title of the tip (e.g. Pomodoro Study Technique)",
+        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English, explaining exactly how it works, how to apply it, and the science/reasoning behind it.",
+        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific tip",
+        "source_name": "Name of the source (e.g. Wikipedia, Healthline, Medium)",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "category": "{category}"
       }}
