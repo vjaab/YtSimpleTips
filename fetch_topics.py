@@ -80,9 +80,20 @@ def fetch_facts_for_category(category):
                 attempts += 1
                 
         except Exception as e:
-            print(f"⚠️ [fetch_topics] Fact fetch failed: {e}. Retrying in 5s...")
+            err_str = str(e).lower()
+            is_rate_limit = any(
+                k in err_str
+                for k in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
+            )
+            if is_rate_limit:
+                import random
+                sleep_time = int(10 * (1.8 ** attempts) + random.uniform(1, 4))
+                print(f"⚠️ [fetch_topics] Gemini API high demand/rate limit. Waiting {sleep_time}s...")
+            else:
+                sleep_time = 5 + attempts * 5
+                print(f"⚠️ [fetch_topics] Fact fetch failed: {e}. Retrying in {sleep_time}s...")
             import time
-            time.sleep(5)
+            time.sleep(sleep_time)
             attempts += 1
             
     # Fallback if search grounding completely fails or returns only duplicates

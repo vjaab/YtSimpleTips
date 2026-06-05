@@ -373,10 +373,11 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
 def call_gemini_api(client, prompt, model='gemini-2.5-flash'):
     """
-    Helper to execute Gemini API call with retries and JSON parsing.
+    Helper to execute Gemini API call with robust exponential backoff retries for 503/429 errors.
     """
     attempts = 0
-    while attempts < 3:
+    max_attempts = 6
+    while attempts < max_attempts:
         try:
             response = client.models.generate_content(
                 model=model,
@@ -395,9 +396,24 @@ def call_gemini_api(client, prompt, model='gemini-2.5-flash'):
             
             return json.loads(raw.strip())
         except Exception as e:
-            print(f"⚠️ Agent call failed: {e}. Retrying in {5 + attempts * 5}s...")
-            time.sleep(5 + attempts * 5)
+            err_str = str(e).lower()
+            is_rate_limit_or_overload = any(
+                keyword in err_str 
+                for keyword in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
+            )
+            
+            if is_rate_limit_or_overload:
+                # Exponential backoff with jitter
+                sleep_time = int(10 * (1.8 ** attempts) + random.uniform(1, 5))
+                print(f"⚠️ [Gemini API Overload/Rate-Limit] {e}")
+                print(f"   Waiting {sleep_time} seconds (attempt {attempts+1}/{max_attempts}) before retrying...")
+                time.sleep(sleep_time)
+            else:
+                sleep_time = 5 + attempts * 5
+                print(f"⚠️ Agent call failed: {e}. Retrying in {sleep_time}s...")
+                time.sleep(sleep_time)
             attempts += 1
             
     print("🚨 Agent failed all attempts.")
     return None
+

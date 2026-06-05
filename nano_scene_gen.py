@@ -55,32 +55,53 @@ Return ONLY a JSON array of objects, one per sentence, in order:
   ...
 ]"""
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=genai.types.GenerateContentConfig(temperature=0.7)
-        )
-        raw = response.text.strip()
-        if "[" in raw and "]" in raw:
-            raw = raw[raw.find("["):raw.rfind("]") + 1]
+    attempts = 0
+    max_attempts = 4
+    prompts = []
+    while attempts < max_attempts:
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+                config=genai.types.GenerateContentConfig(temperature=0.7)
+            )
+            raw = response.text.strip()
+            if "[" in raw and "]" in raw:
+                raw = raw[raw.find("["):raw.rfind("]") + 1]
 
-        import json
-        prompts = json.loads(raw)
+            import json
+            prompts = json.loads(raw)
+            break
+        except Exception as e:
+            err_str = str(e).lower()
+            is_rate_limit = any(
+                k in err_str
+                for k in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
+            )
+            sleep_time = int(8 * (1.8 ** attempts) + random.uniform(1, 3)) if is_rate_limit else 5
+            print(f"  ⚠️ [nano_scene_gen] Prompt generation failed: {e}. Retrying in {sleep_time}s...")
+            time.sleep(sleep_time)
+            attempts += 1
 
-        prompt_map = {p.get("chunk_id", i + 1): p.get("prompt", "") for i, p in enumerate(prompts)}
-        for c in missing:
-            cid = c.get("chunk_id", 0)
-            if cid in prompt_map and prompt_map[cid]:
-                c["nano_visual_prompt"] = prompt_map[cid]
-            else:
-                c["nano_visual_prompt"] = (
-                    f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
-                    f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
-                )
-        print(f"  ✅ Generated {len(prompts)} nano-scene prompts via Gemini Flash.")
-    except Exception as e:
-        print(f"  ⚠️ Batch prompt generation failed: {e}. Using fallback prompts.")
+    if prompts:
+        try:
+            prompt_map = {p.get("chunk_id", i + 1): p.get("prompt", "") for i, p in enumerate(prompts)}
+            for c in missing:
+                cid = c.get("chunk_id", 0)
+                if cid in prompt_map and prompt_map[cid]:
+                    c["nano_visual_prompt"] = prompt_map[cid]
+                else:
+                    c["nano_visual_prompt"] = (
+                        f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
+                        f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
+                    )
+            print(f"  ✅ Generated {len(prompts)} nano-scene prompts via Gemini Flash.")
+        except Exception as e:
+            print(f"  ⚠️ Failed mapping prompts: {e}")
+            prompts = []  # Trigger fallback loop below
+            
+    if not prompts:
+        print("  ⚠️ Using fallback visual prompts for all missing chunks.")
         for c in missing:
             c["nano_visual_prompt"] = (
                 f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
