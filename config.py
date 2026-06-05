@@ -43,7 +43,7 @@ TARGET_AUDIO_DURATION = (40, 55)  # Optimized for Tamil Shorts audience
 ENABLE_LONGFORM = False
 
 # Engagement & Retention Pillars (Faceless Info Channels 2026)
-ENABLE_KINETIC_CAPTIONS = True
+ENABLE_KINETIC_CAPTIONS = False
 ENABLE_WATERMARK = True
 ENABLE_AUDIO_DUCKING = True
 ENABLE_PERIODIC_CUTS = True
@@ -54,7 +54,7 @@ ENABLE_EMOJI_OVERLAYS = True
 
 # Visual Upgrade V2 Feature Flags (2026)
 ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
-ENABLE_DUAL_CAPTIONS = True          # Show Tanglish + English keyword captions simultaneously
+ENABLE_DUAL_CAPTIONS = False          # Show Tanglish + English keyword captions simultaneously
 ENABLE_ADVANCED_TRANSITIONS = True   # Zoom burst, RGB glitch, shake, cross dissolve transitions
 ENABLE_CATEGORY_COLORS = True        # Category-specific color palettes per video
 ENABLE_FACT_COUNTER = True           # "FACT #N" badge in top-left corner
