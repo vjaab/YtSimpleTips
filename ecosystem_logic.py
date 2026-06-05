@@ -105,3 +105,82 @@ def get_category_prompt_enhancement(category, slot):
     }
     
     return enhancements.get(category, enhancements.get("🎲 Random Amazing Facts"))
+
+# ── CATEGORY COLOR PALETTE SYSTEM ──────────────────────────────────────────────
+
+# Each category has a curated color scheme for brand consistency
+_CATEGORY_PALETTES = {
+    "🧪 Science & Space": {
+        "name": "Electric Cyan",
+        "primary": (0, 212, 255),        # Main accent color
+        "secondary": (10, 22, 40),       # Dark background tint
+        "caption_highlight": (0, 230, 255),  # Active word highlight
+        "progress_bar": (0, 212, 255),
+        "thumbnail_accent": (0, 200, 255),
+        "emoji": "🔬",
+    },
+    "🏛️ History & Culture": {
+        "name": "Warm Gold",
+        "primary": (255, 184, 0),
+        "secondary": (26, 16, 0),
+        "caption_highlight": (255, 200, 40),
+        "progress_bar": (255, 184, 0),
+        "thumbnail_accent": (255, 184, 0),
+        "emoji": "📜",
+    },
+    "💊 Health & Body": {
+        "name": "Neon Mint",
+        "primary": (0, 255, 136),
+        "secondary": (13, 31, 13),
+        "caption_highlight": (50, 255, 160),
+        "progress_bar": (0, 255, 136),
+        "thumbnail_accent": (0, 230, 120),
+        "emoji": "🧬",
+    },
+    "🌍 World & Geography": {
+        "name": "Ocean Blue",
+        "primary": (0, 150, 255),
+        "secondary": (10, 18, 35),
+        "caption_highlight": (60, 180, 255),
+        "progress_bar": (0, 150, 255),
+        "thumbnail_accent": (0, 150, 255),
+        "emoji": "🌏",
+    },
+    "💻 Technology & AI": {
+        "name": "Hot Pink",
+        "primary": (255, 0, 128),
+        "secondary": (30, 10, 20),
+        "caption_highlight": (255, 60, 160),
+        "progress_bar": (255, 0, 128),
+        "thumbnail_accent": (255, 0, 128),
+        "emoji": "⚡",
+    },
+    "🧠 Psychology & Mind": {
+        "name": "Cosmic Purple",
+        "primary": (179, 136, 255),
+        "secondary": (13, 10, 26),
+        "caption_highlight": (200, 160, 255),
+        "progress_bar": (179, 136, 255),
+        "thumbnail_accent": (179, 136, 255),
+        "emoji": "🧩",
+    },
+    "🎲 Random Amazing Facts": {
+        "name": "Electric Lime",
+        "primary": (204, 255, 0),
+        "secondary": (15, 15, 10),
+        "caption_highlight": (204, 255, 0),
+        "progress_bar": (204, 255, 0),
+        "thumbnail_accent": (204, 255, 0),
+        "emoji": "🤯",
+    },
+}
+
+# Default palette (Electric Lime — original brand color)
+_DEFAULT_PALETTE = _CATEGORY_PALETTES["🎲 Random Amazing Facts"]
+
+def get_category_color_palette(category):
+    """
+    Returns the category-specific color palette dict.
+    Falls back to Electric Lime (the original brand color) for unknown categories.
+    """
+    return _CATEGORY_PALETTES.get(category, _DEFAULT_PALETTE)

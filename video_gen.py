@@ -1,6 +1,8 @@
 """
 video_gen.py — 15-Layer Faceless Video Rendering Engine with Bilingual Tamil Captions.
-Compiles Ken Burns images, Pexels video clips, and infographic cards with mixed Tamil+English kinetic captions.
+V2: Dual-layer captions, advanced transitions, retention overlays, seamless loop, category colors.
+Compiles Ken Burns images, Pexels video clips, Veo AI clips, and infographic cards
+with mixed Tamil+English kinetic captions.
 """
 
 import os
@@ -19,11 +21,22 @@ from pydub import AudioSegment
 
 from config import (
     ASSETS_DIR, OUTPUT_DIR, LOGS_DIR, BGM_VOLUME, ENABLE_KINETIC_CAPTIONS, ENABLE_WATERMARK,
-    ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS
+    ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS,
+    ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
+    ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
+    ENABLE_SEAMLESS_LOOP
 )
 from infographic_gen import build_infographic_clip, get_font_for_text
 
 FRAME_W, FRAME_H = 1080, 1920  # Default 9:16
+
+# ── DEFAULT COLOR PALETTE (Electric Lime — original brand) ──
+_DEFAULT_PALETTE = {
+    "primary": (204, 255, 0),
+    "secondary": (15, 15, 10),
+    "caption_highlight": (204, 255, 0),
+    "progress_bar": (204, 255, 0),
+}
 
 def set_resolutions(is_longform=False):
     global FRAME_W, FRAME_H
@@ -127,7 +140,94 @@ def _gradient_overlay(duration):
     img = Image.composite(vignette, img, mask)
     return ImageClip(np.array(img)).with_duration(duration)
 
-def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0):
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ── ADVANCED TRANSITION EFFECTS ──────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _apply_zoom_burst(frame, progress):
+    """Quick 1.3x zoom burst that settles back to 1.0x."""
+    h, w = frame.shape[:2]
+    # Scale: 1.0 → 1.3 → 1.0 over the transition duration
+    scale = 1.0 + 0.3 * math.sin(progress * math.pi)
+    new_w, new_h = int(w * scale), int(h * scale)
+    if new_w <= 0 or new_h <= 0:
+        return frame
+    resized = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+    # Crop center back to original size
+    x1 = (new_w - w) // 2
+    y1 = (new_h - h) // 2
+    return resized[y1:y1+h, x1:x1+w]
+
+def _apply_rgb_glitch(frame, progress):
+    """Shifts R/G/B channels by random offsets for a digital glitch look."""
+    h, w = frame.shape[:2]
+    intensity = int(10 * math.sin(progress * math.pi))  # Peak at midpoint
+    if intensity < 1:
+        return frame
+    result = frame.copy()
+    # Shift red channel right, blue channel left
+    result[:, intensity:, 0] = frame[:, :-intensity, 0]  # R shift right
+    result[:, :-intensity, 2] = frame[:, intensity:, 2]   # B shift left
+    # Add horizontal scan lines
+    for y in range(0, h, 4):
+        if random.random() < 0.3 * (1 - progress):
+            shift = random.randint(-intensity, intensity)
+            if shift > 0:
+                result[y, shift:] = result[y, :-shift]
+            elif shift < 0:
+                result[y, :shift] = result[y, -shift:]
+    return result
+
+def _apply_shake(frame, progress):
+    """Random X/Y jitter for emphasis."""
+    h, w = frame.shape[:2]
+    intensity = int(5 * math.sin(progress * math.pi))
+    if intensity < 1:
+        return frame
+    ox = random.randint(-intensity, intensity)
+    oy = random.randint(-intensity, intensity)
+    M = np.float32([[1, 0, ox], [0, 1, oy]])
+    return cv2.warpAffine(frame, M, (w, h), borderMode=cv2.BORDER_REFLECT)
+
+def _apply_flash_fade(frame, progress):
+    """White flash that fades from bright to normal (original transition, refined)."""
+    flash_alpha = 1.0 - progress
+    white = np.full_like(frame, 255)
+    return np.clip(frame * (1 - flash_alpha * 0.7) + white * flash_alpha * 0.7, 0, 255).astype(np.uint8)
+
+def _apply_cross_dissolve(frame, progress):
+    """Smooth opacity reduction for cross-dissolve effect."""
+    # Slight brightness boost during mid-transition
+    brightness = 1.0 + 0.15 * math.sin(progress * math.pi)
+    return np.clip(frame * brightness, 0, 255).astype(np.uint8)
+
+# Transition type mapping from retention_cue effect names
+TRANSITION_MAP = {
+    "zoom_in": _apply_zoom_burst,
+    "zoom_burst": _apply_zoom_burst,
+    "hook_impact": _apply_rgb_glitch,
+    "glitch": _apply_rgb_glitch,
+    "emphasis": _apply_shake,
+    "shake": _apply_shake,
+    "flash": _apply_flash_fade,
+    "dissolve": _apply_cross_dissolve,
+}
+
+# Pool of transitions for random selection when no specific cue is given
+_TRANSITION_POOL = [
+    _apply_zoom_burst,
+    _apply_flash_fade,
+    _apply_cross_dissolve,
+    _apply_shake,
+]
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ── DUAL-LAYER CAPTION SYSTEM ───────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+
+def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=0):
     """Renders high-impact kinetic subtitle frame with dynamic active-word popping."""
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
@@ -163,7 +263,7 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
         lines.append(current_line)
         
     line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = int(FRAME_H * 0.62) - (len(lines) * line_h // 2) + y_shift
+    y_pos = int(FRAME_H * 0.58) - (len(lines) * line_h // 2) + y_shift
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -179,7 +279,9 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
     by1 = y_pos - pad_y
     by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
     
-    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=15, fill=(10, 10, 15, 230), outline=(204, 255, 0, 90), width=2)
+    # Use accent color for the border glow
+    border_r, border_g, border_b = accent_color
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=15, fill=(10, 10, 15, 230), outline=(border_r, border_g, border_b, 90), width=2)
     
     # Draw word by word
     word_idx = 0
@@ -193,7 +295,7 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
             is_active = wd["is_active"]
             
             if is_active:
-                c_fill = (204, 255, 0, 255)  # Premium Electric Yellow/Green
+                c_fill = (*accent_color, 255)  # Category-specific accent color
                 font = get_font_for_text(word_text, int(base_size * 1.15), "extrabold")
                 # Draw dynamic drop shadow for active word
                 draw.text((cur_x+3, line_y-4+3), word_text, fill=(0,0,0,255), font=font)
@@ -209,8 +311,8 @@ def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0)
             
     return canvas_to_clip(img)
 
-def render_whiteboard_caption(text, progress=1.0):
-    """Renders a high-impact whiteboard-style English keyword/phrase caption with electric yellow highlighter."""
+def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
+    """Renders a high-impact whiteboard-style English keyword/phrase caption with category-colored highlighter."""
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
@@ -226,10 +328,19 @@ def render_whiteboard_caption(text, progress=1.0):
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
     cx = (FRAME_W - tw) // 2
-    cy = int(FRAME_H * 0.72)
+    cy = int(FRAME_H * 0.76)  # Moved down for dual-caption layout
     
-    # Breathing animation scale effect
-    scale = 1.0 + 0.04 * math.sin(min(1.0, progress) * math.pi)
+    # Pop-in animation: scale from 0 → 1.1 → 1.0
+    if progress < 0.15:
+        # Quick scale up from 0.3 to 1.1
+        scale = 0.3 + (0.8 * (progress / 0.15))
+    elif progress < 0.3:
+        # Settle from 1.1 to 1.0
+        settle_progress = (progress - 0.15) / 0.15
+        scale = 1.1 - 0.1 * settle_progress
+    else:
+        # Breathing animation
+        scale = 1.0 + 0.03 * math.sin((progress - 0.3) * math.pi * 2)
     
     # Highlight backing pill
     pad_x = int(35 * (FRAME_W / 1080.0))
@@ -257,8 +368,9 @@ def render_whiteboard_caption(text, progress=1.0):
         cx = (FRAME_W - tw) // 2
         cy = int(center_y - th / 2)
     
-    # Highlighter color: Electric neon yellow/green (204, 255, 0, 255)
-    draw.rounded_rectangle([hx1, hy1, hx2, hy2], radius=15, fill=(204, 255, 0, 255))
+    # Highlighter color: Use category accent color
+    r, g, b = accent_color
+    draw.rounded_rectangle([hx1, hy1, hx2, hy2], radius=15, fill=(r, g, b, 255))
     
     # Clean black marker text
     draw.text((cx, cy), text, fill=(10, 10, 10, 255), font=font)
@@ -267,6 +379,97 @@ def render_whiteboard_caption(text, progress=1.0):
 
 def canvas_to_clip(pil_img):
     return np.array(pil_img.convert("RGBA"))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ── RETENTION OVERLAY RENDERERS ──────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _render_fact_counter_badge(draw, fact_number, accent_color):
+    """Draws a 'FACT #N' pill badge in the top-left corner."""
+    badge_text = f"FACT #{fact_number}"
+    font = get_font_for_text(badge_text, 28, "bold")
+    bbox = font.getbbox(badge_text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    bx, by = 40, 140  # Below the watermark area
+    pw, ph = tw + 30, th + 16
+    
+    r, g, b = accent_color
+    # Dark pill with accent border
+    draw.rounded_rectangle([bx, by, bx+pw, by+ph], radius=12, fill=(10, 10, 15, 220))
+    draw.rounded_rectangle([bx, by, bx+pw, by+ph], radius=12, outline=(r, g, b, 200), width=2)
+    draw.text((bx + 15, by + 8), badge_text, fill=(r, g, b, 255), font=font)
+
+def _render_countdown_timer(draw, t, total_duration, accent_color):
+    """Draws a circular countdown arc in the top-right corner."""
+    cx, cy = FRAME_W - 70, 160
+    radius = 22
+    remaining = max(0, total_duration - t)
+    progress = t / total_duration  # 0 → 1 as video plays
+    
+    r, g, b = accent_color
+    
+    # Background circle (dark)
+    draw.ellipse([cx-radius, cy-radius, cx+radius, cy+radius], fill=(20, 20, 25, 200))
+    
+    # Draw arc using line segments (Pillow arc)
+    start_angle = -90  # Start from top
+    end_angle = start_angle + int(360 * (1.0 - progress))
+    if end_angle > start_angle:
+        draw.arc(
+            [cx-radius, cy-radius, cx+radius, cy+radius],
+            start=start_angle, end=end_angle,
+            fill=(r, g, b, 255), width=4
+        )
+    
+    # Time remaining text
+    secs = int(remaining)
+    time_text = f"{secs}"
+    font = get_font_for_text(time_text, 20, "bold")
+    bbox = font.getbbox(time_text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    draw.text((cx - tw // 2, cy - th // 2), time_text, fill=(255, 255, 255, 230), font=font)
+
+def _render_sound_on_indicator(draw, t, accent_color):
+    """Shows a 'Sound ON' indicator with speaker icon in the first 2.5 seconds."""
+    if t > 2.5:
+        return
+    
+    # Fade in (0-0.5s), hold (0.5-1.8s), fade out (1.8-2.5s)
+    if t < 0.5:
+        alpha = int(255 * (t / 0.5))
+    elif t < 1.8:
+        alpha = 255
+    else:
+        alpha = int(255 * (1.0 - (t - 1.8) / 0.7))
+    
+    alpha = max(0, min(255, alpha))
+    
+    r, g, b = accent_color
+    text = "🔊 Sound ON"
+    font = get_font_for_text(text, 32, "bold")
+    bbox = font.getbbox(text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    px = (FRAME_W - tw) // 2
+    py = int(FRAME_H * 0.12)
+    
+    # Semi-transparent pill background
+    draw.rounded_rectangle(
+        [px - 25, py - 10, px + tw + 25, py + th + 10],
+        radius=20, fill=(10, 10, 15, int(alpha * 0.85))
+    )
+    draw.rounded_rectangle(
+        [px - 25, py - 10, px + tw + 25, py + th + 10],
+        radius=20, outline=(r, g, b, alpha), width=2
+    )
+    draw.text((px, py), text, fill=(255, 255, 255, alpha), font=font)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ── AUDIO MASTERING ──────────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
 
 def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
     """Mixes voiceover with background music using dynamic ducking for premium sound."""
@@ -306,6 +509,11 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
         print(f"⚠️ [audio_mastering] Audio mixing failed: {e}. Copying raw voice.")
         shutil.copy(voice_path, output_path)
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ── MAIN VIDEO RENDERING ENGINE ──────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+
 def create_video(audio_path, script_json, chunks, output_path=None):
     """Main rendering execution entry point."""
     slot_str = script_json.get("slot", "")
@@ -324,6 +532,31 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
     audio = AudioFileClip(audio_path)
     audio_duration = audio.duration
+    
+    # ── RESOLVE CATEGORY COLOR PALETTE ──
+    palette = dict(_DEFAULT_PALETTE)
+    if ENABLE_CATEGORY_COLORS:
+        try:
+            from ecosystem_logic import get_category_color_palette
+            category = script_json.get("sub_category", "")
+            if category:
+                palette = get_category_color_palette(category)
+                print(f"🎨 [video_gen] Using color palette: {palette.get('name', 'default')} for '{category}'")
+        except Exception as e:
+            print(f"⚠️ [video_gen] Could not load category palette: {e}. Using default.")
+    
+    accent_color = palette.get("primary", (204, 255, 0))
+    progress_bar_color = palette.get("progress_bar", accent_color)
+    caption_highlight = palette.get("caption_highlight", accent_color)
+    
+    # ── RESOLVE FACT COUNTER ──
+    fact_number = 0
+    if ENABLE_FACT_COUNTER:
+        try:
+            from topic_tracker import get_fact_count
+            fact_number = get_fact_count() + 1  # +1 because this video hasn't been tracked yet
+        except Exception:
+            fact_number = 0
     
     # ── SOUNDTRACK MIXING ──
     bgm_path = os.path.join(ASSETS_DIR, "music", "modern_tech.mp3")
@@ -345,8 +578,21 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     print("🎬 Assembling fullscreen background clips...")
     background_clips = []
     
-    # Track chunk boundaries for flash transitions
+    # Track chunk boundaries for transitions
     chunk_boundaries = []
+    # Map each boundary to a transition type
+    boundary_transitions = {}
+    
+    # Build retention cue map for transitions
+    retention_cues = script_json.get("retention_cues", [])
+    cue_effects = {}
+    for cue in retention_cues:
+        if isinstance(cue, dict):
+            cue_effects[round(cue.get("timestamp", -1), 1)] = cue.get("effect", "default")
+    
+    # Store first chunk visual path for seamless loop
+    first_chunk_visual_path = None
+    first_chunk_visual_type = None
     
     for i, chunk in enumerate(chunks):
         c_start = chunk["start"]
@@ -354,16 +600,30 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         vpath = chunk.get("visual_path")
         has_info = chunk.get("has_infographic", False)
         
-        # Track boundary for flash transition (skip first chunk)
+        # Store first chunk visual for loop engineering
+        if i == 0 and vpath:
+            first_chunk_visual_path = vpath
+            first_chunk_visual_type = chunk.get("visual_type", "photo")
+        
+        # Track boundary for transition (skip first chunk)
         if i > 0 and vpath:
             prev_vpath = chunks[i-1].get("visual_path")
-            # Only flash if visual asset changes or if transitioning to/from infographic cards
             if vpath != prev_vpath or has_info != chunks[i-1].get("has_infographic", False):
                 chunk_boundaries.append(c_start)
+                # Find matching retention cue or pick random transition
+                matched_effect = None
+                for cue_t, effect in cue_effects.items():
+                    if abs(cue_t - c_start) < 2.0:
+                        matched_effect = effect
+                        break
+                if matched_effect and matched_effect in TRANSITION_MAP:
+                    boundary_transitions[c_start] = TRANSITION_MAP[matched_effect]
+                else:
+                    boundary_transitions[c_start] = random.choice(_TRANSITION_POOL)
         
         # 1. Overlay infographic card if flagged
         if has_info:
-            card_clip, overlay_clip = build_infographic_clip(chunk, (255, 215, 0), is_longform=is_longform)
+            card_clip, overlay_clip = build_infographic_clip(chunk, accent_color, is_longform=is_longform)
             if card_clip:
                 # Add whiteboard backing clip for the card
                 dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
@@ -393,7 +653,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 c_clip = build_ken_burns(vpath, c_dur, zoom_direction=zoom_dir).with_start(c_start)
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
-                # Pexels vertical video
+                # Video clip (Pexels or Veo 3.1)
                 c_clip = VideoFileClip(vpath).without_audio().with_start(c_start)
                 if c_clip.duration < c_dur:
                     # Loop video if too short
@@ -422,6 +682,23 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # Compile the base composited backgrounds
     base_comp = CompositeVideoClip(background_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
     
+    # ── PRE-LOAD FIRST FRAME FOR SEAMLESS LOOP ──
+    first_frame_data = None
+    if ENABLE_SEAMLESS_LOOP and first_chunk_visual_path and os.path.exists(first_chunk_visual_path):
+        try:
+            if first_chunk_visual_path.endswith((".jpg", ".jpeg", ".png")):
+                loop_img = Image.open(first_chunk_visual_path).convert("RGB")
+                loop_img = loop_img.resize((FRAME_W, FRAME_H), Image.LANCZOS)
+                first_frame_data = np.array(loop_img)
+            elif first_chunk_visual_path.endswith(".mp4"):
+                loop_clip = VideoFileClip(first_chunk_visual_path)
+                first_frame_data = loop_clip.get_frame(0)
+                # Resize to match frame dimensions
+                first_frame_data = cv2.resize(first_frame_data, (FRAME_W, FRAME_H))
+                loop_clip.close()
+        except Exception as e:
+            print(f"⚠️ [video_gen] Could not pre-load first frame for loop: {e}")
+    
     # ── RETENTION OVERLAYS & SUBTITLES ──
     vignette = _gradient_overlay(audio_duration)
     
@@ -440,7 +717,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
     # ── EMOJI OVERLAY CONFIG ──
-    # Emojis appear at key retention moments: hook (0-2s), reveal (~15s), CTA (last 5s)
     emoji_moments = []
     if ENABLE_EMOJI_OVERLAYS:
         emoji_pool_hook = ["🤯", "😱", "⚡"]
@@ -452,26 +728,68 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             {"start": audio_duration * 0.55, "end": audio_duration * 0.55 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": FRAME_W - 200, "y": 300},
             {"start": audio_duration - 5.0, "end": audio_duration - 3.0, "emoji": random.choice(emoji_pool_cta), "x": FRAME_W - 180, "y": 220},
         ]
+
+    # ── TRANSITION DURATION CONFIG ──
+    transition_duration = 0.2  # seconds per transition
     
     # Frame Assembly Loop
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
         
-        # ── Flash transition effect (white flash at chunk boundaries) ──
-        if ENABLE_FLASH_TRANSITIONS:
-            flash_duration = 0.066  # ~2 frames at 30fps
+        # ── SEAMLESS LOOP: Cross-dissolve last 3s with first frame ──
+        if ENABLE_SEAMLESS_LOOP and first_frame_data is not None:
+            loop_blend_start = audio_duration - 3.0
+            if t > loop_blend_start:
+                loop_progress = (t - loop_blend_start) / 3.0
+                blend_alpha = loop_progress * 0.35  # Max 35% blend
+                try:
+                    first_resized = first_frame_data
+                    if first_resized.shape[:2] != frame.shape[:2]:
+                        first_resized = cv2.resize(first_frame_data, (frame.shape[1], frame.shape[0]))
+                    frame = cv2.addWeighted(frame, 1.0 - blend_alpha, first_resized, blend_alpha, 0)
+                except Exception:
+                    pass
+        
+        # ── ADVANCED TRANSITION EFFECTS ──
+        if ENABLE_ADVANCED_TRANSITIONS:
+            for boundary_t in chunk_boundaries:
+                if boundary_t <= t < boundary_t + transition_duration:
+                    progress = (t - boundary_t) / transition_duration
+                    transition_fn = boundary_transitions.get(boundary_t, _apply_flash_fade)
+                    try:
+                        frame = transition_fn(frame, progress)
+                    except Exception:
+                        pass
+                    break
+        elif ENABLE_FLASH_TRANSITIONS:
+            # Legacy flash-only transitions
+            flash_duration = 0.066
             for boundary_t in chunk_boundaries:
                 if boundary_t <= t < boundary_t + flash_duration:
-                    # Blend white flash with decreasing intensity
                     flash_progress = (t - boundary_t) / flash_duration
-                    flash_alpha = 1.0 - flash_progress  # Fades from white to normal
+                    flash_alpha = 1.0 - flash_progress
                     white = np.full_like(frame, 255)
                     frame = np.clip(frame * (1 - flash_alpha) + white * flash_alpha, 0, 255).astype(np.uint8)
                     break
         
         pil_frame = Image.fromarray(frame).convert("RGBA")
+        p_draw = ImageDraw.Draw(pil_frame)
         
-        # ── Draw subtitles ──
+        # ── RETENTION OVERLAYS ──
+        
+        # Fact Counter Badge (top-left)
+        if ENABLE_FACT_COUNTER and fact_number > 0:
+            _render_fact_counter_badge(p_draw, fact_number, accent_color)
+        
+        # Countdown Timer (top-right)
+        if ENABLE_COUNTDOWN_TIMER:
+            _render_countdown_timer(p_draw, t, audio_duration, accent_color)
+        
+        # Sound-On Indicator (first 2.5s)
+        if ENABLE_SOUND_ON_INDICATOR:
+            _render_sound_on_indicator(p_draw, t, accent_color)
+        
+        # ── DUAL-LAYER CAPTIONS ──
         active_chunk = None
         for chunk in chunks:
             if chunk["start"] <= t <= chunk["end"]:
@@ -481,14 +799,37 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if not active_chunk and chunks and t > chunks[-1]["end"]:
             active_chunk = chunks[-1]
             
-        if ENABLE_KINETIC_CAPTIONS and active_chunk:
-            chunk_text = active_chunk.get("english_caption", active_chunk.get("text", ""))
-            if chunk_text:
-                chunk_dur = max(0.1, active_chunk["end"] - active_chunk["start"])
-                progress = (t - active_chunk["start"]) / chunk_dur
-                sub_arr = render_whiteboard_caption(chunk_text, progress)
-                pil_sub = Image.fromarray(sub_arr).convert("RGBA")
-                pil_frame.alpha_composite(pil_sub)
+        if active_chunk:
+            chunk_dur = max(0.1, active_chunk["end"] - active_chunk["start"])
+            progress = (t - active_chunk["start"]) / chunk_dur
+            
+            if ENABLE_DUAL_CAPTIONS:
+                # ── LAYER 1: Tanglish word-by-word karaoke subtitles (at ~58% Y) ──
+                chunk_words = active_chunk.get("words", [])
+                if chunk_words:
+                    word_status_list = []
+                    for wd in chunk_words:
+                        is_active = wd["start"] <= t <= wd["end"]
+                        word_status_list.append({"word": wd["word"], "is_active": is_active})
+                    
+                    sub_arr = render_subtitle_frame(word_status_list, accent_color=caption_highlight)
+                    pil_sub = Image.fromarray(sub_arr).convert("RGBA")
+                    pil_frame.alpha_composite(pil_sub)
+                
+                # ── LAYER 2: English keyword pill (at ~76% Y) ──
+                eng_caption = active_chunk.get("english_caption", "")
+                if eng_caption and eng_caption.strip():
+                    cap_arr = render_whiteboard_caption(eng_caption, progress, accent_color=accent_color)
+                    pil_cap = Image.fromarray(cap_arr).convert("RGBA")
+                    pil_frame.alpha_composite(pil_cap)
+            
+            elif ENABLE_KINETIC_CAPTIONS:
+                # Legacy single-layer caption mode
+                chunk_text = active_chunk.get("english_caption", active_chunk.get("text", ""))
+                if chunk_text:
+                    sub_arr = render_whiteboard_caption(chunk_text, progress, accent_color=accent_color)
+                    pil_sub = Image.fromarray(sub_arr).convert("RGBA")
+                    pil_frame.alpha_composite(pil_sub)
         
         # ── Emoji reaction overlays ──
         if ENABLE_EMOJI_OVERLAYS:
@@ -514,8 +855,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # ── Dynamic glowing progress bar ──
         progress_w = int(FRAME_W * (t / audio_duration))
         if progress_w > 0:
-            p_draw = ImageDraw.Draw(pil_frame)
-            p_draw.rectangle([0, FRAME_H - 12, progress_w, FRAME_H], fill=(204, 255, 0, 255))
+            bar_draw = ImageDraw.Draw(pil_frame)
+            pr, pg, pb = progress_bar_color
+            bar_draw.rectangle([0, FRAME_H - 12, progress_w, FRAME_H], fill=(pr, pg, pb, 255))
             
         frame = np.array(pil_frame.convert("RGB"))
         return frame

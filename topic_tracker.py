@@ -135,3 +135,8 @@ def update_youtube_url(title, youtube_url, tracker_file=TRACKER_FILE):
             entry["youtube_url"] = youtube_url
             break
     save_tracker(tracker, tracker_file)
+
+def get_fact_count(tracker_file=TRACKER_FILE):
+    """Returns the total number of facts uploaded so far (for the FACT #N badge)."""
+    tracker = load_tracker(tracker_file)
+    return tracker.get("total_uploaded", 0)

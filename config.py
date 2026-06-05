@@ -51,3 +51,13 @@ ENABLE_EVIDENCE_SCREENSHOTS = True
 ENABLE_HORMOZI_STYLING = True
 ENABLE_FLASH_TRANSITIONS = True
 ENABLE_EMOJI_OVERLAYS = True
+
+# Visual Upgrade V2 Feature Flags (2026)
+ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
+ENABLE_DUAL_CAPTIONS = True          # Show Tanglish + English keyword captions simultaneously
+ENABLE_ADVANCED_TRANSITIONS = True   # Zoom burst, RGB glitch, shake, cross dissolve transitions
+ENABLE_CATEGORY_COLORS = True        # Category-specific color palettes per video
+ENABLE_FACT_COUNTER = True           # "FACT #N" badge in top-left corner
+ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
+ENABLE_SOUND_ON_INDICATOR = True     # "Sound ON" flash in first 2.5 seconds
+ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop

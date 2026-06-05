@@ -2,7 +2,7 @@ import os
 import requests
 import random
 import time
-from config import PEXELS_API_KEY, OUTPUT_DIR
+from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO
 from nano_scene_gen import _generate_imagen_image
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
@@ -82,7 +82,7 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
 def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longform=False):
     """
     Orchestrates the retrieval of visuals for all chunks.
-    First tries Pexels stock video/photos, then falls back to Imagen-3 generation.
+    Priority chain: Veo 3.1 → Imagen → Pexels Video → Pexels Photo → Reuse.
     """
     print(f"\n🎬 VISUAL RESOLVER ENGINE: Processing {len(chunks)} chunks...")
     
@@ -94,6 +94,16 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     # Extract keywords from topic context for generic search fallback
     generic_keywords = [w.lower() for w in topic_context.split() if len(w) > 3][:3]
     generic_query = " ".join(generic_keywords) if generic_keywords else "amazing fact"
+
+    # Lazy import Veo only if enabled
+    veo_generate = None
+    if ENABLE_VEO_VIDEO:
+        try:
+            from veo_scene_gen import generate_veo_clip
+            veo_generate = generate_veo_clip
+            print("  🎬 Veo 3.1 enabled as primary video source.")
+        except ImportError:
+            print("  ⚠️ Veo module not found. Falling back to Imagen/Pexels.")
     
     for i, chunk in enumerate(chunks):
         cid = chunk.get("chunk_id", i + 1)
@@ -101,10 +111,8 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         prompt = chunk.get("nano_visual_prompt", "")
         
         # Formulate a search query from the English prompt or subtitle text
-        # If prompt is present, clean it up as a query, else use clean chunk text
         clean_query = ""
         if prompt:
-            # Strip common filler/UI words to get meaningful keywords for stock footage search
             fillers = {
                 "a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "9:16", "vertical",
                 "premium", "app", "ui", "mockup", "screenshot", "design", "vector", "realistic", "illustration",
@@ -123,9 +131,23 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         visual_type = None
         source = "Failed"
         
-        # 1. Try Imagen-3 Generation first (custom, 100% relevant visual)
-        if prompt:
-            print("     → Generating custom Imagen background...")
+        # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
+        if veo_generate and prompt:
+            print("     → Attempting Veo 3.1 video generation...")
+            enhanced_prompt = (
+                f"{prompt}. Cinematic photorealistic, no text overlays, no faces, "
+                f"no watermarks, smooth camera movement, {aspect_ratio} aspect ratio."
+            )
+            output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{TODAY}.mp4")
+            visual_path = veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
+            if visual_path:
+                visual_type = "video"
+                source = "Veo 3.1 AI"
+                time.sleep(3)  # rate limit cooling
+
+        # ── PRIORITY 2: Imagen AI Image (if Veo failed/unavailable) ──
+        if not visual_path and prompt:
+            print("     → Generating Imagen image...")
             output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
             visual_path = _generate_imagen_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
@@ -133,21 +155,21 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                 source = "Imagen AI"
                 time.sleep(2)  # rate limit cooling
                 
-        # 2. Fallback to Pexels Stock Video if Imagen fails or no prompt
+        # ── PRIORITY 3: Pexels Stock Video ──
         if not visual_path:
             visual_path = fetch_pexels_media(clean_query, media_type="video", aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "video"
                 source = "Pexels Video"
                 
-        # 3. Fallback to Pexels Stock Photo
+        # ── PRIORITY 4: Pexels Stock Photo ──
         if not visual_path:
             visual_path = fetch_pexels_media(clean_query, media_type="photo", aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Pexels Photo"
                 
-        # 4. Graceful degradation: propagate last visual
+        # ── PRIORITY 5: Graceful degradation — reuse last visual ──
         if not visual_path:
             if last_successful_path:
                 print(f"     → Visual resolved: Reusing predecessor asset.")
