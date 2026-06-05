@@ -146,8 +146,10 @@ def _generate_elevenlabs(text, output_path):
             "text": text,
             "model_id": "eleven_multilingual_v2", # Premium multilingual synthesis
             "voice_settings": {
-                "stability": 0.45,
-                "similarity_boost": 0.75
+                "stability": 0.40,
+                "similarity_boost": 0.80,
+                "style": 0.10,
+                "use_speaker_boost": True
             }
         }
         
