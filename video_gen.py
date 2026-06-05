@@ -107,6 +107,9 @@ def build_ken_burns(img_path, duration, zoom_direction=None):
         x1 = (w - target_w) // 2
         clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
         
+    # Resize to match target frame dimensions
+    clip = clip.resized(newsize=(FRAME_W, FRAME_H))
+    
     # Guard against zero or extremely small duration to prevent NaN division
     safe_duration = max(0.1, duration) if duration else 1.0
     
@@ -447,7 +450,7 @@ def _render_sound_on_indicator(draw, t, accent_color):
     alpha = max(0, min(255, alpha))
     
     r, g, b = accent_color
-    text = "🔊 Sound ON"
+    text = "Sound ON"
     font = get_font_for_text(text, 32, "bold")
     bbox = font.getbbox(text)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
@@ -710,9 +713,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
         header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
         text_x = 50
-        # Draw premium light theme text watermark
-        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(200, 200, 200, 100), font=header_font)
-        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(40, 40, 40, 255), font=header_font)
+        # Draw premium semi-translucent text watermark with dark drop shadow (readable on any background)
+        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
+        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     

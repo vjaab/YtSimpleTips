@@ -31,9 +31,10 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
         output_path on success, None on failure
     """
     attempts = 0
-    while attempts < 2:
+    max_attempts = 4
+    while attempts < max_attempts:
         try:
-            print(f"  🎬 [Veo] Generating video clip (attempt {attempts + 1}/2)...")
+            print(f"  🎬 [Veo] Generating video clip (attempt {attempts + 1}/{max_attempts})...")
 
             operation = client.models.generate_videos(
                 model=VEO_MODEL_ID,
@@ -68,8 +69,9 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
         except Exception as e:
             err_str = str(e).lower()
             if "429" in err_str:
-                sleep_time = 20 + attempts * 15
-                print(f"  ⏳ [Veo] Rate limited (429). Waiting {sleep_time}s...")
+                import random
+                sleep_time = int(45 * (1.8 ** attempts) + random.uniform(2, 6))
+                print(f"  ⏳ [Veo] Rate limited (429). Waiting {sleep_time}s (attempt {attempts+1}/{max_attempts})...")
                 time.sleep(sleep_time)
                 attempts += 1
             elif "not found" in err_str or "not supported" in err_str:
@@ -138,9 +140,10 @@ def generate_veo_scene_visuals(chunks, headline, style_guide="cinematic, photore
             failed_count += 1
             # Leave visual_path unset — caller will fallback to Imagen/Pexels
 
-        # Throttle between requests to avoid rate limits
-        if i < total - 1 and path:
-            time.sleep(5)
+        # Throttle between requests to avoid rate limits (cooldown between clips)
+        if i < total - 1:
+            sleep_time = 20 if path else 5
+            time.sleep(sleep_time)
 
     print(f"\n  ✅ Veo Generation: {generated_count} clips generated, {failed_count} need fallback.")
     return chunks

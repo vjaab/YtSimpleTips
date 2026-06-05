@@ -50,7 +50,7 @@ ENABLE_PERIODIC_CUTS = True
 ENABLE_EVIDENCE_SCREENSHOTS = True
 ENABLE_HORMOZI_STYLING = True
 ENABLE_FLASH_TRANSITIONS = True
-ENABLE_EMOJI_OVERLAYS = True
+ENABLE_EMOJI_OVERLAYS = False
 
 # Visual Upgrade V2 Feature Flags (2026)
 ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
