@@ -353,7 +353,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         schema_requirements=refined_requirements
     )
     
-    final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.0-flash')
+    final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
     
     if final_script:
         # Override metadata to match selected fact
@@ -371,7 +371,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         
     return final_script
 
-def call_gemini_api(client, prompt, model='gemini-2.0-flash'):
+def call_gemini_api(client, prompt, model='gemini-2.5-flash'):
     """
     Helper to execute Gemini API call with retries and JSON parsing.
     """

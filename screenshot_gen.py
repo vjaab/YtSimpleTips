@@ -25,10 +25,10 @@ def create_fallback_card(url, output_path):
         [cx + 6, cy + 12, cx + cw + 6, cy + ch + 12],
         radius=24, fill=(0, 0, 0, 128)
     )
-    # Border with sleek purple accent
+    # Border with sleek neon accent
     draw.rounded_rectangle(
         [cx - 2, cy - 2, cx + cw + 2, cy + ch + 2],
-        radius=24, fill=(138, 43, 226, 255)
+        radius=24, fill=(204, 255, 0, 255)
     )
     # Inner fill
     draw.rounded_rectangle(
@@ -48,7 +48,7 @@ def create_fallback_card(url, output_path):
         pass
         
     # Title
-    draw.text((cx + 50, cy + 60), "FACT VERIFIED", font=font_title, fill=(138, 43, 226, 255))
+    draw.text((cx + 50, cy + 60), "FACT VERIFIED", font=font_title, fill=(204, 255, 0, 255))
     
     # Extract clean domain
     clean_domain = "Official Reference"
@@ -92,7 +92,7 @@ def create_fallback_card(url, output_path):
     display_url = url
     if len(display_url) > 40:
         display_url = display_url[:37] + "..."
-    draw.text((cx + 80, cy + 495), f"🔗 {display_url}", font=font_body, fill=(138, 43, 226, 255))
+    draw.text((cx + 80, cy + 495), f"🔗 {display_url}", font=font_body, fill=(204, 255, 0, 255))
     
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     img.save(output_path, "PNG")

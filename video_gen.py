@@ -57,8 +57,8 @@ def _prepare_evidence_canvas(img, url=None):
     
     # Shadow
     draw.rounded_rectangle([cx+8, cy+16, cx+target_w+8, cy+target_h+16], radius=24, fill=(0,0,0,140))
-    # Border
-    draw.rounded_rectangle([cx-4, cy-4, cx+target_w+4, cy+target_h+4], radius=24, fill=(255,215,0,255))
+    # Border with sleek neon accent
+    draw.rounded_rectangle([cx-4, cy-4, cx+target_w+4, cy+target_h+4], radius=24, fill=(204,255,0,255))
     # Inner Image
     canvas.paste(scaled_img, (cx, cy))
     
@@ -74,8 +74,8 @@ def _prepare_evidence_canvas(img, url=None):
         by = cy - banner_h - 20
         
         draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=15, fill=(15,15,20,240))
-        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=15, outline=(255,215,0,255), width=2)
-        draw.text((bx + 30, by + 12), url_text, fill=(255,215,0,255), font=font)
+        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=15, outline=(204,255,0,255), width=2)
+        draw.text((bx + 30, by + 12), url_text, fill=(204,255,0,255), font=font)
         
     return canvas
 
@@ -110,8 +110,21 @@ def build_ken_burns(img_path, duration, zoom_direction=None):
     return clip
 
 def _gradient_overlay(duration):
-    """Draws a subtle transparent vignette to preserve the bright whiteboard theme."""
-    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    """Draws a subtle radial vignette to frame the whiteboard theme and guide the eye."""
+    w, h = FRAME_W, FRAME_H
+    mask = Image.new("L", (w, h), 0)
+    draw = ImageDraw.Draw(mask)
+    
+    # Soft dark corners fading into the center
+    max_diag = math.sqrt(w**2 + h**2) / 2.0
+    for r in range(int(max_diag), 0, -15):
+        alpha = int(45 * (r / max_diag)**2) # Cap at 45 (approx 17% opacity)
+        cx, cy = w // 2, h // 2
+        draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=alpha)
+        
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    vignette = Image.new("RGBA", (w, h), (10, 10, 15, 255))
+    img = Image.composite(vignette, img, mask)
     return ImageClip(np.array(img)).with_duration(duration)
 
 def render_subtitle_frame(word_status_list, accent_color=(255,215,0), y_shift=0):
@@ -342,8 +355,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         has_info = chunk.get("has_infographic", False)
         
         # Track boundary for flash transition (skip first chunk)
-        if i > 0:
-            chunk_boundaries.append(c_start)
+        if i > 0 and vpath:
+            prev_vpath = chunks[i-1].get("visual_path")
+            # Only flash if visual asset changes or if transitioning to/from infographic cards
+            if vpath != prev_vpath or has_info != chunks[i-1].get("has_infographic", False):
+                chunk_boundaries.append(c_start)
         
         # 1. Overlay infographic card if flagged
         if has_info:
@@ -363,6 +379,13 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 img = Image.open(vpath).convert("RGBA")
                 canvas = _prepare_evidence_canvas(img, url=chunk.get("source_url"))
                 c_clip = ImageClip(np.array(canvas)).with_duration(c_dur).with_start(c_start)
+                
+                # Gentle Ken Burns scale zoom effect on screenshots
+                c_clip = c_clip.resized(lambda t: 1.0 + 0.04 * (t / max(0.1, c_dur)))
+                
+                # Overlay on off-white whiteboard backing clip
+                whiteboard_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
+                background_clips.append(whiteboard_bg)
                 background_clips.append(c_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
                 # Ken burns zoom with randomized direction for visual variety

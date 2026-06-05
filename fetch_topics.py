@@ -45,7 +45,7 @@ def fetch_facts_for_category(category):
     while attempts < 3:
         try:
             response = client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-2.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     tools=[{'google_search': {}}],
