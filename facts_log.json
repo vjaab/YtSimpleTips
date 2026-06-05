@@ -15,31 +15,40 @@
         "Honey: 3000 Years Fresh?!",
         "Honey Never Spoils",
         "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
-        "Shanay-timpishka: The Amazon's Naturally Boiling River"
+        "Shanay-timpishka: The Amazon's Naturally Boiling River",
+        "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
+        "Turkmenistan's Door to Hell"
     ],
     "used_keywords": [
-        "Tamil Facts",
-        "Did You Know",
+        "Gas Crater",
+        "Science Facts",
+        "Turkmenistan",
+        "Tectonic Plates",
         "Earthquake",
-        "Tectonic Plates"
+        "World Geography",
+        "Door to Hell",
+        "Did You Know",
+        "Tamil Facts",
+        "Darvaza Crater",
+        "Natural Gas"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
         "🧠 Psychology & Mind": 2,
         "🧪 Science & Space": 3,
         "🎲 Random Amazing Facts": 1,
-        "🌍 World & Geography": 1
+        "🌍 World & Geography": 2
     },
     "last_7_days_stories": [
-        "Brain's SHOCKING Secret!",
         "Mistakes = Trust?!",
         "Venus: Day > Year?!",
         "Venus: Day > Year?!",
         "Ocean's SHOCKING Oxygen Secret!",
         "Honey: 3000 Years Fresh?!",
-        "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!"
+        "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
+        "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥"
     ],
-    "total_uploaded": 8,
+    "total_uploaded": 9,
     "last_upload": "2026-06-05",
     "history": [
         {
@@ -147,6 +156,26 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/X4Eh3URxECc",
             "source_url": "https://en.wikipedia.org/wiki/Shanay-timpishka"
+        },
+        {
+            "date": "2026-06-05",
+            "title": "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
+            "news_headline": "Turkmenistan's Door to Hell",
+            "category": "🌍 World & Geography",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "Turkmenistan",
+                "Darvaza Crater",
+                "Door to Hell",
+                "Gas Crater",
+                "Science Facts",
+                "World Geography",
+                "Natural Gas"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/Pv80T8VT9Xo",
+            "source_url": "https://www.nationalgeographic.com/science/article/this-gate-to-hell-has-burned-for-decades-will-we-ever-shut-it"
         }
     ]
 }
