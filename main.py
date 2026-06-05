@@ -43,46 +43,46 @@ def format_description(ai_description, script, hashtags, slot="Slot A", source_u
     template_idx = desc_seed % 3
 
     templates = [
-        f"""உங்களுக்கு தெரியுமா? 💡 சுவாரசியமான அன்றாட உண்மைகளை தமிழில் தெரிந்து கொள்ள சப்ஸ்கிரைப் பண்ணுங்க!
+        f"""தினசரி பயனுள்ள குறிப்புகள் மற்றும் எளிய லைஃப் ஹேக்ஸ் தமிழில்! 💡 சப்ஸ்கிரைப் பண்ணுங்க!
 🚀 JOIN TELEGRAM GROUP → Channel Page-ல Link இருக்கு!
 ━━━━━━━━━━━━━━━━━━━━━━
 💡 {clean_summary}
 ━━━━━━━━━━━━━━━━━━━━━━
 {source_str}━━━━━━━━━━━━━━━━━━━━━━
-Daily Informative Facts:
-• அறிவியல் உண்மைகள் 🧪
-• விசித்திரமான தகவல்கள் 🌍
-• உடல் நலம் & விண்வெளி 🧠
+Daily Useful Tips & Hacks:
+• மொபைல் & டெக் ஹேக்ஸ் 📱
+• படிப்பு & நினைவாற்றல் குறிப்புகள் 🧠
+• உடல் நலம் & வீட்டு குறிப்புகள் 💊
 
 Join our community!
-💬 VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
+💬 Simple Tips by VJ-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
 
-⚠️ DISCLOSURE: This video uses AI-assisted voice cloning (vj.wav) and visual generation tools. Topic selection, research, editing, and analysis are managed by VJ.
+⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
 
 {hashtag_str}
-#தெரியுமா #TamilFacts #VJVideos #GeneralKnowledge #DidYouKnow #facts #Shorts""",
+#SimpleTipsByVJ #LifeHacks #TamilTips #HowTo #UsefulTips #Shorts""",
 
         f"""⚡ {clean_summary}
 {source_str}
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-📬 சுவாரசியமான வீடியோக்களை தினமும் பார்க்க சப்ஸ்கிரைப் பண்ணுங்க:
+📬 பயனுள்ள குறிப்புகள் மற்றும் ஹேக்ஸ் தினமும் பார்க்க சப்ஸ்கிரைப் பண்ணுங்க:
 → Telegram Group-ல சேர channel cover-ல இருக்கற link-ஐ கிளிக் பண்ணுங்க!
 
-⚠️ DISCLOSURE: AI voice cloning and generation tools are used in production. Editorial control, final adjustments, and scripting by VJ.
+⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
 
 {hashtag_str}
-#தமிழ்உண்மைகள் #AruvomAriviyal #SimpleTipsByVJ #didyouknowfacts""",
+#SimpleTipsByVJ #TechHacks #LifeHacksTamil #HowToTamil #Shorts""",
 
-        f"""இன்னைக்கு ஒரு சுவாரசியமான விஷயம் பார்க்கலாம்! 👇 {clean_summary}
+        f"""இன்னைக்கு ஒரு பயனுள்ள டிப் பார்க்கலாம்! 👇 {clean_summary}
 {source_str}
 ━━━━━━━━━━━━━━━━━━━━━━
-🧠 தினசரி அறிவு சார்ந்த உண்மைகளை பெற VJ Videos-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
+🧠 தினசரி பயனுள்ள குறிப்புகளை பெற Simple Tips by VJ-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
 📲 Telegram group link profile home page-ல இருக்கு!
 
-⚠️ DISCLOSURE: AI synthetic voiceover and generative art are utilized. Video production and direction curated by VJ.
+⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
 
 {hashtag_str}
-#factsintamil #gk #amazingfacts #sciencefacts #historyfacts"""
+#LifeHacks #SimpleTips #StudyTips #HealthHacks #DailyHacks #Shorts"""
     ]
 
     return templates[template_idx]

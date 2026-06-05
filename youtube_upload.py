@@ -13,28 +13,28 @@ SCOPES = [
 
 # ── Rotating Tamil pinned comment templates ──
 PINNED_COMMENT_TEMPLATES = [
-    """💡 இந்த மாதிரி இன்னும் பல ஆச்சரியமான மற்றும் சுவாரசியமான தகவல்களை தெரிஞ்சுக்க நம்ம Telegram group-ல join பண்ணுங்க!
+    """💡 இந்த மாதிரி இன்னும் பல பயனுள்ள குறிப்புகள் மற்றும் Life Hacks தெரிஞ்சுக்க நம்ம Telegram group-ல join பண்ணுங்க!
 
-🚀 Daily informative facts and general knowledge in Tamil
-💬 VJ Videos-க்கு மறக்காம Subscribe பண்ணுங்க!
+🚀 Daily Useful Tips and Life Hacks in Tamil
+💬 Simple Tips by VJ-க்கு மறக்காம Subscribe பண்ணுங்க!
 🔗 Telegram Link → channel home page-ல இருக்கு!""",
 
-    """🔥 உங்களுக்கு இந்த fact பிடிச்சிருந்தா, உங்க friends-க்கு share பண்ணுங்க!
+    """🔥 உங்களுக்கு இந்த simple tip பிடிச்சிருந்தா, உங்க friends-க்கு share பண்ணுங்க!
 
-VJ Videos-ல daily ஆச்சரியமான தகவல்கள் உங்களுக்காக:
-→ அறிவியல் உண்மைகள் 🧪
-→ உலக அதிசயங்கள் 🏛️
-→ விசித்திரமான மனித உடம்பு 💊
+நம்ம channel-ல daily பயனுள்ள குறிப்புகள் உங்களுக்காக:
+→ மொபைல் & டெக் ஹேக்ஸ் 📱
+→ படிப்பை எளிதாக்கும் டிப்ஸ் 🧠
+→ உடல் நலம் & வீட்டு குறிப்புகள் 💊
 
 📲 Channel profile header-ல இருக்கற Telegram link-ஐ கிளிக் பண்ணி join பண்ணிக்கோங்க!""",
 
-    """⚡ இந்த topic பத்தின முழு விவரங்கள் நம்ம Telegram group-ல share பண்ணியிருக்கோம்!
+    """⚡ இந்த குறிப்புகள் பத்தின கூடுதல் விவரங்களை நம்ம Telegram group-ல share பண்ணியிருக்கோம்!
 
 ஏன் join பண்ணனும்?
-• Fast infotainment updates in Tamil
-• interesting and mind-blowing topics daily
+• Daily life hacks & tips in Tamil
+• Easy and useful techniques daily
 
-Join immediately! VJ Videos-க்கு Subscribe பண்ண மறந்துடாதீங்க!"""
+Join immediately! Simple Tips by VJ-க்கு Subscribe பண்ண மறந்துடாதீங்க!"""
 ]
 
 def _get_pinned_comment(title=""):
