@@ -13,31 +13,34 @@
         "Ocean's SHOCKING Oxygen Secret!",
         "Oceans Produce Most of Earth's Oxygen",
         "Honey: 3000 Years Fresh?!",
-        "Honey Never Spoils"
+        "Honey Never Spoils",
+        "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
+        "Shanay-timpishka: The Amazon's Naturally Boiling River"
     ],
     "used_keywords": [
-        "Tectonic Plates",
+        "Tamil Facts",
         "Did You Know",
         "Earthquake",
-        "Tamil Facts"
+        "Tectonic Plates"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
         "🧠 Psychology & Mind": 2,
         "🧪 Science & Space": 3,
-        "🎲 Random Amazing Facts": 1
+        "🎲 Random Amazing Facts": 1,
+        "🌍 World & Geography": 1
     },
     "last_7_days_stories": [
-        "Earthquake ஏன் வருது?!",
         "Brain's SHOCKING Secret!",
         "Mistakes = Trust?!",
         "Venus: Day > Year?!",
         "Venus: Day > Year?!",
         "Ocean's SHOCKING Oxygen Secret!",
-        "Honey: 3000 Years Fresh?!"
+        "Honey: 3000 Years Fresh?!",
+        "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!"
     ],
-    "total_uploaded": 7,
-    "last_upload": "2026-06-01",
+    "total_uploaded": 8,
+    "last_upload": "2026-06-05",
     "history": [
         {
             "date": "2026-05-30",
@@ -131,6 +134,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/3uBWG7y07us",
             "source_url": "https://www.youtube.com/watch?v=m7k-P_fuIUo"
+        },
+        {
+            "date": "2026-06-05",
+            "title": "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
+            "news_headline": "Shanay-timpishka: The Amazon's Naturally Boiling River",
+            "category": "🌍 World & Geography",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/X4Eh3URxECc",
+            "source_url": "https://en.wikipedia.org/wiki/Shanay-timpishka"
         }
     ]
 }
