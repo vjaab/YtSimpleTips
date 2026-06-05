@@ -21,7 +21,7 @@ Language Rules:
 2. Subtitles & Captions (`subtitle_chunks`):
    - The `text` field MUST contain the spoken Tanglish segment for that chunk to ensure perfect audio-to-text alignment.
    - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words in English in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept spoken in that chunk. Do NOT write Tamil text or complete sentences in `english_caption`. These will be displayed as bold, clean English captions on screen to highlight important takeaways.
-3. Visual prompts (`nano_visual_prompt`): MUST be written in English. Since we want a whiteboard / drawing animation style matching the 'Almost Everything' channel, specify every prompt as a minimalist hand-drawn whiteboard marker sketch or black line-art doodle on a solid white background. Focus on clean outlines, high contrast, conceptual drawings, and no photographic complexity. E.g., "Minimalist whiteboard marker sketch, black line art doodle on a solid white background, depicting a single hand trying to break a bundle of sticks, clean vector style, high contrast, no realistic shading".
+3. Visual prompts (`nano_visual_prompt`): MUST be written in English. Since we want a highly realistic, cinematic, and vibrant visual style, specify every prompt as a photorealistic, 8K, highly detailed cinematic shot. Focus on dramatic lighting, hyper-realism, and vibrant colors. E.g., "Cinematic photorealistic shot of a glowing human brain with neon blue neural connections, 8K resolution, volumetric lighting, highly detailed, dramatic shadows, Unreal Engine 5 render style".
 Constraint Checklist:
 - No Fluff: Do not say "வணக்கம் நண்பர்களே", "In this video", "Today we talk about". Start immediately with the hook!
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks, italics, ALL CAPS) to guide pronunciation emphasis.
@@ -148,7 +148,7 @@ In the `subtitle_chunks` array:
 - The `text` field MUST contain the exact spoken Tanglish phrase for alignment.
 - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept.
 The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
-`nano_visual_prompt` MUST be in English. Since we want a whiteboard / drawing animation style matching the 'Almost Everything' channel, specify every prompt as a minimalist hand-drawn whiteboard marker sketch or black line-art doodle on a solid white background. Focus on clean outlines, high contrast, conceptual drawings, and no photographic complexity. E.g., "Minimalist whiteboard marker sketch, black line art doodle on a solid white background, depicting a single hand trying to break a bundle of sticks, clean vector style, high contrast, no realistic shading".
+`nano_visual_prompt` MUST be in English. Since we want a highly realistic, cinematic, and vibrant visual style, specify every prompt as a photorealistic, 8K, highly detailed cinematic shot. Focus on dramatic lighting, hyper-realism, and vibrant colors. E.g., "Cinematic photorealistic shot of a glowing human brain with neon blue neural connections, 8K resolution, volumetric lighting, highly detailed, dramatic shadows, Unreal Engine 5 render style".
 
 Return ONLY the final JSON object matching the schema. No markdown wrapping. No explanations."""
 
@@ -253,7 +253,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "start": 0.0, "end": 0.0,
       "has_infographic": false, "infographic_type": "none",
       "infographic_data": {{}},
-      "nano_visual_prompt": "Minimalist whiteboard marker sketch description in English for Imagen. E.g., 'Minimalist whiteboard marker sketch, black line art doodle on a solid white background, depicting...'. 9:16 aspect ratio."
+      "nano_visual_prompt": "Cinematic photorealistic shot description in English for Imagen. E.g., 'Cinematic photorealistic shot of a glowing human brain...'. 9:16 aspect ratio."
   }}],
   "original_news_headline": "Fact Title",
   "original_news_url": "Direct source url",

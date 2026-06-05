@@ -130,7 +130,7 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
 
     return None
 
-def generate_nano_scene_visuals(chunks, headline, style_guide="minimalist whiteboard marker sketch, black line art doodle on a solid white background, high contrast, clean vector style, no realistic shading", aspect_ratio="9:16"):
+def generate_nano_scene_visuals(chunks, headline, style_guide="photorealistic, 8K resolution, highly detailed cinematic shot, dramatic volumetric lighting, vibrant colors, Unreal Engine 5 render style", aspect_ratio="9:16"):
     """
     Main entry point: generates one Imagen background image per chunk.
     """
