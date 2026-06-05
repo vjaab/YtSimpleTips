@@ -2,6 +2,8 @@ import os
 import json
 import re
 import asyncio
+import shutil
+import subprocess
 from datetime import datetime
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
@@ -46,11 +48,14 @@ def _apply_stable_ts(audio_path, text):
 
 def trim_audio_silence(path, word_timestamps):
     """
-    Trims silence from the start and end of the audio file 
+    Trims silence from the start and end of the audio file,
+    applies professional filters (noise reduction, EQ/treble, highpass),
+    normalizes volume to avoid clipping,
     and shifts all word timestamps so that the first word starts at 0.0s.
     """
     from pydub import AudioSegment
     from pydub.silence import detect_leading_silence
+    from pydub.effects import normalize
 
     audio = AudioSegment.from_file(path)
     
@@ -63,10 +68,43 @@ def trim_audio_silence(path, word_timestamps):
     duration = len(audio)
     trimmed_audio = audio[start_trim:duration-end_trim]
     
-    # Boost volume by 8 decibels for punchy Shorts sound
-    trimmed_audio = trimmed_audio + 8
+    # Save trimmed audio to temp format so we can process it with FFmpeg
+    ext = os.path.splitext(path)[1]
+    trimmed_audio.export(path, format=ext[1:])
     
-    trimmed_audio.export(path, format="wav" if path.endswith(".wav") else "mp3")
+    # Apply FFmpeg audio filters for professional voiceover cleaning & mastering:
+    # 1. afftdn: FFT denoiser to eliminate background hiss/static
+    # 2. highpass=f=80: filter out low-frequency electronic/AC hum
+    # 3. equalizer: boost vocal presence/articulation around 3.5kHz by 3dB
+    # 4. treble: shelving filter to boost high-end air/clarity above 6kHz by 3dB
+    temp_path = path + f".filtered{ext}"
+    try:
+        filter_str = "afftdn,highpass=f=80,equalizer=f=3500:width_type=h:width=2000:g=3,treble=g=3:f=6000"
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", path,
+            "-af", filter_str,
+            temp_path
+        ]
+        subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        if os.path.exists(temp_path):
+            shutil.copy(temp_path, path)
+            os.remove(temp_path)
+            print("✨ [audio_gen] Applied professional noise reduction, highpass, presence EQ, and treble boost.")
+    except Exception as e:
+        print(f"⚠️ [audio_gen] FFmpeg voice enhancement failed: {e}")
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+            
+    # Load the filtered audio and apply peak-normalization to -1.5 dBFS.
+    # This maximizes vocal volume without causing any digital clipping.
+    try:
+        filtered_audio = AudioSegment.from_file(path)
+        normalized_audio = normalize(filtered_audio, headroom=1.5)
+        normalized_audio.export(path, format=ext[1:])
+        trimmed_audio = normalized_audio
+    except Exception as e:
+        print(f"⚠️ [audio_gen] Audio normalization failed: {e}")
     
     # Recalibrate timestamps
     shift_sec = start_trim / 1000.0
@@ -79,7 +117,7 @@ def trim_audio_silence(path, word_timestamps):
         })
     
     new_dur = len(trimmed_audio) / 1000.0
-    print(f"🔊 Audio trimmed: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
+    print(f"🔊 Audio trimmed & mastered: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 
 def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.35, target_gap_s=0.15):
@@ -194,17 +232,27 @@ def _generate_edge_tts(text, output_path):
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
     Generates Tamil/Tanglish voiceover with 3-tier fallback architecture:
-    1. Primary: Kaggle GPU offloaded IndicF5 Voice Cloning (Local vj.wav)
-    2. Fallback 1: ElevenLabs Multilingual (Cloud vj.wav Voice Clone)
+    1. Primary: ElevenLabs Multilingual (Cloud vj.wav Voice Clone)
+    2. Fallback 1: Kaggle GPU offloaded IndicF5 Voice Cloning (Local vj.wav)
     3. Fallback 2: Edge TTS Tamil (Free cloud narrator)
     """
     clean_text = clean_tts_text(text)
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
-    # ── PRIMARY: KAGGLE GPU JOB ──
+    # ── PRIMARY: ELEVENLABS CLONED VOICE ──
+    path, dur, word_timestamps = _generate_elevenlabs(clean_text, wav_path)
+    if path:
+        dur, word_timestamps = trim_audio_silence(path, word_timestamps)
+        dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
+        print(f"⭐ [audio_gen] ElevenLabs primary generation successful: {path}")
+        return path, dur, word_timestamps
+    else:
+        print("⚠️ ElevenLabs primary generation failed. Triggering Fallback 1 (Kaggle GPU)...")
+
+    # ── FALLBACK 1: KAGGLE GPU JOB ──
     if KAGGLE_USERNAME and KAGGLE_KEY:
-        print("🎙️ [audio_gen] Running Primary Pipeline: Kaggle GPU IndicF5 Voice Cloning...")
+        print("🎙️ [audio_gen] Running Fallback 1: Kaggle GPU IndicF5 Voice Cloning...")
         script_payload = {"script": clean_text}
         
         job_result = trigger_kaggle_gpu_job(script_payload, custom_phonetic_map)
@@ -229,15 +277,7 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
                 print("⚠️ Kaggle job succeeded but audio file not found. Falling back...")
         else:
             reason = job_result.get("message") if job_result else "Unknown Kaggle error"
-            print(f"⚠️ Kaggle GPU voice cloning failed: {reason}. Triggering Fallback...")
-
-    # ── FALLBACK 1: ELEVENLABS CLONED VOICE ──
-    path, dur, word_timestamps = _generate_elevenlabs(clean_text, wav_path)
-    if path:
-        dur, word_timestamps = trim_audio_silence(path, word_timestamps)
-        dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
-        print(f"⭐ [audio_gen] ElevenLabs fallback successful: {path}")
-        return path, dur, word_timestamps
+            print(f"⚠️ Kaggle GPU voice cloning failed: {reason}. Triggering Fallback 2...")
 
     # ── FALLBACK 2: EDGE TTS TAMIL ──
     path, dur, word_timestamps = _generate_edge_tts(clean_text, wav_path)

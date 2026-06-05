@@ -478,33 +478,60 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
     """Mixes voiceover with background music using dynamic ducking for premium sound."""
     print("🎵 [audio_mastering] Mixing and mastering soundtrack...")
     try:
-        voice = AudioSegment.from_file(voice_path)
+        # Load audio tracks and standardize formats to 44100Hz, Stereo, 16-bit PCM
+        # This prevents any resampling-related glitches or digital stuttering.
+        voice = AudioSegment.from_file(voice_path).set_frame_rate(44100).set_channels(2).set_sample_width(2)
+        
         if bgm_path and os.path.exists(bgm_path):
-            bgm = AudioSegment.from_file(bgm_path)
+            bgm = AudioSegment.from_file(bgm_path).set_frame_rate(44100).set_channels(2).set_sample_width(2)
             
             # Loop BGM if shorter than voice
             while len(bgm) < len(voice):
                 bgm += bgm
             bgm = bgm[:len(voice)]
             
-            # Dynamic ducking: analyze voice loudness per 500ms window
-            # During voice activity: BGM at -22dB; during silence: BGM rises to -14dB
-            chunk_ms = 500
-            ducked_bgm = AudioSegment.empty()
-            for i in range(0, len(bgm), chunk_ms):
-                voice_chunk = voice[i:i+chunk_ms]
-                bgm_chunk = bgm[i:i+chunk_ms]
-                if voice_chunk.dBFS > -40:  # Voice is active
-                    ducked_bgm += bgm_chunk - 22
-                else:  # Silence — let BGM breathe
-                    ducked_bgm += bgm_chunk - 14
+            # Convert BGM_VOLUME from config to decibels
+            # For BGM_VOLUME = 0.08, bgm_base_db will be ~ -21.9 dB
+            bgm_base_db = 20 * math.log10(BGM_VOLUME) if BGM_VOLUME > 0 else -60.0
             
-            # Gentle fade-in (300ms) and fade-out (500ms) for polish
+            # Target volumes
+            # During voice activity: BGM ducked by an extra 6 dB relative to base (e.g., -28 dB)
+            # During silence: BGM rises to base + 2 dB (e.g., -20 dB) to fill the gaps
+            ducked_db = bgm_base_db - 6
+            unducked_db = bgm_base_db + 2
+            
+            chunk_ms = 100
+            targets = []
+            
+            # Determine target volume for each 100ms chunk
+            for i in range(0, len(voice), chunk_ms):
+                voice_chunk = voice[i:i+chunk_ms]
+                if voice_chunk.dBFS > -40:  # Voice is active
+                    targets.append(ducked_db)
+                else:  # Silence
+                    targets.append(unducked_db)
+            
+            # Smooth out volume changes using Exponential Moving Average (EMA).
+            # This creates a natural volume envelope and completely removes click artifacts at chunk boundaries.
+            smoothed = []
+            current_vol = unducked_db
+            alpha = 0.7  # Smoothing factor (transition takes ~300-500ms)
+            for target in targets:
+                current_vol = current_vol * alpha + target * (1 - alpha)
+                smoothed.append(current_vol)
+                
+            # Apply the smoothed gain envelope to the BGM chunks
+            ducked_bgm = AudioSegment.empty()
+            for idx, i in enumerate(range(0, len(bgm), chunk_ms)):
+                bgm_chunk = bgm[i:i+chunk_ms]
+                ducked_bgm += bgm_chunk + smoothed[idx]
+            
+            # Gentle fade-in (300ms) and fade-out (500ms) for high-end polish
             ducked_bgm = ducked_bgm.fade_in(300).fade_out(500)
             
             mastered = ducked_bgm.overlay(voice)
             mastered.export(output_path, format="wav")
-            print("✅ [audio_mastering] Soundtrack mixed with dynamic ducking!")
+            print("✅ [audio_mastering] Soundtrack mixed with smooth EMA-ducked BGM!")
         else:
             print(f"⚠️ [audio_mastering] BGM file not found at '{bgm_path}'. Proceeding with raw voiceover.")
             voice.export(output_path, format="wav")
