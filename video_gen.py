@@ -108,7 +108,7 @@ def build_ken_burns(img_path, duration, zoom_direction=None):
         clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
         
     # Resize to match target frame dimensions
-    clip = clip.resized(newsize=(FRAME_W, FRAME_H))
+    clip = clip.resized(new_size=(FRAME_W, FRAME_H))
     
     # Guard against zero or extremely small duration to prevent NaN division
     safe_duration = max(0.1, duration) if duration else 1.0
