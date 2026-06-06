@@ -34,6 +34,67 @@ def _get_accent_colors(script_json):
     return _DEFAULT_ACCENT, _DEFAULT_SECONDARY, "🤯"
 
 
+def _generate_pexels_background(prompt_context):
+    """Fetches a high-quality landscape stock photo from Pexels as a fallback."""
+    import requests
+    from config import PEXELS_API_KEY
+    if not PEXELS_API_KEY or not PEXELS_API_KEY.strip() or "XXX" in PEXELS_API_KEY:
+        print("⚠️ [thumbnail] Pexels API Key missing or invalid. Skipping stock search fallback.")
+        return None
+        
+    try:
+        print(f"🎨 [thumbnail] Attempting Pexels landscape stock photo fallback for: {prompt_context[:50]}...")
+        headers = {"Authorization": PEXELS_API_KEY}
+        
+        # Clean query: extract keywords to make the search generic and highly relevant
+        fillers = {"a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "landscape", "aspect", "ratio", "no", "text", "watermarks", "faces"}
+        words = [w.strip(",.!?\"'") for w in prompt_context.split() if w.lower() not in fillers]
+        query = " ".join(words[:4]) if words else "infotainment"
+        
+        url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(query)}&per_page=15&orientation=landscape"
+        r = requests.get(url, headers=headers, timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            photos = data.get("photos", [])
+            if photos:
+                photo = random.choice(photos[:5])
+                download_url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
+                if download_url:
+                    print(f"📥 [thumbnail] Downloading landscape stock photo: {download_url[:60]}...")
+                    resp = requests.get(download_url, timeout=20)
+                    if resp.status_code == 200:
+                        from io import BytesIO
+                        img = Image.open(BytesIO(resp.content))
+                        print("✅ [thumbnail] Background retrieved from Pexels")
+                        return img
+    except Exception as e:
+        print(f"⚠️ [thumbnail] Pexels stock fallback failed: {e}")
+    return None
+
+
+def _generate_pollinations_background(prompt_context):
+    """Generates an image via Pollinations AI as a fallback."""
+    import requests
+    try:
+        print("🎨 [thumbnail] Attempting Pollinations AI fallback for background...")
+        prompt = (
+            f"A striking, highly detailed, high-contrast background image related to: {prompt_context}. "
+            "Cinematic studio lighting, rich colors, photorealistic, 8k, landscape 16:9 aspect ratio. "
+            "No text, no watermarks, no faces."
+        )
+        encoded_prompt = requests.utils.quote(prompt)
+        url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1280&height=720&nologo=true"
+        resp = requests.get(url, timeout=30)
+        if resp.status_code == 200:
+            from io import BytesIO
+            img = Image.open(BytesIO(resp.content))
+            print("✅ [thumbnail] Background generated with Pollinations AI")
+            return img
+    except Exception as e:
+        print(f"⚠️ [thumbnail] Pollinations AI fallback failed: {e}")
+    return None
+
+
 def _generate_imagen_background(prompt_context):
     """Generates an eye-catching background image via Imagen 4.0."""
     print(f"🎨 [thumbnail] Generating background for context: {prompt_context[:50]}...")
@@ -85,7 +146,17 @@ def _generate_imagen_background(prompt_context):
             break
         attempts += 1
         
-    print("⚠️ [thumbnail] All Imagen models failed. Using solid dark fallback.")
+    print("⚠️ [thumbnail] All Imagen models failed. Trying Pexels stock photo fallback...")
+    pexels_bg = _generate_pexels_background(prompt_context)
+    if pexels_bg:
+        return pexels_bg
+        
+    print("⚠️ [thumbnail] Pexels fallback failed. Trying Pollinations AI fallback...")
+    pollinations_bg = _generate_pollinations_background(prompt_context)
+    if pollinations_bg:
+        return pollinations_bg
+        
+    print("⚠️ [thumbnail] All backends failed. Using solid dark fallback.")
     return Image.new("RGB", (THUMB_W, THUMB_H), (15, 15, 22))
 
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from youtube_upload import SCOPES
