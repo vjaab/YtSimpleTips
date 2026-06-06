@@ -27,33 +27,38 @@
         "Focus Boost: Time Blocking Hack! 🚀",
         "Time Blocking Your Schedule",
         "Shower Water Pressure Boost Hack!",
-        "Descale Showerhead with Vinegar"
+        "Descale Showerhead with Vinegar",
+        "பொங்காம இருக்க ஒரு Magic Hack!",
+        "Prevent Pots from Boiling Over with a Wooden Spoon"
     ],
     "used_keywords": [
-        "Focus",
-        "Tectonic Plates",
-        "World Geography",
         "Door to Hell",
-        "Gas Crater",
-        "Earthquake",
-        "Communication",
-        "Productivity",
+        "Kitchen Hack",
         "Vinegar Uses",
-        "Home Hacks",
-        "Darvaza Crater",
-        "Science Facts",
-        "Life Hacks",
-        "Life Hack",
-        "Tamil Facts",
+        "Turkmenistan",
         "Social Skills",
-        "Natural Gas",
+        "Cooking Hack",
+        "Water Pressure Fix",
+        "Productivity",
+        "Earthquake",
+        "Boiling Tip",
+        "Did You Know",
+        "Life Hack",
+        "Gas Crater",
+        "Tamil Facts",
+        "Life Hacks",
+        "Tectonic Plates",
+        "Communication",
         "Mirroring",
+        "Natural Gas",
+        "Darvaza Crater",
+        "World Geography",
+        "Home Hacks",
+        "Psychology",
+        "Science Facts",
         "Shower Cleaning",
         "Time Management",
-        "Psychology",
-        "Water Pressure Fix",
-        "Turkmenistan",
-        "Did You Know"
+        "Focus"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -63,18 +68,18 @@
         "🌍 World & Geography": 2,
         "🗣️ Communication & Social Hacks": 1,
         "🚀 Productivity & Time Tips": 3,
-        "🏠 Daily Life & Home Hacks": 1
+        "🏠 Daily Life & Home Hacks": 2
     },
     "last_7_days_stories": [
-        "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
         "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
         "யாரையும் வசமாக்க ஒரு SECRET HACK!",
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
         "Focus Boost: Time Blocking Hack! 🚀",
-        "Shower Water Pressure Boost Hack!"
+        "Shower Water Pressure Boost Hack!",
+        "பொங்காம இருக்க ஒரு Magic Hack!"
     ],
-    "total_uploaded": 14,
+    "total_uploaded": 15,
     "last_upload": "2026-06-06",
     "history": [
         {
@@ -283,6 +288,23 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://www.homedepot.com/c/ah/how-to-clean-a-shower-head/9ba683603c53e003ba683603c53e003"
+        },
+        {
+            "date": "2026-06-06",
+            "title": "பொங்காம இருக்க ஒரு Magic Hack!",
+            "news_headline": "Prevent Pots from Boiling Over with a Wooden Spoon",
+            "category": "🏠 Daily Life & Home Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "Kitchen Hack",
+                "Life Hack",
+                "Boiling Tip",
+                "Cooking Hack"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/"
         }
     ]
 }
