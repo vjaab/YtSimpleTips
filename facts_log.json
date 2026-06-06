@@ -25,29 +25,35 @@
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
         "Eat the Frog Productivity Method",
         "Focus Boost: Time Blocking Hack! 🚀",
-        "Time Blocking Your Schedule"
+        "Time Blocking Your Schedule",
+        "Shower Water Pressure Boost Hack!",
+        "Descale Showerhead with Vinegar"
     ],
     "used_keywords": [
-        "Life Hack",
-        "Tectonic Plates",
-        "Tamil Facts",
-        "Mirroring",
-        "Life Hacks",
         "Focus",
-        "Did You Know",
+        "Tectonic Plates",
         "World Geography",
-        "Time Management",
-        "Darvaza Crater",
-        "Social Skills",
-        "Gas Crater",
-        "Turkmenistan",
-        "Productivity",
-        "Natural Gas",
         "Door to Hell",
-        "Science Facts",
-        "Psychology",
+        "Gas Crater",
+        "Earthquake",
         "Communication",
-        "Earthquake"
+        "Productivity",
+        "Vinegar Uses",
+        "Home Hacks",
+        "Darvaza Crater",
+        "Science Facts",
+        "Life Hacks",
+        "Life Hack",
+        "Tamil Facts",
+        "Social Skills",
+        "Natural Gas",
+        "Mirroring",
+        "Shower Cleaning",
+        "Time Management",
+        "Psychology",
+        "Water Pressure Fix",
+        "Turkmenistan",
+        "Did You Know"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -56,18 +62,19 @@
         "🎲 Random Amazing Facts": 1,
         "🌍 World & Geography": 2,
         "🗣️ Communication & Social Hacks": 1,
-        "🚀 Productivity & Time Tips": 3
+        "🚀 Productivity & Time Tips": 3,
+        "🏠 Daily Life & Home Hacks": 1
     },
     "last_7_days_stories": [
-        "Honey: 3000 Years Fresh?!",
         "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
         "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
         "யாரையும் வசமாக்க ஒரு SECRET HACK!",
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
-        "Focus Boost: Time Blocking Hack! 🚀"
+        "Focus Boost: Time Blocking Hack! 🚀",
+        "Shower Water Pressure Boost Hack!"
     ],
-    "total_uploaded": 13,
+    "total_uploaded": 14,
     "last_upload": "2026-06-06",
     "history": [
         {
@@ -259,6 +266,23 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://todoist.com/productivity-methods/time-blocking"
+        },
+        {
+            "date": "2026-06-06",
+            "title": "Shower Water Pressure Boost Hack!",
+            "news_headline": "Descale Showerhead with Vinegar",
+            "category": "🏠 Daily Life & Home Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "Shower Cleaning",
+                "Home Hacks",
+                "Vinegar Uses",
+                "Water Pressure Fix"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://www.homedepot.com/c/ah/how-to-clean-a-shower-head/9ba683603c53e003ba683603c53e003"
         }
     ]
 }
