@@ -29,36 +29,38 @@
         "Shower Water Pressure Boost Hack!",
         "Descale Showerhead with Vinegar",
         "பொங்காம இருக்க ஒரு Magic Hack!",
-        "Prevent Pots from Boiling Over with a Wooden Spoon"
+        "Prevent Pots from Boiling Over with a Wooden Spoon",
+        "Microwave Cleaning: Lemon Hack!",
+        "Microwave Cleaning with Lemon"
     ],
     "used_keywords": [
-        "Door to Hell",
-        "Kitchen Hack",
-        "Vinegar Uses",
-        "Turkmenistan",
-        "Social Skills",
-        "Cooking Hack",
-        "Water Pressure Fix",
-        "Productivity",
-        "Earthquake",
-        "Boiling Tip",
-        "Did You Know",
-        "Life Hack",
-        "Gas Crater",
-        "Tamil Facts",
-        "Life Hacks",
-        "Tectonic Plates",
-        "Communication",
-        "Mirroring",
         "Natural Gas",
         "Darvaza Crater",
-        "World Geography",
-        "Home Hacks",
-        "Psychology",
+        "Gas Crater",
+        "Social Skills",
         "Science Facts",
-        "Shower Cleaning",
+        "Door to Hell",
+        "Boiling Tip",
+        "Earthquake",
+        "Water Pressure Fix",
+        "Tamil Facts",
+        "Productivity",
+        "Kitchen Hack",
+        "Psychology",
+        "Life Hacks",
         "Time Management",
-        "Focus"
+        "Did You Know",
+        "Focus",
+        "Cooking Hack",
+        "Turkmenistan",
+        "Shower Cleaning",
+        "World Geography",
+        "Life Hack",
+        "Mirroring",
+        "Home Hacks",
+        "Tectonic Plates",
+        "Communication",
+        "Vinegar Uses"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -68,18 +70,18 @@
         "🌍 World & Geography": 2,
         "🗣️ Communication & Social Hacks": 1,
         "🚀 Productivity & Time Tips": 3,
-        "🏠 Daily Life & Home Hacks": 2
+        "🏠 Daily Life & Home Hacks": 3
     },
     "last_7_days_stories": [
-        "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
         "யாரையும் வசமாக்க ஒரு SECRET HACK!",
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
         "Focus Boost: Time Blocking Hack! 🚀",
         "Shower Water Pressure Boost Hack!",
-        "பொங்காம இருக்க ஒரு Magic Hack!"
+        "பொங்காம இருக்க ஒரு Magic Hack!",
+        "Microwave Cleaning: Lemon Hack!"
     ],
-    "total_uploaded": 15,
+    "total_uploaded": 16,
     "last_upload": "2026-06-06",
     "history": [
         {
@@ -305,6 +307,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/"
+        },
+        {
+            "date": "2026-06-06",
+            "title": "Microwave Cleaning: Lemon Hack!",
+            "news_headline": "Microwave Cleaning with Lemon",
+            "category": "🏠 Daily Life & Home Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/4SaJCGbvBEA",
+            "source_url": "https://www.puracy.com/blogs/all/how-to-clean-a-microwave-with-lemon"
         }
     ]
 }
