@@ -19,25 +19,27 @@
         "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
         "Turkmenistan's Door to Hell",
         "யாரையும் வசமாக்க ஒரு SECRET HACK!",
-        "Build Instant Rapport Through Subtle Mirroring"
+        "Build Instant Rapport Through Subtle Mirroring",
+        "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
+        "Two-Minute Rule"
     ],
     "used_keywords": [
-        "Social Skills",
-        "World Geography",
-        "Science Facts",
+        "Tectonic Plates",
         "Door to Hell",
-        "Tamil Facts",
-        "Life Hacks",
+        "Mirroring",
+        "Social Skills",
+        "Science Facts",
         "Natural Gas",
-        "Communication",
+        "Earthquake",
         "Turkmenistan",
+        "Communication",
+        "World Geography",
+        "Life Hacks",
         "Did You Know",
         "Gas Crater",
-        "Tectonic Plates",
         "Darvaza Crater",
-        "Mirroring",
-        "Earthquake",
-        "Psychology"
+        "Psychology",
+        "Tamil Facts"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -45,19 +47,20 @@
         "🧪 Science & Space": 3,
         "🎲 Random Amazing Facts": 1,
         "🌍 World & Geography": 2,
-        "🗣️ Communication & Social Hacks": 1
+        "🗣️ Communication & Social Hacks": 1,
+        "🚀 Productivity & Time Tips": 1
     },
     "last_7_days_stories": [
-        "Venus: Day > Year?!",
         "Venus: Day > Year?!",
         "Ocean's SHOCKING Oxygen Secret!",
         "Honey: 3000 Years Fresh?!",
         "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
         "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
-        "யாரையும் வசமாக்க ஒரு SECRET HACK!"
+        "யாரையும் வசமாக்க ஒரு SECRET HACK!",
+        "2-Minute Rule: Procrastination-அ விரட்டுங்க!"
     ],
-    "total_uploaded": 10,
-    "last_upload": "2026-06-05",
+    "total_uploaded": 11,
+    "last_upload": "2026-06-06",
     "history": [
         {
             "date": "2026-05-30",
@@ -202,6 +205,19 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/q-p8dnYsTRo",
             "source_url": "https://en.wikipedia.org/wiki/Mirroring"
+        },
+        {
+            "date": "2026-06-06",
+            "title": "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
+            "news_headline": "Two-Minute Rule",
+            "category": "🚀 Productivity & Time Tips",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/UBSYfyJIydA",
+            "source_url": "https://todoist.com/productivity-methods/two-minute-rule"
         }
     ]
 }
