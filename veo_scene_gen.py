@@ -31,7 +31,7 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
         output_path on success, None on failure
     """
     attempts = 0
-    max_attempts = 4
+    max_attempts = 2
     while attempts < max_attempts:
         try:
             print(f"  🎬 [Veo] Generating video clip (attempt {attempts + 1}/{max_attempts})...")
@@ -70,7 +70,7 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
             err_str = str(e).lower()
             if "429" in err_str:
                 import random
-                sleep_time = int(45 * (1.8 ** attempts) + random.uniform(2, 6))
+                sleep_time = int(15 + (attempts * 10) + random.uniform(1, 3))
                 print(f"  ⏳ [Veo] Rate limited (429). Waiting {sleep_time}s (attempt {attempts+1}/{max_attempts})...")
                 time.sleep(sleep_time)
                 attempts += 1

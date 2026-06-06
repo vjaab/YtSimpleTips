@@ -120,7 +120,7 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
     ]
 
     attempts = 0
-    while attempts < 3:
+    while attempts < 2:
         for model_name in models_to_try:
             try:
                 result = client.models.generate_images(
@@ -139,8 +139,8 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
             except Exception as e:
                 err_str = str(e).lower()
                 if "429" in err_str:
-                    sleep_time = 15 + attempts * 10
-                    print(f"  ⏳ Imagen rate limited (429) on {model_name}. Retrying attempt {attempts+1}/3 in {sleep_time}s...")
+                    sleep_time = 10 + attempts * 5
+                    print(f"  ⏳ Imagen rate limited (429) on {model_name}. Retrying attempt {attempts+1}/2 in {sleep_time}s...")
                     time.sleep(sleep_time)
                     break  # Break out of model loop to retry after sleeping
                 else:

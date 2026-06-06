@@ -143,7 +143,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "video"
                 source = "Veo 3.1 AI"
-                time.sleep(3)  # rate limit cooling
+                time.sleep(10)  # rate limit cooling
 
         # ── PRIORITY 2: Imagen AI Image (if Veo failed/unavailable) ──
         if not visual_path and prompt:
@@ -153,7 +153,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "photo"
                 source = "Imagen AI"
-                time.sleep(2)  # rate limit cooling
+                time.sleep(5)  # rate limit cooling
                 
         # ── PRIORITY 3: Pexels Stock Video ──
         if not visual_path:
