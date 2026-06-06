@@ -45,6 +45,8 @@ RULES:
 - Photorealistic, cinematic lighting, {format_desc}, 8K quality
 - Include relevant objects, environments, or symbolic imagery
 - Keep each prompt under 80 words
+- If the prompt describes or portrays people, they MUST look like South Indian Tamil people from Tamil Nadu, India.
+- If the prompt describes or portrays locations, streets, houses, buildings, or landscapes, they MUST resemble typical environments in Tamil Nadu, India.
 
 SENTENCES:
 {chunk_list}
@@ -92,8 +94,8 @@ Return ONLY a JSON array of objects, one per sentence, in order:
                     c["nano_visual_prompt"] = prompt_map[cid]
                 else:
                     c["nano_visual_prompt"] = (
-                        f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
-                        f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
+                        f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}, set in Tamil Nadu, India. "
+                        f"Photorealistic, {aspect_ratio} format, {style_guide}, portraying South Indian Tamil people and environments, no text, no faces."
                     )
             print(f"  ✅ Generated {len(prompts)} nano-scene prompts via Gemini Flash.")
         except Exception as e:
@@ -104,8 +106,8 @@ Return ONLY a JSON array of objects, one per sentence, in order:
         print("  ⚠️ Using fallback visual prompts for all missing chunks.")
         for c in missing:
             c["nano_visual_prompt"] = (
-                f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}. "
-                f"Photorealistic, {aspect_ratio} format, {style_guide}, no text, no faces."
+                f"Cinematic visualization of: {c.get('text', 'amazing fact')[:60]}, set in Tamil Nadu, India. "
+                f"Photorealistic, {aspect_ratio} format, {style_guide}, portraying South Indian Tamil people and environments, no text, no faces."
             )
 
     return chunks
