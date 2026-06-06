@@ -184,9 +184,9 @@ def _generate_elevenlabs(text, output_path):
             "text": text,
             "model_id": "eleven_multilingual_v2", # Premium multilingual synthesis
             "voice_settings": {
-                "stability": 0.40,
+                "stability": 0.32,      # Lower stability to increase emotional expressiveness and dynamic range
                 "similarity_boost": 0.75,
-                "style": 0.10,
+                "style": 0.45,          # High style exaggeration to amplify the energetic and emotional tone
                 "use_speaker_boost": True
             }
         }
