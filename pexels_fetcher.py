@@ -79,10 +79,26 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
         
     return None
 
+def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
+    """Free, no-key AI image generation fallback if Imagen and Veo fail."""
+    try:
+        width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+        encoded_prompt = requests.utils.quote(prompt)
+        url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+        print(f"     → Attempting Pollinations AI fallback...")
+        resp = requests.get(url, timeout=30)
+        if resp.status_code == 200:
+            with open(output_path, "wb") as f:
+                f.write(resp.content)
+            return output_path
+    except Exception as e:
+        print(f"  ⚠️ [pollinations] Generation failed: {e}")
+    return None
+
 def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longform=False):
     """
     Orchestrates the retrieval of visuals for all chunks.
-    Priority chain: Veo 3.1 → Imagen → Pexels Video → Pexels Photo → Reuse.
+    Priority chain: Veo 3.1 → Imagen → Pollinations AI → Pexels Video → Pexels Photo → Reuse.
     """
     print(f"\n🎬 VISUAL RESOLVER ENGINE: Processing {len(chunks)} chunks...")
     
@@ -90,6 +106,10 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     
     last_successful_path = None
     last_successful_type = "photo"
+    
+    # Circuit breakers to skip APIs if they consistently fail (e.g. rate limit quota reached)
+    veo_consecutive_fails = 0
+    imagen_consecutive_fails = 0
     
     # Extract keywords from topic context for generic search fallback
     generic_keywords = [w.lower() for w in topic_context.split() if len(w) > 3][:3]
@@ -132,7 +152,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         source = "Failed"
         
         # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
-        if veo_generate and prompt:
+        if veo_generate and prompt and veo_consecutive_fails < 2:
             print("     → Attempting Veo 3.1 video generation...")
             enhanced_prompt = (
                 f"{prompt}. Cinematic photorealistic, no text overlays, no faces, "
@@ -143,18 +163,36 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "video"
                 source = "Veo 3.1 AI"
+                veo_consecutive_fails = 0
                 time.sleep(10)  # rate limit cooling
+            else:
+                veo_consecutive_fails += 1
+                if veo_consecutive_fails >= 2:
+                    print("     🚨 Veo 3.1 failed twice consecutively. Disabling Veo for remaining chunks.")
 
         # ── PRIORITY 2: Imagen AI Image (if Veo failed/unavailable) ──
-        if not visual_path and prompt:
+        if not visual_path and prompt and imagen_consecutive_fails < 2:
             print("     → Generating Imagen image...")
             output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
             visual_path = _generate_imagen_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Imagen AI"
+                imagen_consecutive_fails = 0
                 time.sleep(5)  # rate limit cooling
-                
+            else:
+                imagen_consecutive_fails += 1
+                if imagen_consecutive_fails >= 2:
+                    print("     🚨 Imagen failed twice consecutively. Disabling Imagen for remaining chunks.")
+                    
+        # ── PRIORITY 2.5: Pollinations AI Image (Free AI fallback) ──
+        if not visual_path and prompt:
+            output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
+            visual_path = _generate_pollinations_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
+            if visual_path:
+                visual_type = "photo"
+                source = "Pollinations AI"
+
         # ── PRIORITY 3: Pexels Stock Video ──
         if not visual_path:
             visual_path = fetch_pexels_media(clean_query, media_type="video", aspect_ratio=aspect_ratio)
