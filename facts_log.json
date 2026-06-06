@@ -23,27 +23,31 @@
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "Two-Minute Rule",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
-        "Eat the Frog Productivity Method"
+        "Eat the Frog Productivity Method",
+        "Focus Boost: Time Blocking Hack! 🚀",
+        "Time Blocking Your Schedule"
     ],
     "used_keywords": [
-        "Door to Hell",
-        "Life Hacks",
+        "Life Hack",
+        "Tectonic Plates",
         "Tamil Facts",
+        "Mirroring",
+        "Life Hacks",
+        "Focus",
+        "Did You Know",
+        "World Geography",
         "Time Management",
         "Darvaza Crater",
-        "Psychology",
+        "Social Skills",
+        "Gas Crater",
         "Turkmenistan",
         "Productivity",
-        "Communication",
-        "Mirroring",
-        "World Geography",
         "Natural Gas",
-        "Gas Crater",
+        "Door to Hell",
         "Science Facts",
-        "Earthquake",
-        "Social Skills",
-        "Tectonic Plates",
-        "Did You Know"
+        "Psychology",
+        "Communication",
+        "Earthquake"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -52,18 +56,18 @@
         "🎲 Random Amazing Facts": 1,
         "🌍 World & Geography": 2,
         "🗣️ Communication & Social Hacks": 1,
-        "🚀 Productivity & Time Tips": 2
+        "🚀 Productivity & Time Tips": 3
     },
     "last_7_days_stories": [
-        "Ocean's SHOCKING Oxygen Secret!",
         "Honey: 3000 Years Fresh?!",
         "அமேசான்ல கொதிக்கும் ஆறு! 🤯 ஷாக் ஆகாதீங்க!",
         "பூமியின் 'நரக வாசல்' 50 வருஷமா எரியுது! 🔥",
         "யாரையும் வசமாக்க ஒரு SECRET HACK!",
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
-        "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!"
+        "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
+        "Focus Boost: Time Blocking Hack! 🚀"
     ],
-    "total_uploaded": 12,
+    "total_uploaded": 13,
     "last_upload": "2026-06-06",
     "history": [
         {
@@ -238,6 +242,23 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://www.briantracy.com/blog/time-management/eat-that-frog-and-start-accomplishing-your-goals/"
+        },
+        {
+            "date": "2026-06-06",
+            "title": "Focus Boost: Time Blocking Hack! 🚀",
+            "news_headline": "Time Blocking Your Schedule",
+            "category": "🚀 Productivity & Time Tips",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "Productivity",
+                "Time Management",
+                "Focus",
+                "Life Hack"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://todoist.com/productivity-methods/time-blocking"
         }
     ]
 }
