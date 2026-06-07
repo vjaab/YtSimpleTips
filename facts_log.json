@@ -31,36 +31,42 @@
         "பொங்காம இருக்க ஒரு Magic Hack!",
         "Prevent Pots from Boiling Over with a Wooden Spoon",
         "Microwave Cleaning: Lemon Hack!",
-        "Microwave Cleaning with Lemon"
+        "Microwave Cleaning with Lemon",
+        "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!",
+        "The Ben Franklin Effect"
     ],
     "used_keywords": [
         "Natural Gas",
-        "Darvaza Crater",
-        "Gas Crater",
-        "Social Skills",
-        "Science Facts",
-        "Door to Hell",
-        "Boiling Tip",
-        "Earthquake",
-        "Water Pressure Fix",
-        "Tamil Facts",
         "Productivity",
-        "Kitchen Hack",
-        "Psychology",
+        "Water Pressure Fix",
         "Life Hacks",
-        "Time Management",
-        "Did You Know",
         "Focus",
         "Cooking Hack",
-        "Turkmenistan",
-        "Shower Cleaning",
-        "World Geography",
-        "Life Hack",
         "Mirroring",
+        "Kitchen Hack",
+        "Time Management",
+        "Science Facts",
+        "Did You Know",
+        "Gas Crater",
+        "World Geography",
+        "Vinegar Uses",
+        "Shower Cleaning",
+        "Darvaza Crater",
+        "Ben Franklin Effect",
+        "Social Skills",
+        "Social Hack",
+        "Friendship Tips",
+        "Door to Hell",
+        "Tamil Facts",
+        "Psychology",
+        "VJ Videos",
+        "Life Hack",
+        "Boiling Tip",
         "Home Hacks",
-        "Tectonic Plates",
         "Communication",
-        "Vinegar Uses"
+        "Turkmenistan",
+        "Tectonic Plates",
+        "Earthquake"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -68,21 +74,21 @@
         "🧪 Science & Space": 3,
         "🎲 Random Amazing Facts": 1,
         "🌍 World & Geography": 2,
-        "🗣️ Communication & Social Hacks": 1,
+        "🗣️ Communication & Social Hacks": 2,
         "🚀 Productivity & Time Tips": 3,
         "🏠 Daily Life & Home Hacks": 3
     },
     "last_7_days_stories": [
-        "யாரையும் வசமாக்க ஒரு SECRET HACK!",
         "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
         "Focus Boost: Time Blocking Hack! 🚀",
         "Shower Water Pressure Boost Hack!",
         "பொங்காம இருக்க ஒரு Magic Hack!",
-        "Microwave Cleaning: Lemon Hack!"
+        "Microwave Cleaning: Lemon Hack!",
+        "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!"
     ],
-    "total_uploaded": 16,
-    "last_upload": "2026-06-06",
+    "total_uploaded": 17,
+    "last_upload": "2026-06-07",
     "history": [
         {
             "date": "2026-05-30",
@@ -320,6 +326,25 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/4SaJCGbvBEA",
             "source_url": "https://www.puracy.com/blogs/all/how-to-clean-a-microwave-with-lemon"
+        },
+        {
+            "date": "2026-06-07",
+            "title": "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!",
+            "news_headline": "The Ben Franklin Effect",
+            "category": "🗣️ Communication & Social Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "Ben Franklin Effect",
+                "Psychology",
+                "Social Hack",
+                "Life Hack",
+                "Friendship Tips",
+                "VJ Videos"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/m29jKCizsjQ",
+            "source_url": "https://en.wikipedia.org/wiki/Ben_Franklin_effect"
         }
     ]
 }
