@@ -738,11 +738,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
         header_draw = ImageDraw.Draw(header_img)
         
-        header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
+        header_font = get_font_for_text("Tech Tips by VJ", 38, "bold")
         text_x = 50
         # Draw premium semi-translucent text watermark with dark drop shadow (readable on any background)
-        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
-        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
+        header_draw.text((text_x + 2, 82), "Tech Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
+        header_draw.text((text_x, 80), "Tech Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
