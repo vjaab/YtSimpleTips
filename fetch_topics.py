@@ -21,16 +21,23 @@ def fetch_facts_for_category(category):
     client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = f"""
-    Search the web for 5 highly useful, practical, and true life hacks, tips, or guidelines related to the category: "{category}".
-    These tips must be actionable, interesting, and highly suitable for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    Search the web for 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
+    These tips must be highly actionable, surprising, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    
+    DEMOGRAPHIC & TRENDING CRITERIA:
+    1. The tip must have high appeal and immediate utility for at least one of these groups:
+       - Parents: Kid-safety features, smart home efficiency, budgeting/saving on bills.
+       - Middle-aged: Phone settings, WhatsApp tips, UPI/online security, daily life convenience, spam blocking.
+       - Young People: Focus/study apps, tech shortcuts, productivity tools, customization, hidden settings.
+    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, or app shortcuts that simplify life.
     
     CRITICAL REQUIREMENT: For each tip/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, life hack publication, scientific study, or official guide) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
     Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the tip (e.g. Pomodoro Study Technique)",
-        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English, explaining exactly how it works, how to apply it, and the science/reasoning behind it.",
+        "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
+        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English, explaining exactly how it works, how to apply it, and the direct benefit to parents, middle-aged, or young people.",
         "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific tip",
         "source_name": "Name of the source (e.g. Wikipedia, Healthline, Medium)",
         "keywords": ["keyword1", "keyword2", "keyword3"],

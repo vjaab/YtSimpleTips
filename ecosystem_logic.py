@@ -16,9 +16,9 @@ def get_slot_info():
     daily_categories = {
         "Mon": "📱 Tech & Phone Hacks",        # Keyboard shortcuts, hidden phone features, productivity apps
         "Tue": "🧠 Study & Memory Tips",       # How to study fast, memorization tricks, focus techniques
-        "Wed": "💊 Health & Body Hacks",       # Sleep hacks, posture tips, brain boosters, hydration tricks
+        "Wed": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
         "Thu": "💰 Money & Finance Tips",      # Saving money hacks, smart shopping tips, compound interest simply
-        "Fri": "🚀 Productivity & Time Tips",  # Time management hacks, procrastination solutions, focus tips
+        "Fri": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
         "Sat": "🗣️ Communication & Social Hacks", # Body language tips, conversation starters, confidence hacks
         "Sun": "🏠 Daily Life & Home Hacks"     # Clever kitchen tricks, organization hacks, DIY life hacks
     }
@@ -33,9 +33,9 @@ def get_slot_info():
             "Mon": "🏠 Daily Life & Home Hacks",
             "Tue": "📱 Tech & Phone Hacks",
             "Wed": "🧠 Study & Memory Tips",
-            "Thu": "💊 Health & Body Hacks",
+            "Thu": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
             "Fri": "💰 Money & Finance Tips",
-            "Sat": "🚀 Productivity & Time Tips",
+            "Sat": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
             "Sun": "🗣️ Communication & Social Hacks"
         }
         category = evening_categories.get(day_name, "🏠 Daily Life & Home Hacks")
@@ -57,49 +57,57 @@ def get_category_prompt_enhancement(category, slot):
     """
     Returns specific instructions and formatting for the given Tamil tip/hack category.
     """
-    base_instructions = "FOCUS: High utility, actionable value, and curiosity-inducing tips. The hook must immediately state a common problem and promise a simple solution in Tanglish. Keep the tone friendly and conversational (Tanglish)."
+    base_instructions = (
+        "FOCUS: High utility, actionable value, and curiosity-inducing tips. The hook must immediately state a common problem "
+        "and promise a simple solution in Tanglish. Keep the tone friendly and conversational (Tanglish).\n"
+        "TARGET DEMOGRAPHICS & RETENTION:\n"
+        "1. Young People (students/professionals): Focus on efficiency, speed, productivity hacks, and modern tools.\n"
+        "2. Middle-aged (working class): Focus on daily utility, phone settings, WhatsApp/UPI security, time-saving, and stress reduction.\n"
+        "3. Parents: Focus on kid's screen safety, money-saving, household convenience, smart parenting, and home automation.\n"
+        "To get millions of views, start with a highly emotional, relatable problem hook and end with a seamless retention loop."
+    )
     
     enhancements = {
         "📱 Tech & Phone Hacks": f"""
             {base_instructions}
             CATEGORY: Tech & Phone Hacks
-            GOAL: Share an incredibly useful, actionable phone or laptop hack (shortcuts, hidden settings, clean-up tips) in simple Tanglish.
+            GOAL: Share a game-changing, hidden setting, app shortcut, or trick on Android/iOS/Windows/Mac. Ensure it is highly actionable for at least two demographics (e.g., parents locking screen for kids, young people boosting gaming speed, or middle-aged blocking spam/scams).
             HOOK TEMPLATE (Tamil): "உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க! உங்க phone speed-ஐ boost பண்ண ஒரு simple hack..."
         """,
         "🧠 Study & Memory Tips": f"""
             {base_instructions}
             CATEGORY: Study & Memory Tips
-            GOAL: Share a scientific study tip, concentration hack, or memory trick (e.g., Feynman technique, Pomodoro, active recall) in Tamil/Tanglish.
+            GOAL: Share a highly effective, scientifically-backed study tip, concentration hack, or memory technique (e.g. Feynman method, active recall, AI study tools). Frame it to be useful for young students as well as parents trying to help their kids study better.
             HOOK TEMPLATE (Tamil): "எந்த ஒரு விஷயத்தையும் 10 மடங்கு வேகமா மனப்பாடம் பண்ண இந்த ஒரு science trick-ஐ follow பண்ணுங்க..."
         """,
         "💊 Health & Body Hacks": f"""
             {base_instructions}
             CATEGORY: Health & Body Hacks
-            GOAL: Share an actionable wellness, posture, sleep, or energy hack (e.g., military sleep method, eye relief rule, hydration hacks).
+            GOAL: Share an actionable physical/mental health hack. Prefer tech-infused tips (e.g., screen glare eye-relief apps, smart posture trackers) or high-impact wellness habits (military sleep method, hydration hacks) that apply to young geeks, working parents, or middle-aged people feeling tired.
             HOOK TEMPLATE (Tamil): "அடுத்த 2 நிமிடத்துல தூங்கணுமா? US military யூஸ் பண்ற இந்த simple hack-ஐ ட்ரை பண்ணுங்க..."
         """,
         "💰 Money & Finance Tips": f"""
             {base_instructions}
             CATEGORY: Money & Finance Tips
-            GOAL: Give actionable money-saving hacks, smart shopping rules, or simple concepts to grow wealth.
+            GOAL: Give actionable money-saving hacks, smart shopping rules, or simple wealth tips. Prefer tech-related financial safety tips (e.g., UPI fraud prevention, auto-subscription cancels, budget apps) that protect middle-aged folks, save money for parents, and build wealth for youth.
             HOOK TEMPLATE (Tamil): "உங்க பணத்தை சேமிக்க இந்த ஒரு 50/30/20 rule-ஐ follow பண்ணுங்க! உங்க savings-ஐ double பண்ண ஒரு simple hack..."
         """,
         "🚀 Productivity & Time Tips": f"""
             {base_instructions}
             CATEGORY: Productivity & Time Tips
-            GOAL: Provide actionable productivity routines, how to beat procrastination, or manage time effectively.
+            GOAL: Provide actionable productivity routines, focus techniques, or time management hacks. Highlight how apps or smart settings (e.g. Do Not Disturb setup, screen time limits) help youth focus, middle-aged manage work-life balance, and parents regain free time.
             HOOK TEMPLATE (Tamil): "Procrastination-ஐ 5 வினாடியில நிறுத்த இந்த ஒரு simple rule-ஐ follow பண்ணுங்க..."
         """,
         "🗣️ Communication & Social Hacks": f"""
             {base_instructions}
             CATEGORY: Communication & Social Hacks
-            GOAL: Share communication hacks, body language tricks, confidence tips, or conversation starters.
+            GOAL: Share psychological triggers, body language hacks, or communication tricks. Relate it to interview success for youth, office politics for middle-aged, or managing family conversations for parents.
             HOOK TEMPLATE (Tamil): "யார் கூட பேசினாலும் உங்க மேல ஒரு நல்ல impression வர இந்த ஒரு body language hack-ஐ follow பண்ணுங்க..."
         """,
         "🏠 Daily Life & Home Hacks": f"""
             {base_instructions}
             CATEGORY: Daily Life & Home Hacks
-            GOAL: Share clever household organization hacks, clean-up shortcuts, kitchen tricks, or DIY solutions.
+            GOAL: Share clever household organization hacks, clean-up shortcuts, kitchen tricks, or DIY solutions. Blend in smart home gadget tips or appliance settings that save energy and time for parents and middle-aged homeowners.
             HOOK TEMPLATE (Tamil): "உங்க வீட்ல இருக்குற இந்த ஒரு பொருளை வச்சு, இந்த பெரிய தொல்லையை ஈஸியா தீர்க்கலாம்..."
         """
     }
