@@ -79,6 +79,18 @@ jobs:
       - name: Setup Environment Secrets (.env)
         run: |
           echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_2 }}" ]; then
+            echo "GEMINI_API_KEY_2=${{ secrets.GEMINI_API_KEY_2 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_3 }}" ]; then
+            echo "GEMINI_API_KEY_3=${{ secrets.GEMINI_API_KEY_3 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_4 }}" ]; then
+            echo "GEMINI_API_KEY_4=${{ secrets.GEMINI_API_KEY_4 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_5 }}" ]; then
+            echo "GEMINI_API_KEY_5=${{ secrets.GEMINI_API_KEY_5 }}" >> .env
+          fi
           echo "ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}" >> .env
           echo "ELEVENLABS_VOICE_ID=${{ secrets.ELEVENLABS_VOICE_ID }}" >> .env
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env

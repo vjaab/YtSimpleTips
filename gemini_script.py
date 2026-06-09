@@ -370,11 +370,16 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
     
+    if not final_script:
+        print("⚠️ [gemini_script] Agent pipeline failed. Attempting offline fallback script...")
+        final_script = get_offline_fallback_script(category)
+        
     if final_script:
-        # Override metadata to match selected fact
-        final_script["original_news_headline"] = selected_headline
-        final_script["original_news_url"] = selected_url
-        final_script["use_case_evidence_url"] = selected_url
+        # Override metadata to match selected fact only if it was a generated template
+        if final_script.get("original_news_headline") == "Fact Title" or not final_script.get("original_news_headline"):
+            final_script["original_news_headline"] = selected_headline
+            final_script["original_news_url"] = selected_url
+            final_script["use_case_evidence_url"] = selected_url
         
         # Save output in logs for debug
         os.makedirs(LOGS_DIR, exist_ok=True)
@@ -386,23 +391,72 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         
     return final_script
 
+def get_offline_fallback_script(category):
+    """
+    Loads a pre-packaged script from fallback_scripts.json matching the category.
+    Avoids already used titles if possible.
+    """
+    fallback_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fallback_scripts.json")
+    if not os.path.exists(fallback_path):
+        print(f"⚠️ [gemini_script] fallback_scripts.json not found at {fallback_path}")
+        return None
+        
+    try:
+        with open(fallback_path, 'r', encoding='utf-8') as f:
+            scripts = json.load(f)
+    except Exception as e:
+        print(f"⚠️ [gemini_script] Failed to load fallback_scripts.json: {e}")
+        return None
+
+    # Load tracker to check used titles
+    tracker = load_tracker()
+    used_titles = tracker.get("used_titles", [])
+
+    # Filter matching category
+    matching = [s for s in scripts if s.get("sub_category") == category]
+    if not matching:
+        # Try finding using loose matching or just use all scripts
+        matching = scripts
+
+    # Find unused scripts
+    unused = [s for s in matching if s.get("title") not in used_titles]
+    if not unused:
+        # If all are used, reuse any matching
+        unused = matching
+
+    selected = random.choice(unused) if unused else None
+    if selected:
+        print(f"✅ [gemini_script] Offline fallback script selected: '{selected.get('title')}'")
+    return selected
+
 def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
     """
     Helper to execute Gemini API call with robust exponential backoff retries for 503/429 errors.
     Automatically rotates Gemini API key and retries immediately if multiple keys exist.
+    Also falls back to alternate models on rate limits/overloads.
     """
     client = client_arg or get_gemini_client()
     if not client:
         client = get_gemini_client()
 
     attempts = 0
-    max_attempts = max(6, len(GEMINI_API_KEYS) * 2)
+    max_attempts = max(8, len(GEMINI_API_KEYS) * 3)
     keys_rotated_in_a_row = 0
 
+    # Define model list to cycle/fallback through
+    models_to_try = [model]
+    for m in ['gemini-1.5-flash', 'gemini-2.0-flash-exp', 'gemini-2.5-pro']:
+        if m not in models_to_try:
+            models_to_try.append(m)
+    
+    model_idx = 0
+
     while attempts < max_attempts:
+        current_model = models_to_try[model_idx % len(models_to_try)]
         try:
+            print(f"🔮 Calling Gemini API with model {current_model}...")
             response = client.models.generate_content(
-                model=model,
+                model=current_model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.7,
@@ -426,8 +480,9 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
             is_credit_depleted = "prepayment credits" in err_str or "depleted" in err_str
             
             if is_rate_limit_or_overload or is_credit_depleted:
-                print(f"⚠️ [Gemini API Overload/Rate-Limit] {e}")
+                print(f"⚠️ [Gemini API Overload/Rate-Limit/Depleted] {e}")
                 
+                # Check key rotation first
                 if len(GEMINI_API_KEYS) > 1 and keys_rotated_in_a_row < len(GEMINI_API_KEYS):
                     rotate_gemini_api_key()
                     client = get_gemini_client()
@@ -436,13 +491,17 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
                     attempts += 1
                     continue
                 
-                # Reset key rotation tracker if we tried all keys
+                # If we tried all keys or only have 1 key, rotate the model
                 keys_rotated_in_a_row = 0
+                model_idx += 1
+                next_model = models_to_try[model_idx % len(models_to_try)]
+                print(f"🔄 Rotated through keys. Switching model to fallback: {next_model}. Retrying immediately...")
                 
-                # Exponential backoff with jitter
-                sleep_time = int(10 * (1.8 ** attempts) + random.uniform(1, 5))
-                print(f"   Waiting {sleep_time} seconds (attempt {attempts+1}/{max_attempts}) before retrying...")
-                time.sleep(sleep_time)
+                # Exponential backoff with jitter if we have rotated through all models too
+                if model_idx % len(models_to_try) == 0:
+                    sleep_time = int(10 * (1.5 ** (attempts // len(models_to_try))) + random.uniform(1, 4))
+                    print(f"   Waiting {sleep_time} seconds (attempt {attempts+1}/{max_attempts}) before retrying...")
+                    time.sleep(sleep_time)
             else:
                 sleep_time = 5 + attempts * 5
                 print(f"⚠️ Agent call failed: {e}. Retrying in {sleep_time}s...")
