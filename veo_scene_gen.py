@@ -9,11 +9,12 @@ import time
 from datetime import datetime
 from google import genai
 from google.genai import types
-from config import GEMINI_API_KEY, OUTPUT_DIR, VEO_MODEL_ID
+from config import GEMINI_API_KEY, OUTPUT_DIR, VEO_MODEL_ID, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 
 TODAY = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+def _get_client():
+    return get_gemini_client()
 
 
 def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds=120):
@@ -34,6 +35,7 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
     max_attempts = 2
     while attempts < max_attempts:
         try:
+            client = _get_client()
             print(f"  🎬 [Veo] Generating video clip (attempt {attempts + 1}/{max_attempts})...")
 
             operation = client.models.generate_videos(
@@ -68,6 +70,13 @@ def generate_veo_clip(prompt, output_path, aspect_ratio="9:16", max_wait_seconds
 
         except Exception as e:
             err_str = str(e).lower()
+            is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+            
+            if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
+                rotate_gemini_api_key()
+                print("🔄 [veo_scene_gen] Rotated key. Retrying immediately...")
+                continue
+                
             if "429" in err_str:
                 import random
                 sleep_time = int(15 + (attempts * 10) + random.uniform(1, 3))

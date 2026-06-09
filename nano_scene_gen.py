@@ -8,11 +8,12 @@ import time
 import random
 from datetime import datetime
 from google import genai
-from config import GEMINI_API_KEY, OUTPUT_DIR
+from config import GEMINI_API_KEY, OUTPUT_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 
 TODAY = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+def _get_client():
+    return get_gemini_client()
 
 def _generate_missing_prompts(chunks, headline, style_guide, aspect_ratio="9:16"):
     """
@@ -62,6 +63,7 @@ Return ONLY a JSON array of objects, one per sentence, in order:
     prompts = []
     while attempts < max_attempts:
         try:
+            client = _get_client()
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
                 contents=prompt,
@@ -80,6 +82,14 @@ Return ONLY a JSON array of objects, one per sentence, in order:
                 k in err_str
                 for k in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
             )
+            is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+            
+            if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
+                rotate_gemini_api_key()
+                print("🔄 [nano_scene_gen] Rotated key. Retrying immediately...")
+                attempts += 1
+                continue
+                
             sleep_time = int(8 * (1.8 ** attempts) + random.uniform(1, 3)) if is_rate_limit else 5
             print(f"  ⚠️ [nano_scene_gen] Prompt generation failed: {e}. Retrying in {sleep_time}s...")
             time.sleep(sleep_time)
@@ -121,6 +131,7 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
 
     attempts = 0
     while attempts < 2:
+        client = _get_client()
         for model_name in models_to_try:
             try:
                 result = client.models.generate_images(
@@ -138,6 +149,13 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
                     return output_path
             except Exception as e:
                 err_str = str(e).lower()
+                is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+                
+                if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
+                    rotate_gemini_api_key()
+                    print("🔄 [nano_scene_gen] Rotated key for Imagen. Retrying immediately...")
+                    break  # Break out of model loop to retry with fresh client
+                    
                 if "429" in err_str:
                     sleep_time = 10 + attempts * 5
                     print(f"  ⏳ Imagen rate limited (429) on {model_name}. Retrying attempt {attempts+1}/2 in {sleep_time}s...")

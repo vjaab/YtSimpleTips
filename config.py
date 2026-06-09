@@ -4,7 +4,59 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # API Keys
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+# API Keys
+GEMINI_API_KEYS_RAW = os.getenv("GEMINI_API_KEY", "")
+GEMINI_API_KEYS = [k.strip() for k in GEMINI_API_KEYS_RAW.split(",") if k.strip()]
+
+# Check other env variables as well: GEMINI_API_KEY_1, GEMINI_API_KEY_2, GEMINI_API_KEY_3, etc.
+_key_idx = 1
+while True:
+    alt_key = os.getenv(f"GEMINI_API_KEY_{_key_idx}", "")
+    if alt_key:
+        if alt_key.strip() not in GEMINI_API_KEYS:
+            GEMINI_API_KEYS.append(alt_key.strip())
+        _key_idx += 1
+    else:
+        if _key_idx > 10:
+            break
+        _key_idx += 1
+
+# If still empty, check the base GEMINI_API_KEY
+if not GEMINI_API_KEYS and os.getenv("GEMINI_API_KEY"):
+    GEMINI_API_KEYS = [os.getenv("GEMINI_API_KEY").strip()]
+
+# Remove duplicates while preserving order
+_seen = set()
+GEMINI_API_KEYS = [x for x in GEMINI_API_KEYS if not (x in _seen or _seen.add(x))]
+
+# For backward compatibility
+GEMINI_API_KEY = GEMINI_API_KEYS[0] if GEMINI_API_KEYS else ""
+
+_current_key_idx = 0
+
+def get_gemini_api_key():
+    global _current_key_idx
+    if not GEMINI_API_KEYS:
+        return ""
+    _current_key_idx = _current_key_idx % len(GEMINI_API_KEYS)
+    return GEMINI_API_KEYS[_current_key_idx]
+
+def rotate_gemini_api_key():
+    global _current_key_idx
+    if not GEMINI_API_KEYS or len(GEMINI_API_KEYS) <= 1:
+        return False
+    _old_idx = _current_key_idx
+    _current_key_idx = (_current_key_idx + 1) % len(GEMINI_API_KEYS)
+    print(f"🔄 [config] Rotating Gemini API Key: Index {_old_idx+1} -> {_current_key_idx+1} (Total: {len(GEMINI_API_KEYS)} keys)")
+    return True
+
+def get_gemini_client(refresh=False):
+    from google import genai
+    key = get_gemini_api_key()
+    if not key:
+        print("⚠️ [config] No Gemini API key available!")
+        return None
+    return genai.Client(api_key=key)
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")

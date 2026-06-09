@@ -11,7 +11,7 @@ import math
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from google import genai
-from config import GEMINI_API_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_CATEGORY_COLORS
+from config import GEMINI_API_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_CATEGORY_COLORS, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from infographic_gen import get_font_for_text
 
 THUMB_W, THUMB_H = 1280, 720  # Standard YouTube 16:9 Thumbnail size
@@ -98,7 +98,6 @@ def _generate_pollinations_background(prompt_context):
 def _generate_imagen_background(prompt_context):
     """Generates an eye-catching background image via Imagen 4.0."""
     print(f"🎨 [thumbnail] Generating background for context: {prompt_context[:50]}...")
-    client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = (
         f"A striking, highly detailed, high-contrast background image related to: {prompt_context}. "
@@ -113,6 +112,10 @@ def _generate_imagen_background(prompt_context):
     
     attempts = 0
     while attempts < 3:
+        client = get_gemini_client()
+        if not client:
+            print("⚠️ [thumbnail] Client missing! Skipping Imagen background generation.")
+            break
         for model_name in models_to_try:
             try:
                 result = client.models.generate_images(
@@ -133,6 +136,13 @@ def _generate_imagen_background(prompt_context):
                     return Image.open(temp_path)
             except Exception as e:
                 err_str = str(e).lower()
+                is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+                
+                if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
+                    rotate_gemini_api_key()
+                    print("🔄 [thumbnail] Rotated key for Imagen background. Retrying immediately...")
+                    break  # Break out of model loop to retry with fresh client
+                    
                 if "429" in err_str:
                     sleep_time = 15 + attempts * 10
                     print(f"⏳ [thumbnail] Rate limited (429) on {model_name}. Retrying attempt {attempts+1}/3 in {sleep_time}s...")
@@ -142,7 +152,7 @@ def _generate_imagen_background(prompt_context):
                     print(f"⚠️ [thumbnail] {model_name} failed: {e}. Trying next...")
                     continue
         else:
-            # Completed the model loop without breaking (no 429 encountered)
+            # Completed the model loop without breaking (no 429/rotation encountered)
             break
         attempts += 1
         

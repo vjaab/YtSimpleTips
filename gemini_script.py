@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 import time
 import random
-from config import GEMINI_API_KEY, LOGS_DIR
+from config import GEMINI_API_KEY, LOGS_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import load_tracker, check_story_uniqueness, check_cooldowns
 from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
@@ -190,11 +190,10 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     """
     Orchestrates the multi-agent pipeline to generate a high-retention Tanglish fact script.
     """
-    if not GEMINI_API_KEY:
-        print("⚠️ Gemini API Key missing! Cannot run multi-agent script generation.")
+    client = get_gemini_client()
+    if not client:
+        print("⚠️ Gemini API Client missing! Cannot run multi-agent script generation.")
         return None
-        
-    client = genai.Client(api_key=GEMINI_API_KEY)
     
     day_name, slot, category = get_slot_info()
     strategy_enhancement = get_category_prompt_enhancement(category, slot)
@@ -387,12 +386,19 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         
     return final_script
 
-def call_gemini_api(client, prompt, model='gemini-2.5-flash'):
+def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
     """
     Helper to execute Gemini API call with robust exponential backoff retries for 503/429 errors.
+    Automatically rotates Gemini API key and retries immediately if multiple keys exist.
     """
+    client = client_arg or get_gemini_client()
+    if not client:
+        client = get_gemini_client()
+
     attempts = 0
-    max_attempts = 6
+    max_attempts = max(6, len(GEMINI_API_KEYS) * 2)
+    keys_rotated_in_a_row = 0
+
     while attempts < max_attempts:
         try:
             response = client.models.generate_content(
@@ -417,11 +423,24 @@ def call_gemini_api(client, prompt, model='gemini-2.5-flash'):
                 keyword in err_str 
                 for keyword in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
             )
+            is_credit_depleted = "prepayment credits" in err_str or "depleted" in err_str
             
-            if is_rate_limit_or_overload:
+            if is_rate_limit_or_overload or is_credit_depleted:
+                print(f"⚠️ [Gemini API Overload/Rate-Limit] {e}")
+                
+                if len(GEMINI_API_KEYS) > 1 and keys_rotated_in_a_row < len(GEMINI_API_KEYS):
+                    rotate_gemini_api_key()
+                    client = get_gemini_client()
+                    keys_rotated_in_a_row += 1
+                    print(f"🔄 Rotated key to attempt next API key. Retrying immediately (attempt {attempts+1}/{max_attempts})...")
+                    attempts += 1
+                    continue
+                
+                # Reset key rotation tracker if we tried all keys
+                keys_rotated_in_a_row = 0
+                
                 # Exponential backoff with jitter
                 sleep_time = int(10 * (1.8 ** attempts) + random.uniform(1, 5))
-                print(f"⚠️ [Gemini API Overload/Rate-Limit] {e}")
                 print(f"   Waiting {sleep_time} seconds (attempt {attempts+1}/{max_attempts}) before retrying...")
                 time.sleep(sleep_time)
             else:

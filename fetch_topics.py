@@ -3,7 +3,7 @@ from google.genai import types
 import json
 import os
 from datetime import datetime
-from config import GEMINI_API_KEY, TRACKER_FILE
+from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import check_story_uniqueness
 
 def fetch_facts_for_category(category):
@@ -14,11 +14,10 @@ def fetch_facts_for_category(category):
     """
     print(f"📡 [fetch_topics] Fetching trending tips and hacks for category '{category}' using Gemini Search Grounding...")
     
-    if not GEMINI_API_KEY:
-        print("⚠️ Gemini API Key missing! Cannot fetch tips.")
+    client = get_gemini_client()
+    if not client:
+        print("⚠️ Gemini API Client missing! Cannot fetch tips.")
         return []
-        
-    client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = f"""
     Search the web for 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
@@ -92,6 +91,15 @@ def fetch_facts_for_category(category):
                 k in err_str
                 for k in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
             )
+            is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+            
+            if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
+                rotate_gemini_api_key()
+                client = get_gemini_client()
+                print("🔄 [fetch_topics] Successfully rotated API key after 429 / credit depletion. Retrying immediately...")
+                attempts += 1
+                continue
+                
             if is_rate_limit:
                 import random
                 sleep_time = int(10 * (1.8 ** attempts) + random.uniform(1, 4))
