@@ -126,9 +126,10 @@ jobs:
           # Pull latest changes first
           git pull origin main --rebase --autostash || echo "Pull skipped"
           
+          # Add tracking files and technical logs (force add since logs/ is gitignored)
           git add facts_log.json || echo "Facts log missing"
           if [ -d "logs" ]; then
-            git add logs/*.txt 2>/dev/null || echo "No logs to commit"
+            git add -f logs/*.txt 2>/dev/null || echo "No logs to commit"
           fi
           
           if ! git diff --cached --quiet; then

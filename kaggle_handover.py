@@ -89,20 +89,21 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
         elif os.path.exists("venv/Scripts/kaggle"):
             kaggle_cmd = "venv/Scripts/kaggle"
             
-        subprocess.run([kaggle_cmd, "kernels", "push", "-p", scripts_dir], check=True)
+        subprocess.run([kaggle_cmd, "kernels", "push", "-p", scripts_dir], check=True, timeout=90)
     except Exception as e:
         msg = f"Failed to push Kaggle kernel: {e}"
         print(f"❌ {msg}")
         _notify_kaggle_failure(f"🚨 Kaggle Push Failed\n\n{msg}\n\nPipeline will attempt ElevenLabs fallback.")
         return {"error": "push_failed", "message": msg}
 
-    # 3. Poll for Completion
+    # 3. Poll for Completion (with an absolute safety limit)
     kernel_id = "vijayakumarj/ytsimpletips-gpu-worker"
     print(f"⌛ Waiting for Kaggle job ({kernel_id}) to finish...")
     
     max_queued_mins = 10
     max_running_mins = 15
     poll_interval_s = 20
+    absolute_timeout_s = (max_queued_mins + max_running_mins + 5) * 60
     
     start_time = time.time()
     job_started_running = False
@@ -111,6 +112,16 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
     while True:
         elapsed_s = time.time() - start_time
         elapsed_mins = elapsed_s / 60
+        
+        # Absolute safety timeout to prevent infinite hangs
+        if elapsed_s > absolute_timeout_s:
+            msg = f"Kaggle job exceeded absolute safety timeout of {absolute_timeout_s/60:.0f} minutes."
+            print(f"❌ {msg}")
+            _notify_kaggle_failure(
+                f"⏰ Kaggle GPU Absolute Timeout\n\n{msg}\n\n"
+                f"Pipeline will attempt ElevenLabs fallback."
+            )
+            return {"error": "absolute_timeout", "message": msg}
         
         try:
             status_output = subprocess.check_output(
@@ -161,7 +172,7 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
     output_dir = "output"
     os.makedirs(output_dir, exist_ok=True)
     try:
-        subprocess.run([kaggle_cmd, "kernels", "output", kernel_id, "-p", output_dir], check=True)
+        subprocess.run([kaggle_cmd, "kernels", "output", kernel_id, "-p", output_dir], check=True, timeout=120)
         
         results_file = os.path.join(output_dir, "results.json")
         if os.path.exists(results_file):
