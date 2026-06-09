@@ -287,8 +287,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         )
         selection = call_gemini_api(client, selector_prompt)
         if not selection or "selected_headline" not in selection:
-            print("⚠️ Selector Agent failed. Using fallback.")
-            return None
+            print("⚠️ Selector Agent failed. Attempting offline fallback script...")
+            return get_offline_fallback_script(category)
         selected_headline = selection["selected_headline"]
         selected_url = selection["selected_url"]
         
@@ -320,7 +320,9 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         news_context=isolated_context
     )
     research = call_gemini_api(client, research_prompt)
-    if not research: return None
+    if not research:
+        print("⚠️ Research Agent failed. Attempting offline fallback script...")
+        return get_offline_fallback_script(category)
 
     # ── AGENT 2: HOOK ──
     print("🪝 [AGENT 2] Hook Agent: Generating Tanglish hooks...")
@@ -329,7 +331,9 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         research_json=json.dumps(research)
     )
     hooks_data = call_gemini_api(client, hook_prompt)
-    if not hooks_data or "hooks" not in hooks_data: return None
+    if not hooks_data or "hooks" not in hooks_data:
+        print("⚠️ Hook Agent failed. Attempting offline fallback script...")
+        return get_offline_fallback_script(category)
     
     # Pick highest curiosity score hook
     best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0))
@@ -344,7 +348,9 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         selection_instruction=selection_instruction
     )
     narrative = call_gemini_api(client, narrative_prompt)
-    if not narrative: return None
+    if not narrative:
+        print("⚠️ Narrative Agent failed. Attempting offline fallback script...")
+        return get_offline_fallback_script(category)
 
     # ── AGENT 4: RETENTION OPTIMIZER ──
     print("⚡ [AGENT 4] Pacing Optimizer: Shortening sentences...")
@@ -353,7 +359,9 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         narrative_json=json.dumps(narrative)
     )
     optimized = call_gemini_api(client, retention_prompt)
-    if not optimized: return None
+    if not optimized:
+        print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
+        return get_offline_fallback_script(category)
 
     # ── AGENT 5: HUMANIZER & SCHEMATIZER ──
     print("🗣️ [AGENT 5] Humanizer: Structuring final Tamil schema...")
@@ -427,6 +435,17 @@ def get_offline_fallback_script(category):
     selected = random.choice(unused) if unused else None
     if selected:
         print(f"✅ [gemini_script] Offline fallback script selected: '{selected.get('title')}'")
+        
+        # Save output in logs for debug
+        try:
+            os.makedirs(LOGS_DIR, exist_ok=True)
+            log_path = os.path.join(LOGS_DIR, f"script_fallback_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
+            with open(log_path, 'w', encoding='utf-8') as f:
+                json.dump(selected, f, indent=4, ensure_ascii=False)
+            print(f"⭐ [PIPELINE] Saved offline fallback script log: {log_path}")
+        except Exception as e:
+            print(f"⚠️ Failed to save fallback log: {e}")
+            
     return selected
 
 def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
@@ -445,7 +464,7 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
 
     # Define model list to cycle/fallback through
     models_to_try = [model]
-    for m in ['gemini-1.5-flash', 'gemini-2.0-flash-exp', 'gemini-2.5-pro']:
+    for m in ['gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-2.5-pro']:
         if m not in models_to_try:
             models_to_try.append(m)
     
