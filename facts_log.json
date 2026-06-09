@@ -33,40 +33,46 @@
         "Microwave Cleaning: Lemon Hack!",
         "Microwave Cleaning with Lemon",
         "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!",
-        "The Ben Franklin Effect"
+        "The Ben Franklin Effect",
+        "பொங்காம இருக்க Magic Hack!",
+        "Why a wooden spoon stops boiling over"
     ],
     "used_keywords": [
-        "Natural Gas",
-        "Productivity",
-        "Water Pressure Fix",
         "Life Hacks",
-        "Focus",
-        "Cooking Hack",
-        "Mirroring",
-        "Kitchen Hack",
-        "Time Management",
-        "Science Facts",
-        "Did You Know",
-        "Gas Crater",
         "World Geography",
+        "Tamil Facts",
+        "Gas Crater",
+        "Cooking Hack",
+        "Social Hack",
+        "Boiling Tip",
+        "Door to Hell",
+        "Earthquake",
+        "Kitchen Hacks",
+        "Tectonic Plates",
+        "Friendship Tips",
+        "Did You Know",
+        "VJ Videos",
+        "Mirroring",
+        "Water Pressure Fix",
+        "Darvaza Crater",
+        "Focus",
+        "Kitchen Hack",
+        "Boiling Pot Hack",
+        "Productivity",
+        "Turkmenistan",
+        "Natural Gas",
+        "Life Hack",
+        "Communication",
+        "Science Facts",
+        "Social Skills",
+        "Ben Franklin Effect",
+        "Psychology",
+        "Tamil Life Hacks",
         "Vinegar Uses",
         "Shower Cleaning",
-        "Darvaza Crater",
-        "Ben Franklin Effect",
-        "Social Skills",
-        "Social Hack",
-        "Friendship Tips",
-        "Door to Hell",
-        "Tamil Facts",
-        "Psychology",
-        "VJ Videos",
-        "Life Hack",
-        "Boiling Tip",
-        "Home Hacks",
-        "Communication",
-        "Turkmenistan",
-        "Tectonic Plates",
-        "Earthquake"
+        "Time Management",
+        "Home Tips",
+        "Home Hacks"
     ],
     "used_categories": {
         "🌍 Earth Science": 1,
@@ -76,19 +82,19 @@
         "🌍 World & Geography": 2,
         "🗣️ Communication & Social Hacks": 2,
         "🚀 Productivity & Time Tips": 3,
-        "🏠 Daily Life & Home Hacks": 3
+        "🏠 Daily Life & Home Hacks": 4
     },
     "last_7_days_stories": [
-        "2-Minute Rule: Procrastination-அ விரட்டுங்க!",
         "உங்க 'Frog' எங்க இருக்கு? உடனே முடிங்க! Life மாறும்!",
         "Focus Boost: Time Blocking Hack! 🚀",
         "Shower Water Pressure Boost Hack!",
         "பொங்காம இருக்க ஒரு Magic Hack!",
         "Microwave Cleaning: Lemon Hack!",
-        "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!"
+        "Favor கேட்டா... அவங்களுக்கு உங்களை பிடிக்குமாமே?!",
+        "பொங்காம இருக்க Magic Hack!"
     ],
-    "total_uploaded": 17,
-    "last_upload": "2026-06-07",
+    "total_uploaded": 18,
+    "last_upload": "2026-06-09",
     "history": [
         {
             "date": "2026-05-30",
@@ -345,6 +351,21 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/m29jKCizsjQ",
             "source_url": "https://en.wikipedia.org/wiki/Ben_Franklin_effect"
+        },
+        {
+            "date": "2026-06-09",
+            "title": "பொங்காம இருக்க Magic Hack!",
+            "news_headline": "Why a wooden spoon stops boiling over",
+            "category": "🏠 Daily Life & Home Hacks",
+            "keywords": [
+                "Kitchen Hacks",
+                "Home Tips",
+                "Boiling Pot Hack",
+                "Tamil Life Hacks"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/jNYikrSmjKo",
+            "source_url": "https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/"
         }
     ]
 }
