@@ -1,8 +1,56 @@
 import json
 import os
+import re
 from datetime import datetime
 from rapidfuzz import fuzz
 from config import TRACKER_FILE
+
+def normalize_url(url):
+    if not url:
+        return ""
+    url = url.strip().lower()
+    # Remove protocol
+    if url.startswith("https://"):
+        url = url[8:]
+    elif url.startswith("http://"):
+        url = url[7:]
+    # Remove www.
+    if url.startswith("www."):
+        url = url[4:]
+    # Remove query parameters
+    if "?" in url:
+        url = url.split("?")[0]
+    # Remove fragment
+    if "#" in url:
+        url = url.split("#")[0]
+    # Remove trailing slash
+    if url.endswith("/"):
+        url = url[:-1]
+    return url
+
+def clean_title_for_comparison(title):
+    if not title:
+        return ""
+    # Lowercase
+    title = title.lower()
+    # Remove punctuation
+    title = re.sub(r'[^\w\s]', '', title)
+    # Remove common English and Tamil stopwords
+    stopwords = {
+        'a', 'an', 'the', 'is', 'are', 'was', 'were', 'on', 'in', 'at', 'to', 'for', 'with', 
+        'of', 'and', 'or', 'but', 'if', 'then', 'else', 'than', 'this', 'that', 'these', 'those',
+        'from', 'by', 'about', 'as', 'into', 'through', 'during', 'before', 'after', 'above', 
+        'below', 'up', 'down', 'out', 'off', 'over', 'under', 'again', 'further', 'once', 'here', 
+        'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 
+        'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'too', 
+        'very', 's', 't', 'can', 'will', 'just', 'should', 'now',
+        # Tamil stopwords/fillers (transliterated & Tamil script)
+        'oru', 'indha', 'andha', 'enru', 'aana', 'irundhu', 'muthal', 'vazhi', 'moolam',
+        'ஒரு', 'இந்த', 'அந்த', 'என்று', 'ஆனா', 'இருந்து', 'முதல்', 'வழி', 'மூலம்', 'மற்றும்'
+    }
+    words = title.split()
+    filtered_words = [w for w in words if w not in stopwords]
+    return " ".join(filtered_words)
 
 def load_tracker(tracker_file=TRACKER_FILE):
     if not os.path.exists(tracker_file):
@@ -38,44 +86,67 @@ def check_story_uniqueness(new_title, new_headline=None, new_keywords=None, new_
     if not tracker:
         return True, "Unique (Empty tracker)"
     
-    # 1. Exact URL Check
+    # 1. URL Check (Normalized)
     if new_url:
-        for entry in tracker.get('history', []):
-            if not isinstance(entry, dict): continue
-            if entry.get('source_url') == new_url or entry.get('news_source_url') == new_url:
-                return False, f"Exact URL already covered: {new_url}"
+        norm_new_url = normalize_url(new_url)
+        # Skip checking google search grounding redirects because they are dynamic
+        if "grounding-api-redirect" not in norm_new_url:
+            for entry in tracker.get('history', []):
+                if not isinstance(entry, dict): continue
+                old_url = entry.get('source_url') or entry.get('news_source_url')
+                if old_url:
+                    if normalize_url(old_url) == norm_new_url:
+                        return False, f"URL already covered: {new_url}"
 
-    # 2. Semantic Title & Headline Check
+    # 2. Semantic Title & Headline Check (with stopword removal)
     from config import SIMILARITY_THRESHOLD
-    headlines_to_check = (tracker.get('used_titles', []) or []) + (tracker.get('last_7_days_stories', []) or [])
+    
+    # Check used_titles, last_7_days_stories, and all history titles/news_headlines
+    headlines_to_check = set(
+        (tracker.get('used_titles', []) or []) + 
+        (tracker.get('last_7_days_stories', []) or [])
+    )
+    for entry in tracker.get('history', []):
+        if not isinstance(entry, dict): continue
+        t = entry.get('title')
+        h = entry.get('news_headline')
+        if t: headlines_to_check.add(t)
+        if h: headlines_to_check.add(h)
     
     search_titles = [new_title]
     if new_headline: 
         search_titles.append(new_headline)
     
-    for existing_title in set(headlines_to_check):
+    for existing_title in headlines_to_check:
         if not existing_title: continue
         for st in search_titles:
             if not st: continue
-            score = fuzz.token_set_ratio(st.lower(), existing_title.lower())
-            if score > SIMILARITY_THRESHOLD: 
-                return False, f"Semantic match found (score {score}): '{existing_title}'"
             
-    # 3. Keyword Overlap Check (Batch Deduplication)
+            # Clean both titles before calculating ratio
+            cleaned_st = clean_title_for_comparison(st)
+            cleaned_ext = clean_title_for_comparison(existing_title)
+            
+            if cleaned_st and cleaned_ext:
+                score = fuzz.token_set_ratio(cleaned_st, cleaned_ext)
+                if score > SIMILARITY_THRESHOLD: 
+                    return False, f"Semantic match found (score {score:.1f}): '{existing_title}'"
+            
+    # 3. Keyword Overlap Check (across all historical stories)
     if new_keywords:
-        recent_keywords = []
-        for entry in tracker.get('history', [])[-10:]: # Look at last 10 stories
-            recent_keywords.extend([k.lower() for k in entry.get('keywords', []) if k])
+        historical_keywords = []
+        for entry in tracker.get('history', []):
+            if not isinstance(entry, dict): continue
+            historical_keywords.extend([k.lower() for k in entry.get('keywords', []) if k])
         
         new_k_set = set([k.lower() for k in new_keywords if k])
-        old_k_set = set(recent_keywords)
+        old_k_set = set(historical_keywords)
         intersection = new_k_set.intersection(old_k_set)
         
-        # If > 70% of keywords overlap with recent stories, it's likely redundant
+        # If > 70% of keywords overlap with history, it's likely redundant
         if len(new_k_set) > 0:
             overlap_pct = (len(intersection) / len(new_k_set)) * 100
             if overlap_pct > 70:
-                return False, f"High keyword overlap ({overlap_pct:.0f}%) with recent stories."
+                return False, f"High keyword overlap ({overlap_pct:.0f}%) with historical stories."
                 
     return True, "Unique"
 

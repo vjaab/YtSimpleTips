@@ -6,6 +6,85 @@ from datetime import datetime
 from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import check_story_uniqueness
 
+def fetch_facts_from_llm_fallback(category, avoid_titles):
+    """
+    Generates 5 fresh, unique facts for a category using standard Gemini without Search Grounding,
+    explicitly avoiding a list of already used titles.
+    """
+    print(f"🔮 [fetch_topics] Attempting LLM generation fallback (without search grounding) for category '{category}'...")
+    client = get_gemini_client()
+    if not client:
+        print("⚠️ Gemini API Client missing! Cannot run LLM fallback.")
+        return []
+    
+    avoid_list_str = "\n".join([f"- {t}" for t in avoid_titles if t])
+    avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
+    
+    prompt = f"""
+    Generate 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
+    These tips must be highly actionable, surprising, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    
+    DEMOGRAPHIC & TRENDING CRITERIA:
+    1. The tip must have high appeal and immediate utility for parents, middle-aged, or young people in daily life.
+    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, or app shortcuts that simplify life.
+    
+    {avoid_instruction}
+    
+    CRITICAL REQUIREMENT: For each tip/hack, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    
+    Return ONLY a JSON list of 5 tips matching this schema:
+    [
+      {{
+        "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
+        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English...",
+        "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
+        "source_name": "Name of the source",
+        "keywords": ["keyword1", "keyword2", "keyword3"],
+        "category": "{category}"
+      }}
+    ]
+    
+    Do NOT wrap in markdown tags like ```json. Return ONLY the raw JSON string starting with [ and ending with ].
+    """
+    
+    attempts = 0
+    while attempts < 3:
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7
+                )
+            )
+            raw = response.text.strip()
+            if "[" in raw and "]" in raw:
+                raw = raw[raw.find("["):raw.rfind("]")+1]
+            facts = json.loads(raw)
+            
+            # Filter unique facts
+            unique_facts = []
+            for fact in facts:
+                title = fact.get("title", "")
+                url = fact.get("source_url", "")
+                is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                if is_unique:
+                    unique_facts.append(fact)
+                else:
+                    print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
+            
+            if unique_facts:
+                print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via LLM.")
+                return unique_facts
+            
+            print("⚠️ [fetch_topics fallback] All LLM generated facts were duplicates. Retrying fallback generation...")
+            attempts += 1
+        except Exception as e:
+            print(f"⚠️ [fetch_topics fallback] LLM fallback failed: {e}. Retrying...")
+            attempts += 1
+            
+    return []
+
 def fetch_facts_for_category(category):
     """
     Uses Gemini Search Grounding to find 5 fresh, high-utility, actionable tips/hacks
@@ -18,6 +97,21 @@ def fetch_facts_for_category(category):
     if not client:
         print("⚠️ Gemini API Client missing! Cannot fetch tips.")
         return []
+        
+    # Load avoid titles to pass to standard LLM fallback
+    from topic_tracker import load_tracker
+    tracker = load_tracker()
+    headlines_to_avoid = set(
+        (tracker.get('used_titles', []) or []) + 
+        (tracker.get('last_7_days_stories', []) or [])
+    )
+    for entry in tracker.get('history', []):
+        if not isinstance(entry, dict): continue
+        t = entry.get('title')
+        h = entry.get('news_headline')
+        if t: headlines_to_avoid.add(t)
+        if h: headlines_to_avoid.add(h)
+    avoid_titles = list(headlines_to_avoid)
     
     prompt = f"""
     Search the web for 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
@@ -112,7 +206,12 @@ def fetch_facts_for_category(category):
             attempts += 1
             
     # Fallback if search grounding completely fails or returns only duplicates
-    print("🚨 [fetch_topics] All search grounding attempts failed or returned duplicates. Loading historical backup...")
+    print("🚨 [fetch_topics] All search grounding attempts failed or returned duplicates. Attempting LLM fallback...")
+    unique_fallback_facts = fetch_facts_from_llm_fallback(category, avoid_titles)
+    if unique_fallback_facts:
+        return unique_fallback_facts
+        
+    print("🚨 [fetch_topics] LLM fallback failed. Loading historical backup as absolute last resort...")
     return get_historical_fallback(category)
 
 def get_historical_fallback(category):

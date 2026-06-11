@@ -218,6 +218,41 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         isolated_context = f"Title: {selected_headline}\nDescription: {forced_article.get('description')}\nURL: {selected_url}"
         news_context += f"FORCED FACT TO COVER:\n{isolated_context}\n"
     else:
+        # Programmatically filter out duplicate facts before passing to Selector Agent
+        if articles:
+            unique_articles = []
+            for art in articles:
+                title = art.get('title', '')
+                url = art.get('source_url', '')
+                is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                if is_unique:
+                    unique_articles.append(art)
+                else:
+                    print(f"⏭️ [pick_and_generate_script] Filtering out duplicate article: {title}. Reason: {reason}")
+            articles = unique_articles
+            
+        # If articles is empty (all duplicates), trigger LLM fallback to fetch unique ones
+        if not articles:
+            print("⚠️ [pick_and_generate_script] No unique articles available. Generating fresh facts via LLM fallback...")
+            from fetch_topics import fetch_facts_from_llm_fallback
+            articles = fetch_facts_from_llm_fallback(category, combined_avoid)
+            
+        # If still empty or no articles were provided initially
+        if not articles:
+            print("⚠️ No input facts provided. Fetching fresh facts for selection...")
+            from fetch_topics import fetch_facts_for_category
+            fresh_facts = fetch_facts_for_category(category)
+            unique_fresh = []
+            for art in fresh_facts:
+                title = art.get('title', '')
+                url = art.get('source_url', '')
+                is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                if is_unique:
+                    unique_fresh.append(art)
+                else:
+                    print(f"⏭️ [pick_and_generate_script] Filtering out duplicate fresh fact: {title}. Reason: {reason}")
+            articles = unique_fresh
+
         if articles:
             for idx, art in enumerate(articles[:10]):
                 title = art.get('title', '')
@@ -225,14 +260,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 url = art.get('source_url', '')
                 news_context += f"\n[{idx+1}] Title: {title}\nDescription: {desc}\nURL: {url}\n"
         else:
-            print("⚠️ No input facts provided. Fetching fresh facts for selection...")
-            from fetch_topics import fetch_facts_for_category
-            fresh_facts = fetch_facts_for_category(category)
-            for idx, art in enumerate(fresh_facts[:10]):
-                title = art.get('title', '')
-                desc = art.get('description', '')
-                url = art.get('source_url', '')
-                news_context += f"\n[{idx+1}] Title: {title}\nDescription: {desc}\nURL: {url}\n"
+            print("🚨 [pick_and_generate_script] No unique articles could be fetched or generated!")
+            return get_offline_fallback_script(category)
 
     selection_instruction = (
         f"Analyze the facts and select the SINGLE most mind-blowing fact to convert into a 45-55s Tanglish YouTube Short.\n"
@@ -242,7 +271,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     )
 
     prompt_requirements = f"""Return ONLY this exact JSON (no markdown):
-{{
+{
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
   "description": "Full SEO friendly video description including Tamil tags #தெரியுமா #FactsInTamil #VJVideos",
   "use_case_evidence_url": "Direct source url of the fact to take a screenshot of.",
@@ -255,27 +284,27 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "script": "The FULL unified voiceover script in Tanglish combining all parts. Approx 110-130 words. STRICT MAXIMUM 130 words.",
   "hook_text": "The first 5-8 words of the script.",
   "relevant_links": ["Source url"],
-  "phonetic_pronunciation_map": {{"NVIDIA": "In-vid-yah"}},
+  "phonetic_pronunciation_map": {"NVIDIA": "In-vid-yah"},
   "hook": "Matches the first sentence of the script",
   "summary": "One line English summary",
   "sub_category": "{category}",
   "breaking_news_level": 8,
-  "retention_cues": [{{"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}}],
-  "subtitle_chunks": [{{
+  "retention_cues": [{"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}],
+  "subtitle_chunks": [{
       "chunk_id": 1,
       "text": "The exact Tanglish words spoken in this chunk (e.g., 'namma brain-la almost')",
       "english_caption": "1-3 IMPORTANT English words representing the key concept of this chunk in uppercase (e.g., '86 BILLION NEURONS')",
       "start": 0.0, "end": 0.0,
       "has_infographic": false, "infographic_type": "none",
-      "infographic_data": {{}},
+      "infographic_data": {},
       "nano_visual_prompt": "Cinematic photorealistic shot description in English for Imagen. E.g., 'Cinematic photorealistic shot of a glowing human brain...'. 9:16 aspect ratio."
-  }}],
+  }],
   "original_news_headline": "Fact Title",
   "original_news_url": "Direct source url",
   "keywords": ["Tamil Facts", "Did You Know"],
   "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
   "comment_hook": "Provocative question in Tanglish to drive comments."
-}}"""
+}"""
 
     # ── AGENT 0: SELECTOR ──
     if not forced_article:
@@ -291,6 +320,26 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             return get_offline_fallback_script(category)
         selected_headline = selection["selected_headline"]
         selected_url = selection["selected_url"]
+        
+        # Verify the uniqueness of the Selector Agent's choice
+        is_unique, reason = check_story_uniqueness(new_title=selected_headline, new_url=selected_url)
+        if not is_unique:
+            print(f"⚠️ [pick_and_generate_script] Selector Agent selected a duplicate topic: {selected_headline}. Reason: {reason}")
+            # Try to find a match in our unique articles list to fallback on
+            fallback_found = False
+            if articles:
+                for art in articles:
+                    art_title = art.get("title", "")
+                    art_url = art.get("source_url", "")
+                    if check_story_uniqueness(new_title=art_title, new_url=art_url)[0]:
+                        selected_headline = art_title
+                        selected_url = art_url
+                        fallback_found = True
+                        print(f"🔄 [pick_and_generate_script] Fell back to first verified unique article: {selected_headline}")
+                        break
+            if not fallback_found:
+                print("🚨 [pick_and_generate_script] No verified unique article fallback available. Loading offline fallback...")
+                return get_offline_fallback_script(category)
         
     print(f"✅ Selected Fact: {selected_headline}")
     
