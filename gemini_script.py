@@ -270,7 +270,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         "STRICT LIMIT: Total word count MUST be between 110-130 words to guarantee natural, high-retention pacing inside 55 seconds."
     )
 
-    prompt_requirements = f"""Return ONLY this exact JSON (no markdown):
+    prompt_requirements = """Return ONLY this exact JSON (no markdown):
 {
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
   "description": "Full SEO friendly video description including Tamil tags #தெரியுமா #FactsInTamil #VJVideos",
@@ -304,7 +304,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "keywords": ["Tamil Facts", "Did You Know"],
   "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
   "comment_hook": "Provocative question in Tanglish to drive comments."
-}"""
+}""".replace("{category}", category)
 
     # ── AGENT 0: SELECTOR ──
     if not forced_article:
