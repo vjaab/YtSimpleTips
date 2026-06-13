@@ -489,23 +489,26 @@ def get_offline_fallback_script(category):
         print(f"⚠️ [gemini_script] Failed to load fallback_scripts.json: {e}")
         return None
 
-    # Load tracker to check used titles
-    tracker = load_tracker()
-    used_titles = tracker.get("used_titles", [])
-
     # Filter matching category
     matching = [s for s in scripts if s.get("sub_category") == category]
     if not matching:
-        # Try finding using loose matching or just use all scripts
         matching = scripts
 
-    # Find unused scripts
-    unused = [s for s in matching if s.get("title") not in used_titles]
+    # Find scripts that pass full uniqueness check (not just title list)
+    unused = []
+    for s in matching:
+        is_unique, _ = check_story_uniqueness(
+            new_title=s.get("title", ""),
+            new_url=s.get("original_news_url") or s.get("use_case_evidence_url", "")
+        )
+        if is_unique:
+            unused.append(s)
+    
     if not unused:
-        # If all are used, reuse any matching
-        unused = matching
+        print("⚠️ [gemini_script] All offline fallback scripts are duplicates. Cannot use fallback.")
+        return None
 
-    selected = random.choice(unused) if unused else None
+    selected = random.choice(unused)
     if selected:
         print(f"✅ [gemini_script] Offline fallback script selected: '{selected.get('title')}'")
         

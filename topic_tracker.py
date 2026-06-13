@@ -86,6 +86,27 @@ def check_story_uniqueness(new_title, new_headline=None, new_keywords=None, new_
     if not tracker:
         return True, "Unique (Empty tracker)"
     
+    # 0. EXACT title match (fast, case-insensitive) — catches obvious repeats immediately
+    if new_title:
+        lower_new = new_title.strip().lower()
+        for entry in tracker.get('history', []):
+            if not isinstance(entry, dict): continue
+            for field in ('title', 'news_headline'):
+                old = entry.get(field)
+                if old and old.strip().lower() == lower_new:
+                    return False, f"Exact title match in history: '{old}'"
+        for old_t in tracker.get('used_titles', []):
+            if old_t and old_t.strip().lower() == lower_new:
+                return False, f"Exact title match in used_titles: '{old_t}'"
+    if new_headline:
+        lower_hl = new_headline.strip().lower()
+        for entry in tracker.get('history', []):
+            if not isinstance(entry, dict): continue
+            for field in ('title', 'news_headline'):
+                old = entry.get(field)
+                if old and old.strip().lower() == lower_hl:
+                    return False, f"Exact headline match in history: '{old}'"
+    
     # 1. URL Check (Normalized)
     if new_url:
         norm_new_url = normalize_url(new_url)
@@ -167,6 +188,14 @@ def check_cooldowns(category, tracker_file=TRACKER_FILE):
 def record_story(title, news_headline, category, keywords, voice_used, youtube_url, source_url, tracker_file=TRACKER_FILE):
     tracker = load_tracker(tracker_file)
     today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Guard: refuse to record if this exact title already exists in history
+    lower_title = (title or "").strip().lower()
+    for entry in tracker.get('history', []):
+        if not isinstance(entry, dict): continue
+        if entry.get('title', '').strip().lower() == lower_title:
+            print(f"⚠️ [record_story] Skipping duplicate record: '{title}' already in history.")
+            return
     
     tracker.setdefault("used_titles", []).append(title)
     if news_headline:
