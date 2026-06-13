@@ -505,8 +505,8 @@ def get_offline_fallback_script(category):
             unused.append(s)
     
     if not unused:
-        print("⚠️ [gemini_script] All offline fallback scripts are duplicates. Cannot use fallback.")
-        return None
+        print("⚠️ [gemini_script] All offline fallback scripts are duplicates. Reusing a duplicate fallback script as last resort to prevent pipeline failure.")
+        unused = matching
 
     selected = random.choice(unused)
     if selected:
