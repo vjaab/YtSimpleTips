@@ -62,6 +62,11 @@ Based on the following research, generate 10 potential YouTube Shorts hooks (<1.
 Hooks MUST address a highly relatable everyday frustration or surprise for parents, middle-aged people, or young people, and promise an immediate, easy solution (especially tech-based settings/apps/shortcuts), creating extreme curiosity in Tamil/Tanglish.
 No greetings. No generic statements. Start with the core problem/result first!
 
+SCORING CRITERIA:
+- curiosity_score: How much does this make someone NEED to know the answer? (1-10)
+- emotional_trigger_score: How strongly does this hit a pain point or desire? (1-10)
+- swipe_stop_power: Would this make someone physically STOP scrolling on their phone? Hooks that start with numbers, shocking claims, direct address ("உங்க phone-ல..."), or challenge assumptions score highest. (1-10)
+
 RESEARCH:
 {research_json}
 
@@ -72,6 +77,7 @@ Return ONLY a JSON object:
       "text": "Tanglish hook text (e.g. 'உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க!')",
       "curiosity_score": 1-10,
       "emotional_trigger_score": 1-10,
+      "swipe_stop_power": 1-10,
       "reason": "Why it works"
     }}
   ]
@@ -81,12 +87,18 @@ NARRATIVE_AGENT_TEMPLATE = """{persona}
 
 NARRATIVE AGENT TASK:
 Using the selected hook and research, create a step-by-step tutorial or tip flow that is highly appealing to our target demographics (parents, middle-aged, and youth).
+
+VIRAL RETENTION TECHNIQUES (MANDATORY):
+- OPEN LOOP: In the first 5 seconds, plant an unresolved curiosity (e.g., "ஆனா இதுல ஒரு catch இருக்கு...", "ஆனா most people இந்த mistake பண்றாங்க...") that only gets resolved at the 25-30 second mark. This is the #1 retention driver.
+- PATTERN INTERRUPTS: Every 8-10 seconds, inject a micro-hook phrase to prevent drop-off. Use phrases like: "ஆனா wait பண்ணுங்க...", "இது தான் twist...", "இப்போ கவனமா கேளுங்க...", "ஆனா இது மட்டும் இல்ல..."
+- RAPID PACING: Every sentence must be under 10 words. No long explanations. Punch, punch, punch.
+
 Include:
-1. Hook (The selected problem-solving hook - must instantly capture attention)
-2. Context (3-10s) - Define the common daily problem or mistake parents, middle-aged, or youth face. Approx 20 words in Tanglish.
-3. Escalation (10-40s) - Step-by-step simple instructions on how to apply the tip/setting/hack. Keep sentences very short, direct, and actionable. Approx 80 words.
-4. Retention Loop (40-48s) - End with a loop trigger or a seamless bridge/phrase that connects perfectly back to the exact opening words of the hook for a continuous loop. Approx 15 words.
-5. Outro CTA (48-55s) - A provocative question in Tanglish about this tip to drive high comment engagement. Approx 15 words.
+1. Hook (The selected problem-solving hook - must instantly capture attention + plant open loop)
+2. Context (2-6s) - Define the common daily problem. Approx 12 words in Tanglish.
+3. Escalation (6-28s) - Step-by-step instructions with pattern interrupts. Keep sentences VERY short. Approx 55 words.
+4. Retention Loop (28-33s) - Seamless bridge back to the exact opening words of the hook. Approx 10 words.
+5. Outro CTA (33-38s) - A provocative question in Tanglish to drive comments. Approx 10 words.
 
 RESEARCH:
 {research_json}
@@ -99,8 +111,10 @@ SELECTED HOOK:
 Return ONLY a JSON object representing the narrative draft (not the final schema yet):
 {{
   "hook": "...",
+  "open_loop_tease": "The unresolved curiosity planted in hook/context",
   "context": "...",
   "escalation": "...",
+  "pattern_interrupts_used": ["phrase1", "phrase2"],
   "retention_loop": "...",
   "outro_cta": "..."
 }}"""
@@ -108,24 +122,32 @@ Return ONLY a JSON object representing the narrative draft (not the final schema
 RETENTION_OPTIMIZER_TEMPLATE = """{persona}
 
 RETENTION OPTIMIZER TASK:
-Rewrite the narrative draft to maximize retention, remove fluff, shorten sentences, and increase curiosity density.
-Ensure the script directly resonates with daily scenarios for parents, middle-aged, or young people.
-Fast sentence pacing is mandatory. Use highly visual everyday analogies.
-Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
-Make sure the last sentence merges seamlessly back into the very first sentence to make a perfect 100% looping short.
+Rewrite the narrative draft to maximize retention, remove ALL fluff, and increase curiosity density.
+The script must feel like a rapid-fire conversation, NOT a lecture.
+
+MANDATORY RULES:
+1. TOTAL WORD COUNT: Strictly 90-110 words. NOT more. Count carefully.
+2. Every sentence MUST be under 10 words.
+3. Ensure the script directly resonates with daily scenarios for parents, middle-aged, or young people.
+4. PATTERN INTERRUPTS: There must be at least 2 pattern interrupt phrases (e.g., "ஆனா wait பண்ணுங்க...", "இது தான் twist...", "இப்போ கவனமா கேளுங்க...") at approximately the 8-second and 18-second marks.
+5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
+6. Make sure the last sentence merges seamlessly back into the very first sentence to make a perfect 100% looping short.
+7. The OPEN LOOP planted in the hook must be resolved around the 25-30 second mark.
 
 NARRATIVE DRAFT:
 {narrative_json}
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script."
+  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script. STRICTLY 90-110 words.",
+  "word_count": 0,
+  "pattern_interrupt_timestamps": ["~8s", "~18s"]
 }}"""
 
 SELECTOR_AGENT_TEMPLATE = """{persona}
 
 SELECTOR AGENT TASK:
-Analyze the following tips/hacks and pick the SINGLE most mind-blowing, high-utility, and high-retention tip for a 50-second video.
+Analyze the following tips/hacks and pick the SINGLE most mind-blowing, high-utility, and high-retention tip for a 30-40 second video.
 
 SELECTION CRITERIA:
 1. Strongly prioritize tech-infused hacks, digital/phone/PC/smart-device settings, or app tricks that are highly useful.
@@ -161,8 +183,10 @@ SCHEMA REQUIREMENTS:
 
 CRITICAL CAPTION RULE:
 In the `subtitle_chunks` array:
-- The `text` field MUST contain the exact spoken Tanglish phrase for alignment.
+- Each subtitle chunk MUST be SHORT: 3-5 words maximum per chunk. This creates punchy karaoke-style captions.
+- The `text` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
 - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept.
+- You MUST produce at least 15-25 subtitle chunks for the full script to ensure word-by-word karaoke flow.
 The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
 `nano_visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks"). Specify a photorealistic, 8K, highly detailed cinematic shot with dramatic volumetric lighting, vibrant colors, and high contrast. CRITICAL: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 
@@ -264,10 +288,10 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             return get_offline_fallback_script(category)
 
     selection_instruction = (
-        f"Analyze the facts and select the SINGLE most mind-blowing fact to convert into a 45-55s Tanglish YouTube Short.\n"
+        f"Analyze the facts and select the SINGLE most mind-blowing fact to convert into a 30-40s Tanglish YouTube Short.\n"
         f"CATEGORY: {category}\n"
         f"{strategy_enhancement}\n"
-        "STRICT LIMIT: Total word count MUST be between 110-130 words to guarantee natural, high-retention pacing inside 55 seconds."
+        "STRICT LIMIT: Total word count MUST be between 90-110 words to guarantee fast-paced, high-retention delivery inside 40 seconds."
     )
 
     prompt_requirements = """Return ONLY this exact JSON (no markdown):
@@ -275,13 +299,13 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
   "description": "Full SEO friendly video description including Tamil tags #தெரியுமா #FactsInTamil #VJVideos",
   "use_case_evidence_url": "Direct source url of the fact to take a screenshot of.",
-  "title": "Main punchy YouTube title (max 50 chars)",
+  "title": "Main punchy YouTube title (max 40 chars, include emoji)",
   "hook_script": "The Hook (<1.5s): A shocking Result-First statement in Tanglish. Approx 6 words.",
-  "problem_context": "The Context (3-10s): Introduce the mystery or setup in Tanglish. Approx 20 words.",
-  "solution_tech": "The Fact Escalation (10-40s): Explain the mind-blowing science or detail in Tanglish. Under 80 words.",
-  "retention_loop": "The Retention Loop (40-48s): Seamless bridge/cliffhanger back to start. Approx 15 words.",
-  "outro_cta": "CTA: Provocative question to drive comments in Tanglish. Approx 15 words. STRICTLY DO NOT mention subscribe, follow or share.",
-  "script": "The FULL unified voiceover script in Tanglish combining all parts. Approx 110-130 words. STRICT MAXIMUM 130 words.",
+  "problem_context": "The Context (2-6s): Introduce the mystery or setup in Tanglish. Approx 12 words.",
+  "solution_tech": "The Fact Escalation (6-28s): Step-by-step instructions with pattern interrupts. Under 55 words.",
+  "retention_loop": "The Retention Loop (28-33s): Seamless bridge/cliffhanger back to start. Approx 10 words.",
+  "outro_cta": "CTA: Provocative question to drive comments in Tanglish. Approx 10 words. STRICTLY DO NOT mention subscribe, follow or share.",
+  "script": "The FULL unified voiceover script in Tanglish combining all parts. STRICTLY 90-110 words. STRICT MAXIMUM 110 words.",
   "hook_text": "The first 5-8 words of the script.",
   "relevant_links": ["Source url"],
   "phonetic_pronunciation_map": {"NVIDIA": "In-vid-yah"},
@@ -385,7 +409,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         return get_offline_fallback_script(category)
     
     # Pick highest curiosity score hook
-    best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0))
+    best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0) + h.get("swipe_stop_power", 0))
     print(f"🎯 Selected Hook: {best_hook.get('text')}")
 
     # ── AGENT 3: NARRATIVE ──

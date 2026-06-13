@@ -5,46 +5,62 @@ import pytz
 def get_slot_info():
     """
     Returns (day_name, slot, category) based on current IST time.
-    2 uploads per day (Morning 08:00 IST, Evening 18:00 IST).
-    Slot A (Morning) uses the daily rotating life tip category.
-    Slot B (Evening) uses "🏠 Daily Life & Home Hacks".
+    3 uploads per day (Morning 08:00 IST, Afternoon 13:00 IST, Evening 18:00 IST).
+    Heavily weighted toward Tech & Phone Hacks for maximum viral potential.
     """
     ist_now = datetime.datetime.now(pytz.timezone(TIMEZONE))
     day_name = ist_now.strftime("%a")  # Mon, Tue, etc.
     hour = ist_now.hour
     
-    daily_categories = {
-        "Mon": "📱 Tech & Phone Hacks",        # Keyboard shortcuts, hidden phone features, productivity apps
-        "Tue": "🧠 Study & Memory Tips",       # How to study fast, memorization tricks, focus techniques
-        "Wed": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
-        "Thu": "💰 Money & Finance Tips",      # Saving money hacks, smart shopping tips, compound interest simply
-        "Fri": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
-        "Sat": "🗣️ Communication & Social Hacks", # Body language tips, conversation starters, confidence hacks
-        "Sun": "🏠 Daily Life & Home Hacks"     # Clever kitchen tricks, organization hacks, DIY life hacks
+    # Morning slot: Tech-heavy (5/7 days = Tech)
+    morning_categories = {
+        "Mon": "📱 Tech & Phone Hacks",
+        "Tue": "📱 Tech & Phone Hacks",
+        "Wed": "📱 Tech & Phone Hacks",
+        "Thu": "💰 Money & Finance Tips",
+        "Fri": "📱 Tech & Phone Hacks",
+        "Sat": "📱 Tech & Phone Hacks",
+        "Sun": "🏠 Daily Life & Home Hacks"
+    }
+    
+    # Afternoon slot: Variety + Trending Reaction
+    afternoon_categories = {
+        "Mon": "🔥 Trending Reaction",
+        "Tue": "🧠 Study & Memory Tips",
+        "Wed": "🔥 Trending Reaction",
+        "Thu": "📱 Tech & Phone Hacks",
+        "Fri": "🔥 Trending Reaction",
+        "Sat": "🗣️ Communication & Social Hacks",
+        "Sun": "📱 Tech & Phone Hacks"
+    }
+    
+    # Evening slot: Tech + secondary variety
+    evening_categories = {
+        "Mon": "📱 Tech & Phone Hacks",
+        "Tue": "📱 Tech & Phone Hacks",
+        "Wed": "🧠 Study & Memory Tips",
+        "Thu": "📱 Tech & Phone Hacks",
+        "Fri": "💰 Money & Finance Tips",
+        "Sat": "📱 Tech & Phone Hacks",
+        "Sun": "🗣️ Communication & Social Hacks"
     }
     
     if hour < 12:
         slot = "Slot A (Morning)"
-        category = daily_categories.get(day_name, "🏠 Daily Life & Home Hacks")
+        category = morning_categories.get(day_name, "📱 Tech & Phone Hacks")
+    elif hour < 16:
+        slot = "Slot B (Afternoon)"
+        category = afternoon_categories.get(day_name, "📱 Tech & Phone Hacks")
     else:
-        slot = "Slot B (Evening)"
-        # Alternate category for evening slots to keep audience engaged
-        evening_categories = {
-            "Mon": "🏠 Daily Life & Home Hacks",
-            "Tue": "📱 Tech & Phone Hacks",
-            "Wed": "🧠 Study & Memory Tips",
-            "Thu": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
-            "Fri": "💰 Money & Finance Tips",
-            "Sat": "📱 Tech & Phone Hacks",        # Tech tips & phone hacks
-            "Sun": "🗣️ Communication & Social Hacks"
-        }
-        category = evening_categories.get(day_name, "🏠 Daily Life & Home Hacks")
+        slot = "Slot C (Evening)"
+        category = evening_categories.get(day_name, "📱 Tech & Phone Hacks")
         
     return day_name, slot, category
 
 SERIES_MAP = {
     "Slot A": {"name": "Simple Tips by VJ", "tagline": "தினசரி பயனுள்ள குறிப்புகள்! Simple & Useful Tips!"},
     "Slot B": {"name": "Simple Tips by VJ", "tagline": "சூப்பர் லைஃப் ஹேக்ஸ்! Life-Changing Hacks!"},
+    "Slot C": {"name": "Simple Tips by VJ", "tagline": "இன்றைய டிரெண்டிங் டிப்! Today's Trending Tip!"},
 }
 
 def get_series_identity(slot):
@@ -109,10 +125,16 @@ def get_category_prompt_enhancement(category, slot):
             CATEGORY: Daily Life & Home Hacks
             GOAL: Share clever household organization hacks, clean-up shortcuts, kitchen tricks, or DIY solutions. Blend in smart home gadget tips or appliance settings that save energy and time for parents and middle-aged homeowners.
             HOOK TEMPLATE (Tamil): "உங்க வீட்ல இருக்குற இந்த ஒரு பொருளை வச்சு, இந்த பெரிய தொல்லையை ஈஸியா தீர்க்கலாம்..."
+        """,
+        "🔥 Trending Reaction": f"""
+            {base_instructions}
+            CATEGORY: Trending Reaction
+            GOAL: React to whatever is trending RIGHT NOW in India — a new phone feature, app update, viral tech news, or social media controversy. Ride the existing search volume wave. The tip MUST be timely and reference the trending topic directly. This category has the highest viral potential because it piggybacks on existing search demand.
+            HOOK TEMPLATE (Tamil): "இன்னைக்கு India-வே இதை பத்தி பேசுது... உங்களுக்கு இது தெரியுமா?"
         """
     }
     
-    return enhancements.get(category, enhancements.get("🏠 Daily Life & Home Hacks"))
+    return enhancements.get(category, enhancements.get("📱 Tech & Phone Hacks"))
 
 # ── CATEGORY COLOR PALETTE SYSTEM ──────────────────────────────────────────────
 
@@ -181,14 +203,23 @@ _CATEGORY_PALETTES = {
         "thumbnail_accent": (204, 255, 0),
         "emoji": "🏠",
     },
+    "🔥 Trending Reaction": {
+        "name": "Fire Orange",
+        "primary": (255, 100, 0),
+        "secondary": (30, 12, 0),
+        "caption_highlight": (255, 140, 40),
+        "progress_bar": (255, 100, 0),
+        "thumbnail_accent": (255, 100, 0),
+        "emoji": "🔥",
+    },
 }
 
-# Default palette (Electric Lime — original brand color)
-_DEFAULT_PALETTE = _CATEGORY_PALETTES["🏠 Daily Life & Home Hacks"]
+# Default palette (Electric Cyan — optimized for tech-heavy content)
+_DEFAULT_PALETTE = _CATEGORY_PALETTES["📱 Tech & Phone Hacks"]
 
 def get_category_color_palette(category):
     """
     Returns the category-specific color palette dict.
-    Falls back to Electric Lime (the original brand color) for unknown categories.
+    Falls back to Electric Cyan (tech-focused brand color) for unknown categories.
     """
     return _CATEGORY_PALETTES.get(category, _DEFAULT_PALETTE)

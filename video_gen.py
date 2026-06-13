@@ -766,12 +766,33 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
         
-        # ── SEAMLESS LOOP: Cross-dissolve last 3s with first frame ──
+        # ── HOOK FLASH: Rapid zoom-in + shake in first 0.5s to stop scrolling ──
+        if t < 0.5:
+            hook_progress = t / 0.5
+            # Zoom from 1.2x down to 1.0x
+            hook_scale = 1.2 - 0.2 * hook_progress
+            h_f, w_f = frame.shape[:2]
+            new_w_f, new_h_f = int(w_f * hook_scale), int(h_f * hook_scale)
+            if new_w_f > 0 and new_h_f > 0:
+                resized_f = cv2.resize(frame, (new_w_f, new_h_f), interpolation=cv2.INTER_LINEAR)
+                x1_f = (new_w_f - w_f) // 2
+                y1_f = (new_h_f - h_f) // 2
+                frame = resized_f[y1_f:y1_f+h_f, x1_f:x1_f+w_f]
+            # Subtle camera shake
+            if t < 0.3:
+                shake_intensity = int(4 * (1.0 - hook_progress))
+                if shake_intensity > 0:
+                    ox_h = random.randint(-shake_intensity, shake_intensity)
+                    oy_h = random.randint(-shake_intensity, shake_intensity)
+                    M_h = np.float32([[1, 0, ox_h], [0, 1, oy_h]])
+                    frame = cv2.warpAffine(frame, M_h, (frame.shape[1], frame.shape[0]), borderMode=cv2.BORDER_REFLECT)
+        
+        # ── SEAMLESS LOOP: Cross-dissolve last 2.5s with first frame ──
         if ENABLE_SEAMLESS_LOOP and first_frame_data is not None:
-            loop_blend_start = audio_duration - 3.0
+            loop_blend_start = audio_duration - 2.5
             if t > loop_blend_start:
-                loop_progress = (t - loop_blend_start) / 3.0
-                blend_alpha = loop_progress * 0.35  # Max 35% blend
+                loop_progress = (t - loop_blend_start) / 2.5
+                blend_alpha = loop_progress * 0.50  # Max 50% blend for strong loop signal
                 try:
                     first_resized = first_frame_data
                     if first_resized.shape[:2] != frame.shape[:2]:
@@ -801,6 +822,22 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     white = np.full_like(frame, 255)
                     frame = np.clip(frame * (1 - flash_alpha) + white * flash_alpha, 0, 255).astype(np.uint8)
                     break
+        
+        # ── BEAT CUT: Mid-chunk zoom shifts every 2.5s for constant visual motion ──
+        beat_interval = 2.5
+        beat_duration = 0.15
+        time_in_beat = t % beat_interval
+        if time_in_beat < beat_duration and t > 0.5:  # Skip during hook flash
+            beat_progress = time_in_beat / beat_duration
+            # Subtle zoom pulse: 1.0 → 1.05 → 1.0
+            beat_scale = 1.0 + 0.05 * math.sin(beat_progress * math.pi)
+            h_b, w_b = frame.shape[:2]
+            new_w_b, new_h_b = int(w_b * beat_scale), int(h_b * beat_scale)
+            if new_w_b > w_b and new_h_b > h_b:
+                resized_b = cv2.resize(frame, (new_w_b, new_h_b), interpolation=cv2.INTER_LINEAR)
+                x1_b = (new_w_b - w_b) // 2
+                y1_b = (new_h_b - h_b) // 2
+                frame = resized_b[y1_b:y1_b+h_b, x1_b:x1_b+w_b]
         
         pil_frame = Image.fromarray(frame).convert("RGBA")
         p_draw = ImageDraw.Draw(pil_frame)
@@ -882,12 +919,23 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     except Exception:
                         pass
                 
-        # ── Dynamic glowing progress bar ──
-        progress_w = int(FRAME_W * (t / audio_duration))
+        # ── Dynamic glowing progress bar with pulse at midpoint ──
+        progress_ratio = t / audio_duration
+        progress_w = int(FRAME_W * progress_ratio)
         if progress_w > 0:
             bar_draw = ImageDraw.Draw(pil_frame)
             pr, pg, pb = progress_bar_color
-            bar_draw.rectangle([0, FRAME_H - 12, progress_w, FRAME_H], fill=(pr, pg, pb, 255))
+            # Pulse glow at 40-60% mark (midpoint engagement boost)
+            glow_intensity = 0
+            if 0.35 < progress_ratio < 0.65:
+                glow_phase = (progress_ratio - 0.35) / 0.30
+                glow_intensity = int(40 * math.sin(glow_phase * math.pi))
+            bar_height = 12 + (glow_intensity // 10)
+            # Glow layer (slightly wider, semi-transparent)
+            if glow_intensity > 0:
+                bar_draw.rectangle([0, FRAME_H - bar_height - 4, progress_w + 3, FRAME_H], fill=(pr, pg, pb, glow_intensity))
+            # Main bar
+            bar_draw.rectangle([0, FRAME_H - bar_height, progress_w, FRAME_H], fill=(pr, pg, pb, 255))
             
         frame = np.array(pil_frame.convert("RGB"))
         return frame

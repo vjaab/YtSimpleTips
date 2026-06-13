@@ -79,7 +79,7 @@ def trim_audio_silence(path, word_timestamps):
     # 4. treble: shelving filter to boost high-end air/clarity above 6kHz by 3dB
     temp_path = path + f".filtered{ext}"
     try:
-        filter_str = "afftdn,highpass=f=80,equalizer=f=3500:width_type=h:width=2000:g=3,treble=g=3:f=6000"
+        filter_str = "afftdn,highpass=f=80,equalizer=f=4000:width_type=h:width=2000:g=4,treble=g=3:f=6000"
         cmd = [
             "ffmpeg", "-y",
             "-i", path,
@@ -120,16 +120,66 @@ def trim_audio_silence(path, word_timestamps):
     print(f"🔊 Audio trimmed & mastered: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 
-def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.35, target_gap_s=0.15):
+def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.40, target_gap_s=0.20):
     """
     Detects silent gaps between words and shortens them to keep the pacing
-    extremely tight and fast for high-retention Shorts.
-    Bypassed to prevent word cutting and choppy/broken speech.
+    tight for high-retention Shorts. Uses gentle thresholds to avoid
+    cutting words or creating choppy speech.
     """
     from pydub import AudioSegment
     try:
         audio = AudioSegment.from_file(audio_path)
-        return len(audio) / 1000.0, word_timestamps
+        
+        # Find gaps and shorten only those exceeding max_gap_s
+        modified = False
+        segments = []
+        last_end_ms = 0
+        
+        for i, ws in enumerate(word_timestamps):
+            start_ms = int(ws["start"] * 1000)
+            end_ms = int(ws["end"] * 1000)
+            
+            gap_ms = start_ms - last_end_ms
+            gap_s = gap_ms / 1000.0
+            
+            if gap_s > max_gap_s and last_end_ms > 0:
+                # Shorten this gap to target_gap_s
+                target_gap_ms = int(target_gap_s * 1000)
+                # Keep a small portion of the original silence for naturalness
+                segments.append(audio[last_end_ms:last_end_ms + target_gap_ms])
+                # Adjust timestamps for all subsequent words
+                reduction_ms = gap_ms - target_gap_ms
+                for j in range(i, len(word_timestamps)):
+                    word_timestamps[j]["start"] = max(0, word_timestamps[j]["start"] - reduction_ms / 1000.0)
+                    word_timestamps[j]["end"] = max(0, word_timestamps[j]["end"] - reduction_ms / 1000.0)
+                modified = True
+            else:
+                # Keep the gap as-is
+                if last_end_ms < start_ms:
+                    segments.append(audio[last_end_ms:start_ms])
+            
+            segments.append(audio[start_ms:end_ms])
+            last_end_ms = end_ms
+        
+        # Add any remaining audio after the last word
+        if last_end_ms < len(audio):
+            remaining = audio[last_end_ms:]
+            # Trim trailing silence to max 0.3s
+            if len(remaining) > 300:
+                remaining = remaining[:300]
+            segments.append(remaining)
+        
+        if modified and segments:
+            combined = segments[0]
+            for seg in segments[1:]:
+                combined += seg
+            combined.export(audio_path, format=os.path.splitext(audio_path)[1][1:])
+            new_duration = len(combined) / 1000.0
+            print(f"✂️ [audio_gen] Gap optimization: tightened pacing. New duration: {new_duration:.2f}s")
+            return new_duration, word_timestamps
+        
+        duration = len(audio) / 1000.0
+        return duration, word_timestamps
     except Exception as e:
         print(f"⚠️ Gap pacing optimization failed: {e}")
         return 0.0, word_timestamps
@@ -184,10 +234,9 @@ def _generate_elevenlabs(text, output_path):
             "text": text,
             "model_id": "eleven_multilingual_v2", # Premium multilingual synthesis
             "voice_settings": {
-                "stability": 0.45,      # Lower stability to increase emotional expressiveness and dynamic range
-                "similarity_boost": 0.75
-                #"style": 0.45,          # High style exaggeration to amplify the energetic and emotional tone
-                #"use_speaker_boost": True
+                "stability": 0.40,      # Lower stability for more expressive, dynamic delivery
+                "similarity_boost": 0.75,
+                "speed": 1.15           # 15% faster speech for viral Shorts pacing
             }
         }
         

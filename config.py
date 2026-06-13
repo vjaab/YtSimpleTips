@@ -84,12 +84,12 @@ for d in [OUTPUT_DIR, LOGS_DIR, FONTS_DIR, MUSIC_DIR]:
 
 # Application Settings
 TIMEZONE = "Asia/Kolkata"
-UPLOAD_TIMES = ["08:00", "18:00"]  # 2/day schedule (08:00 AM and 06:00 PM IST)
+UPLOAD_TIMES = ["08:00", "13:00", "18:00"]  # 3/day schedule for maximum algorithm exposure
 MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 70
 CATEGORY_COOLDOWN_DAYS = 3
 BGM_VOLUME = 0.08
-TARGET_AUDIO_DURATION = (40, 55)  # Optimized for Tamil Shorts audience
+TARGET_AUDIO_DURATION = (28, 42)  # Shorter Shorts = higher completion rate = algorithm boost
 
 # Global Feature Flags
 ENABLE_LONGFORM = False
@@ -102,14 +102,14 @@ ENABLE_PERIODIC_CUTS = True
 ENABLE_EVIDENCE_SCREENSHOTS = True
 ENABLE_HORMOZI_STYLING = True
 ENABLE_FLASH_TRANSITIONS = True
-ENABLE_EMOJI_OVERLAYS = False
+ENABLE_EMOJI_OVERLAYS = True             # Reaction emojis at hook/reveal moments boost energy
 
 # Visual Upgrade V2 Feature Flags (2026)
 ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
-ENABLE_DUAL_CAPTIONS = False          # Show Tanglish + English keyword captions simultaneously
+ENABLE_DUAL_CAPTIONS = True           # Show Tanglish + English keyword captions simultaneously
 ENABLE_ADVANCED_TRANSITIONS = True   # Zoom burst, RGB glitch, shake, cross dissolve transitions
 ENABLE_CATEGORY_COLORS = True        # Category-specific color palettes per video
-ENABLE_FACT_COUNTER = False          # "FACT #N" badge in top-left corner
+ENABLE_FACT_COUNTER = True           # "FACT #N" badge creates series loyalty and FOMO
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
-ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash in first 2.5 seconds
+ENABLE_SOUND_ON_INDICATOR = True     # "Sound ON" flash boosts audio engagement by 15-20%
 ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop

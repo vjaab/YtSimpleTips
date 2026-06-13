@@ -255,7 +255,7 @@ def run_pipeline(forced_category=None):
     hashtags = script_data.get("hashtags", ["#தெரியுமா", "#VJVideos"])
     description = format_description(ai_desc, script, hashtags, slot=slot, source_url=fact_url)
     
-    tags = list(set(keywords + [t.replace("#", "") for t in hashtags]))[:15]
+    tags = list(set(keywords + [t.replace("#", "") for t in hashtags] + ["Shorts", "SimpleTipsByVJ", "TamilTips"]))[:15]
     
     uploaded, result = upload_video(
         video_path, title, description, tags, 

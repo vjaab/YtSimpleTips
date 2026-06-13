@@ -6,6 +6,13 @@ from datetime import datetime
 from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import check_story_uniqueness
 
+# Best-effort trending signal integration
+try:
+    from trending_boost import get_trending_context, boost_articles_with_trending
+    _TRENDING_AVAILABLE = True
+except ImportError:
+    _TRENDING_AVAILABLE = False
+
 def fetch_facts_from_llm_fallback(category, avoid_titles):
     """
     Generates 5 fresh, unique facts for a category using standard Gemini without Search Grounding,
@@ -97,6 +104,16 @@ def fetch_facts_for_category(category):
     if not client:
         print("⚠️ Gemini API Client missing! Cannot fetch tips.")
         return []
+    
+    # Fetch trending signals to inject into the search query
+    trending_context = ""
+    if _TRENDING_AVAILABLE:
+        try:
+            trending_context = get_trending_context(category)
+            if trending_context:
+                trending_context = f"\n    {trending_context}"
+        except Exception as e:
+            print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
         
     # Load avoid titles to pass to standard LLM fallback
     from topic_tracker import load_tracker
@@ -115,7 +132,7 @@ def fetch_facts_for_category(category):
     
     prompt = f"""
     Search the web for 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
-    These tips must be highly actionable, surprising, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    These tips must be highly actionable, surprising, and optimized for a 30-40 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
     DEMOGRAPHIC & TRENDING CRITERIA:
     1. The tip must have high appeal and immediate utility for at least one of these groups:
@@ -123,6 +140,8 @@ def fetch_facts_for_category(category):
        - Middle-aged: Phone settings, WhatsApp tips, UPI/online security, daily life convenience, spam blocking.
        - Young People: Focus/study apps, tech shortcuts, productivity tools, customization, hidden settings.
     2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, or app shortcuts that simplify life.
+    3. Focus on tips that are NEW or recently updated (2025-2026 relevance).
+    {trending_context}
     
     CRITICAL REQUIREMENT: For each tip/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, life hack publication, scientific study, or official guide) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
@@ -174,6 +193,12 @@ def fetch_facts_for_category(category):
                     print(f"⏭️ Skipping non-unique fact: {title}. Reason: {reason}")
                     
             if unique_facts:
+                # Apply trending boost scoring if available
+                if _TRENDING_AVAILABLE:
+                    try:
+                        unique_facts = boost_articles_with_trending(unique_facts, category)
+                    except Exception as e:
+                        print(f"  ⚠️ [fetch_topics] Trending boost failed (non-fatal): {e}")
                 return unique_facts
             else:
                 print("⚠️ All fetched facts were duplicates. Retrying fetch...")

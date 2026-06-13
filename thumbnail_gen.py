@@ -181,7 +181,7 @@ def _layout_mystery_box(canvas, draw, title, headline, accent_color, secondary_c
     overlay = Image.new("RGBA", (THUMB_W, THUMB_H), (0, 0, 0, 0))
     o_draw = ImageDraw.Draw(overlay)
     for x in range(0, THUMB_W):
-        alpha = int(220 * (1.0 - (x / THUMB_W)))
+        alpha = int(240 * (1.0 - (x / THUMB_W)))
         o_draw.line([x, 0, x, THUMB_H], fill=(0, 0, 0, alpha))
     canvas = Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB")
     draw = ImageDraw.Draw(canvas)
