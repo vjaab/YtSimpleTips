@@ -24,7 +24,7 @@ from config import (
     ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS,
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
-    ENABLE_SEAMLESS_LOOP
+    ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM
 )
 from infographic_gen import build_infographic_clip, get_font_for_text
 
@@ -547,7 +547,7 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
 def create_video(audio_path, script_json, chunks, output_path=None):
     """Main rendering execution entry point."""
     slot_str = script_json.get("slot", "")
-    is_longform = "Slot C" in slot_str or "Slot L" in slot_str or script_json.get("is_longform", False)
+    is_longform = ENABLE_LONGFORM and ("Slot C" in slot_str or "Slot L" in slot_str or script_json.get("is_longform", False))
     set_resolutions(is_longform)
     
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
