@@ -26,7 +26,7 @@ from config import (
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
     ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM
 )
-from infographic_gen import build_infographic_clip, get_font_for_text
+from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 
 FRAME_W, FRAME_H = 1080, 1920  # Default 9:16
 
@@ -912,10 +912,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                         emoji_size = int(90 * scale)
                         if emoji_size > 10:
                             em_font = get_font_for_text(em["emoji"], emoji_size, "bold")
-                            em_draw = ImageDraw.Draw(pil_frame)
-                            # Drop shadow
-                            em_draw.text((em["x"]+3, em["y"]+3), em["emoji"], fill=(0,0,0,int(180*alpha)), font=em_font)
-                            em_draw.text((em["x"], em["y"]), em["emoji"], fill=(255,255,255,int(255*alpha)), font=em_font)
+                            if is_char_supported(em_font, em["emoji"]):
+                                em_draw = ImageDraw.Draw(pil_frame)
+                                # Drop shadow
+                                em_draw.text((em["x"]+3, em["y"]+3), em["emoji"], fill=(0,0,0,int(180*alpha)), font=em_font)
+                                em_draw.text((em["x"], em["y"]), em["emoji"], fill=(255,255,255,int(255*alpha)), font=em_font)
                     except Exception:
                         pass
                 

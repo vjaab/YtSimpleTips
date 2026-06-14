@@ -52,14 +52,139 @@ def _load_font(path, size):
             _font_cache[key] = ImageFont.load_default()
     return _font_cache[key]
 
-def get_font_for_text(text, size, weight="regular"):
-    """Detects if text contains Tamil characters and returns the corresponding Tamil font."""
-    is_tamil = bool(re.search(r'[\u0b80-\u0bff]', str(text)))
-    if is_tamil:
-        if weight in ("bold", "extrabold"):
-            return _load_font(_FONT_TAMIL_BOLD, size)
+def is_emoji(text):
+    for char in str(text):
+        o = ord(char)
+        if (0x1f300 <= o <= 0x1f9ff) or (0x1fa70 <= o <= 0x1faff) or (0x2600 <= o <= 0x27bf) or (0xfe00 <= o <= 0xfe0f):
+            return True
+    return False
+
+_EMOJI_FONTS = [
+    "/System/Library/Fonts/Apple Color Emoji.ttc",
+    "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf",
+    "/usr/share/fonts/truetype/emoji/NotoColorEmoji.ttf",
+    "/usr/share/fonts/truetype/noto-color-emoji/NotoColorEmoji.ttf",
+]
+
+def _load_emoji_font(size):
+    for p in _EMOJI_FONTS:
+        if os.path.exists(p):
+            try:
+                return ImageFont.truetype(p, size)
+            except Exception:
+                pass
+    return None
+
+def is_char_supported(font, char):
+    try:
+        missing_mask = list(font.getmask("\ufffd"))
+        char_mask = list(font.getmask(char))
+        return char_mask != missing_mask
+    except Exception:
+        return False
+
+def get_text_runs(text):
+    runs = []
+    current_run = []
+    current_is_tamil = None
+    
+    for char in str(text):
+        is_tamil = '\u0b80' <= char <= '\u0bff'
+        if char.isspace() or char in ".,!?-:;()\"'0123456789%":
+            if current_is_tamil is None:
+                current_is_tamil = is_tamil
+            is_tamil = current_is_tamil
+            
+        if current_is_tamil is None:
+            current_is_tamil = is_tamil
+            current_run.append(char)
+        elif is_tamil == current_is_tamil:
+            current_run.append(char)
         else:
-            return _load_font(_FONT_TAMIL_REG, size)
+            runs.append(("".join(current_run), current_is_tamil))
+            current_run = [char]
+            current_is_tamil = is_tamil
+            
+    if current_run:
+        runs.append(("".join(current_run), current_is_tamil))
+    return runs
+
+class MultilingualFontWrapper:
+    def __init__(self, size, weight="regular"):
+        self.size = size
+        self.weight = weight
+        if weight in ("bold", "extrabold"):
+            self.font_tamil = _load_font(_FONT_TAMIL_BOLD, size)
+        else:
+            self.font_tamil = _load_font(_FONT_TAMIL_REG, size)
+            
+        if weight == "extrabold":
+            self.font_latin = _load_font(_FONT_EXTRA_BOLD, size)
+        elif weight == "bold":
+            self.font_latin = _load_font(_FONT_BOLD, size)
+        else:
+            self.font_latin = _load_font(_FONT_REGULAR, size)
+            
+        try:
+            self.path = self.font_latin.path
+        except AttributeError:
+            self.path = ""
+
+    def get_font_for_run(self, is_tamil):
+        return self.font_tamil if is_tamil else self.font_latin
+
+    def getbbox(self, text, *args, **kwargs):
+        runs = get_text_runs(text)
+        total_w = 0
+        max_h = 0
+        min_top = 0
+        
+        for run_text, is_tamil in runs:
+            f = self.get_font_for_run(is_tamil)
+            bbox = f.getbbox(run_text, *args, **kwargs)
+            w = bbox[2] - bbox[0]
+            h = bbox[3] - bbox[1]
+            total_w += w
+            if h > max_h:
+                max_h = h
+            if bbox[1] < min_top:
+                min_top = bbox[1]
+                
+        return (0, min_top, total_w, min_top + max_h)
+
+    def getmask(self, text, mode="L", *args, **kwargs):
+        bbox = self.getbbox(text, *args, **kwargs)
+        w = max(1, bbox[2])
+        h = max(1, bbox[3] - bbox[1] + 20)
+        
+        temp_img = Image.new("L", (w + 20, h), 0)
+        temp_draw = ImageDraw.Draw(temp_img)
+        
+        x = 0
+        y = -bbox[1] if bbox[1] < 0 else 0
+        
+        runs = get_text_runs(text)
+        for run_text, is_tamil in runs:
+            f = self.get_font_for_run(is_tamil)
+            temp_draw.text((x, y), run_text, font=f, fill=255)
+            x += f.getbbox(run_text)[2] - f.getbbox(run_text)[0]
+            
+        return temp_img.im
+
+    def getmetrics(self):
+        return self.font_latin.getmetrics()
+
+def get_font_for_text(text, size, weight="regular"):
+    """Detects text language/type and returns the corresponding font/wrapper."""
+    text_str = str(text)
+    if is_emoji(text_str):
+        emoji_f = _load_emoji_font(size)
+        if emoji_f:
+            return emoji_f
+            
+    is_tamil = bool(re.search(r'[\u0b80-\u0bff]', text_str))
+    if is_tamil:
+        return MultilingualFontWrapper(size, weight)
     else:
         if weight == "extrabold":
             return _load_font(_FONT_EXTRA_BOLD, size)

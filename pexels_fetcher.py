@@ -151,12 +151,15 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         visual_type = None
         source = "Failed"
         
+        # Define search query suffix for Pexels
+        pexels_query = f"{clean_query} whiteboard animation"
+
         # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
         if veo_generate and prompt and veo_consecutive_fails < 2:
             print("     → Attempting Veo 3.1 video generation...")
             enhanced_prompt = (
-                f"{prompt}. Cinematic photorealistic, no text overlays, no faces, "
-                f"no watermarks, smooth camera movement, {aspect_ratio} aspect ratio."
+                f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, "
+                f"no text overlays, no watermarks, clean 2D vector line art illustration, {aspect_ratio} aspect ratio."
             )
             output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{TODAY}.mp4")
             visual_path = veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
@@ -174,7 +177,10 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         if not visual_path and prompt and imagen_consecutive_fails < 2:
             print("     → Generating Imagen image...")
             output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
-            visual_path = _generate_imagen_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
+            enhanced_imagen_prompt = prompt
+            if "whiteboard" not in prompt.lower():
+                enhanced_imagen_prompt = f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, clean 2D vector line art, vibrant color accents."
+            visual_path = _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Imagen AI"
@@ -188,21 +194,24 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         # ── PRIORITY 2.5: Pollinations AI Image (Free AI fallback) ──
         if not visual_path and prompt:
             output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
-            visual_path = _generate_pollinations_image(prompt, output_jpg, aspect_ratio=aspect_ratio)
+            enhanced_pollinations_prompt = prompt
+            if "whiteboard" not in prompt.lower():
+                enhanced_pollinations_prompt = f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, clean 2D vector line art, vibrant color accents."
+            visual_path = _generate_pollinations_image(enhanced_pollinations_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Pollinations AI"
 
         # ── PRIORITY 3: Pexels Stock Video ──
         if not visual_path:
-            visual_path = fetch_pexels_media(clean_query, media_type="video", aspect_ratio=aspect_ratio)
+            visual_path = fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "video"
                 source = "Pexels Video"
                 
         # ── PRIORITY 4: Pexels Stock Photo ──
         if not visual_path:
-            visual_path = fetch_pexels_media(clean_query, media_type="photo", aspect_ratio=aspect_ratio)
+            visual_path = fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
                 source = "Pexels Photo"

@@ -28,7 +28,7 @@ Language Rules:
    - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning").
    - Emotional resonance (e.g., depicting individuals with highly expressive, exaggerated emotions: shocked face, amazed look, gasping in surprise, intense focus).
    - Rich metaphors and vibrant colors (e.g., glowing neon connections, holographic interfaces, gold coins popping out of a screen, lock snapping in half).
-   - Explicit style: Specify a photorealistic, 8K, highly detailed cinematic look with dramatic lighting, volumetric glow, and high color contrast.
+   - Explicit style: Specify a whiteboard animation style (clean 2D vector line art illustration drawing on a clean off-white whiteboard background, hand drawing sketch animation style, vibrant lime/primary accent colors, no photorealism).
    - Ethnicity & Local Context: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and any locations/backgrounds must resemble typical settings in Tamil Nadu, India where applicable.
 Constraint Checklist:
 - No Fluff: Do not say "வணக்கம் நண்பர்களே", "In this video", "Today we talk about". Start immediately with a highly relatable, emotional problem hook for the target demographics!
@@ -188,7 +188,7 @@ In the `subtitle_chunks` array:
 - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept.
 - You MUST produce at least 15-25 subtitle chunks for the full script to ensure word-by-word karaoke flow.
 The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
-`nano_visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks"). Specify a photorealistic, 8K, highly detailed cinematic shot with dramatic volumetric lighting, vibrant colors, and high contrast. CRITICAL: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
+`nano_visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks"). Specify a whiteboard animation drawing style, clean 2D vector line art illustration on a clean off-white whiteboard background, hand drawing sketch animation style, vibrant color accents, no photorealism. CRITICAL: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 
 Return ONLY the final JSON object matching the schema. No markdown wrapping. No explanations."""
 
@@ -321,7 +321,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "start": 0.0, "end": 0.0,
       "has_infographic": false, "infographic_type": "none",
       "infographic_data": {},
-      "nano_visual_prompt": "Cinematic photorealistic shot description in English for Imagen. E.g., 'Cinematic photorealistic shot of a glowing human brain...'. 9:16 aspect ratio."
+      "nano_visual_prompt": "Whiteboard animation drawing style description in English for Imagen/Veo. E.g., 'Whiteboard animation drawing of a glowing human brain...'. 9:16 aspect ratio."
   }],
   "original_news_headline": "Fact Title",
   "original_news_url": "Direct source url",
