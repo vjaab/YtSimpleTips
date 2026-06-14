@@ -139,7 +139,26 @@ def run_pipeline(forced_category=None):
         title = script_data.get("title") or ""
         if not str(title).strip():
             title = script_data.get("original_news_headline") or "Tamil Fact!"
-        script = script_data.get("script", "")
+        # Rebuild script from subtitle_chunks to guarantee 100% word-for-word alignment
+        raw_sub_chunks = script_data.get("subtitle_chunks", [])
+        sub_chunks = []
+        for sc in raw_sub_chunks:
+            if isinstance(sc, list):
+                for item in sc:
+                    if isinstance(item, dict):
+                        sub_chunks.append(item)
+            elif isinstance(sc, dict):
+                sub_chunks.append(sc)
+        
+        if sub_chunks:
+            rebuilt_script = " ".join(sc.get("text", "").strip() for sc in sub_chunks if sc.get("text"))
+            if rebuilt_script:
+                log_message("Aligning script text with subtitle chunks...")
+                script = rebuilt_script
+            else:
+                script = script_data.get("script", "")
+        else:
+            script = script_data.get("script", "")
         fact_headline = script_data.get("original_news_headline")
         fact_url = script_data.get("original_news_url")
         log_message(f"Selected Fact: {fact_headline}")

@@ -186,8 +186,9 @@ In the `subtitle_chunks` array:
 - Each subtitle chunk MUST be SHORT: 3-5 words maximum per chunk. This creates punchy karaoke-style captions.
 - The `text` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
 - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept.
+- `stock_search_query` MUST be a simple 1-3 word English search query describing the visual concept (e.g. 'typing laptop', 'timer', 'alarm clock', 'sad mother') to search Pexels.
 - You MUST produce at least 15-25 subtitle chunks for the full script to ensure word-by-word karaoke flow.
-The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
+- The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
 `nano_visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks"). Specify a whiteboard animation drawing style, clean 2D vector line art illustration on a clean off-white whiteboard background, hand drawing sketch animation style, vibrant color accents, no photorealism. CRITICAL: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 
 Return ONLY the final JSON object matching the schema. No markdown wrapping. No explanations."""
@@ -321,6 +322,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "start": 0.0, "end": 0.0,
       "has_infographic": false, "infographic_type": "none",
       "infographic_data": {},
+      "stock_search_query": "Simple 1-3 word search query in English representing the core concept for stock video search (e.g., 'overwhelmed person', 'digital clock', 'writing email').",
       "nano_visual_prompt": "Whiteboard animation drawing style description in English for Imagen/Veo. E.g., 'Whiteboard animation drawing of a glowing human brain...'. 9:16 aspect ratio."
   }],
   "original_news_headline": "Fact Title",

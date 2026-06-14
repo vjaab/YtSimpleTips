@@ -130,17 +130,18 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         text = chunk.get("text", "")
         prompt = chunk.get("nano_visual_prompt", "")
         
-        # Formulate a search query from the English prompt or subtitle text
-        clean_query = ""
-        if prompt:
-            fillers = {
-                "a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "9:16", "vertical",
-                "premium", "app", "ui", "mockup", "screenshot", "design", "vector", "realistic", "illustration",
-                "photo", "image", "representing", "representation", "showing", "displays", "displaying", "screen",
-                "mockups", "template", "concept", "close-up", "close", "up", "person", "man", "woman", "human", "face"
-            }
-            words = [w.strip(",.!?\"'") for w in prompt.split() if w.lower() not in fillers]
-            clean_query = " ".join(words[:3])
+        # Formulate a search query from the LLM-generated stock_search_query or English prompt
+        clean_query = chunk.get("stock_search_query", "")
+        if not clean_query:
+            if prompt:
+                fillers = {
+                    "a", "the", "cinematic", "photorealistic", "detailed", "in", "of", "and", "9:16", "vertical",
+                    "premium", "app", "ui", "mockup", "screenshot", "design", "vector", "realistic", "illustration",
+                    "photo", "image", "representing", "representation", "showing", "displays", "displaying", "screen",
+                    "mockups", "template", "concept", "close-up", "close", "up", "person", "man", "woman", "human", "face"
+                }
+                words = [w.strip(",.!?\"'") for w in prompt.split() if w.lower() not in fillers]
+                clean_query = " ".join(words[:3])
             
         if not clean_query or len(clean_query.strip()) < 3:
             clean_query = generic_query
@@ -151,8 +152,8 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         visual_type = None
         source = "Failed"
         
-        # Define search query suffix for Pexels
-        pexels_query = f"{clean_query} whiteboard animation"
+        # Define search query for Pexels (use the clean query directly to match real stock footage)
+        pexels_query = clean_query
 
         # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
         if veo_generate and prompt and veo_consecutive_fails < 2:
