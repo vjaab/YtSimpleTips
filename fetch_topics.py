@@ -33,7 +33,7 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     
     DEMOGRAPHIC & TRENDING CRITERIA:
     1. The tip must have high appeal and immediate utility for parents, middle-aged, or young people in daily life.
-    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, or app shortcuts that simplify life.
+    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, app shortcuts, or simple sports/fitness routines that simplify life or improve health.
     
     {avoid_instruction}
     
@@ -138,8 +138,8 @@ def fetch_facts_for_category(category):
     1. The tip must have high appeal and immediate utility for at least one of these groups:
        - Parents: Kid-safety features, smart home efficiency, budgeting/saving on bills.
        - Middle-aged: Phone settings, WhatsApp tips, UPI/online security, daily life convenience, spam blocking.
-       - Young People: Focus/study apps, tech shortcuts, productivity tools, customization, hidden settings.
-    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, or app shortcuts that simplify life.
+       - Young People: Focus/study apps, tech shortcuts, productivity tools, sports/fitness hacks, hidden settings.
+    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, app shortcuts, or athletic/fitness hacks that simplify life.
     3. Focus on tips that are NEW or recently updated (2025-2026 relevance).
     {trending_context}
     

@@ -30,8 +30,8 @@ def get_slot_info():
         "Wed": "🔥 Trending Reaction",
         "Thu": "📱 Tech & Phone Hacks",
         "Fri": "🔥 Trending Reaction",
-        "Sat": "🗣️ Communication & Social Hacks",
-        "Sun": "📱 Tech & Phone Hacks"
+        "Sat": "🏅 Sports & Fitness Tips",
+        "Sun": "🗣️ Communication & Social Hacks"
     }
     
     # Evening slot: Tech + secondary variety
@@ -131,6 +131,12 @@ def get_category_prompt_enhancement(category, slot):
             CATEGORY: Trending Reaction
             GOAL: React to whatever is trending RIGHT NOW in India — a new phone feature, app update, viral tech news, or social media controversy. Ride the existing search volume wave. The tip MUST be timely and reference the trending topic directly. This category has the highest viral potential because it piggybacks on existing search demand.
             HOOK TEMPLATE (Tamil): "இன்னைக்கு India-வே இதை பத்தி பேசுது... உங்களுக்கு இது தெரியுமா?"
+        """,
+        "🏅 Sports & Fitness Tips": f"""
+            {base_instructions}
+            CATEGORY: Sports & Fitness Tips
+            GOAL: Share an actionable physical fitness, sports technique, or recovery hack. Prefer tips that anyone can apply, like athletic recovery tricks, stamina building, or simple sports science hacks that apply to youth playing sports, middle-aged wanting fitness, or parents managing kids' health.
+            HOOK TEMPLATE (Tamil): "விளையாடும் போது சீக்கிரம் டயர்ட் ஆகுறீங்களா? Sports players use பண்ற இந்த simple hack-ஐ ட்ரை பண்ணுங்க..."
         """
     }
     
@@ -211,6 +217,15 @@ _CATEGORY_PALETTES = {
         "progress_bar": (255, 100, 0),
         "thumbnail_accent": (255, 100, 0),
         "emoji": "🔥",
+    },
+    "🏅 Sports & Fitness Tips": {
+        "name": "Athletic Red",
+        "primary": (255, 50, 50),
+        "secondary": (30, 10, 10),
+        "caption_highlight": (255, 100, 100),
+        "progress_bar": (255, 50, 50),
+        "thumbnail_accent": (255, 50, 50),
+        "emoji": "🏅",
     },
 }
 
