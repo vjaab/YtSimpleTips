@@ -279,6 +279,14 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 title = art.get('title', '')
                 url = art.get('source_url', '')
                 is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                
+                if is_unique and failed_topics:
+                    for ft in failed_topics:
+                        if ft and (ft.lower() in title.lower() or title.lower() in ft.lower()):
+                            is_unique = False
+                            reason = f"Topic failed in a previous attempt: {ft}"
+                            break
+                            
                 if is_unique:
                     unique_articles.append(art)
                 else:
@@ -315,7 +323,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 news_context += f"\n[{idx+1}] Title: {title}\nDescription: {desc}\nURL: {url}\n"
         else:
             print("🚨 [pick_and_generate_script] No unique articles could be fetched or generated!")
-            return get_offline_fallback_script(category)
+            return get_offline_fallback_script(category, failed_topics)
 
     selection_instruction = (
         f"Analyze the facts and select the SINGLE most mind-blowing fact to convert into a 30-40s Tanglish YouTube Short.\n"
@@ -373,7 +381,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         selection = call_gemini_api(client, selector_prompt)
         if not selection or "selected_headline" not in selection:
             print("⚠️ Selector Agent failed. Attempting offline fallback script...")
-            return get_offline_fallback_script(category)
+            return get_offline_fallback_script(category, failed_topics)
         selected_headline = selection["selected_headline"]
         selected_url = selection["selected_url"]
         
@@ -395,7 +403,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                         break
             if not fallback_found:
                 print("🚨 [pick_and_generate_script] No verified unique article fallback available. Loading offline fallback...")
-                return get_offline_fallback_script(category)
+                return get_offline_fallback_script(category, failed_topics)
         
     print(f"✅ Selected Fact: {selected_headline}")
     
@@ -427,7 +435,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     research = call_gemini_api(client, research_prompt)
     if not research:
         print("⚠️ Research Agent failed. Attempting offline fallback script...")
-        return get_offline_fallback_script(category)
+        return get_offline_fallback_script(category, failed_topics)
 
     # ── AGENT 2: HOOK ──
     print("🪝 [AGENT 2] Hook Agent: Generating Tanglish hooks...")
@@ -438,7 +446,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     hooks_data = call_gemini_api(client, hook_prompt)
     if not hooks_data or "hooks" not in hooks_data:
         print("⚠️ Hook Agent failed. Attempting offline fallback script...")
-        return get_offline_fallback_script(category)
+        return get_offline_fallback_script(category, failed_topics)
     
     # Pick highest curiosity score hook
     best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0) + h.get("swipe_stop_power", 0))
@@ -455,7 +463,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     narrative = call_gemini_api(client, narrative_prompt)
     if not narrative:
         print("⚠️ Narrative Agent failed. Attempting offline fallback script...")
-        return get_offline_fallback_script(category)
+        return get_offline_fallback_script(category, failed_topics)
 
     # ── AGENT 4: RETENTION OPTIMIZER ──
     print("⚡ [AGENT 4] Pacing Optimizer: Shortening sentences...")
@@ -466,7 +474,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     optimized = call_gemini_api(client, retention_prompt)
     if not optimized:
         print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
-        return get_offline_fallback_script(category)
+        return get_offline_fallback_script(category, failed_topics)
 
     # ── AGENT 5: HUMANIZER & SCHEMATIZER ──
     print("🗣️ [AGENT 5] Humanizer: Structuring final Tamil schema...")
@@ -544,7 +552,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
     if not final_script:
         print("⚠️ [gemini_script] Agent pipeline failed. Attempting offline fallback script...")
-        final_script = get_offline_fallback_script(category)
+        final_script = get_offline_fallback_script(category, failed_topics)
         
     if final_script:
         # Map storyboard to subtitle_chunks for compatibility with main.py and downstream video gen
@@ -606,11 +614,14 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         
     return final_script
 
-def get_offline_fallback_script(category):
+def get_offline_fallback_script(category, failed_topics=None):
     """
     Loads a pre-packaged script from fallback_scripts.json matching the category.
-    Avoids already used titles if possible.
+    Avoids already used titles and previously failed topics if possible.
     """
+    if failed_topics is None:
+        failed_topics = []
+        
     fallback_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fallback_scripts.json")
     if not os.path.exists(fallback_path):
         print(f"⚠️ [gemini_script] fallback_scripts.json not found at {fallback_path}")
@@ -631,16 +642,26 @@ def get_offline_fallback_script(category):
     # Find scripts that pass full uniqueness check (not just title list)
     unused = []
     for s in matching:
+        s_title = s.get("title", "")
+        s_news = s.get("original_news_headline", "")
         is_unique, _ = check_story_uniqueness(
-            new_title=s.get("title", ""),
+            new_title=s_title,
             new_url=s.get("original_news_url") or s.get("use_case_evidence_url", "")
         )
+        
+        # Check against failed topics
+        if is_unique and failed_topics:
+            for ft in failed_topics:
+                if ft and (ft.lower() in s_title.lower() or ft.lower() in s_news.lower()):
+                    is_unique = False
+                    break
+                    
         if is_unique:
             unused.append(s)
     
     if not unused:
-        print("⚠️ [gemini_script] All offline fallback scripts are duplicates. Reusing a duplicate fallback script as last resort to prevent pipeline failure.")
-        unused = matching
+        print("🚨 [gemini_script] FATAL: All offline fallback scripts are duplicates or failed. Cannot proceed without repeating content. Failing pipeline.")
+        return None
 
     selected = random.choice(unused)
     if selected:
