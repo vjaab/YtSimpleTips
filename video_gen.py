@@ -148,33 +148,51 @@ def _gradient_overlay(duration):
 # ── ADVANCED TRANSITION EFFECTS ──────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _apply_zoom_burst(frame, progress):
-    """Quick 1.3x zoom burst that settles back to 1.0x."""
-    h, w = frame.shape[:2]
-    # Scale: 1.0 → 1.3 → 1.0 over the transition duration
-    scale = 1.0 + 0.3 * math.sin(progress * math.pi)
-    new_w, new_h = int(w * scale), int(h * scale)
-    if new_w <= 0 or new_h <= 0:
-        return frame
-    resized = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-    # Crop center back to original size
-    x1 = (new_w - w) // 2
-    y1 = (new_h - h) // 2
-    return resized[y1:y1+h, x1:x1+w]
+def _apply_zoom_burst(outgoing, incoming, progress):
+    """Zoom out outgoing frame, zoom in incoming frame, and blend."""
+    h, w = incoming.shape[:2]
+    # Outgoing: zoom from 1.0 up to 1.15
+    scale_out = 1.0 + 0.15 * progress
+    new_w_out, new_h_out = int(w * scale_out), int(h * scale_out)
+    if new_w_out <= 0 or new_h_out <= 0:
+        return incoming
+    resized_out = cv2.resize(outgoing, (new_w_out, new_h_out), interpolation=cv2.INTER_LINEAR)
+    x1_out = (new_w_out - w) // 2
+    y1_out = (new_h_out - h) // 2
+    cropped_out = resized_out[y1_out:y1_out+h, x1_out:x1_out+w]
 
-def _apply_rgb_glitch(frame, progress):
-    """Shifts R/G/B channels by random offsets for a digital glitch look."""
-    h, w = frame.shape[:2]
-    intensity = int(10 * math.sin(progress * math.pi))  # Peak at midpoint
+    # Incoming: zoom from 0.85 up to 1.0
+    scale_in = 0.85 + 0.15 * progress
+    new_w_in, new_h_in = int(w * scale_in), int(h * scale_in)
+    if new_w_in <= 0 or new_h_in <= 0:
+        return incoming
+    resized_in = cv2.resize(incoming, (new_w_in, new_h_in), interpolation=cv2.INTER_LINEAR)
+    canvas_in = np.zeros_like(incoming)
+    if scale_in < 1.0:
+        dy = (h - new_h_in) // 2
+        dx = (w - new_w_in) // 2
+        canvas_in[dy:dy+new_h_in, dx:dx+new_w_in] = resized_in
+    else:
+        x1_in = (new_w_in - w) // 2
+        y1_in = (new_h_in - h) // 2
+        canvas_in = resized_in[y1_in:y1_in+h, x1_in:x1_in+w]
+
+    return cv2.addWeighted(cropped_out, 1.0 - progress, canvas_in, progress, 0)
+
+def _apply_rgb_glitch(outgoing, incoming, progress):
+    """Blends frames with horizontal scanlines and channel offsets."""
+    blended = cv2.addWeighted(outgoing, 1.0 - progress, incoming, progress, 0)
+    h, w = blended.shape[:2]
+    intensity = int(12 * math.sin(progress * math.pi))
     if intensity < 1:
-        return frame
-    result = frame.copy()
+        return blended
+    result = blended.copy()
     # Shift red channel right, blue channel left
-    result[:, intensity:, 0] = frame[:, :-intensity, 0]  # R shift right
-    result[:, :-intensity, 2] = frame[:, intensity:, 2]   # B shift left
-    # Add horizontal scan lines
-    for y in range(0, h, 4):
-        if random.random() < 0.3 * (1 - progress):
+    result[:, intensity:, 0] = blended[:, :-intensity, 0]
+    result[:, :-intensity, 2] = blended[:, intensity:, 2]
+    # Scanline noise
+    for y in range(0, h, 6):
+        if random.random() < 0.4:
             shift = random.randint(-intensity, intensity)
             if shift > 0:
                 result[y, shift:] = result[y, :-shift]
@@ -182,28 +200,31 @@ def _apply_rgb_glitch(frame, progress):
                 result[y, :shift] = result[y, -shift:]
     return result
 
-def _apply_shake(frame, progress):
-    """Random X/Y jitter for emphasis."""
-    h, w = frame.shape[:2]
-    intensity = int(5 * math.sin(progress * math.pi))
+def _apply_shake(outgoing, incoming, progress):
+    """Blends frames with rapid translational shake."""
+    blended = cv2.addWeighted(outgoing, 1.0 - progress, incoming, progress, 0)
+    h, w = blended.shape[:2]
+    intensity = int(8 * math.sin(progress * math.pi))
     if intensity < 1:
-        return frame
+        return blended
     ox = random.randint(-intensity, intensity)
     oy = random.randint(-intensity, intensity)
     M = np.float32([[1, 0, ox], [0, 1, oy]])
-    return cv2.warpAffine(frame, M, (w, h), borderMode=cv2.BORDER_REFLECT)
+    return cv2.warpAffine(blended, M, (w, h), borderMode=cv2.BORDER_REFLECT)
 
-def _apply_flash_fade(frame, progress):
-    """White flash that fades from bright to normal (original transition, refined)."""
-    flash_alpha = 1.0 - progress
-    white = np.full_like(frame, 255)
-    return np.clip(frame * (1 - flash_alpha * 0.7) + white * flash_alpha * 0.7, 0, 255).astype(np.uint8)
+def _apply_flash_fade(outgoing, incoming, progress):
+    """Fades outgoing to white flash at peak, then fades to incoming."""
+    white = np.full_like(incoming, 255)
+    if progress < 0.5:
+        p_sub = progress / 0.5
+        return cv2.addWeighted(outgoing, 1.0 - p_sub, white, p_sub, 0)
+    else:
+        p_sub = (progress - 0.5) / 0.5
+        return cv2.addWeighted(white, 1.0 - p_sub, incoming, p_sub, 0)
 
-def _apply_cross_dissolve(frame, progress):
-    """Smooth opacity reduction for cross-dissolve effect."""
-    # Slight brightness boost during mid-transition
-    brightness = 1.0 + 0.15 * math.sin(progress * math.pi)
-    return np.clip(frame * brightness, 0, 255).astype(np.uint8)
+def _apply_cross_dissolve(outgoing, incoming, progress):
+    """Blends outgoing frame into incoming frame smoothly."""
+    return cv2.addWeighted(outgoing, 1.0 - progress, incoming, progress, 0)
 
 # Transition type mapping from retention_cue effect names
 TRANSITION_MAP = {
@@ -808,7 +829,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     progress = (t - boundary_t) / transition_duration
                     transition_fn = boundary_transitions.get(boundary_t, _apply_flash_fade)
                     try:
-                        frame = transition_fn(frame, progress)
+                        outgoing_t = max(0.0, boundary_t - 0.01)
+                        outgoing_frame = base_comp.get_frame(outgoing_t)
+                        frame = transition_fn(outgoing_frame, frame, progress)
                     except Exception:
                         pass
                     break

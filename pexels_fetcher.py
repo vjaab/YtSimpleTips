@@ -240,6 +240,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     return chunks
 
 def _fill_visual_gaps(chunks):
+    # 1. Forward-fill
     last_path = None
     last_type = "photo"
     for c in chunks:
@@ -250,3 +251,19 @@ def _fill_visual_gaps(chunks):
             c["visual_path"] = last_path
             c["visual_type"] = last_type
             c["source"] = c.get("source", "Gap-filled fallback")
+
+    # 2. Backward-fill (for any initial chunks that missed forward-fill)
+    first_path = None
+    first_type = "photo"
+    for c in chunks:
+        if c.get("visual_path"):
+            first_path = c["visual_path"]
+            first_type = c.get("visual_type", "photo")
+            break
+
+    if first_path:
+        for c in chunks:
+            if not c.get("visual_path"):
+                c["visual_path"] = first_path
+                c["visual_type"] = first_type
+                c["source"] = c.get("source", "Back-filled fallback")

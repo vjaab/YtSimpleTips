@@ -214,6 +214,32 @@ Return ONLY a JSON object:
   "core_narrative": "A one paragraph summary focusing ONLY on this tip."
 }}"""
 
+VALIDATOR_AGENT_TEMPLATE = """{persona}
+
+VALIDATOR AGENT TASK:
+You are a Senior AI Video Quality Auditor. Your job is to analyze the generated YouTube Shorts script and storyboard, calculate quality scores, and identify any issues or content breaks.
+
+Evaluate the following storyboard JSON against these strict criteria (rate each from 0 to 100):
+1. story_continuity_score: Does scene N logically connect to scene N+1? Is there a clear cause-and-effect chain and a transformation journey?
+2. visual_alignment_score: Does the visual prompt directly represent the spoken narration? (No generic tech backgrounds, no unrelated stock footage).
+3. engagement_score: Are there visual changes every 2-3 seconds? Are hook visuals optimized? Are there curiosity triggers and pattern interrupts?
+4. transition_score: Do transitions feel connected (match cuts, zoom transitions, morphs, object/story continuity) instead of hard-cuts?
+5. subtitle_timing_score: Are narration segments short and punchy (3-5 words) for fast-paced subtitles?
+
+STORYBOARD TO EVALUATE:
+{storyboard_json}
+
+Return ONLY a JSON object:
+{{
+  "story_continuity_score": 0-100,
+  "visual_alignment_score": 0-100,
+  "engagement_score": 0-100,
+  "transition_score": 0-100,
+  "subtitle_timing_score": 0-100,
+  "passes_validation": true|false,
+  "feedback": "Detailed feedback on what is wrong and which scenes need improvement/regeneration."
+}}"""
+
 def pick_and_generate_script(articles=None, extra_instruction="", forced_article=None, topic_type="research", failed_topics=[]):
     """
     Orchestrates the multi-agent pipeline to generate a high-retention Tanglish fact script.
@@ -457,6 +483,65 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
     
+    if final_script and "storyboard" in final_script:
+        # ── AGENT 6: VALIDATOR & SELF-CORRECTION LOOP ──
+        print("🔍 [AGENT 6] Validator Agent: Checking storyboard quality and continuity...")
+        validation_attempts = 0
+        max_validation_attempts = 2
+        
+        while validation_attempts < max_validation_attempts:
+            validator_prompt = VALIDATOR_AGENT_TEMPLATE.format(
+                persona=SYSTEM_PERSONA,
+                storyboard_json=json.dumps(final_script, ensure_ascii=False)
+            )
+            validation_result = call_gemini_api(client, validator_prompt, model='gemini-2.5-flash')
+            
+            if not validation_result:
+                print("⚠️ Validator Agent failed to respond. Proceeding with current storyboard.")
+                break
+                
+            print(f"   📈 Storyboard Quality Audit (Attempt {validation_attempts+1}):")
+            print(f"      - Story Continuity Score: {validation_result.get('story_continuity_score', 0)}%")
+            print(f"      - Visual Alignment: {validation_result.get('visual_alignment_score', 0)}%")
+            print(f"      - Engagement: {validation_result.get('engagement_score', 0)}%")
+            print(f"      - Transitions: {validation_result.get('transition_score', 0)}%")
+            print(f"      - Subtitle Timing: {validation_result.get('subtitle_timing_score', 0)}%")
+            
+            # Check if all scores are >= 90%
+            scores = [
+                validation_result.get('story_continuity_score', 0),
+                validation_result.get('visual_alignment_score', 0),
+                validation_result.get('engagement_score', 0),
+                validation_result.get('transition_score', 0),
+                validation_result.get('subtitle_timing_score', 0)
+            ]
+            
+            if all(score >= 90 for score in scores) or validation_result.get('passes_validation') is True:
+                print("   ⭐ Storyboard passed all quality checks (>90% scores)!")
+                final_script["quality_scores"] = {
+                    "story_continuity": validation_result.get('story_continuity_score'),
+                    "visual_alignment": validation_result.get('visual_alignment_score'),
+                    "engagement": validation_result.get('engagement_score'),
+                    "transitions": validation_result.get('transition_score'),
+                    "subtitle_timing": validation_result.get('subtitle_timing_score')
+                }
+                break
+            else:
+                feedback = validation_result.get('feedback', 'Improve storyboard flow, transition logic and visual alignment.')
+                print(f"   ⚠️ Storyboard failed quality checks. Feedback: {feedback}")
+                print("   🔄 Triggering self-correction loop in Humanizer Agent...")
+                
+                correction_prompt = HUMANIZER_AGENT_TEMPLATE.format(
+                    persona=SYSTEM_PERSONA,
+                    optimized_script=optimized.get("optimized_script", ""),
+                    schema_requirements=refined_requirements
+                ) + f"\n\nCRITICAL FEEDBACK FROM AUDITOR (YOU MUST CORRECT THESE ISSUES AND RETRY):\n{feedback}"
+                
+                corrected_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash')
+                if corrected_script:
+                    final_script = corrected_script
+                validation_attempts += 1
+
     if not final_script:
         print("⚠️ [gemini_script] Agent pipeline failed. Attempting offline fallback script...")
         final_script = get_offline_fallback_script(category)

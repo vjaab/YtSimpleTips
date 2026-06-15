@@ -136,6 +136,14 @@ def run_pipeline(forced_category=None):
             continue
             
         script_data["slot"] = slot
+        scores = script_data.get("quality_scores")
+        if scores:
+            log_message(f"✅ Storyboard Quality Validation Passed (All scores >= 90%):")
+            log_message(f"   - Story Continuity: {scores.get('story_continuity')}%")
+            log_message(f"   - Visual Alignment: {scores.get('visual_alignment')}%")
+            log_message(f"   - Engagement: {scores.get('engagement')}%")
+            log_message(f"   - Transitions: {scores.get('transitions')}%")
+            log_message(f"   - Subtitle Timing: {scores.get('subtitle_timing')}%")
         title = script_data.get("title") or ""
         if not str(title).strip():
             title = script_data.get("original_news_headline") or "Tamil Fact!"
