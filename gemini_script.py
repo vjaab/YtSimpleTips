@@ -181,15 +181,18 @@ OPTIMIZED SCRIPT:
 SCHEMA REQUIREMENTS:
 {schema_requirements}
 
-CRITICAL CAPTION RULE:
-In the `subtitle_chunks` array:
-- Each subtitle chunk MUST be SHORT: 3-5 words maximum per chunk. This creates punchy karaoke-style captions.
-- The `text` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
-- The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "UNIFIED FORCE", "STRENGTH") representing the central concept.
-- `stock_search_query` MUST be a simple 1-3 word English search query describing the visual concept (e.g. 'typing laptop', 'timer', 'alarm clock', 'sad mother') to search Pexels.
-- You MUST produce at least 15-25 subtitle chunks for the full script to ensure word-by-word karaoke flow.
-- The timestamps `start` and `end` are placeholders (set `start` to 0.0 and `end` to 0.0 — they will be aligned dynamically by stable-whisper).
-`nano_visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks"). Specify a whiteboard animation drawing style, clean 2D vector line art illustration on a clean off-white whiteboard background, hand drawing sketch animation style, vibrant color accents, no photorealism. CRITICAL: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
+CRITICAL STORYBOARD & SCENE RULES:
+In the `storyboard` array:
+- Each scene/chunk MUST be SHORT: 3-5 words maximum in the `narration` field to ensure punchy karaoke-style captions on screen.
+- You MUST produce at least 15-25 storyboard scenes for the full script to ensure perfect word-by-word alignment.
+- The `narration` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
+- The `on_screen_text` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "PHONE SETTING", "STRENGTH") representing the central concept.
+- The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
+- Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics').
+- The `visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks").
+- Any people depicted in `visual_prompt` must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
+- Set `camera_motion` (e.g. 'Slow zoom', 'Dolly-in', 'Orbit', 'Pan', 'Tracking shot', 'None') and `transition` (e.g. 'Match cut', 'Zoom transition', 'Morph', 'Swipe', 'Object continuity', 'Story continuity').
+- Enforce the 2-3 second visual change rule: keep the duration of each scene short (e.g. 2 or 3 seconds).
 
 Return ONLY the final JSON object matching the schema. No markdown wrapping. No explanations."""
 
@@ -297,34 +300,35 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
     prompt_requirements = """Return ONLY this exact JSON (no markdown):
 {
+  "title": "Main punchy YouTube title (max 40 chars, include emoji)",
+  "hook": "The Hook (<1.5s): A shocking Result-First statement in Tanglish. Approx 6 words.",
+  "narration": [
+    "First sentence in Tanglish",
+    "Second sentence in Tanglish",
+    "Third sentence in Tanglish"
+  ],
+  "storyboard": [
+    {
+      "scene_number": 1,
+      "narration": "The exact spoken Tanglish phrase for this scene (3-5 words maximum for punchy subtitles, e.g. 'namma brain-la almost')",
+      "scene_objective": "Explain the concept visually, not just verbally",
+      "visual_type": "Google Video Generation|Animated Infographics|Whiteboard Animation|Motion Graphics",
+      "visual_prompt": "A detailed image/video prompt in English (e.g., 'A young Indian professional sitting late at night scrolling endlessly on smartphone, dark room illuminated by phone screen, realistic cinematic lighting, shallow depth of field, emotional expression, slow camera push-in, ultra realistic, vertical video format'). Avoid generic backgrounds.",
+      "camera_motion": "Slow zoom|Dolly-in|Orbit|Pan|Tracking shot|None",
+      "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
+      "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
+      "emotion": "Curiosity|Surprise|Fear|Excitement|Focus|Confusion",
+      "duration": 3
+    }
+  ],
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
   "description": "Full SEO friendly video description including Tamil tags #தெரியுமா #FactsInTamil #VJVideos",
   "use_case_evidence_url": "Direct source url of the fact to take a screenshot of.",
-  "title": "Main punchy YouTube title (max 40 chars, include emoji)",
-  "hook_script": "The Hook (<1.5s): A shocking Result-First statement in Tanglish. Approx 6 words.",
-  "problem_context": "The Context (2-6s): Introduce the mystery or setup in Tanglish. Approx 12 words.",
-  "solution_tech": "The Fact Escalation (6-28s): Step-by-step instructions with pattern interrupts. Under 55 words.",
-  "retention_loop": "The Retention Loop (28-33s): Seamless bridge/cliffhanger back to start. Approx 10 words.",
-  "outro_cta": "CTA: Provocative question to drive comments in Tanglish. Approx 10 words. STRICTLY DO NOT mention subscribe, follow or share.",
-  "script": "The FULL unified voiceover script in Tanglish combining all parts. STRICTLY 90-110 words. STRICT MAXIMUM 110 words.",
-  "hook_text": "The first 5-8 words of the script.",
   "relevant_links": ["Source url"],
   "phonetic_pronunciation_map": {"NVIDIA": "In-vid-yah"},
-  "hook": "Matches the first sentence of the script",
   "summary": "One line English summary",
   "sub_category": "{category}",
   "breaking_news_level": 8,
-  "retention_cues": [{"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}],
-  "subtitle_chunks": [{
-      "chunk_id": 1,
-      "text": "The exact Tanglish words spoken in this chunk (e.g., 'namma brain-la almost')",
-      "english_caption": "1-3 IMPORTANT English words representing the key concept of this chunk in uppercase (e.g., '86 BILLION NEURONS')",
-      "start": 0.0, "end": 0.0,
-      "has_infographic": false, "infographic_type": "none",
-      "infographic_data": {},
-      "stock_search_query": "Simple 1-3 word search query in English representing the core concept for stock video search (e.g., 'overwhelmed person', 'digital clock', 'writing email').",
-      "nano_visual_prompt": "Whiteboard animation drawing style description in English for Imagen/Veo. E.g., 'Whiteboard animation drawing of a glowing human brain...'. 9:16 aspect ratio."
-  }],
   "original_news_headline": "Fact Title",
   "original_news_url": "Direct source url",
   "keywords": ["Tamil Facts", "Did You Know"],
@@ -458,6 +462,49 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         final_script = get_offline_fallback_script(category)
         
     if final_script:
+        # Map storyboard to subtitle_chunks for compatibility with main.py and downstream video gen
+        if "storyboard" in final_script:
+            subtitle_chunks = []
+            rebuilt_script_parts = []
+            for scene in final_script["storyboard"]:
+                scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
+                narration_text = scene.get("narration", "")
+                rebuilt_script_parts.append(narration_text)
+                
+                # Check visual type for infographic
+                v_type = scene.get("visual_type", "")
+                has_info = False
+                info_type = "none"
+                if "infographic" in v_type.lower():
+                    has_info = True
+                    info_type = "stat_callout" # default type
+                
+                # Extract stock_search_query from visual_prompt or narration
+                vis_prompt = scene.get("visual_prompt", "")
+                words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
+                stock_query = " ".join(words) if words else "tech"
+                
+                chunk = {
+                    "chunk_id": scene_num,
+                    "text": narration_text,
+                    "english_caption": scene.get("on_screen_text", ""),
+                    "start": 0.0,
+                    "end": 0.0,
+                    "has_infographic": has_info,
+                    "infographic_type": info_type,
+                    "infographic_data": {},
+                    "stock_search_query": stock_query,
+                    "nano_visual_prompt": vis_prompt,
+                    "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
+                    "camera_motion": scene.get("camera_motion", "None"),
+                    "transition": scene.get("transition", "Match cut")
+                }
+                subtitle_chunks.append(chunk)
+            
+            final_script["subtitle_chunks"] = subtitle_chunks
+            if not final_script.get("script"):
+                final_script["script"] = "  ".join(rebuilt_script_parts)
+
         # Override metadata to match selected fact only if it was a generated template
         if final_script.get("original_news_headline") == "Fact Title" or not final_script.get("original_news_headline"):
             final_script["original_news_headline"] = selected_headline
@@ -529,7 +576,7 @@ def get_offline_fallback_script(category):
 def call_fallback_model(prompt):
     """
     Attempts to call non-Gemini fallback APIs in sequence:
-    OpenAI -> Anthropic (Claude) -> Groq (Llama) -> DeepSeek -> OpenRouter.
+    Groq (OpenAI Free Model -> Qwen -> Llama) -> OpenAI -> Anthropic (Claude) -> DeepSeek -> OpenRouter.
     Returns the parsed JSON response dict or None.
     """
     import os
@@ -544,10 +591,36 @@ def call_fallback_model(prompt):
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         return json.loads(raw.strip())
 
-    # 1. OpenAI
+    # 1. Groq (with model preference order: openai/gpt-oss-120b -> qwen/qwen3-32b -> llama-3.3-70b-versatile)
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        headers = {
+            "Authorization": f"Bearer {groq_key}",
+            "Content-Type": "application/json"
+        }
+        groq_models = ["openai/gpt-oss-120b", "qwen/qwen3-32b", "llama-3.3-70b-versatile"]
+        for model_name in groq_models:
+            print(f"🔮 Gemini failed. Falling back to Groq ({model_name})...")
+            try:
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.7
+                }
+                r = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    return clean_and_parse_json(content)
+                else:
+                    print(f"⚠️ Groq ({model_name}) failed with code {r.status_code}: {r.text}")
+            except Exception as e:
+                print(f"⚠️ Groq ({model_name}) fallback failed: {e}")
+
+    # 2. OpenAI
     openai_key = os.getenv("OPENAI_API_KEY")
     if openai_key:
-        print("🔮 Gemini failed. Falling back to OpenAI (gpt-4o-mini)...")
+        print("🔮 Falling back to OpenAI (gpt-4o-mini)...")
         try:
             headers = {
                 "Authorization": f"Bearer {openai_key}",
@@ -568,10 +641,10 @@ def call_fallback_model(prompt):
         except Exception as e:
             print(f"⚠️ OpenAI fallback failed: {e}")
 
-    # 2. Anthropic (Claude)
+    # 3. Anthropic (Claude)
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     if anthropic_key:
-        print("🔮 Gemini/OpenAI failed. Falling back to Anthropic (claude-3-5-haiku-20241022)...")
+        print("🔮 Falling back to Anthropic (claude-3-5-haiku-20241022)...")
         try:
             headers = {
                 "x-api-key": anthropic_key,
@@ -591,30 +664,6 @@ def call_fallback_model(prompt):
                 print(f"⚠️ Anthropic API failed with code {r.status_code}: {r.text}")
         except Exception as e:
             print(f"⚠️ Anthropic fallback failed: {e}")
-
-    # 3. Groq (Llama)
-    groq_key = os.getenv("GROQ_API_KEY")
-    if groq_key:
-        print("🔮 Gemini/OpenAI/Anthropic failed. Falling back to Groq (llama-3.3-70b-versatile)...")
-        try:
-            headers = {
-                "Authorization": f"Bearer {groq_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": "llama-3.3-70b-versatile",
-                "messages": [{"role": "user", "content": prompt}],
-                "response_format": {"type": "json_object"},
-                "temperature": 0.7
-            }
-            r = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=30)
-            if r.status_code == 200:
-                content = r.json()["choices"][0]["message"]["content"].strip()
-                return clean_and_parse_json(content)
-            else:
-                print(f"⚠️ Groq API failed with code {r.status_code}: {r.text}")
-        except Exception as e:
-            print(f"⚠️ Groq fallback failed: {e}")
 
     # 4. DeepSeek
     deepseek_key = os.getenv("DEEPSEEK_API_KEY")
