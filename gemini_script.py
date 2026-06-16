@@ -707,7 +707,7 @@ def call_fallback_model(prompt):
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": "llama3.1-8b", # Llama 3.1 8B is usually available on Cerebras free tier if 70B fails
+                "model": "llama-3.3-70b", # Llama 3.3 70B is available on Cerebras
                 "messages": [{"role": "user", "content": prompt}],
                 "response_format": {"type": "json_object"},
                 "temperature": 0.7
@@ -728,7 +728,7 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json"
         }
-        groq_models = ["llama-3.3-70b-versatile", "mixtral-8x7b-32768", "gemma2-9b-it"]
+        groq_models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
         for model_name in groq_models:
             print(f"🔮 Gemini failed. Falling back to Groq ({model_name})...")
             try:
@@ -822,26 +822,28 @@ def call_fallback_model(prompt):
     # 5. OpenRouter
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
     if openrouter_key:
-        print("🔮 Falling back to OpenRouter (meta-llama/llama-3.3-70b-instruct)...")
-        try:
-            headers = {
-                "Authorization": f"Bearer {openrouter_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": "meta-llama/llama-3.3-70b-instruct:free",
-                "messages": [{"role": "user", "content": prompt}],
-                "response_format": {"type": "json_object"},
-                "temperature": 0.7
-            }
-            r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
-            if r.status_code == 200:
-                content = r.json()["choices"][0]["message"]["content"].strip()
-                return clean_and_parse_json(content)
-            else:
-                print(f"⚠️ OpenRouter API failed with code {r.status_code}: {r.text}")
-        except Exception as e:
-            print(f"⚠️ OpenRouter fallback failed: {e}")
+        headers = {
+            "Authorization": f"Bearer {openrouter_key}",
+            "Content-Type": "application/json"
+        }
+        openrouter_models = ["meta-llama/llama-3.3-70b-instruct:free", "google/gemini-2.5-flash:free", "qwen/qwen-2.5-72b-instruct:free"]
+        for or_model in openrouter_models:
+            print(f"🔮 Falling back to OpenRouter ({or_model})...")
+            try:
+                payload = {
+                    "model": or_model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.7
+                }
+                r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    return clean_and_parse_json(content)
+                else:
+                    print(f"⚠️ OpenRouter API ({or_model}) failed with code {r.status_code}: {r.text}")
+            except Exception as e:
+                print(f"⚠️ OpenRouter ({or_model}) fallback failed: {e}")
 
     return None
 
