@@ -89,7 +89,7 @@ MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
 BGM_VOLUME = 0.08
-TARGET_AUDIO_DURATION = (28, 42)  # Shorter Shorts = higher completion rate = algorithm boost
+TARGET_AUDIO_DURATION = (20, 45)  # Shorter Shorts = higher completion rate = algorithm boost
 
 # Global Feature Flags
 ENABLE_LONGFORM = False
