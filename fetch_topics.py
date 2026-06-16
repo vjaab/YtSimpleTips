@@ -39,19 +39,21 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     
     CRITICAL REQUIREMENT: For each tip/hack, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
-    Return ONLY a JSON list of 5 tips matching this schema:
-    [
-      {{
-        "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
-        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English...",
-        "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
-        "source_name": "Name of the source",
-        "keywords": ["keyword1", "keyword2", "keyword3"],
-        "category": "{category}"
-      }}
-    ]
+    Return ONLY a JSON object containing a "tips" array matching this schema:
+    {{
+      "tips": [
+        {{
+          "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
+          "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English...",
+          "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
+          "source_name": "Name of the source",
+          "keywords": ["keyword1", "keyword2", "keyword3"],
+          "category": "{category}"
+        }}
+      ]
+    }}
     
-    Do NOT wrap in markdown tags like ```json. Return ONLY the raw JSON string starting with [ and ending with ].
+    Do NOT wrap in markdown tags like ```json.
     """
     
     attempts = 0
@@ -65,9 +67,16 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                 )
             )
             raw = response.text.strip()
-            if "[" in raw and "]" in raw:
-                raw = raw[raw.find("["):raw.rfind("]")+1]
-            facts = json.loads(raw)
+            if "```json" in raw:
+                raw = raw[raw.find("```json")+7:raw.rfind("```")]
+            elif "```" in raw:
+                raw = raw[raw.find("```")+3:raw.rfind("```")]
+            raw = raw.strip()
+            if raw.startswith("["):
+                facts = json.loads(raw)
+            else:
+                data = json.loads(raw)
+                facts = data.get("tips", []) if isinstance(data, dict) else data
             
             # Filter unique facts
             unique_facts = []
@@ -90,6 +99,28 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
             print(f"⚠️ [fetch_topics fallback] LLM fallback failed: {e}. Retrying...")
             attempts += 1
             
+    print("🚨 [fetch_topics fallback] Gemini API failed all attempts. Attempting non-Gemini fallback models (Groq/OpenAI/etc)...")
+    try:
+        from gemini_script import call_fallback_model
+        fallback_res = call_fallback_model(prompt)
+        if fallback_res:
+            facts = fallback_res.get("tips", []) if isinstance(fallback_res, dict) else fallback_res
+            unique_facts = []
+            for fact in facts:
+                title = fact.get("title", "")
+                url = fact.get("source_url", "")
+                is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                if is_unique:
+                    unique_facts.append(fact)
+                else:
+                    print(f"⏭️ [fetch_topics fallback models] Skipping non-unique fact: {title}. Reason: {reason}")
+            
+            if unique_facts:
+                print(f"✅ [fetch_topics fallback models] Successfully generated {len(unique_facts)} unique facts via fallback models.")
+                return unique_facts
+    except Exception as e:
+        print(f"⚠️ [fetch_topics fallback models] Non-Gemini fallback also failed: {e}")
+        
     return []
 
 def fetch_facts_for_category(category):
