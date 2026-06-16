@@ -700,14 +700,14 @@ def call_fallback_model(prompt):
     # 1. Cerebras (Llama 3.3 70B)
     cerebras_key = os.getenv("CEREBRAS_API_KEY")
     if cerebras_key:
-        print("🔮 Gemini failed. Falling back to Cerebras (llama3.3-70b)...")
+        print("🔮 Gemini failed. Falling back to Cerebras (llama-3.3-70b)...")
         try:
             headers = {
                 "Authorization": f"Bearer {cerebras_key}",
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": "llama3.3-70b",
+                "model": "llama3.1-8b", # Llama 3.1 8B is usually available on Cerebras free tier if 70B fails
                 "messages": [{"role": "user", "content": prompt}],
                 "response_format": {"type": "json_object"},
                 "temperature": 0.7
@@ -721,14 +721,14 @@ def call_fallback_model(prompt):
         except Exception as e:
             print(f"⚠️ Cerebras fallback failed: {e}")
 
-    # 2. Groq (with model preference order: openai/gpt-oss-120b -> qwen/qwen3-32b -> llama-3.3-70b-versatile)
+    # 2. Groq (with model preference order: llama-3.3-70b-versatile -> mixtral-8x7b-32768)
     groq_key = os.getenv("GROQ_API_KEY")
     if groq_key:
         headers = {
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json"
         }
-        groq_models = ["openai/gpt-oss-120b", "qwen/qwen3-32b", "llama-3.3-70b-versatile"]
+        groq_models = ["llama-3.3-70b-versatile", "mixtral-8x7b-32768", "gemma2-9b-it"]
         for model_name in groq_models:
             print(f"🔮 Gemini failed. Falling back to Groq ({model_name})...")
             try:
@@ -847,16 +847,16 @@ def call_fallback_model(prompt):
 
 def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
     """
-    Helper to execute Gemini API call with robust exponential backoff retries for 503/429 errors.
-    Automatically rotates Gemini API key and retries immediately if multiple keys exist.
-    Also falls back to alternate models on rate limits/overloads.
+    Helper to execute Gemini API call with robust fallback to alternate models and APIs.
+    Automatically rotates Gemini API keys. If a model fails on all keys, it is removed 
+    from rotation and we immediately proceed to the next fallback without waiting.
     """
     client = client_arg or get_gemini_client()
     if not client:
         client = get_gemini_client()
 
     attempts = 0
-    max_attempts = max(8, len(GEMINI_API_KEYS) * 3)
+    max_attempts = max(16, len(GEMINI_API_KEYS) * 4)
     keys_rotated_in_a_row = 0
 
     # Define model list to cycle/fallback through
@@ -867,7 +867,7 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
     
     model_idx = 0
 
-    while attempts < max_attempts:
+    while attempts < max_attempts and models_to_try:
         current_model = models_to_try[model_idx % len(models_to_try)]
         try:
             print(f"🔮 Calling Gemini API with model {current_model}...")
@@ -907,24 +907,26 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
                     attempts += 1
                     continue
                 
-                # If we tried all keys or only have 1 key, rotate the model
+                # If we tried all keys or only have 1 key, remove the model
+                print(f"🚫 Model {current_model} failed on all keys. Removing from rotation.")
+                models_to_try.pop(model_idx % len(models_to_try))
                 keys_rotated_in_a_row = 0
-                model_idx += 1
-                next_model = models_to_try[model_idx % len(models_to_try)]
-                print(f"🔄 Rotated through keys. Switching model to fallback: {next_model}. Retrying immediately...")
                 
-                # Exponential backoff with jitter if we have rotated through all models too
-                if model_idx % len(models_to_try) == 0:
-                    sleep_time = int(10 * (1.5 ** (attempts // len(models_to_try))) + random.uniform(1, 4))
-                    print(f"   Waiting {sleep_time} seconds (attempt {attempts+1}/{max_attempts}) before retrying...")
-                    time.sleep(sleep_time)
+                if models_to_try:
+                    next_model = models_to_try[model_idx % len(models_to_try)]
+                    print(f"🔄 Switching model to fallback: {next_model}. Retrying immediately...")
             else:
-                sleep_time = 5 + attempts * 5
-                print(f"⚠️ Agent call failed: {e}. Retrying in {sleep_time}s...")
-                time.sleep(sleep_time)
+                print(f"⚠️ Agent call failed: {e}. Removing {current_model} from rotation.")
+                models_to_try.pop(model_idx % len(models_to_try))
+                keys_rotated_in_a_row = 0
+                
+                if models_to_try:
+                    next_model = models_to_try[model_idx % len(models_to_try)]
+                    print(f"🔄 Switching model to fallback: {next_model}. Retrying immediately...")
+                    
             attempts += 1
             
-    print("🚨 Gemini failed all attempts. Attempting fallback models...")
+    print("🚨 All Gemini models depleted or failed. Attempting fallback models...")
     fallback_res = call_fallback_model(prompt)
     if fallback_res:
         return fallback_res
