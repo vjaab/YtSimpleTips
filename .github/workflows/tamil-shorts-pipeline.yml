@@ -113,6 +113,9 @@ jobs:
           if [ ! -z "${{ secrets.OPENROUTER_API_KEY }}" ]; then
             echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> .env
           fi
+          if [ ! -z "${{ secrets.CEREBRAS_API_KEY }}" ]; then
+            echo "CEREBRAS_API_KEY=${{ secrets.CEREBRAS_API_KEY }}" >> .env
+          fi
           
       - name: Setup YouTube Auth Files
         run: |
