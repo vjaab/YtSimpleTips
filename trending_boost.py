@@ -22,13 +22,15 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
         return []
 
     search_queries = {
-        "📱 Tech & Phone Hacks": ["phone hidden settings", "Android tricks 2026", "iPhone secret features"],
-        "🧠 Study & Memory Tips": ["study hacks", "memory tricks students", "AI study tools"],
-        "💰 Money & Finance Tips": ["money saving hacks", "UPI security tips", "finance tips Tamil"],
-        "🔥 Trending Reaction": ["tech news today India", "new app features", "trending tech"],
+        "💰 Finance Quick Tips": ["money saving hacks", "UPI security tips", "finance tips Tamil", "stock market tips"],
+        "📱 Tech & AI Quick Facts": ["phone hidden settings", "Android tricks", "iPhone secret features", "AI tools"],
+        "🚀 Motivation Bites": ["success quotes", "life lessons", "study hacks"],
+        "🧠 Facts & Trivia": ["interesting facts", "top 3 lists", "did you know"],
+        "🛠️ How-To Tutorials": ["how to quickly", "excel shortcuts", "skill hacks"],
+        "🤖 AI/ML Quick Learn": ["machine learning tips", "Python tricks", "ChatGPT facts"],
     }
 
-    queries = search_queries.get(category, ["tech tips hidden features", "phone hacks"])
+    queries = search_queries.get(category, ["tech tips hidden features", "finance hacks"])
     trending_keywords = []
 
     for query in queries[:2]:  # Limit to 2 queries to save API quota
@@ -96,7 +98,7 @@ def _fetch_reddit_trending_keywords():
     return unique[:20]
 
 
-def get_trending_context(category="📱 Tech & Phone Hacks"):
+def get_trending_context(category="💰 Finance Quick Tips"):
     """
     Returns a formatted string of trending keywords and topics that can be
     injected into the Gemini Search Grounding query for higher relevance.
@@ -130,7 +132,7 @@ def get_trending_context(category="📱 Tech & Phone Hacks"):
     return context
 
 
-def boost_articles_with_trending(articles, category="📱 Tech & Phone Hacks"):
+def boost_articles_with_trending(articles, category="💰 Finance Quick Tips"):
     """
     Cross-references fetched articles/facts with trending signals.
     Articles matching trending keywords get a 2x priority boost.
