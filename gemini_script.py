@@ -697,7 +697,31 @@ def call_fallback_model(prompt):
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         return json.loads(raw.strip())
 
-    # 1. Groq (with model preference order: openai/gpt-oss-120b -> qwen/qwen3-32b -> llama-3.3-70b-versatile)
+    # 1. Cerebras (Llama 3.3 70B)
+    cerebras_key = os.getenv("CEREBRAS_API_KEY")
+    if cerebras_key:
+        print("🔮 Gemini failed. Falling back to Cerebras (llama3.3-70b)...")
+        try:
+            headers = {
+                "Authorization": f"Bearer {cerebras_key}",
+                "Content-Type": "application/json"
+            }
+            payload = {
+                "model": "llama3.3-70b",
+                "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"},
+                "temperature": 0.7
+            }
+            r = requests.post("https://api.cerebras.ai/v1/chat/completions", json=payload, headers=headers, timeout=30)
+            if r.status_code == 200:
+                content = r.json()["choices"][0]["message"]["content"].strip()
+                return clean_and_parse_json(content)
+            else:
+                print(f"⚠️ Cerebras API failed with code {r.status_code}: {r.text}")
+        except Exception as e:
+            print(f"⚠️ Cerebras fallback failed: {e}")
+
+    # 2. Groq (with model preference order: openai/gpt-oss-120b -> qwen/qwen3-32b -> llama-3.3-70b-versatile)
     groq_key = os.getenv("GROQ_API_KEY")
     if groq_key:
         headers = {
@@ -805,8 +829,9 @@ def call_fallback_model(prompt):
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": "meta-llama/llama-3.3-70b-instruct",
+                "model": "meta-llama/llama-3.3-70b-instruct:free",
                 "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"},
                 "temperature": 0.7
             }
             r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
