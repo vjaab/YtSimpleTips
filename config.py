@@ -112,4 +112,4 @@ ENABLE_CATEGORY_COLORS = False        # Category-specific color palettes per vid
 ENABLE_FACT_COUNTER = False          # "FACT #N" badge creates series loyalty and FOMO
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
 ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash boosts audio engagement by 15-20%
-ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop
+ENABLE_SEAMLESS_LOOP = False          # Cross-dissolve last 3s with opening visual for loop
