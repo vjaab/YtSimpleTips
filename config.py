@@ -97,8 +97,8 @@ ENABLE_LONGFORM = False
 # Engagement & Retention Pillars (Faceless Info Channels 2026)
 ENABLE_KINETIC_CAPTIONS = False
 ENABLE_WATERMARK = True
-ENABLE_AUDIO_DUCKING = True
-ENABLE_PERIODIC_CUTS = True
+ENABLE_AUDIO_DUCKING = False
+ENABLE_PERIODIC_CUTS = False
 ENABLE_EVIDENCE_SCREENSHOTS = True
 ENABLE_HORMOZI_STYLING = True
 ENABLE_FLASH_TRANSITIONS = True
@@ -106,9 +106,9 @@ ENABLE_EMOJI_OVERLAYS = True             # Reaction emojis at hook/reveal moment
 
 # Visual Upgrade V2 Feature Flags (2026)
 ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
-ENABLE_DUAL_CAPTIONS = True           # Show Tanglish + English keyword captions simultaneously
+ENABLE_DUAL_CAPTIONS = False           # Show Tanglish + English keyword captions simultaneously
 ENABLE_ADVANCED_TRANSITIONS = True   # Zoom burst, RGB glitch, shake, cross dissolve transitions
-ENABLE_CATEGORY_COLORS = True        # Category-specific color palettes per video
+ENABLE_CATEGORY_COLORS = False        # Category-specific color palettes per video
 ENABLE_FACT_COUNTER = False          # "FACT #N" badge creates series loyalty and FOMO
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
 ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash boosts audio engagement by 15-20%
