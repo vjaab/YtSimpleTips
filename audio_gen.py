@@ -120,7 +120,7 @@ def trim_audio_silence(path, word_timestamps):
     print(f"🔊 Audio trimmed & mastered: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 
-def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.40, target_gap_s=0.20):
+def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.60, target_gap_s=0.35):
     """
     Detects silent gaps between words and shortens them to keep the pacing
     tight for high-retention Shorts. Uses gentle thresholds to avoid
@@ -172,7 +172,11 @@ def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.40, target_gap_
         if modified and segments:
             combined = segments[0]
             for seg in segments[1:]:
-                combined += seg
+                fade_len = min(40, len(combined), len(seg))
+                if fade_len > 0:
+                    combined = combined.append(seg, crossfade=fade_len)
+                else:
+                    combined += seg
             combined.export(audio_path, format=os.path.splitext(audio_path)[1][1:])
             new_duration = len(combined) / 1000.0
             print(f"✂️ [audio_gen] Gap optimization: tightened pacing. New duration: {new_duration:.2f}s")
@@ -234,9 +238,9 @@ def _generate_elevenlabs(text, output_path):
             "text": text,
             "model_id": "eleven_multilingual_v2", # Premium multilingual synthesis
             "voice_settings": {
-                "stability": 0.40,      # Lower stability for more expressive, dynamic delivery
+                "stability": 0.75,      # Increased from 0.40 to prevent stuttering/repetitions
                 "similarity_boost": 0.75,
-                "speed": 1.15           # 15% faster speech for viral Shorts pacing
+                "speed": 1.05           # Reduced from 1.15 to sound more natural and fluid
             }
         }
         

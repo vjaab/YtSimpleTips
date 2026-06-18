@@ -88,7 +88,7 @@ UPLOAD_TIMES = ["08:00", "13:00", "18:00"]  # 3/day schedule for maximum algorit
 MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
-BGM_VOLUME = 0.08
+BGM_VOLUME = 0.15
 TARGET_AUDIO_DURATION = (20, 45)  # Shorter Shorts = higher completion rate = algorithm boost
 
 # Global Feature Flags

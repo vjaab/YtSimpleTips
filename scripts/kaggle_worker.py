@@ -156,7 +156,7 @@ def process_job():
         segment_paths.append(seg_path)
 
     # Join segments
-    CROSSFADE_MS = 30
+    CROSSFADE_MS = 100
     combined = AudioSegment.from_wav(segment_paths[0]) if segment_paths else AudioSegment.empty()
     for sp in segment_paths[1:]:
         seg = AudioSegment.from_wav(sp)
