@@ -6,15 +6,17 @@ load_dotenv()
 # API Keys
 # API Keys
 GEMINI_API_KEYS_RAW = os.getenv("GEMINI_API_KEY", "")
-GEMINI_API_KEYS = [k.strip() for k in GEMINI_API_KEYS_RAW.split(",") if k.strip()]
+GEMINI_API_KEYS = [k.strip() for k in GEMINI_API_KEYS_RAW.split(",") if k.strip() and "dummy" not in k.lower()]
 
 # Check other env variables as well: GEMINI_API_KEY_1, GEMINI_API_KEY_2, GEMINI_API_KEY_3, etc.
 _key_idx = 1
 while True:
     alt_key = os.getenv(f"GEMINI_API_KEY_{_key_idx}", "")
     if alt_key:
-        if alt_key.strip() not in GEMINI_API_KEYS:
-            GEMINI_API_KEYS.append(alt_key.strip())
+        cleaned_key = alt_key.strip()
+        if "dummy" not in cleaned_key.lower():
+            if cleaned_key not in GEMINI_API_KEYS:
+                GEMINI_API_KEYS.append(cleaned_key)
         _key_idx += 1
     else:
         if _key_idx > 10:
@@ -23,7 +25,9 @@ while True:
 
 # If still empty, check the base GEMINI_API_KEY
 if not GEMINI_API_KEYS and os.getenv("GEMINI_API_KEY"):
-    GEMINI_API_KEYS = [os.getenv("GEMINI_API_KEY").strip()]
+    val = os.getenv("GEMINI_API_KEY").strip()
+    if "dummy" not in val.lower():
+        GEMINI_API_KEYS = [val]
 
 # Remove duplicates while preserving order
 _seen = set()

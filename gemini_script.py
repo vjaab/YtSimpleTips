@@ -32,6 +32,8 @@ Language Rules:
    - Ethnicity & Local Context: Any people depicted must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and any locations/backgrounds must resemble typical settings in Tamil Nadu, India where applicable.
 Constraint Checklist:
 - No Fluff: Do not say "வணக்கம் நண்பர்களே", "In this video", "Today we talk about". Start immediately with a highly relatable, emotional problem hook for the target demographics!
+- HYPER-SPECIFIC HOOKS: Do NOT use vague catch-all clickbaits (like 'Do this one setting' or 'Your life is going to change'). The hook MUST immediately mention the specific topic/benefit or the core problem (e.g., 'Double your Samsung phone battery' or 'Stop WhatsApp spam calls').
+- EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (immediately after the hook), explicitly introduce the name of the topic, setting, or concept being discussed. The audience must know exactly what specific feature/setting/app this video is about within the first 5 seconds.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks, italics, ALL CAPS) to guide pronunciation emphasis. Add intense emotional cues where natural to make the delivery highly dramatic and energetic.
 - SEAMLESS LOOP: Ensure the script's final sentence flows perfectly back into the hook's opening sentence to create an infinite, high-retention loop.
 - CTAs: At the end of every script, ask a provocative question in Tanglish to drive comments. Do NOT tell or ask the viewer to subscribe, follow, or share in the spoken voiceover script. End the script strictly on the question.
@@ -61,11 +63,13 @@ HOOK AGENT TASK:
 Based on the following research, generate 10 potential YouTube Shorts hooks (<1.5s).
 Hooks MUST address a highly relatable everyday frustration or surprise for parents, middle-aged people, or young people, and promise an immediate, easy solution (especially tech-based settings/apps/shortcuts), creating extreme curiosity in Tamil/Tanglish.
 No greetings. No generic statements. Start with the core problem/result first!
+Hooks must NOT be generic (e.g., 'Change this setting'). They MUST mention the specific topic or immediate payoff (e.g., 'Samsung gallery-ல இந்த lock setting இருக்கா?' or 'Battery backup-ஐ double பண்ணனுமா?').
 
 SCORING CRITERIA:
 - curiosity_score: How much does this make someone NEED to know the answer? (1-10)
 - emotional_trigger_score: How strongly does this hit a pain point or desire? (1-10)
 - swipe_stop_power: Would this make someone physically STOP scrolling on their phone? Hooks that start with numbers, shocking claims, direct address ("உங்க phone-ல..."), or challenge assumptions score highest. (1-10)
+- topic_specificity_score: How clear is it what specific setting, app, or daily problem the video is about? High scores require mentioning the specific target (e.g. battery, WhatsApp, Wi-Fi speed) instead of general 'tricks' or 'hacks'. (1-10)
 
 RESEARCH:
 {research_json}
@@ -74,10 +78,11 @@ Return ONLY a JSON object:
 {{
   "hooks": [
     {{
-      "text": "Tanglish hook text (e.g. 'உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க!')",
+      "text": "Tanglish hook text (e.g. 'உங்க phone-ல battery backup-ஐ double பண்ணனுமா?')",
       "curiosity_score": 1-10,
       "emotional_trigger_score": 1-10,
       "swipe_stop_power": 1-10,
+      "topic_specificity_score": 1-10,
       "reason": "Why it works"
     }}
   ]
@@ -92,6 +97,7 @@ VIRAL RETENTION TECHNIQUES (MANDATORY):
 - OPEN LOOP: In the first 5 seconds, plant an unresolved curiosity (e.g., "ஆனா இதுல ஒரு catch இருக்கு...", "ஆனா most people இந்த mistake பண்றாங்க...") that only gets resolved at the 25-30 second mark. This is the #1 retention driver.
 - PATTERN INTERRUPTS: Every 8-10 seconds, inject a micro-hook phrase to prevent drop-off. Use phrases like: "ஆனா wait பண்ணுங்க...", "இது தான் twist...", "இப்போ கவனமா கேளுங்க...", "ஆனா இது மட்டும் இல்ல..."
 - RAPID PACING: Every sentence must be under 10 words. No long explanations. Punch, punch, punch.
+- TOPIC CLARITY DIRECTIVE: In the Context section (first 2-6s), you MUST explicitly state what specific tool, settings page, or technique is being used. For example, if the hook is about WhatsApp storage, the context should name the 'Storage and Data settings' and what it does. Do not keep the topic vague or mysterious.
 
 Include:
 1. Hook (The selected problem-solving hook - must instantly capture attention + plant open loop)
@@ -133,6 +139,7 @@ MANDATORY RULES:
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
 6. Make sure the last sentence merges seamlessly back into the very first sentence to make a perfect 100% looping short.
 7. The OPEN LOOP planted in the hook must be resolved around the 25-30 second mark.
+8. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds. If it is too generic, rewrite it to be concrete and clear.
 
 NARRATIVE DRAFT:
 {narrative_json}
@@ -467,7 +474,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         return get_offline_fallback_script(category, failed_topics)
     
     # Pick highest curiosity score hook
-    best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0) + h.get("swipe_stop_power", 0))
+    best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0) + h.get("swipe_stop_power", 0) + h.get("topic_specificity_score", 0))
     print(f"🎯 Selected Hook: {best_hook.get('text')}")
 
     # ── AGENT 3: NARRATIVE ──
