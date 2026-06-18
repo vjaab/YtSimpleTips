@@ -30,13 +30,81 @@ from infographic_gen import build_infographic_clip, get_font_for_text, is_char_s
 
 FRAME_W, FRAME_H = 1080, 1920  # Default 9:16
 
-# ── DEFAULT COLOR PALETTE (Electric Lime — original brand) ──
+# ── DEFAULT COLOR PALETTE (Anime theme - Neon Orange & Electric Blue) ──
 _DEFAULT_PALETTE = {
-    "primary": (204, 255, 0),
+    "primary": (255, 107, 53),           # Neon Orange
     "secondary": (15, 15, 10),
-    "caption_highlight": (204, 255, 0),
-    "progress_bar": (204, 255, 0),
+    "caption_highlight": (0, 212, 255),  # Electric Blue
+    "progress_bar": (0, 212, 255),
 }
+
+def desaturate_frame(frame, factor=0.85):
+    """Reduces saturation of an RGB frame by factor (0.85 = 15% desaturation)."""
+    hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
+    hsv[:, :, 1] *= factor
+    hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
+    return cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+
+def apply_anime_color_grade(frame):
+    """
+    Simulates anime LUT color grading:
+    - High contrast
+    - Crushed blacks (low pixels pushed down)
+    - Slightly boosted saturation/vibrancy for neon midtones
+    """
+    hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
+    hsv[:, :, 1] *= 0.90 # slightly desaturated base
+    hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
+    frame = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+    
+    frame_float = frame.astype(np.float32)
+    frame_graded = 255.0 * np.power(frame_float / 255.0, 1.2)
+    
+    mid = 128.0
+    factor = 1.15
+    frame_graded = mid + factor * (frame_graded - mid)
+    frame_graded = np.clip(frame_graded, 0, 255).astype(np.uint8)
+    
+    return frame_graded
+
+def _apply_anime_flash_cut(outgoing, incoming, progress):
+    """
+    Fast anime-style flash cut:
+    - 2 frames (approx first 25% of transition) white flash.
+    - Zoom incoming by 1.05.
+    """
+    h, w = incoming.shape[:2]
+    zoom_scale = 1.0 + 0.05 * progress
+    new_w = int(w * zoom_scale)
+    new_h = int(h * zoom_scale)
+    if new_w > 0 and new_h > 0:
+        resized_in = cv2.resize(incoming, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+        x1 = (new_w - w) // 2
+        y1 = (new_h - h) // 2
+        zoomed_in = resized_in[y1:y1+h, x1:x1+w]
+    else:
+        zoomed_in = incoming
+
+    new_w_out = int(w * (1.0 + 0.02 * progress))
+    new_h_out = int(h * (1.0 + 0.02 * progress))
+    if new_w_out > 0 and new_h_out > 0:
+        resized_out = cv2.resize(outgoing, (new_w_out, new_h_out), interpolation=cv2.INTER_LINEAR)
+        x1_out = (new_w_out - w) // 2
+        y1_out = (new_h_out - h) // 2
+        zoomed_out = resized_out[y1_out:y1_out+h, x1_out:x1_out+w]
+    else:
+        zoomed_out = outgoing
+
+    if progress < 0.25:
+        flash_intensity = progress / 0.25
+        flash_frame = np.full_like(zoomed_out, 255)
+        blended = cv2.addWeighted(zoomed_out, 1.0 - flash_intensity, flash_frame, flash_intensity, 0)
+    else:
+        flash_intensity = 1.0 - ((progress - 0.25) / 0.75)
+        flash_frame = np.full_like(zoomed_in, 255)
+        blended = cv2.addWeighted(zoomed_in, 1.0 - flash_intensity, flash_frame, flash_intensity, 0)
+
+    return blended
 
 def set_resolutions(is_longform=False):
     global FRAME_W, FRAME_H
@@ -229,19 +297,19 @@ def _apply_cross_dissolve(outgoing, incoming, progress):
 # Transition type mapping from retention_cue effect names
 TRANSITION_MAP = {
     "zoom_in": _apply_zoom_burst,
-    "zoom_burst": _apply_zoom_burst,
+    "zoom_burst": _apply_anime_flash_cut,
     "hook_impact": _apply_rgb_glitch,
     "glitch": _apply_rgb_glitch,
     "emphasis": _apply_shake,
     "shake": _apply_shake,
-    "flash": _apply_flash_fade,
+    "flash": _apply_anime_flash_cut,
     "dissolve": _apply_cross_dissolve,
 }
 
 # Pool of transitions for random selection when no specific cue is given
 _TRANSITION_POOL = [
-    _apply_zoom_burst,
-    _apply_flash_fade,
+    _apply_anime_flash_cut,
+    _apply_rgb_glitch,
     _apply_cross_dissolve,
     _apply_shake,
 ]
@@ -319,11 +387,14 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
             is_active = wd["is_active"]
             
             if is_active:
-                c_fill = (*accent_color, 255)  # Category-specific accent color
                 font = get_font_for_text(word_text, int(base_size * 1.15), "extrabold")
-                # Draw dynamic drop shadow for active word
-                draw.text((cur_x+3, line_y-4+3), word_text, fill=(0,0,0,255), font=font)
-                draw.text((cur_x, line_y-4), word_text, fill=c_fill, font=font)
+                # Draw electric blue glow behind the active word (offset multiple times)
+                for dx in [-3, -2, -1, 0, 1, 2, 3]:
+                    for dy in [-3, -2, -1, 0, 1, 2, 3]:
+                        if abs(dx) + abs(dy) > 0:
+                            draw.text((cur_x + dx, line_y - 4 + dy), word_text, fill=(0, 212, 255, 120), font=font)
+                # Main active text is bold white
+                draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
             else:
                 c_fill = (255, 255, 255, 255)
                 font = get_font_for_text(word_text, base_size, "bold")
@@ -786,6 +857,15 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # Frame Assembly Loop
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
+        
+        # ── ANIME COLOR GRADE & DESATURATION ──
+        frame = desaturate_frame(frame, 0.85)
+        frame = apply_anime_color_grade(frame)
+        
+        # ── ATTENTION-GRAB SCREEN FLICKER (0:00 - 0:02) ──
+        if t <= 2.0:
+            flicker_factor = 1.0 + 0.08 * math.sin(t * 50.0) * random.uniform(0.5, 1.0)
+            frame = np.clip(frame.astype(np.float32) * flicker_factor, 0, 255).astype(np.uint8)
         
         # ── HOOK FLASH: Rapid zoom-in + shake in first 0.5s to stop scrolling ──
         if t < 0.5:

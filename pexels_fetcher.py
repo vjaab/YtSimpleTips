@@ -159,8 +159,10 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         if veo_generate and prompt and veo_consecutive_fails < 2:
             print("     → Attempting Veo 3.1 video generation...")
             enhanced_prompt = (
-                f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, "
-                f"no text overlays, no watermarks, clean 2D vector line art illustration, {aspect_ratio} aspect ratio."
+                f"{prompt}. Art style: Clean modern anime (similar to Jujutsu Kaisen / Demon Slayer style and color palette). "
+                f"Color grading: Deep navy + electric blue + neon orange accent glows, no dialogue or text overlays, "
+                f"no watermarks, stylized silhouette or faceless anime protagonist, smooth camera movement, "
+                f"9:16 aspect ratio, vertical video format, highly dynamic."
             )
             output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{TODAY}.mp4")
             visual_path = veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
@@ -179,8 +181,11 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             print("     → Generating Imagen image...")
             output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
             enhanced_imagen_prompt = prompt
-            if "whiteboard" not in prompt.lower():
-                enhanced_imagen_prompt = f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, clean 2D vector line art, vibrant color accents."
+            if "anime" not in prompt.lower():
+                enhanced_imagen_prompt = (
+                    f"{prompt}. Clean modern anime illustration, vibrant neon lighting, Jujutsu Kaisen meets cyberpunk visual style, "
+                    f"deep navy, electric blue and neon orange glowing details, high contrast, crushed blacks."
+                )
             visual_path = _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"
@@ -196,8 +201,11 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         if not visual_path and prompt:
             output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
             enhanced_pollinations_prompt = prompt
-            if "whiteboard" not in prompt.lower():
-                enhanced_pollinations_prompt = f"{prompt}. Whiteboard animation style, hand drawing sketch on a clean off-white whiteboard background, clean 2D vector line art, vibrant color accents."
+            if "anime" not in prompt.lower():
+                enhanced_pollinations_prompt = (
+                    f"{prompt}. Clean modern anime illustration, vibrant neon lighting, Jujutsu Kaisen meets cyberpunk visual style, "
+                    f"deep navy, electric blue and neon orange glowing details, high contrast, crushed blacks."
+                )
             visual_path = _generate_pollinations_image(enhanced_pollinations_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
                 visual_type = "photo"

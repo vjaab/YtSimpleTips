@@ -92,7 +92,7 @@ UPLOAD_TIMES = ["08:00", "13:00", "18:00"]  # 3/day schedule for maximum algorit
 MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
-BGM_VOLUME = 0.15
+BGM_VOLUME = 0.12
 TARGET_AUDIO_DURATION = (20, 45)  # Shorter Shorts = higher completion rate = algorithm boost
 
 # Global Feature Flags
@@ -110,10 +110,10 @@ ENABLE_EMOJI_OVERLAYS = True             # Reaction emojis at hook/reveal moment
 
 # Visual Upgrade V2 Feature Flags (2026)
 ENABLE_VEO_VIDEO = True              # Use Veo 3.1 AI video clips as primary B-roll
-ENABLE_DUAL_CAPTIONS = False           # Show Tanglish + English keyword captions simultaneously
+ENABLE_DUAL_CAPTIONS = True           # Show Tanglish + English keyword captions simultaneously
 ENABLE_ADVANCED_TRANSITIONS = True   # Zoom burst, RGB glitch, shake, cross dissolve transitions
 ENABLE_CATEGORY_COLORS = False        # Category-specific color palettes per video
-ENABLE_FACT_COUNTER = False          # "FACT #N" badge creates series loyalty and FOMO
+ENABLE_FACT_COUNTER = True          # "FACT #N" badge creates series loyalty and FOMO
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
 ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash boosts audio engagement by 15-20%
-ENABLE_SEAMLESS_LOOP = False          # Cross-dissolve last 3s with opening visual for loop
+ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop

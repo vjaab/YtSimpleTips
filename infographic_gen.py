@@ -202,22 +202,42 @@ def _center_text(draw, text, font, y, color, card_x, card_w):
     x = card_x + (card_w - tw) // 2
     draw.text((x, y), text, font=font, fill=color)
 
-def _draw_card_bg(draw, cx, cy, cw, ch, accent_color, border=2, radius=24, fill=(15, 15, 15, 242)):
-    # Shadow
+def _draw_card_bg(draw, cx, cy, cw, ch, accent_color, border=2, radius=24, fill=(10, 15, 44, 235)):
+    # 1. Shadow
     draw.rounded_rectangle(
-        [cx + 6, cy + 12, cx + cw + 6, cy + ch + 12],
-        radius=radius, fill=(0, 0, 0, 128)
+        [cx + 8, cy + 16, cx + cw + 8, cy + ch + 16],
+        radius=radius, fill=(0, 0, 0, 180)
     )
-    # Border
+    # 2. Outer glow border (4px, semi-transparent)
     draw.rounded_rectangle(
-        [cx - border, cy - border, cx + cw + border, cy + ch + border],
-        radius=radius, fill=(*accent_color, 255)
+        [cx - 4, cy - 4, cx + cw + 4, cy + ch + 4],
+        radius=radius, outline=(*accent_color, 100), width=4
     )
-    # Inner fill
+    # 3. Inner glow border (2px, brighter)
+    draw.rounded_rectangle(
+        [cx - 2, cy - 2, cx + cw + 2, cy + ch + 2],
+        radius=radius, outline=(*accent_color, 200), width=2
+    )
+    # 4. Card body (dark navy)
     draw.rounded_rectangle(
         [cx, cy, cx + cw, cy + ch],
         radius=radius, fill=fill
     )
+    # 5. Corner energy sparkles / HUD crosshairs for anime tech look
+    r, g, b = accent_color
+    line_len = 15
+    # Top-Left corner spark
+    draw.line([cx - 10, cy, cx - 10 + line_len, cy], fill=(r, g, b, 255), width=3)
+    draw.line([cx, cy - 10, cx, cy - 10 + line_len], fill=(r, g, b, 255), width=3)
+    # Top-Right corner spark
+    draw.line([cx + cw + 10 - line_len, cy, cx + cw + 10, cy], fill=(r, g, b, 255), width=3)
+    draw.line([cx + cw, cy - 10, cx + cw, cy - 10 + line_len], fill=(r, g, b, 255), width=3)
+    # Bottom-Left corner spark
+    draw.line([cx - 10, cy + ch, cx - 10 + line_len, cy + ch], fill=(r, g, b, 255), width=3)
+    draw.line([cx, cy + ch + 10 - line_len, cx, cy + ch + 10], fill=(r, g, b, 255), width=3)
+    # Bottom-Right corner spark
+    draw.line([cx + cw + 10 - line_len, cy + ch, cx + cw + 10, cy + ch], fill=(r, g, b, 255), width=3)
+    draw.line([cx + cw, cy + ch + 10 - line_len, cx + cw, cy + ch + 10], fill=(r, g, b, 255), width=3)
 
 # ── 1. Stat Card ──
 def _render_stat_card(data, accent_color, progress=1.0):
