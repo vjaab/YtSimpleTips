@@ -352,7 +352,25 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
       "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
       "emotion": "Curiosity|Surprise|Fear|Excitement|Focus|Confusion",
-      "duration": 3
+      "duration": 3,
+      "infographic_type": "stat|comparison|timeline|definition|ranking|growth|slide|process|none",
+      "infographic_data": {
+        "term": "Required only if type is 'definition' (e.g. 'Mirroring')",
+        "definition": "Required only if type is 'definition' (e.g. 'Subtly copying body language to build rapport.')",
+        "example": "Optional if type is 'definition' (e.g. 'Matching their speech rate.')",
+        "headline": "Required only if type is 'stat' or 'growth' (e.g. 'PHONE SPEED')",
+        "subtext": "Required only if type is 'stat' or 'growth' (e.g. '100%' or 'Information')",
+        "context": "Optional if type is 'stat' (e.g. 'Speed multiplier increased')",
+        "title": "Required if type is 'comparison', 'timeline', 'ranking', 'slide', or 'process' (e.g. 'STEPS')",
+        "item1": "Required if type is 'comparison' (e.g. 'Perfect')",
+        "val1": "Required if type is 'comparison' (e.g. 'Unapproachable')",
+        "item2": "Required if type is 'comparison' (e.g. 'Imperfect')",
+        "val2": "Required if type is 'comparison' (e.g. 'Friendly & Likeable')",
+        "events": [{"date": "Step 1", "desc": "Go to Settings"}, {"date": "Step 2", "desc": "About Phone"}],
+        "items": [{"name": "Rank 1", "val": "First Item"}],
+        "percent": "Growth percent (e.g. '+50%')",
+        "steps": ["Step 1 description", "Step 2 description"]
+      }
     }
   ],
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
@@ -566,11 +584,14 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 
                 # Check visual type for infographic
                 v_type = scene.get("visual_type", "")
-                has_info = False
-                info_type = "none"
-                if "infographic" in v_type.lower():
-                    has_info = True
-                    info_type = "stat_callout" # default type
+                info_type = scene.get("infographic_type", "none").lower()
+                
+                # Check for visual type compatibility
+                if "infographic" in v_type.lower() and info_type in ("none", ""):
+                    info_type = "stat"
+                
+                has_info = info_type not in ("none", "")
+                info_data = scene.get("infographic_data", {})
                 
                 # Extract stock_search_query from visual_prompt or narration
                 vis_prompt = scene.get("visual_prompt", "")
@@ -585,7 +606,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                     "end": 0.0,
                     "has_infographic": has_info,
                     "infographic_type": info_type,
-                    "infographic_data": {},
+                    "infographic_data": info_data,
                     "stock_search_query": stock_query,
                     "nano_visual_prompt": vis_prompt,
                     "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
