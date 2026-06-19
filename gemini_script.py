@@ -11,15 +11,15 @@ from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
 # ── PROMPT TEMPLATES (TAMIL SHORTS AGENTIC LOOP) ──────────────────────────────────
 
-SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in anime-style infotainment ("Simple Tips by VJ").
+SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in infotainment ("Simple Tips by VJ").
 Your goal is to explain extremely useful, trending tech/smart life hacks, study tricks, phone settings, health tips, and financial hacks in a super engaging, conversational way that helps everyday people improve their lives.
-Tone: High-energy anime narrator voice — dramatic, punchy, emotionally reactive, confident, like a shonen anime reveal scene. You build tension, drop knowledge, and land the impact.
-Target Audience: Tamil-speaking viewers aged 16–35 who love anime, tech, and life hacks, spanning:
+Tone: Relatable, friendly, clear, and engaging South Indian Tamil guy (like a tech/lifestyle creator or a local RJ/VJ). Natural, enthusiastic, and easy to follow. Speak clearly and articulate every word so that Tamil viewers all over the world can understand easily. Avoid overly dramatic anime narrator style, shouting, or hyper-reactive shouting. Maintain a clean, professional yet friendly creator tone.
+Target Audience: Tamil-speaking viewers aged 16–35 who love tech, hacks, and smart life tips, spanning:
 1) Parents (cares about screen safety, child learning, budgeting, and home convenience).
 2) Middle-aged (cares about smartphone utility, WhatsApp/finance security, spam blocking, and daily efficiency).
 3) Young People (cares about AI tools, phone/PC customization, study hacks, fast tricks, and speed).
 Language Rules:
-1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in TANGLISH (Tamil words in Tamil script, mixed with English words in English alphabet where natural, e.g. "shortcut", "setting", "battery", "focus", "memory"). This is exactly how young Tamil speakers talk and ensures the TTS handles the pronunciation naturally.
+1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in TANGLISH (Tamil words in Tamil script, mixed with English words in English alphabet where natural, e.g. "shortcut", "setting", "battery", "focus", "memory"). This is exactly how young Tamil speakers talk and ensures the TTS handles the pronunciation naturally. Enforce standard, clean, and universally understandable Tanglish/Tamil vocabulary, avoiding obscure local dialects, heavy colloquialisms, or region-specific slang that would confuse Tamil speakers globally (e.g. in Singapore, Malaysia, Sri Lanka, and the west).
    Example: "உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க! உங்க browser speed-ஐ boost பண்ண ஒரு simple hack..."
 2. Subtitles & Captions (`subtitle_chunks`):
    - The `text` field MUST contain the spoken Tanglish segment for that chunk to ensure perfect audio-to-text alignment.
@@ -32,10 +32,10 @@ Language Rules:
 Constraint Checklist:
 - SCRIPT WORD COUNT: Strictly 90-110 words in Tanglish.
 - SCRIPT SENTENCES: Every sentence must be under 9 words.
-- HYPER-SPECIFIC ANIME HOOKS: First line MUST be a scroll-stopping hook using an anime trope (e.g. "Ithu plot twist da!", "Final boss level hack!", "Hidden power unlock aaguthu!", "Side character feel pannaadhey!"), immediately mentioning the specific topic/benefit (e.g., 'Samsung gallery-la intha lock setting irukka?').
+- HYPER-SPECIFIC HOOKS: First line MUST be a scroll-stopping, high-curiosity hook that a friendly South Indian tech guy would use (e.g., "உங்களுக்கு இந்த ரகசிய செட்டிங் தெரியுமா?", "உங்க போன்ல உடனே இதை மாத்துங்க!", "இதை மட்டும் மாத்துனீங்கன்னா உங்க லைஃப் ரொம்ப ஈஸியாயிடும்!"), immediately mentioning the specific topic/benefit (e.g., 'Samsung gallery-la intha lock setting irukka?'). Do NOT use anime tropes, cartoonish drama, or fantasy language in the voice hooks.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (immediately after the hook), explicitly introduce the name of the topic, setting, or concept being discussed. The audience must know exactly what specific feature/setting/app this video is about within the first 5 seconds.
 - PATTERN INTERRUPTS: At least 2 pattern interrupts like: "Aana wait pannunga...", "Intha secret yaarukkum theriyaadhu..."
-- VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks, italics, ALL CAPS) to guide pronunciation emphasis. Add intense emotional cues where natural to make the delivery highly dramatic and energetic.
+- VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
 - SEAMLESS LOOP: Ensure the script's final sentence flows perfectly back into the hook's opening sentence to create an infinite, high-retention loop.
 - CTAs: At the end of every script, ask a provocative question or a soft CTA in Tanglish to drive comments. Example: "Save pannunga, maraakaadhey. Comment-la sollunga!" Do NOT tell or ask the viewer to subscribe, follow, or share in the spoken voiceover script. End the script strictly on the question or soft CTA.
 """
@@ -65,7 +65,7 @@ Based on the following research, generate 10 potential YouTube Shorts hooks (<1.
 Hooks MUST address a highly relatable everyday frustration or surprise, and promise an immediate, easy solution (especially tech-based settings/apps/shortcuts), creating extreme curiosity in Tamil/Tanglish.
 No greetings. No generic statements. Start with the core problem/result first!
 Hooks must NOT be generic (e.g., 'Change this setting'). They MUST mention the specific topic or immediate payoff.
-For anime style compliance, the hook must use anime tropes or dramatic framing (e.g., 'Ithu plot twist da!', 'Final boss level hack!', 'Hidden power unlock aaguthu!', 'Side character feel pannaadhey!').
+The hook must sound like a friendly, clear, and relatable South Indian Tamil guy narrator, avoiding anime tropes or fantasy phrases (do NOT use 'Ithu plot twist da!', 'Final boss level hack!', 'Hidden power unlock aaguthu!', etc.).
 
 SCORING CRITERIA:
 - curiosity_score: How much does this make someone NEED to know the answer? (1-10)
@@ -80,7 +80,7 @@ Return ONLY a JSON object:
 {{
   "hooks": [
     {{
-      "text": "Tanglish hook text (e.g. 'Ithu plot twist da! battery backup-ai double panna oru hidden power setting!')",
+      "text": "Tanglish hook text (e.g. 'உங்க phone battery-ஐ டபுள் ஆக்க இந்த ஒரு secret setting போதும்!')",
       "curiosity_score": 1-10,
       "emotional_trigger_score": 1-10,
       "swipe_stop_power": 1-10,
@@ -198,7 +198,7 @@ In the `storyboard` array:
 - The `on_screen_text` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "PHONE SETTING", "STRENGTH") representing the central concept.
 - The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
 - Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics').
-- The `visual_prompt` MUST be in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open", "amazed gasping"), or visual metaphors ("glowing data streams flowing into phone", "lock breaking in half with digital sparks").
+- The `visual_prompt` MUST be in English and specify "clean modern anime illustration" style. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open in clean modern anime illustration style", "amazed gasping in clean modern anime illustration style"), or visual metaphors ("glowing data streams flowing into phone in clean modern anime illustration style").
 - Any people depicted in `visual_prompt` must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 - Set `camera_motion` (e.g. 'Slow zoom', 'Dolly-in', 'Orbit', 'Pan', 'Tracking shot', 'None') and `transition` (e.g. 'Match cut', 'Zoom transition', 'Morph', 'Swipe', 'Object continuity', 'Story continuity').
 - Enforce the 2-3 second visual change rule: keep the duration of each scene short (e.g. 2 or 3 seconds).
@@ -235,8 +235,9 @@ Evaluate the following storyboard JSON against these strict criteria (rate each 
 4. transition_score: Do transitions feel connected (match cuts, zoom transitions, morphs, object/story continuity) instead of hard-cuts?
 5. subtitle_timing_score: Are narration segments short and punchy (3-5 words) for fast-paced subtitles?
 
-ANIME STYLE COMPLIANCE CHECK CRITERIA:
-- Does the hook use an anime trope or dramatic framing? (e.g. plot twist, final boss level hack)
+TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
+- Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
+- Is the script easily understandable by Tamil speakers globally (clear pronunciation, standard vocabulary, no obscure slang)?
 - Are all sentences under 9 words?
 - Is there a tension-build -> reveal -> payoff structure?
 - Does the script avoid generic phrases like "intha video-la"?
@@ -363,7 +364,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "narration": "The exact spoken Tanglish phrase for this scene (3-5 words maximum for punchy subtitles, e.g. 'namma brain-la almost')",
       "scene_objective": "Explain the concept visually, not just verbally",
       "visual_type": "Google Video Generation|Animated Infographics|Whiteboard Animation|Motion Graphics",
-      "visual_prompt": "A detailed image/video prompt in English (e.g., 'A young Indian professional sitting late at night scrolling endlessly on smartphone, dark room illuminated by phone screen, realistic cinematic lighting, shallow depth of field, emotional expression, slow camera push-in, ultra realistic, vertical video format'). Avoid generic backgrounds.",
+      "visual_prompt": "A detailed image/video prompt in English. Must specify 'clean modern anime illustration' style, e.g., 'A young South Indian Tamil guy sitting late at night scrolling on smartphone, phone screen glowing on face, clean modern anime illustration, vibrant neon lighting, deep navy background with glowing orange sparks, dramatic low-angle tilt'. Avoid generic backgrounds.",
       "camera_motion": "Slow zoom|Dolly-in|Orbit|Pan|Tracking shot|None",
       "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
       "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
