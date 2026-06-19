@@ -813,7 +813,7 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {cerebras_key}",
             "Content-Type": "application/json"
         }
-        cerebras_models = ["llama-3.3-70b", "llama-3.1-70b", "llama-3.1-8b"]
+        cerebras_models = ["zai-glm-4.7", "gpt-oss-120b"]
         for model_name in cerebras_models:
             print(f"🔮 Gemini failed. Falling back to Cerebras ({model_name})...")
             try:
@@ -839,7 +839,7 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json"
         }
-        groq_models = ["llama-3.3-70b-versatile", "llama-3.1-70b-versatile", "mixtral-8x7b-32768", "gemma2-9b-it", "llama-3.1-8b-instant", "deepseek-r1-distill-llama-70b"]
+        groq_models = ["llama-3.3-70b-versatile", "llama-4-scout", "llama-3.1-8b-instant", "qwen/qwen3-32b", "openai/gpt-oss-120b"]
         for model_name in groq_models:
             print(f"🔮 Gemini failed. Falling back to Groq ({model_name})...")
             try:
@@ -937,7 +937,7 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {openrouter_key}",
             "Content-Type": "application/json"
         }
-        openrouter_models = ["meta-llama/llama-3.3-70b-instruct:free", "google/gemini-2.5-flash", "qwen/qwen-2.5-72b-instruct", "google/gemini-2.0-flash-lite-preview-02-05:free", "deepseek/deepseek-chat:free", "nvidia/llama-3.1-nemotron-70b-instruct:free"]
+        openrouter_models = ["qwen/qwen-2.5-72b-instruct", "meta-llama/llama-3.3-70b-instruct:free", "google/gemini-2.5-flash", "deepseek/deepseek-chat:free", "nvidia/llama-3.1-nemotron-70b-instruct:free"]
         for or_model in openrouter_models:
             print(f"🔮 Falling back to OpenRouter ({or_model})...")
             try:
@@ -945,7 +945,8 @@ def call_fallback_model(prompt):
                     "model": or_model,
                     "messages": [{"role": "user", "content": prompt}],
                     "response_format": {"type": "json_object"},
-                    "temperature": 0.7
+                    "temperature": 0.7,
+                    "max_tokens": 4096
                 }
                 r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
                 if r.status_code == 200:

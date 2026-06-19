@@ -487,12 +487,12 @@ def apply_mastering_chain(audio_path: str) -> None:
     temp_path = audio_path + ".mastered.wav"
     filter_str = (
         "highpass=f=80,"  # removes low-frequency rumble below 80Hz
-        "lowpass=f=12000,"  # removes harsh air above 12kHz that TTS adds
+        "lowpass=f=11000,"  # removes harsh air/TTS artifacts above 11kHz (was 12kHz)
         "afftdn=nf=-25,"  # noise floor reduction at -25dB (gentler than current)
         "equalizer=f=200:t=h:w=200:g=-3,"  # cut muddy low-mids
         "equalizer=f=2500:t=h:w=800:g=+4,"  # boost vocal presence (clarity range)
-        "equalizer=f=8000:t=h:w=2000:g=+2,"  # subtle air/brightness
-        "acompressor=threshold=0.1:ratio=4:attack=5:release=50:makeup=2,"  # dynamic compression for consistent volume
+        "equalizer=f=8000:t=h:w=2000:g=+1,"  # subtle air/brightness (reduced from +2 to prevent TTS artifact amplification)
+        "acompressor=threshold=0.05:ratio=3:attack=10:release=100:makeup=1,"  # gentler compression to prevent pumping/ringing artifacts
         "loudnorm=I=-14:TP=-1.5:LRA=7,"  # normalize to YouTube Shorts standard (-14 LUFS)
         "aresample=44100"  # ensure sample rate is exactly 44100 Hz
     )
