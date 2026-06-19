@@ -562,6 +562,28 @@ def _render_sound_on_indicator(draw, t, accent_color):
     draw.text((px, py), text, fill=(255, 255, 255, alpha), font=font)
 
 
+def _render_voice_fallback_warning(draw, accent_color):
+    """Draws a premium yellow warning badge at the top: '⚠️ Voice Fallback Used'."""
+    text = "⚠️ Voice Fallback Used"
+    font = get_font_for_text(text, 28, "bold")
+    bbox = font.getbbox(text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    px = (FRAME_W - tw) // 2
+    py = int(FRAME_H * 0.14)
+    
+    # Semi-transparent pill background with red-orange outline
+    draw.rounded_rectangle(
+        [px - 20, py - 10, px + tw + 20, py + th + 10],
+        radius=15, fill=(15, 10, 10, 220)
+    )
+    draw.rounded_rectangle(
+        [px - 20, py - 10, px + tw + 20, py + th + 10],
+        radius=15, outline=(255, 69, 0, 255), width=3
+    )
+    draw.text((px, py), text, fill=(255, 69, 0, 255), font=font)
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # ── AUDIO MASTERING ──────────────────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1002,6 +1024,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # Sound-On Indicator (first 2.5s)
         if ENABLE_SOUND_ON_INDICATOR:
             _render_sound_on_indicator(p_draw, t, accent_color)
+            
+        # Voice Fallback warning (top-center)
+        if script_json.get("voice_fallback_used"):
+            _render_voice_fallback_warning(p_draw, accent_color)
         
         # ── DUAL-LAYER CAPTIONS ──
         active_chunk = None

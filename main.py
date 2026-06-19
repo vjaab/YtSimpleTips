@@ -213,6 +213,9 @@ def run_pipeline(forced_category=None, dry_run=False):
             attempts += 1
             continue
             
+        # Propagate Voice Fallback Status
+        import audio_gen
+        script_data["voice_fallback_used"] = getattr(audio_gen, "VOICE_FALLBACK_USED", False)
         break  # Success
 
     if not audio_path or not script_data or duration < min_dur:
@@ -278,7 +281,10 @@ def run_pipeline(forced_category=None, dry_run=False):
             "thumbnail": thumbnail_variants[0]
         }
     else:
-        approved_choice = send_upload_consent(thumbnail_variants, title_variants, duration)
+        approved_choice = send_upload_consent(
+            thumbnail_variants, title_variants, duration,
+            voice_fallback_used=script_data.get("voice_fallback_used", False)
+        )
     
     if not approved_choice:
         log_message("❌ Upload skipped by user rejection or timeout.")

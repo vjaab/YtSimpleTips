@@ -1,15 +1,24 @@
 import os
+import sys
 import json
 import re
 import asyncio
 import shutil
 import subprocess
+import warnings
 from datetime import datetime
+
+# Filter user-facing warnings for clean output
+warnings.filterwarnings("ignore")
+
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
     KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR
 )
 from kaggle_handover import trigger_kaggle_gpu_job
+
+# Global status tracking for voice fallback
+VOICE_FALLBACK_USED = False
 
 def _apply_stable_ts(audio_path, text):
     """
@@ -49,13 +58,10 @@ def _apply_stable_ts(audio_path, text):
 def trim_audio_silence(path, word_timestamps):
     """
     Trims silence from the start and end of the audio file,
-    applies professional filters (noise reduction, EQ/treble, highpass),
-    normalizes volume to avoid clipping,
     and shifts all word timestamps so that the first word starts at 0.0s.
     """
     from pydub import AudioSegment
     from pydub.silence import detect_leading_silence
-    from pydub.effects import normalize
 
     audio = AudioSegment.from_file(path)
     
@@ -73,43 +79,9 @@ def trim_audio_silence(path, word_timestamps):
     else:
         trimmed_audio = audio[start_trim:duration-end_trim]
     
-    # Save trimmed audio to temp format so we can process it with FFmpeg
+    # Save trimmed audio
     ext = os.path.splitext(path)[1]
     trimmed_audio.export(path, format=ext[1:])
-    
-    # Apply FFmpeg audio filters for professional voiceover cleaning & mastering:
-    # 1. afftdn: FFT denoiser to eliminate background hiss/static
-    # 2. highpass=f=80: filter out low-frequency electronic/AC hum
-    # 3. equalizer: boost vocal presence/articulation around 3.5kHz by 3dB
-    # 4. treble: shelving filter to boost high-end air/clarity above 6kHz by 3dB
-    temp_path = path + f".filtered{ext}"
-    try:
-        filter_str = "afftdn,highpass=f=80,equalizer=f=4000:width_type=h:width=2000:g=4,treble=g=3:f=6000"
-        cmd = [
-            "ffmpeg", "-y",
-            "-i", path,
-            "-af", filter_str,
-            temp_path
-        ]
-        subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-        if os.path.exists(temp_path):
-            shutil.copy(temp_path, path)
-            os.remove(temp_path)
-            print("✨ [audio_gen] Applied professional noise reduction, highpass, presence EQ, and treble boost.")
-    except Exception as e:
-        print(f"⚠️ [audio_gen] FFmpeg voice enhancement failed: {e}")
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-            
-    # Load the filtered audio and apply peak-normalization to -1.5 dBFS.
-    # This maximizes vocal volume without causing any digital clipping.
-    try:
-        filtered_audio = AudioSegment.from_file(path)
-        normalized_audio = normalize(filtered_audio, headroom=1.5)
-        normalized_audio.export(path, format=ext[1:])
-        trimmed_audio = normalized_audio
-    except Exception as e:
-        print(f"⚠️ [audio_gen] Audio normalization failed: {e}")
     
     new_dur = len(trimmed_audio) / 1000.0
 
@@ -127,20 +99,18 @@ def trim_audio_silence(path, word_timestamps):
                 "end": min(w_end, new_dur)
             })
     
-    print(f"🔊 Audio trimmed & mastered: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
+    print(f"🔊 Audio trimmed: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 
-def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.60, target_gap_s=0.35):
+def optimize_audio_gaps(audio_path, word_timestamps):
     """
     Detects silent gaps between words and shortens them to keep the pacing
-    tight for high-retention Shorts. Uses gentle thresholds to avoid
-    cutting words or creating choppy speech.
+    tight for high-retention Shorts.
     """
     from pydub import AudioSegment
     try:
         audio = AudioSegment.from_file(audio_path)
         
-        # Find gaps and shorten only those exceeding max_gap_s
         modified = False
         segments = []
         last_end_ms = 0
@@ -149,28 +119,60 @@ def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.60, target_gap_
             start_ms = int(ws["start"] * 1000)
             end_ms = int(ws["end"] * 1000)
             
-            gap_ms = start_ms - last_end_ms
-            gap_s = gap_ms / 1000.0
-            
-            if gap_s > max_gap_s and last_end_ms > 0:
-                # Shorten this gap to target_gap_s
+            if last_end_ms > 0:
+                gap_ms = start_ms - last_end_ms
+                gap_s = gap_ms / 1000.0
+                
+                # Determine target gap
+                if gap_s > 0.5:
+                    target_gap_s = 0.25
+                elif 0.3 < gap_s <= 0.5:
+                    target_gap_s = 0.20
+                else:
+                    target_gap_s = gap_s  # leave untouched
+                
+                # Enforce minimum gap of 0.15s (150ms)
+                if target_gap_s < 0.15:
+                    target_gap_s = 0.15
+                    
                 target_gap_ms = int(target_gap_s * 1000)
-                # Keep a small portion of the original silence for naturalness
-                segments.append(audio[last_end_ms:last_end_ms + target_gap_ms])
-                # Adjust timestamps for all subsequent words
-                reduction_ms = gap_ms - target_gap_ms
-                for j in range(i, len(word_timestamps)):
-                    word_timestamps[j]["start"] = max(0, word_timestamps[j]["start"] - reduction_ms / 1000.0)
-                    word_timestamps[j]["end"] = max(0, word_timestamps[j]["end"] - reduction_ms / 1000.0)
-                modified = True
+                
+                # If target_gap_ms is different from original gap_ms, we compress/expand it
+                if target_gap_ms != gap_ms:
+                    reduction_ms = gap_ms - target_gap_ms
+                    
+                    if target_gap_ms < gap_ms:
+                        # Compress: append a chunk of original silence of length target_gap_ms
+                        segments.append(audio[last_end_ms:last_end_ms + target_gap_ms])
+                    else:
+                        # Expand: append the original silence plus extra silence
+                        extra_silence_ms = target_gap_ms - gap_ms
+                        if extra_silence_ms > 0:
+                            silence_seg = AudioSegment.silent(duration=extra_silence_ms, frame_rate=audio.frame_rate)
+                            silence_seg = silence_seg.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
+                            segments.append(audio[last_end_ms:start_ms] + silence_seg)
+                        else:
+                            segments.append(audio[last_end_ms:start_ms])
+                            
+                    # Adjust timestamps for all subsequent words
+                    for j in range(i, len(word_timestamps)):
+                        word_timestamps[j]["start"] = max(0.0, round(word_timestamps[j]["start"] - reduction_ms / 1000.0, 3))
+                        word_timestamps[j]["end"] = max(0.0, round(word_timestamps[j]["end"] - reduction_ms / 1000.0, 3))
+                    
+                    if reduction_ms != 0:
+                        modified = True
+                else:
+                    # No modification needed
+                    if last_end_ms < start_ms:
+                        segments.append(audio[last_end_ms:start_ms])
             else:
-                # Keep the gap as-is
+                # First word, just append silence before it if any
                 if last_end_ms < start_ms:
                     segments.append(audio[last_end_ms:start_ms])
             
             segments.append(audio[start_ms:end_ms])
             last_end_ms = end_ms
-        
+            
         # Add any remaining audio after the last word
         if last_end_ms < len(audio):
             remaining = audio[last_end_ms:]
@@ -178,7 +180,7 @@ def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.60, target_gap_
             if len(remaining) > 300:
                 remaining = remaining[:300]
             segments.append(remaining)
-        
+            
         if modified and segments:
             combined = segments[0]
             for seg in segments[1:]:
@@ -191,7 +193,7 @@ def optimize_audio_gaps(audio_path, word_timestamps, max_gap_s=0.60, target_gap_
             new_duration = len(combined) / 1000.0
             print(f"✂️ [audio_gen] Gap optimization: tightened pacing. New duration: {new_duration:.2f}s")
             return new_duration, word_timestamps
-        
+            
         duration = len(audio) / 1000.0
         return duration, word_timestamps
     except Exception as e:
@@ -222,76 +224,315 @@ def get_audio_duration(path):
 
 def clean_tts_text(text):
     """Strips AI meta directions and bracket symbols from voice script."""
-    cleaned = re.sub(r'\[[^\]]*\]|\([^)]*\)', '', text)
-    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
-    return cleaned
+    return preprocess_script_for_tts(text)
 
-# ── FALLBACK 1: ElevenLabs Multilingual (Your Cloned Voice in Tamil) ──
-def _generate_elevenlabs(text, output_path):
-    print("📡 [audio_gen] Trying Fallback 1: ElevenLabs Turbo v2.5 (Cloned Voice)...")
-    if not ELEVENLABS_API_KEY:
-        print("   ✗ ElevenLabs API Key missing.")
-        return None, 0, []
+def preprocess_script_for_tts(text: str) -> str:
+    if not text:
+        return ""
+    # Strip brackets/parentheses
+    text = re.sub(r'\[[^\]]*\]|\([^)]*\)', '', text)
+    # Replace "..." with ", "
+    text = text.replace("...", ", ")
+    # Replace " - " with ", "
+    text = text.replace(" - ", ", ")
+    # Replace newlines "\n" with " "
+    text = text.replace("\n", " ")
+    # Replace "%" with " percent"
+    text = text.replace("%", " percent")
+    
+    # Replace numbers > 999 with word form (without commas)
+    def replace_num(match):
+        raw = match.group(0)
+        clean = raw.replace(',', '')
+        try:
+            val = int(clean)
+            if val > 999:
+                return clean
+        except ValueError:
+            pass
+        return raw
+    text = re.sub(r'\b\d{1,3}(?:,\d{3})+\b|\b\d{4,}\b', replace_num, text)
+    
+    # Remove all markdown: **, *, #, _, ~
+    text = re.sub(r'[*#_~]', '', text)
+    # Replace double spaces with single space
+    text = re.sub(r'\s+', ' ', text)
+    # Strip leading/trailing whitespace
+    text = text.strip()
+    # Ensure text ends with "."
+    if text and not text[-1] in ('.', '!', '?'):
+        text += "."
         
+    return re.sub(r'\s+', ' ', text).strip()
+
+def split_text_into_chunks(text: str) -> list[str]:
+    # Split on sentence-ending punctuation: ".", "!", "?"
+    sentences = re.split(r'([.!?]+)', text)
+    sentence_list = []
+    
+    # Reassemble sentences with punctuation
+    for i in range(0, len(sentences) - 1, 2):
+        s = sentences[i].strip()
+        punc = sentences[i+1]
+        if s:
+            sentence_list.append(s + punc)
+    if len(sentences) % 2 == 1:
+        s = sentences[-1].strip()
+        if s:
+            sentence_list.append(s)
+            
+    chunks = []
+    current_chunk = []
+    for sent in sentence_list:
+        current_chunk.append(sent)
+        if len(current_chunk) == 2:  # Group 2 sentences per chunk
+            chunks.append(" ".join(current_chunk))
+            current_chunk = []
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+    return chunks
+
+def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
+    cleaned_text = preprocess_script_for_tts(text)
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    
+    data = {
+        "text": cleaned_text,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.90,
+            "style": 0.35,
+            "use_speaker_boost": True
+        }
+    }
+    
     try:
         import requests
-        voice_id = ELEVENLABS_VOICE_ID or "8Oo4d9mNNwVwK369qOwl"
-        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-        
-        headers = {
-            "Accept": "audio/mpeg",
-            "Content-Type": "application/json",
-            "xi-api-key": ELEVENLABS_API_KEY
-        }
-        
-        data = {
-            "text": text,
-            "model_id": "eleven_multilingual_v2", # Premium multilingual synthesis
-            "voice_settings": {
-                "stability": 0.75,      # Increased from 0.40 to prevent stuttering/repetitions
-                "similarity_boost": 0.75,
-                "speed": 1.05           # Reduced from 1.15 to sound more natural and fluid
-            }
-        }
-        
-        response = requests.post(url, json=data, headers=headers)
+        # Collect all chunks into a single bytes buffer
+        response = requests.post(url, json=data, headers=headers, params=params, stream=True)
         if response.status_code == 200:
-            with open(output_path, 'wb') as f:
-                f.write(response.content)
-            
-            duration = get_audio_duration(output_path)
-            word_timestamps = _apply_stable_ts(output_path, text)
-            if not word_timestamps:
-                word_timestamps = _estimate_timestamps(text, duration)
-            return output_path, duration, word_timestamps
+            audio_data = b""
+            for chunk in response.iter_content(chunk_size=4096):
+                if chunk:
+                    audio_data += chunk
+            return audio_data
         else:
-            print(f"   ✗ ElevenLabs API error: {response.text}")
-            return None, 0, []
+            print(f"   ✗ ElevenLabs API error: {response.status_code} - {response.text}")
+            return None
     except Exception as e:
-        print(f"   ✗ ElevenLabs failed: {e}")
-        return None, 0, []
+        print(f"   ✗ ElevenLabs chunk synthesis failed: {e}")
+        return None
 
-# ── FALLBACK 2: Edge TTS Tamil (Free, cloud-based last resort) ──
+def _generate_elevenlabs(text, output_path):
+    print("📡 [audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
+    if not ELEVENLABS_API_KEY:
+        print("   ✗ ElevenLabs API Key missing.")
+        return None
+        
+    voice_id = ELEVENLABS_VOICE_ID or "8Oo4d9mNNwVwK369qOwl"
+    headers = {
+        "Content-Type": "application/json",
+        "xi-api-key": ELEVENLABS_API_KEY
+    }
+    params = {
+        "output_format": "pcm_44100"
+    }
+    
+    words = text.split()
+    if len(words) > 50:
+        print(f"📝 Long script detected ({len(words)} words). Using chunked synthesis...")
+        chunks = split_text_into_chunks(text)
+        print(f"👉 Split script into {len(chunks)} chunks.")
+        
+        all_pcm_bytes = b""
+        silence_samples = int(44100 * 0.080)  # exactly 80ms silence
+        silence_bytes = b'\x00' * (silence_samples * 2)  # 16-bit mono
+        
+        for idx, chunk in enumerate(chunks):
+            print(f"🎙️ Synthesizing chunk {idx+1}/{len(chunks)}...")
+            chunk_pcm = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
+            if not chunk_pcm:
+                print(f"   ✗ Failed to synthesize chunk {idx+1}")
+                return None
+            if idx > 0:
+                all_pcm_bytes += silence_bytes
+            all_pcm_bytes += chunk_pcm
+    else:
+        print("🎙️ Script is short. Synthesizing as a single ElevenLabs chunk...")
+        all_pcm_bytes = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
+        if not all_pcm_bytes:
+            return None
+            
+    try:
+        from pydub import AudioSegment
+        audio_seg = AudioSegment(data=all_pcm_bytes, sample_width=2, frame_rate=44100, channels=1)
+        audio_seg.export(output_path, format="wav")
+        return output_path
+    except Exception as e:
+        print(f"   ✗ ElevenLabs output conversion failed: {e}")
+        return None
+
 async def _async_generate_edge_tts(text, output_path):
     import edge_tts
-    # ta-IN-ValluvarNeural is an excellent, warm male Tamil narrator voice
     communicate = edge_tts.Communicate(text, "ta-IN-ValluvarNeural", rate="+8%")
     await communicate.save(output_path)
 
 def _generate_edge_tts(text, output_path):
-    print("📡 [audio_gen] Trying Fallback 2: Edge TTS Tamil (ta-IN-ValluvarNeural)...")
+    print("📡 [audio_gen] Synthesizing with Edge TTS (ta-IN-ValluvarNeural)...")
     try:
         asyncio.run(_async_generate_edge_tts(text, output_path))
-        duration = get_audio_duration(output_path)
-        word_timestamps = _apply_stable_ts(output_path, text)
-        if not word_timestamps:
-            word_timestamps = _estimate_timestamps(text, duration)
-        return output_path, duration, word_timestamps
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            return output_path
     except Exception as e:
         print(f"   ✗ Edge TTS failed: {e}")
-        return None, 0, []
+    return None
 
-# ── MAIN ENTRY POINT ──
+def detect_audio_breaks(audio_path: str) -> list[tuple]:
+    """
+    Loads audio with librosa (sr=44100, mono=True)
+    Computes RMS energy in 10ms windows (441 samples at 44.1kHz)
+    Flags any contiguous silence where RMS < 0.005 and duration > 150ms as a "break".
+    Returns a list of (start_time_ms, end_time_ms).
+    """
+    import librosa
+    try:
+        y, sr = librosa.load(audio_path, sr=44100, mono=True)
+    except Exception as e:
+        print(f"⚠️ [audio_gen] Failed to load audio in librosa: {e}")
+        return []
+        
+    frame_length = 441
+    hop_length = 441
+    
+    rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)
+    rms_values = rms[0]
+    num_frames = len(rms_values)
+    
+    breaks = []
+    in_break = False
+    break_start_frame = None
+    
+    for i in range(num_frames):
+        is_silent = rms_values[i] < 0.005
+        if is_silent:
+            if not in_break:
+                in_break = True
+                break_start_frame = i
+        else:
+            if in_break:
+                duration_ms = (i - break_start_frame) * 10.0
+                if duration_ms > 150.0:
+                    start_time = break_start_frame * 10.0
+                    end_time = i * 10.0
+                    breaks.append((start_time, end_time))
+                in_break = False
+                
+    if in_break:
+        duration_ms = (num_frames - break_start_frame) * 10.0
+        if duration_ms > 150.0:
+            start_time = break_start_frame * 10.0
+            end_time = num_frames * 10.0
+            breaks.append((start_time, end_time))
+            
+    return breaks
+
+def fix_audio_breaks(audio_path: str, breaks: list) -> str:
+    """
+    Compresses or removes silent breaks in the audio using pydub.
+    - If break duration < 300ms: replace with 60ms silence.
+    - If break duration >= 300ms: remove entirely and crossfade adjacent segments with 20ms linear fade.
+    """
+    if not breaks:
+        return audio_path
+        
+    from pydub import AudioSegment
+    try:
+        audio = AudioSegment.from_file(audio_path)
+    except Exception as e:
+        print(f"⚠️ [audio_gen] Failed to read audio with pydub: {e}")
+        return audio_path
+        
+    # Process from end to start (reverse order) so timestamps remain valid
+    for start_ms, end_ms in reversed(breaks):
+        start_ms = int(start_ms)
+        end_ms = int(end_ms)
+        duration_ms = end_ms - start_ms
+        
+        left_part = audio[:start_ms]
+        right_part = audio[end_ms:]
+        
+        if duration_ms < 300:
+            # Replace with 60ms silence
+            silence_gap = AudioSegment.silent(duration=60, frame_rate=audio.frame_rate)
+            silence_gap = silence_gap.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
+            audio = left_part + silence_gap + right_part
+        else:
+            # Remove entirely and crossfade adjacent segments with 20ms linear fade
+            if len(left_part) >= 20 and len(right_part) >= 20:
+                audio = left_part.append(right_part, crossfade=20)
+            else:
+                audio = left_part + right_part
+                
+    audio.export(audio_path, format="wav")
+    return audio_path
+
+def apply_mastering_chain(audio_path: str) -> None:
+    """
+    Applies the exact professional FFmpeg mastering filter chain for vocal clarity.
+    Uses t=h (Hz width type) instead of t=o (octave) because widths of 200, 800, 2000
+    are Hz values; using octave (t=o) causes coefficient corruption and silence.
+    Also appends aresample=44100 to ensure sample rate is exactly 44100 Hz.
+    """
+    temp_path = audio_path + ".mastered.wav"
+    filter_str = (
+        "highpass=f=80,"  # removes low-frequency rumble below 80Hz
+        "lowpass=f=12000,"  # removes harsh air above 12kHz that TTS adds
+        "afftdn=nf=-25,"  # noise floor reduction at -25dB (gentler than current)
+        "equalizer=f=200:t=h:w=200:g=-3,"  # cut muddy low-mids
+        "equalizer=f=2500:t=h:w=800:g=+4,"  # boost vocal presence (clarity range)
+        "equalizer=f=8000:t=h:w=2000:g=+2,"  # subtle air/brightness
+        "acompressor=threshold=0.1:ratio=4:attack=5:release=50:makeup=2,"  # dynamic compression for consistent volume
+        "loudnorm=I=-14:TP=-1.5:LRA=7,"  # normalize to YouTube Shorts standard (-14 LUFS)
+        "aresample=44100"  # ensure sample rate is exactly 44100 Hz
+    )
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", audio_path,
+        "-af", filter_str,
+        "-ar", "44100",
+        temp_path
+    ]
+    try:
+        print(f"🎛️ [audio_gen] Applying FFmpeg mastering chain to {audio_path}...")
+        subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        if os.path.exists(temp_path):
+            shutil.copy(temp_path, audio_path)
+            os.remove(temp_path)
+            print("✨ [audio_gen] FFmpeg mastering chain applied successfully.")
+    except Exception as e:
+        print(f"⚠️ [audio_gen] FFmpeg mastering chain failed: {e}")
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
+def upsample_audio_to_44100(audio_path: str) -> None:
+    """
+    Upsamples the audio file to 44100 Hz using librosa.resample with res_type='kaiser_best'.
+    """
+    import librosa
+    import soundfile as sf
+    print(f"🔄 [audio_gen] Upsampling {audio_path} to 44100 Hz using kaiser_best...")
+    try:
+        y, sr = librosa.load(audio_path, sr=None)  # Load at original sample rate
+        if sr != 44100:
+            y_resampled = librosa.resample(y, orig_sr=sr, target_sr=44100, res_type='kaiser_best')
+            sf.write(audio_path, y_resampled, 44100)
+            print(f"✅ [audio_gen] Upsampled from {sr} Hz to 44100 Hz.")
+        else:
+            print(f"ℹ️ [audio_gen] Audio is already 44100 Hz.")
+    except Exception as e:
+        print(f"⚠️ [audio_gen] Upsampling failed: {e}")
+
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
     Generates Tamil/Tanglish voiceover with 3-tier fallback architecture:
@@ -299,55 +540,174 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     2. Fallback 1: Kaggle GPU offloaded IndicF5 Voice Cloning (Local vj.wav)
     3. Fallback 2: Edge TTS Tamil (Free cloud narrator)
     """
-    clean_text = clean_tts_text(text)
+    clean_text = preprocess_script_for_tts(text)
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
+    global VOICE_FALLBACK_USED
+    VOICE_FALLBACK_USED = False
+    
+    path = None
+    is_indic_f5 = False
+    
     # ── PRIMARY: ELEVENLABS CLONED VOICE ──
-    path, dur, word_timestamps = _generate_elevenlabs(clean_text, wav_path)
-    if path:
-        dur, word_timestamps = trim_audio_silence(path, word_timestamps)
-        dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
-        print(f"⭐ [audio_gen] ElevenLabs primary generation successful: {path}")
-        return path, dur, word_timestamps
-    else:
+    path = _generate_elevenlabs(clean_text, wav_path)
+    if not path:
         print("⚠️ ElevenLabs primary generation failed. Triggering Fallback 1 (Kaggle GPU)...")
-
-    # ── FALLBACK 1: KAGGLE GPU JOB ──
-    if KAGGLE_USERNAME and KAGGLE_KEY:
-        print("🎙️ [audio_gen] Running Fallback 1: Kaggle GPU IndicF5 Voice Cloning...")
-        script_payload = {"script": clean_text}
-        
-        job_result = trigger_kaggle_gpu_job(script_payload, custom_phonetic_map)
-        
-        if job_result and "error" not in job_result:
-            local_wav = job_result.get("audio_path")
-            word_timestamps = job_result.get("word_timestamps", [])
-            duration = job_result.get("duration", 0)
+        # ── FALLBACK 1: KAGGLE GPU JOB ──
+        if KAGGLE_USERNAME and KAGGLE_KEY:
+            print("🎙️ [audio_gen] Running Fallback 1: Kaggle GPU IndicF5 Voice Cloning...")
+            script_payload = {"script": clean_text}
             
-            # Copy to targeted local wav path
-            if local_wav and os.path.exists(local_wav):
-                shutil.copy(local_wav, wav_path)
-                
-                # Apply local post-processing & gap optimization
-                if word_timestamps:
-                    duration, word_timestamps = trim_audio_silence(wav_path, word_timestamps)
-                    duration, word_timestamps = optimize_audio_gaps(wav_path, word_timestamps)
-                    
-                print(f"⭐ [audio_gen] Successfully generated voiceover using IndicF5 on Kaggle: {wav_path} ({duration:.2f}s)")
-                return wav_path, duration, word_timestamps
+            job_result = trigger_kaggle_gpu_job(script_payload, custom_phonetic_map)
+            
+            if job_result and "error" not in job_result:
+                local_wav = job_result.get("audio_path")
+                if local_wav and os.path.exists(local_wav):
+                    shutil.copy(local_wav, wav_path)
+                    path = wav_path
+                    is_indic_f5 = True
+                else:
+                    print("⚠️ Kaggle job succeeded but audio file not found. Falling back...")
             else:
-                print("⚠️ Kaggle job succeeded but audio file not found. Falling back...")
+                reason = job_result.get("message") if job_result else "Unknown Kaggle error"
+                print(f"⚠️ Kaggle GPU voice cloning failed: {reason}. Triggering Fallback 2...")
+        
+        if not path:
+            # ── FALLBACK 2: EDGE TTS TAMIL ──
+            VOICE_FALLBACK_USED = True
+            print("⚠️ Edge TTS fallback active — voice clone not matched")
+            path = _generate_edge_tts(clean_text, wav_path)
+            
+    if not path:
+        raise RuntimeError("🚨 ALL audio generation methods failed! Aborting pipeline.")
+        
+    # ── UNIFIED POST-PROCESSING PIPELINE ──
+    
+    # Step 1: Upsample if IndicF5 was used
+    if is_indic_f5:
+        upsample_audio_to_44100(path)
+        
+    # Step 2: Run break detection and fixing before mastering
+    breaks = detect_audio_breaks(path)
+    print(f"🔍 [audio_gen] Detected {len(breaks)} audio breaks.")
+    if breaks:
+        path = fix_audio_breaks(path, breaks)
+        print(f"🛠️ [audio_gen] Fixed {len(breaks)} audio breaks.")
+        
+    # Step 3: Run stable-ts to get real word timestamps (or estimate)
+    dur = get_audio_duration(path)
+    word_timestamps = _apply_stable_ts(path, clean_text)
+    if not word_timestamps:
+        word_timestamps = _estimate_timestamps(clean_text, dur)
+        
+    # Step 4: Apply professional FFmpeg mastering chain
+    apply_mastering_chain(path)
+    
+    # Step 5: Trim audio silence and optimize gaps
+    dur, word_timestamps = trim_audio_silence(path, word_timestamps)
+    dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
+    
+    # Final warning log if voice fallback was used
+    if VOICE_FALLBACK_USED:
+        print("⚠️ WARNING: Edge TTS fallback active — voice clone not matched")
+        
+    print(f"⭐ [audio_gen] Audio generation and processing complete. Path: {path}, Duration: {dur:.2f}s")
+    return path, dur, word_timestamps
+
+def measure_loudness_and_peaks(audio_path: str) -> tuple[float, float, int]:
+    """
+    Measures the Integrated Loudness (LUFS), True Peak (TP), and Sample Rate of the audio.
+    Returns (lufs, true_peak, sample_rate).
+    """
+    import soundfile as sf
+    sample_rate = 0
+    try:
+        info = sf.info(audio_path)
+        sample_rate = info.samplerate
+    except Exception:
+        pass
+        
+    cmd = [
+        "ffmpeg", "-i", audio_path,
+        "-filter_complex", "ebur128=peak=true",
+        "-f", "null", "-"
+    ]
+    
+    lufs = -99.9
+    true_peak = -99.9
+    
+    try:
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        stderr = res.stderr
+        
+        # Parse Integrated loudness (I:)
+        i_match = re.search(r'I:\s+([-\d.]+)\s+LUFS', stderr)
+        if i_match:
+            lufs = float(i_match.group(1))
+            
+        # Parse True peak (Peak:)
+        tp_match = re.search(r'Peak:\s+([-\d.]+)\s+dBFS', stderr)
+        if tp_match:
+            true_peak = float(tp_match.group(1))
+            
+    except Exception as e:
+        print(f"⚠️ Failed to measure audio metrics with FFmpeg: {e}")
+        
+    return lufs, true_peak, sample_rate
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Audio Generation Module")
+    parser.add_argument("--test-audio", action="store_true", help="Run audio mastering dry-run test")
+    args = parser.parse_args()
+    
+    if args.test_audio:
+        print("🧪 Starting Dry-Run Audio Quality & Mastering Test...")
+        test_text = "Vanakkam, ithellam theriyuma? Simple Tips by VJ."
+        test_wav = os.path.join(OUTPUT_DIR, "test_output.wav")
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        
+        print(f"📝 Test text: '{test_text}'")
+        
+        # 1. Synthesize the text
+        clean_text = preprocess_script_for_tts(test_text)
+        path = _generate_elevenlabs(clean_text, test_wav)
+        if not path:
+            print("⚠️ ElevenLabs failed or not configured, using Edge TTS for dry-run test.")
+            path = _generate_edge_tts(clean_text, test_wav)
+            
+        if not path:
+            print("🚨 Test failed: Could not generate audio using ElevenLabs or Edge TTS fallback.")
+            sys.exit(1)
+            
+        # 2. Run break detection
+        breaks = detect_audio_breaks(path)
+        print(f"🔍 [Test] Detected breaks count: {len(breaks)}")
+        for idx, (start, end) in enumerate(breaks, 1):
+            print(f"   Break {idx}: {start:.1f}ms to {end:.1f}ms (duration: {end - start:.1f}ms)")
+            
+        # Fix breaks if any
+        if breaks:
+            path = fix_audio_breaks(path, breaks)
+            
+        # 3. Run mastering chain
+        apply_mastering_chain(path)
+        
+        # 4. Measure and print results
+        lufs, tp, sr = measure_loudness_and_peaks(path)
+        duration = get_audio_duration(path)
+        
+        print("\n📊 --- DRY-RUN AUDIO METRICS ---")
+        print(f"📂 Output File: {path}")
+        print(f"⏱️ Duration: {duration:.3f}s")
+        print(f"🔊 LUFS Level: {lufs} LUFS (Target: -14 LUFS)")
+        print(f"📈 True Peak: {tp} dBFS (Target: < -1.0 dBFS)")
+        print(f"Hz Sample Rate: {sr} Hz (Target: 44100 Hz)")
+        print("---------------------------------\n")
+        
+        if lufs == -99.9 or tp == -99.9:
+            print("⚠️ Metrics extraction incomplete. Make sure FFmpeg is installed and accessible.")
         else:
-            reason = job_result.get("message") if job_result else "Unknown Kaggle error"
-            print(f"⚠️ Kaggle GPU voice cloning failed: {reason}. Triggering Fallback 2...")
+            print("✅ Dry-run test completed.")
 
-    # ── FALLBACK 2: EDGE TTS TAMIL ──
-    path, dur, word_timestamps = _generate_edge_tts(clean_text, wav_path)
-    if path:
-        dur, word_timestamps = trim_audio_silence(path, word_timestamps)
-        dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
-        print(f"⭐ [audio_gen] Edge TTS fallback successful: {path}")
-        return path, dur, word_timestamps
-
-    raise RuntimeError("🚨 ALL audio generation methods failed! Aborting pipeline.")

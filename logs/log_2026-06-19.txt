@@ -68,3 +68,15 @@
 [09:02:59] 🎉 YouTube upload SUCCESS: https://youtu.be/AlIzALwn4IA
 [09:03:00] STEP 12: Cleaning up output files...
 [09:03:00] === PIPELINE COMPLETED SUCCESSFULLY ===
+[14:55:13] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[14:55:13]    - Story Continuity: 85%
+[14:55:13]    - Visual Alignment: 90%
+[14:55:13]    - Engagement: 95%
+[14:55:13]    - Transitions: 80%
+[14:55:13]    - Subtitle Timing: 85%
+[14:55:13] Aligning script text with subtitle chunks...
+[14:55:13] Selected Fact: Use Forest App to Stay Focused
+[14:55:13] Source URL: https://www.forestapp.cc/
+[14:55:13] STEP 3b: Capturing evidence screenshot (before audio for fast fail)...
+[14:55:14] ✅ Screenshot captured: /Users/vijayakumarjermansraj/Desktop/google_antigravity/yt_simple_tips/assets/screenshots/screenshot_20260619_145513.png
+[14:55:14] STEP 4: Generating Tamil cloned voiceover...

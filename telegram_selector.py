@@ -223,7 +223,7 @@ def _send_media_group(photo_paths, caption=""):
         for f in files.values():
             f.close()
 
-def send_upload_consent(thumbnail_paths, title_variants, duration_sec):
+def send_upload_consent(thumbnail_paths, title_variants, duration_sec, voice_fallback_used=False):
     """
     Sends all thumbnail variants and title options to Telegram.
     Presents an interactive inline keyboard allowing VJ to toggle selections
@@ -284,7 +284,7 @@ def send_upload_consent(thumbnail_paths, title_variants, duration_sec):
         
         t_letter = ["A", "B", "C"][state["thumb_idx"]]
         
-        return (
+        status_text = (
             f"🎬 <b>VJ Videos - Video Ready for Approval</b>\n\n"
             f"⏱ <b>Duration:</b> {dur_str}\n\n"
             f"📝 <b>Titles:</b>\n"
@@ -294,8 +294,12 @@ def send_upload_consent(thumbnail_paths, title_variants, duration_sec):
             f"👉 <b>Current Selection:</b>\n"
             f"• Title: Variant {state['title_idx'] + 1}\n"
             f"• Thumbnail: Variant {t_letter}\n\n"
-            f"⏳ <i>Auto-approving Title 1 & Thumbnail A in 5 minutes on timeout...</i>"
         )
+        if voice_fallback_used:
+            status_text += "⚠️ Voice fallback used — review before approving\n\n"
+            
+        status_text += "⏳ <i>Auto-approving Title 1 & Thumbnail A in 5 minutes on timeout...</i>"
+        return status_text
 
     # Send control message
     msg = _send_message(get_status_text(), reply_markup=get_keyboard_markup())
