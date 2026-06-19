@@ -87,7 +87,7 @@ Join our community!
 
     return templates[template_idx]
 
-def run_pipeline(forced_category=None):
+def run_pipeline(forced_category=None, dry_run=False):
     log_message("=== STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===")
 
     # ── Clean output folder before starting ──
@@ -265,18 +265,30 @@ def run_pipeline(forced_category=None):
 
     # ── STEP 8: Generate Custom Thumbnail ──
     log_message("STEP 8: Generating premium YouTube thumbnail...")
-    thumbnail_path = generate_thumbnail(script_data)
+    thumbnail_variants = generate_thumbnail(script_data)  # Generates 3 variants [pathA, pathB, pathC]
 
     # ── STEP 9: Telegram Verification & Consent ──
     log_message("STEP 9: Requesting VJ's upload approval via Telegram...")
-    approved = send_upload_consent(thumbnail_path, title, duration)
+    title_variants = script_data.get("title_variants", [title, title, title])
     
-    if not approved:
+    if dry_run:
+        log_message("⏳ [DRY-RUN] Simulating Telegram consent: Selecting Variant A and Title Variant 1...")
+        approved_choice = {
+            "title": title_variants[0],
+            "thumbnail": thumbnail_variants[0]
+        }
+    else:
+        approved_choice = send_upload_consent(thumbnail_variants, title_variants, duration)
+    
+    if not approved_choice:
         log_message("❌ Upload skipped by user rejection or timeout.")
         notify_telegram("❌ YouTube upload skipped. Video saved locally in output/.", "⚠️")
         return True
 
-    # ── STEP 10: YouTube Upload ──
+    selected_title = approved_choice["title"]
+    selected_thumbnail = approved_choice["thumbnail"]
+
+    # ── STEP 10: YouTube Upload & Instagram Reels Cross-post ──
     log_message("STEP 10: Uploading video to VJ Videos YouTube Channel...")
     ai_desc = script_data.get("description", "")
     hashtags = script_data.get("hashtags", ["#தெரியுமா", "#VJVideos"])
@@ -284,19 +296,34 @@ def run_pipeline(forced_category=None):
     
     tags = list(set(keywords + [t.replace("#", "") for t in hashtags] + ["Shorts", "SimpleTipsByVJ", "TamilTips"]))[:15]
     
-    uploaded, result = upload_video(
-        video_path, title, description, tags, 
-        thumbnail_path=thumbnail_path, comment_hook=script_data.get("comment_hook")
-    )
+    if dry_run:
+        log_message("🚀 [DRY-RUN] Simulating YouTube Upload and Instagram Reels cross-posting...")
+        # Verify video crop logic by running ffmpeg crop
+        from youtube_upload import crop_for_instagram
+        try:
+            cropped_path = crop_for_instagram(video_path)
+            log_message(f"✅ [DRY-RUN] Verified Instagram video crop: {cropped_path}")
+            if os.path.exists(cropped_path):
+                os.remove(cropped_path)
+        except Exception as ce:
+            log_message(f"❌ [DRY-RUN] Instagram crop verification failed: {ce}")
+        uploaded, result = True, "dry_run_video_id"
+    else:
+        uploaded, result = upload_video(
+            video_path, selected_title, description, tags, 
+            thumbnail_path=selected_thumbnail, comment_hook=script_data.get("comment_hook"),
+            comment_bait_question=script_data.get("comment_bait_question")
+        )
     
     if not uploaded:
         log_message(f"❌ YouTube upload failed: {result}")
         notify_telegram(f"❌ YouTube upload failed: {result}", "🚨")
         return False
 
-    youtube_url = f"https://youtu.be/{result}"
+    youtube_url = f"https://youtu.be/{result}" if not dry_run else "https://youtu.be/dry_run_video_id"
     log_message(f"🎉 YouTube upload SUCCESS: {youtube_url}")
-    notify_telegram(f"🚀 Video is now LIVE on VJ Videos!\n\n📌 <b>{title}</b>\n🔗 {youtube_url}", "✅")
+    if not dry_run:
+        notify_telegram(f"🚀 Video is now LIVE on VJ Videos!\n\n📌 <b>{selected_title}</b>\n🔗 {youtube_url}", "✅")
 
     # ── STEP 11: Update URL in tracker ──
     update_youtube_url(fact_headline, youtube_url)
@@ -315,8 +342,8 @@ def run_pipeline(forced_category=None):
     log_message("=== PIPELINE COMPLETED SUCCESSFULLY ===")
     return True
 
-def run_local(category=None):
-    success = run_pipeline(forced_category=category)
+def run_local(category=None, dry_run=False):
+    success = run_pipeline(forced_category=category, dry_run=dry_run)
     if not success:
         print("❌ Pipeline failed.")
         sys.exit(1)
@@ -325,10 +352,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--now", action="store_true", help="Run pipeline immediately.")
     parser.add_argument("--category", type=str, default=None, help="Force a specific daily category")
+    parser.add_argument("--dry-run", action="store_true", help="Run dry run verification.")
     args = parser.parse_args()
 
     if args.now:
-        run_local(category=args.category)
+        run_local(category=args.category, dry_run=args.dry_run)
     else:
         print("Usage: python main.py --now")
         print("For scheduled runs: python scheduler.py")

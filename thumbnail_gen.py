@@ -444,6 +444,48 @@ def _layout_clean_modern(canvas, draw, title, headline, accent_color, secondary_
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# ── LAYOUT E: "SPLIT SCREEN" (Variant C comparison) ──────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _layout_split_screen(canvas, draw, title, headline, accent_color, secondary_color, cat_emoji):
+    """Draws a vertical separation line with BEFORE and AFTER text badges, and title."""
+    r, g, b = accent_color
+    
+    # Draw vertical divider line
+    draw.line([THUMB_W // 2, 0, THUMB_W // 2, THUMB_H], fill=(r, g, b, 255), width=6)
+    
+    # BEFORE label on left side
+    font_badge = get_font_for_text("BEFORE", 32, "extrabold")
+    draw.rounded_rectangle([40, 40, 200, 90], radius=10, fill=(220, 20, 60, 255))
+    draw.text((60, 45), "BEFORE", fill=(255, 255, 255, 255), font=font_badge)
+    
+    # AFTER label on right side
+    draw.rounded_rectangle([THUMB_W - 200, 40, THUMB_W - 40, 90], radius=10, fill=(50, 205, 50, 255))
+    draw.text((THUMB_W - 175, 45), "AFTER", fill=(255, 255, 255, 255), font=font_badge)
+    
+    # Standard title overlay in the bottom portion
+    hook_lines = [title]
+    if len(title) > 22:
+        words = title.split()
+        mid = len(words) // 2
+        hook_lines = [" ".join(words[:mid]), " ".join(words[mid:])]
+        
+    y = THUMB_H - 180
+    for line in hook_lines[:2]:
+        font_title = get_font_for_text(line, 50, "extrabold")
+        bbox = font_title.getbbox(line)
+        lw, lh = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        lx = (THUMB_W - lw) // 2
+        # Dark translucent backing plate
+        draw.rounded_rectangle([lx - 20, y - 5, lx + lw + 20, y + lh + 10], radius=12, fill=(10, 10, 15, 220))
+        draw.text((lx+2, y+2), line, fill=(0, 0, 0, 200), font=font_title)
+        draw.text((lx, y), line, fill=(255, 255, 255, 255), font=font_title)
+        y += lh + 20
+        
+    return canvas
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # ── MAIN THUMBNAIL GENERATOR ─────────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -458,37 +500,69 @@ _LAYOUT_REGISTRY = [
 
 def generate_thumbnail(script_json):
     """
-    Generates a CTR-boosting infotainment thumbnail.
-    Randomly selects from 4 layout variants for natural A/B testing.
-    Uses category-specific color palettes for brand consistency.
+    Generates three CTR-boosting infotainment thumbnail variants:
+    - Variant A: Current style (anime background visual + text layout).
+    - Variant B: Close-up anime character face with high-contrast text overlay.
+    - Variant C: Split-screen comparison layout (before/after).
+    Returns [pathA, pathB, pathC].
     """
     title = script_json.get("title", "சுவாரசியமான தகவல்")
     headline = script_json.get("original_news_headline", title)
-    
-    # Resolve category colors
     accent_color, secondary_color, cat_emoji = _get_accent_colors(script_json)
     
-    # 1. Fetch Background
-    bg = _generate_imagen_background(headline)
-    canvas = bg.resize((THUMB_W, THUMB_H), Image.LANCZOS)
-    draw = ImageDraw.Draw(canvas)
-    
-    # 2. Select layout variant randomly
-    layout_name, layout_fn = random.choice(_LAYOUT_REGISTRY)
-    print(f"🎨 [thumbnail] Selected layout: {layout_name}")
-    
-    # 3. Apply the selected layout
-    canvas = layout_fn(canvas, draw, title, headline, accent_color, secondary_color, cat_emoji)
-    draw = ImageDraw.Draw(canvas)
-    
-    # 4. Common branding strip on bottom (all layouts)
-    r, g, b = accent_color
-    draw.rectangle([0, THUMB_H-6, THUMB_W, THUMB_H], fill=(r, g, b, 255))
-    
-    # Save JPEG
     today_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_path = os.path.join(OUTPUT_DIR, f"thumbnail_{today_str}.jpg")
-    canvas.save(out_path, "JPEG", quality=95)
-    print(f"🎉 [thumbnail] Custom thumbnail ({layout_name}) saved to: {out_path}")
+    paths = []
     
-    return out_path
+    # ── VARIANT A: CURRENT STYLE ──
+    print("🎨 Generating Thumbnail Variant A (Standard)...")
+    bg_a = _generate_imagen_background(headline)
+    canvas_a = bg_a.resize((THUMB_W, THUMB_H), Image.LANCZOS)
+    draw_a = ImageDraw.Draw(canvas_a)
+    layout_name_a, layout_fn_a = random.choice(_LAYOUT_REGISTRY)
+    canvas_a = layout_fn_a(canvas_a, draw_a, title, headline, accent_color, secondary_color, cat_emoji)
+    
+    # Add bottom accent branding bar
+    r, g, b = accent_color
+    draw_a = ImageDraw.Draw(canvas_a)
+    draw_a.rectangle([0, THUMB_H-6, THUMB_W, THUMB_H], fill=(r, g, b, 255))
+    
+    out_path_a = os.path.join(OUTPUT_DIR, f"thumbnail_{today_str}_A.jpg")
+    canvas_a.save(out_path_a, "JPEG", quality=95)
+    paths.append(out_path_a)
+    print(f"✅ Variant A saved to: {out_path_a}")
+    
+    # ── VARIANT B: CLOSE-UP PORTRAIT ──
+    print("🎨 Generating Thumbnail Variant B (Close-up Face)...")
+    bg_prompt_b = f"Close-up of a shocked South Indian Tamil anime character looking at the screen, clean modern anime illustration style, dramatic neon lighting, {headline}"
+    bg_b = _generate_imagen_background(bg_prompt_b)
+    canvas_b = bg_b.resize((THUMB_W, THUMB_H), Image.LANCZOS)
+    draw_b = ImageDraw.Draw(canvas_b)
+    # For Variant B, use either Spotlight Focus or Mystery Box to highlight the face
+    layout_fn_b = random.choice([_layout_mystery_box, _layout_spotlight_focus])
+    canvas_b = layout_fn_b(canvas_b, draw_b, title, headline, accent_color, secondary_color, cat_emoji)
+    
+    draw_b = ImageDraw.Draw(canvas_b)
+    draw_b.rectangle([0, THUMB_H-6, THUMB_W, THUMB_H], fill=(r, g, b, 255))
+    
+    out_path_b = os.path.join(OUTPUT_DIR, f"thumbnail_{today_str}_B.jpg")
+    canvas_b.save(out_path_b, "JPEG", quality=95)
+    paths.append(out_path_b)
+    print(f"✅ Variant B saved to: {out_path_b}")
+    
+    # ── VARIANT C: SPLIT-SCREEN COMPARISON ──
+    print("🎨 Generating Thumbnail Variant C (Split-Screen)...")
+    bg_prompt_c = f"A split screen comparison showing a bad state on the left and a perfect good state on the right, modern anime illustration style, high contrast, {headline}"
+    bg_c = _generate_imagen_background(bg_prompt_c)
+    canvas_c = bg_c.resize((THUMB_W, THUMB_H), Image.LANCZOS)
+    draw_c = ImageDraw.Draw(canvas_c)
+    canvas_c = _layout_split_screen(canvas_c, draw_c, title, headline, accent_color, secondary_color, cat_emoji)
+    
+    draw_c = ImageDraw.Draw(canvas_c)
+    draw_c.rectangle([0, THUMB_H-6, THUMB_W, THUMB_H], fill=(r, g, b, 255))
+    
+    out_path_c = os.path.join(OUTPUT_DIR, f"thumbnail_{today_str}_C.jpg")
+    canvas_c.save(out_path_c, "JPEG", quality=95)
+    paths.append(out_path_c)
+    print(f"✅ Variant C saved to: {out_path_c}")
+    
+    return paths

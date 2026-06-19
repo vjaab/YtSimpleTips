@@ -66,7 +66,12 @@ def trim_audio_silence(path, word_timestamps):
     end_trim = detect_leading_silence(reversed_audio, silence_threshold=-50.0)
 
     duration = len(audio)
-    trimmed_audio = audio[start_trim:duration-end_trim]
+    # Cut final audio clip exactly 0.3s (300ms) before natural termination for loop optimization
+    end_cut_ms = end_trim + 300
+    if duration - start_trim - end_cut_ms > 100:
+        trimmed_audio = audio[start_trim:duration-end_cut_ms]
+    else:
+        trimmed_audio = audio[start_trim:duration-end_trim]
     
     # Save trimmed audio to temp format so we can process it with FFmpeg
     ext = os.path.splitext(path)[1]
@@ -106,17 +111,22 @@ def trim_audio_silence(path, word_timestamps):
     except Exception as e:
         print(f"⚠️ [audio_gen] Audio normalization failed: {e}")
     
+    new_dur = len(trimmed_audio) / 1000.0
+
     # Recalibrate timestamps
     shift_sec = start_trim / 1000.0
     new_ts = []
     for ws in word_timestamps:
-        new_ts.append({
-            "word": ws["word"],
-            "start": max(0.0, round(ws["start"] - shift_sec, 3)),
-            "end": max(0.0, round(ws["end"] - shift_sec, 3))
-        })
+        w_start = max(0.0, round(ws["start"] - shift_sec, 3))
+        w_end = max(0.0, round(ws["end"] - shift_sec, 3))
+        # Keep word only if it starts before the new trimmed audio duration
+        if w_start < new_dur:
+            new_ts.append({
+                "word": ws["word"],
+                "start": w_start,
+                "end": min(w_end, new_dur)
+            })
     
-    new_dur = len(trimmed_audio) / 1000.0
     print(f"🔊 Audio trimmed & mastered: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 

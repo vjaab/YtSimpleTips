@@ -75,7 +75,110 @@ def get_authenticated_service():
         print(f"❌ YouTube auth failed: {e}")
         return None
 
-def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None):
+def crop_for_instagram(video_path):
+    """
+    Crops the top 80px watermark header strip using FFmpeg.
+    Uses crop=in_w:in_h-80:0:80 to crop the top 80 pixels.
+    """
+    import subprocess
+    base, ext = os.path.splitext(video_path)
+    cropped_path = f"{base}_cropped{ext}"
+    
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", video_path,
+        "-vf", "crop=in_w:in_h-80:0:80",
+        "-c:a", "copy",
+        cropped_path
+    ]
+    print(f"🎬 Running FFmpeg crop for Instagram: {' '.join(cmd)}")
+    subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    return cropped_path
+
+def crosspost_to_instagram(cropped_video_path, caption):
+    """
+    Cross-posts the cropped video to Instagram Reels using the Meta Graph API.
+    """
+    import requests
+    import os
+    
+    access_token = os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
+    business_account_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "")
+    public_video_url = os.getenv("PUBLIC_VIDEO_URL", "")
+    
+    if not access_token or not business_account_id:
+        print("⚠️ Instagram credentials (INSTAGRAM_ACCESS_TOKEN/INSTAGRAM_BUSINESS_ACCOUNT_ID) missing. Skipping Instagram cross-posting.")
+        return False, "Credentials missing"
+        
+    if not public_video_url:
+        print("⚠️ PUBLIC_VIDEO_URL is missing. Meta Graph API requires a public URL to download the video. Skipping Instagram publish.")
+        return False, "PUBLIC_VIDEO_URL missing"
+        
+    print(f"📡 Initiating Instagram Reels upload container for: {cropped_video_path}...")
+    
+    url = f"https://graph.facebook.com/v19.0/{business_account_id}/media"
+    payload = {
+        "media_type": "REELS",
+        "video_url": public_video_url,
+        "caption": caption,
+        "access_token": access_token
+    }
+    
+    try:
+        r = requests.post(url, data=payload, timeout=20)
+        if r.status_code != 200:
+            print(f"❌ Instagram container creation failed: {r.text}")
+            return False, r.text
+            
+        res = r.json()
+        container_id = res.get("id")
+        print(f"✅ Instagram Reel container created: {container_id}")
+        
+        poll_url = f"https://graph.facebook.com/v19.0/{container_id}"
+        params = {
+            "fields": "status_code",
+            "access_token": access_token
+        }
+        
+        max_polls = 12
+        for attempt in range(max_polls):
+            time.sleep(10)
+            pr = requests.get(poll_url, params=params, timeout=15)
+            if pr.status_code == 200:
+                status = pr.json().get("status_code", "").upper()
+                print(f"⏳ Reel container status: {status} (attempt {attempt+1}/{max_polls})")
+                if status == "FINISHED":
+                    break
+                elif status == "ERROR":
+                    print(f"❌ Instagram processing error: {pr.text}")
+                    return False, "Processing error"
+            else:
+                print(f"⚠️ Instagram container polling failed: {pr.text}")
+        else:
+            print("⚠️ Reel processing timed out on Meta servers.")
+            return False, "Processing timeout"
+            
+        publish_url = f"https://graph.facebook.com/v19.0/{business_account_id}/media_publish"
+        publish_payload = {
+            "creation_id": container_id,
+            "access_token": access_token
+        }
+        
+        pr = requests.post(publish_url, data=publish_payload, timeout=20)
+        if pr.status_code == 200:
+            publish_res = pr.json()
+            media_id = publish_res.get("id")
+            print(f"🎉 Instagram Reel published successfully! Media ID: {media_id}")
+            return True, media_id
+        else:
+            print(f"❌ Instagram Reel publish failed: {pr.text}")
+            return False, pr.text
+            
+    except Exception as e:
+        print(f"⚠️ Instagram cross-posting failed with exception: {e}")
+        return False, str(e)
+
+def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None, comment_bait_question=None):
     """Uploads the generated Shorts video to YouTube with Tamil metadata and Altered Content flag."""
     youtube = get_authenticated_service()
     if not youtube:
@@ -94,7 +197,7 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
             "title":                title[:40],
             "description":          description[:5000],
             "tags":                 tags[:15],
-            "categoryId":           category_id,  # 28 = Science & Tech (better for tech tips, higher CPM)
+            "categoryId":           category_id,  # 28 = Science & Tech
             "defaultLanguage":      "ta",
             "defaultAudioLanguage": "ta",
         },
@@ -124,10 +227,24 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
         # 2. Post Pinned Comment
         try:
             pinned_text = _get_pinned_comment(title)
-            full_comment = f"{title}\n\n{comment_hook}\n\n{pinned_text}" if comment_hook else pinned_text
+            if comment_bait_question:
+                full_comment = f"❓ {comment_bait_question}\n\n{pinned_text}"
+            elif comment_hook:
+                full_comment = f"{comment_hook}\n\n{pinned_text}"
+            else:
+                full_comment = pinned_text
             post_and_pin_comment(youtube, video_id, full_comment)
         except Exception as e:
             print(f"⚠️ Pinned comment failed (non-fatal): {e}")
+
+        # 3. Instagram Reels Cross-Post
+        try:
+            cropped_video = crop_for_instagram(video_path)
+            crosspost_to_instagram(cropped_video, f"{title}\n\n{description[:100]}...")
+            if cropped_video and os.path.exists(cropped_video):
+                os.remove(cropped_video)
+        except Exception as ie:
+            print(f"⚠️ Instagram cross-posting failed (non-fatal): {ie}")
 
         return True, video_id
     except googleapiclient.errors.HttpError as e:

@@ -193,35 +193,201 @@ def _send_photo(photo_path, caption=""):
             print(f"⚠️ Telegram sendPhoto retry failed: {re}")
         return {}
 
-def send_upload_consent(thumbnail_path, title, duration_sec):
+import json
+
+def _send_media_group(photo_paths, caption=""):
+    if not BOT_TOKEN or not CHAT_ID:
+        return []
+    media = []
+    for i, path in enumerate(photo_paths):
+        media.append({
+            "type": "photo",
+            "media": f"attach://photo{i}",
+        })
+    if media and caption:
+        media[0]["caption"] = caption
+        media[0]["parse_mode"] = "HTML"
+        
+    files = {}
+    for i, path in enumerate(photo_paths):
+        files[f"photo{i}"] = open(path, "rb")
+        
+    try:
+        r = requests.post(f"{BASE_URL}/sendMediaGroup", data={"chat_id": CHAT_ID, "media": json.dumps(media)}, files=files, timeout=30)
+        r.raise_for_status()
+        return r.json().get("result", [])
+    except Exception as e:
+        print(f"⚠️ Telegram sendMediaGroup failed: {e}")
+        return []
+    finally:
+        for f in files.values():
+            f.close()
+
+def send_upload_consent(thumbnail_paths, title_variants, duration_sec):
     """
-    Sends the compiled video status and thumbnail to Telegram as a notification
-    and automatically returns True to auto-approve the upload.
+    Sends all thumbnail variants and title options to Telegram.
+    Presents an interactive inline keyboard allowing VJ to toggle selections
+    and approve the final upload.
     """
     if not BOT_TOKEN or not CHAT_ID:
-        print("Telegram not configured — auto-approving upload.")
-        return True
-
-    mins, secs = divmod(int(duration_sec), 60)
-    duration_str = f"{mins}m {secs}s" if mins else f"{secs}s"
-
-    caption = (
-        f"🎬 <b>VJ Videos - Video Compiled!</b>\n\n"
-        f"📌 <b>Title:</b> {title}\n"
-        f"⏱ <b>Duration:</b> {duration_str}\n\n"
-        f"🚀 <i>Auto-uploading to VJ Videos YouTube Channel now...</i>"
-    )
-
+        print("Telegram not configured — auto-approving default upload choice.")
+        return {
+            "title": title_variants[0] if title_variants else "Default Title",
+            "thumbnail": thumbnail_paths[0] if thumbnail_paths else ""
+        }
+        
     try:
-        if thumbnail_path and os.path.exists(thumbnail_path):
-            _send_photo(thumbnail_path, caption)
-        else:
-            _send_message(caption)
+        # Send the media group first so VJ can see all 3 thumbnails
+        _send_media_group(thumbnail_paths, caption="📷 Here are the generated thumbnails (A, B, C)")
     except Exception as e:
-        print(f"Telegram photo send failed: {e}")
-        _send_message(caption)
+        print(f"⚠️ Failed to send media group: {e}")
+    
+    # Store currently selected indices (0-indexed)
+    state = {
+        "title_idx": 0,
+        "thumb_idx": 0
+    }
+    
+    def get_keyboard_markup():
+        # Title Selection buttons
+        title_buttons = []
+        for idx in range(3):
+            label = f"Title {idx+1}"
+            if idx == state["title_idx"]:
+                label += " 🔘"
+            title_buttons.append({"text": label, "callback_data": f"sel_title_{idx}"})
+            
+        # Thumbnail Selection buttons
+        thumb_buttons = []
+        for idx, letter in enumerate(["A", "B", "C"]):
+            label = f"Thumb {letter}"
+            if idx == state["thumb_idx"]:
+                label += " 🔘"
+            thumb_buttons.append({"text": label, "callback_data": f"sel_thumb_{idx}"})
+            
+        # Action buttons
+        action_buttons = [
+            {"text": "✅ Approve & Upload", "callback_data": "approve_upload"}
+        ]
+        
+        return {
+            "inline_keyboard": [
+                title_buttons,
+                thumb_buttons,
+                action_buttons
+            ]
+        }
+        
+    def get_status_text():
+        mins, secs = divmod(int(duration_sec), 60)
+        dur_str = f"{mins}m {secs}s" if mins else f"{secs}s"
+        
+        t_letter = ["A", "B", "C"][state["thumb_idx"]]
+        
+        return (
+            f"🎬 <b>VJ Videos - Video Ready for Approval</b>\n\n"
+            f"⏱ <b>Duration:</b> {dur_str}\n\n"
+            f"📝 <b>Titles:</b>\n"
+            f"1. {title_variants[0]}\n"
+            f"2. {title_variants[1]}\n"
+            f"3. {title_variants[2]}\n\n"
+            f"👉 <b>Current Selection:</b>\n"
+            f"• Title: Variant {state['title_idx'] + 1}\n"
+            f"• Thumbnail: Variant {t_letter}\n\n"
+            f"⏳ <i>Auto-approving Title 1 & Thumbnail A in 5 minutes on timeout...</i>"
+        )
 
-    return True
+    # Send control message
+    msg = _send_message(get_status_text(), reply_markup=get_keyboard_markup())
+    sent_message_id = msg.get("message_id")
+    
+    deadline = time.time() + TIMEOUT_SECONDS
+    last_update_id = None
+    
+    stale = _get_updates()
+    if stale:
+        last_update_id = stale[-1]["update_id"] + 1
+        
+    while time.time() < deadline:
+        try:
+            updates = _get_updates(offset=last_update_id)
+        except Exception as e:
+            print(f"Telegram poll error: {e}")
+            time.sleep(5)
+            continue
+            
+        for update in updates:
+            last_update_id = update["update_id"] + 1
+            action = None
+            
+            if "callback_query" in update:
+                cb = update["callback_query"]
+                if str(cb["message"]["chat"]["id"]) == str(CHAT_ID):
+                    action = cb["data"].strip()
+                    
+                    if action.startswith("sel_title_"):
+                        state["title_idx"] = int(action.split("_")[-1])
+                        _answer_callback(cb["id"], f"Selected Title {state['title_idx']+1} 📝")
+                        if sent_message_id:
+                            requests.post(f"{BASE_URL}/editMessageText", json={
+                                "chat_id": CHAT_ID,
+                                "message_id": sent_message_id,
+                                "text": get_status_text(),
+                                "parse_mode": "HTML",
+                                "reply_markup": get_keyboard_markup()
+                            }, timeout=10)
+                            
+                    elif action.startswith("sel_thumb_"):
+                        state["thumb_idx"] = int(action.split("_")[-1])
+                        t_letter = ["A", "B", "C"][state["thumb_idx"]]
+                        _answer_callback(cb["id"], f"Selected Thumbnail {t_letter} 📷")
+                        if sent_message_id:
+                            requests.post(f"{BASE_URL}/editMessageText", json={
+                                "chat_id": CHAT_ID,
+                                "message_id": sent_message_id,
+                                "text": get_status_text(),
+                                "parse_mode": "HTML",
+                                "reply_markup": get_keyboard_markup()
+                            }, timeout=10)
+                            
+                    elif action == "approve_upload":
+                        _answer_callback(cb["id"], "Approved! Uploading... 🚀")
+                        confirm_text = (
+                            f"✅ <b>VJ Approved Upload!</b>\n\n"
+                            f"📌 <b>Final Title:</b> {title_variants[state['title_idx']]}\n"
+                            f"🖼️ <b>Thumbnail:</b> Variant {['A', 'B', 'C'][state['thumb_idx']]}\n\n"
+                            f"🚀 <i>Uploading now...</i>"
+                        )
+                        if sent_message_id:
+                            _edit_message(sent_message_id, confirm_text)
+                        else:
+                            _send_message(confirm_text)
+                            
+                        return {
+                            "title": title_variants[state["title_idx"]],
+                            "thumbnail": thumbnail_paths[state["thumb_idx"]]
+                        }
+                        
+            elif "message" in update:
+                m = update["message"]
+                if str(m["chat"]["id"]) == str(CHAT_ID) and "text" in m:
+                    text = m["text"].strip().lower()
+                    if "approve" in text or "upload" in text or "ok" in text:
+                        return {
+                            "title": title_variants[state["title_idx"]],
+                            "thumbnail": thumbnail_paths[state["thumb_idx"]]
+                        }
+                        
+        time.sleep(3)
+        
+    print("Telegram selection timed out. Auto-approving default selection.")
+    if sent_message_id:
+        _edit_message(sent_message_id, "⏰ <b>Timed out.</b> Auto-uploading with default settings (Title 1 & Thumbnail A)...")
+        
+    return {
+        "title": title_variants[0],
+        "thumbnail": thumbnail_paths[0]
+    }
 
 def notify_telegram(message, emoji="ℹ️"):
     if BOT_TOKEN and CHAT_ID:

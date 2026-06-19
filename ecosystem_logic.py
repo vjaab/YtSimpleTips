@@ -51,6 +51,44 @@ def get_slot_info():
         slot = "Slot C (Evening)"
         category = evening_categories.get(day_name, "🚀 Motivation Bites")
         
+    # Load performance insights for dynamic strategy boosting
+    import os
+    import json
+    
+    insights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "performance_insights.json")
+    if os.path.exists(insights_path):
+        try:
+            with open(insights_path, 'r', encoding='utf-8') as f:
+                insights = json.load(f)
+                top_categories_raw = insights.get("top_categories", [])
+                
+                category_mapping = {
+                    "finance": "💰 Finance Quick Tips",
+                    "tech": "📱 Tech & AI Quick Facts",
+                    "motivation": "🚀 Motivation Bites",
+                    "facts": "🧠 Facts & Trivia",
+                    "howto": "🛠️ How-To Tutorials",
+                    "ai_ml": "🤖 AI/ML Quick Learn"
+                }
+                
+                top_mapped = []
+                for cat in top_categories_raw:
+                    mapped = category_mapping.get(cat.lower().split()[0]) or category_mapping.get(cat.lower())
+                    if not mapped:
+                        for k, v in category_mapping.items():
+                            if k in cat.lower() or cat.lower() in k:
+                                mapped = v
+                                break
+                    if mapped and mapped not in top_mapped:
+                        top_mapped.append(mapped)
+                        
+                if top_mapped and category not in top_mapped:
+                    boosted_cat = top_mapped[0]
+                    print(f"📈 [ecosystem] Boosting category priority: Overriding '{category}' with top-performer '{boosted_cat}'")
+                    category = boosted_cat
+        except Exception as e:
+            print(f"⚠️ Failed to apply category boosting: {e}")
+            
     return day_name, slot, category
 
 SERIES_MAP = {
@@ -189,3 +227,22 @@ def get_category_color_palette(category):
     Falls back to Finance Quick Tips for unknown categories.
     """
     return _CATEGORY_PALETTES.get(category, _DEFAULT_PALETTE)
+
+def get_session_length_cap():
+    """
+    Checks performance_insights.json. If the average script length of top performers 
+    is under 60 words, returns 60, otherwise returns None.
+    """
+    import os
+    import json
+    insights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "performance_insights.json")
+    if os.path.exists(insights_path):
+        try:
+            with open(insights_path, 'r', encoding='utf-8') as f:
+                insights = json.load(f)
+                avg_len = insights.get("average_script_length", 60)
+                if avg_len < 60:
+                    return 60
+        except Exception as e:
+            print(f"⚠️ Failed to read performance_insights.json: {e}")
+    return None

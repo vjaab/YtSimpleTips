@@ -822,7 +822,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             print(f"⚠️ [video_gen] Could not pre-load first frame for loop: {e}")
     
     # ── RETENTION OVERLAYS & SUBTITLES ──
-    vignette = _gradient_overlay(audio_duration)
+    if audio_duration > 1.5:
+        vignette = _gradient_overlay(audio_duration - 1.5).with_start(1.5)
+    else:
+        vignette = _gradient_overlay(audio_duration)
     
     # Generate Header bar watermark
     header_clip = None
@@ -836,7 +839,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
         header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
-        header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
+        if audio_duration > 1.5:
+            header_clip = ImageClip(np.array(header_img)).with_start(1.5).with_duration(audio_duration - 1.5)
+        else:
+            header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
     # ── EMOJI OVERLAY CONFIG ──
     emoji_moments = []
@@ -856,6 +862,44 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     
     # Frame Assembly Loop
     def make_final_frame(t):
+        if t < 1.5:
+            # solid black background card (no anime visual yet)
+            bg_color = (15, 15, 20)
+            hook_text = script_json.get("hook", "")
+            img = Image.new("RGB", (FRAME_W, FRAME_H), bg_color)
+            draw = ImageDraw.Draw(img)
+            
+            # Hook sentence in 64pt+ bold text, centered
+            base_size = int(68 * (FRAME_W / 1080.0))
+            words = hook_text.split()
+            lines = []
+            current_line = []
+            for w in words:
+                current_line.append(w)
+                line_str = " ".join(current_line)
+                font = get_font_for_text(line_str, base_size, "bold")
+                bbox = font.getbbox(line_str)
+                lw = bbox[2] - bbox[0]
+                if lw > FRAME_W * 0.85 and len(current_line) > 1:
+                    current_line.pop()
+                    lines.append(" ".join(current_line))
+                    current_line = [w]
+            if current_line:
+                lines.append(" ".join(current_line))
+                
+            line_h = int(110 * (FRAME_W / 1080.0))
+            total_h = len(lines) * line_h
+            y_pos = (FRAME_H - total_h) // 2
+            
+            for i, line in enumerate(lines):
+                font = get_font_for_text(line, base_size, "bold")
+                bbox = font.getbbox(line)
+                lw = bbox[2] - bbox[0]
+                lx = (FRAME_W - lw) // 2
+                draw.text((lx, y_pos + i * line_h), line, fill=(255, 255, 255, 255), font=font)
+                
+            return np.array(img)
+
         frame = base_comp.get_frame(t)
         
         # ── ANIME COLOR GRADE & DESATURATION ──

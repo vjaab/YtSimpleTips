@@ -30,11 +30,11 @@ Language Rules:
    - Characters: Stylized silhouette or faceless anime protagonist. Any characters depicted should look South Indian Tamil but in stylized anime format.
    - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning", "speed lines background").
 Constraint Checklist:
-- SCRIPT WORD COUNT: Strictly 90-110 words in Tanglish.
+- SCRIPT WORD COUNT: Strictly 55-70 words in Tanglish.
 - SCRIPT SENTENCES: Every sentence must be under 9 words.
 - HYPER-SPECIFIC HOOKS: First line MUST be a scroll-stopping, high-curiosity hook that a friendly South Indian tech guy would use (e.g., "உங்களுக்கு இந்த ரகசிய செட்டிங் தெரியுமா?", "உங்க போன்ல உடனே இதை மாத்துங்க!", "இதை மட்டும் மாத்துனீங்கன்னா உங்க லைஃப் ரொம்ப ஈஸியாயிடும்!"), immediately mentioning the specific topic/benefit (e.g., 'Samsung gallery-la intha lock setting irukka?'). Do NOT use anime tropes, cartoonish drama, or fantasy language in the voice hooks.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (immediately after the hook), explicitly introduce the name of the topic, setting, or concept being discussed. The audience must know exactly what specific feature/setting/app this video is about within the first 5 seconds.
-- PATTERN INTERRUPTS: At least 2 pattern interrupts like: "Aana wait pannunga...", "Intha secret yaarukkum theriyaadhu..."
+- PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "oru second wait pannunga..." or "ithai parunga..." to break the pattern and regain interest.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
 - SEAMLESS LOOP: Ensure the script's final sentence flows perfectly back into the hook's opening sentence to create an infinite, high-retention loop.
 - CTAs: At the end of every script, ask a provocative question or a soft CTA in Tanglish to drive comments. Example: "Save pannunga, maraakaadhey. Comment-la sollunga!" Do NOT tell or ask the viewer to subscribe, follow, or share in the spoken voiceover script. End the script strictly on the question or soft CTA.
@@ -134,10 +134,10 @@ Rewrite the narrative draft to maximize retention, remove ALL fluff, and increas
 The script must feel like a rapid-fire conversation, NOT a lecture.
 
 MANDATORY RULES:
-1. TOTAL WORD COUNT: Strictly 90-110 words. NOT more.
+1. TOTAL WORD COUNT: Strictly 55-70 words. NOT more.
 2. Every sentence MUST be under 9 words.
 3. Ensure the script directly resonates with daily scenarios.
-4. PATTERN INTERRUPTS: There must be at least 2 pattern interrupt phrases at approximately the 8-second and 18-second marks.
+4. PATTERN INTERRUPT: At exactly the midpoint (50%) of the timeline/duration, you must include a pattern interrupt scene with spoken narration using a phrase like "oru second wait pannunga..." or "ithai parunga..." to break visual and narrative monotony.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
 6. Make sure the last sentence merges seamlessly back into the very first sentence to make a perfect 100% looping short.
 7. The OPEN LOOP planted in the hook must be resolved around the 25-30 second mark.
@@ -148,9 +148,29 @@ NARRATIVE DRAFT:
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script. STRICTLY 90-110 words.",
+  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script. STRICTLY 55-70 words.",
   "word_count": 0,
-  "pattern_interrupt_timestamps": ["~8s", "~18s"]
+  "pattern_interrupt_timestamps": ["~15s"]
+}}"""
+
+TITLE_VARIANTS_AGENT_TEMPLATE = """{persona}
+
+TITLE VARIANTS AGENT TASK:
+Based on the following research context and selected script/topic, generate 3 highly click-worthy YouTube Short titles (each under 50 characters, include relevant emojis):
+1. Variant 1 (Curiosity): A title that builds a curiosity gap, question, or teaser (e.g. 'Intha phone trick theriyuma? 🤫').
+2. Variant 2 (Fear/Loss): A title that highlights fear of missing out, security risk, or a common mistake to avoid (e.g. 'Udaney intha setting-ai maathungaa! 🚨').
+3. Variant 3 (Direct Benefit): A title that directly promises a clear benefit, speed-up, or money-saving result (e.g. 'Browser speed-ai 2x aaka hack! 🚀').
+
+SCRIPT CONTEXT:
+{script_text}
+
+Return ONLY a JSON object:
+{{
+  "title_variants": [
+    "Variant 1 Title",
+    "Variant 2 Title",
+    "Variant 3 Title"
+  ]
 }}"""
 
 SELECTOR_AGENT_TEMPLATE = """{persona}
@@ -197,7 +217,8 @@ In the `storyboard` array:
 - The `narration` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
 - The `on_screen_text` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "PHONE SETTING", "STRENGTH") representing the central concept.
 - The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
-- Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics').
+- Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics', 'PATTERN_INTERRUPT').
+- At exactly the midpoint (50% position) of the storyboard array, you must include a mandatory pattern interrupt scene where `visual_type` is set to "PATTERN_INTERRUPT". The spoken narration for this midpoint scene must use a phrase like "oru second wait pannunga..." or "ithai parunga..." to break the pattern and regain attention.
 - The `visual_prompt` MUST be in English and specify "clean modern anime illustration" style. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open in clean modern anime illustration style", "amazed gasping in clean modern anime illustration style"), or visual metaphors ("glowing data streams flowing into phone in clean modern anime illustration style").
 - Any people depicted in `visual_prompt` must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 - Set `camera_motion` (e.g. 'Slow zoom', 'Dolly-in', 'Orbit', 'Pan', 'Tracking shot', 'None') and `transition` (e.g. 'Match cut', 'Zoom transition', 'Morph', 'Swipe', 'Object continuity', 'Story continuity').
@@ -229,11 +250,12 @@ VALIDATOR AGENT TASK:
 You are a Senior AI Video Quality Auditor. Your job is to analyze the generated YouTube Shorts script and storyboard, calculate quality scores, and identify any issues or content breaks.
 
 Evaluate the following storyboard JSON against these strict criteria (rate each from 0 to 100):
-1. story_continuity_score: Does scene N logically connect to scene N+1? Is there a clear cause-and-effect chain and a transformation journey?
+1. story_continuity_score: Does scene N logically connect to scene N+1? Is there a cause-and-effect chain and a transformation journey?
 2. visual_alignment_score: Does the visual prompt directly represent the spoken narration? (No generic tech backgrounds, no unrelated stock footage).
-3. engagement_score: Are there visual changes every 2-3 seconds? Are hook visuals optimized? Are there curiosity triggers and pattern interrupts?
+3. engagement_score: Are there visual changes every 2-3 seconds? Is there a pattern interrupt scene at exactly the midpoint (50% position) of the storyboard array with "visual_type": "PATTERN_INTERRUPT" and an engaging break phrase like "oru second wait pannunga" or "ithai parunga"?
 4. transition_score: Do transitions feel connected (match cuts, zoom transitions, morphs, object/story continuity) instead of hard-cuts?
 5. subtitle_timing_score: Are narration segments short and punchy (3-5 words) for fast-paced subtitles?
+6. comment_bait_score: Rate the quality of the 'comment_bait_question'. It must be a highly polarizing, debate-inducing question in Tanglish/Tamil that naturally drives engagement. Generic CTAs like "Comment below" or "Save this video" must be scored 0.
 
 TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
@@ -253,6 +275,7 @@ Return ONLY a JSON object:
   "engagement_score": 0-100,
   "transition_score": 0-100,
   "subtitle_timing_score": 0-100,
+  "comment_bait_score": 0-100,
   "passes_validation": true|false,
   "feedback": "Detailed feedback on what is wrong and which scenes need improvement/regeneration."
 }}"""
@@ -268,6 +291,24 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     day_name, slot, category = get_slot_info()
     strategy_enhancement = get_category_prompt_enhancement(category, slot)
+    
+    # Check for session length cap from performance insights
+    from ecosystem_logic import get_session_length_cap
+    session_length_cap = get_session_length_cap()
+    
+    local_persona = globals()["SYSTEM_PERSONA"]
+    local_optimizer = globals()["RETENTION_OPTIMIZER_TEMPLATE"]
+    
+    if session_length_cap:
+        print(f"📉 [gemini_script] Applying session length cap of {session_length_cap} words.")
+        local_persona = local_persona.replace("55-70", f"50-{session_length_cap}")
+        local_optimizer = local_optimizer.replace("55-70", f"50-{session_length_cap}")
+        word_count_limit_str = f"STRICT LIMIT: Total word count MUST be between 50-{session_length_cap} words."
+    else:
+        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 55-70 words."
+
+    SYSTEM_PERSONA = local_persona
+    RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
     
     # ── REP AVOIDANCE ──
     tracker = load_tracker()
@@ -346,7 +387,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         f"Analyze the facts and select the SINGLE most mind-blowing fact to convert into a 30-40s Tanglish YouTube Short.\n"
         f"CATEGORY: {category}\n"
         f"{strategy_enhancement}\n"
-        "STRICT LIMIT: Total word count MUST be between 90-110 words to guarantee fast-paced, high-retention delivery inside 40 seconds."
+        f"{word_count_limit_str}"
     )
 
     prompt_requirements = """Return ONLY this exact JSON (no markdown):
@@ -402,7 +443,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "original_news_url": "Direct source url",
   "keywords": ["Tamil Facts", "Did You Know"],
   "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
-  "comment_hook": "Provocative question in Tanglish to drive comments."
+  "comment_hook": "Provocative question in Tanglish to drive comments.",
+  "comment_bait_question": "A polarizing debate question in Tanglish or Tamil about the topic to spark discussion/arguments in comments (e.g. 'Ethu best-nu neenga neneikiringa?', 'WhatsApp call record panrathu right-a thapa?'). Avoid generic CTAs like 'Comment below'."
 }""".replace("{category}", category)
 
     # ── AGENT 0: SELECTOR ──
@@ -556,7 +598,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 validation_result.get('visual_alignment_score', 0),
                 validation_result.get('engagement_score', 0),
                 validation_result.get('transition_score', 0),
-                validation_result.get('subtitle_timing_score', 0)
+                validation_result.get('subtitle_timing_score', 0),
+                validation_result.get('comment_bait_score', 0)
             ]
             
             if all(score >= 90 for score in scores) or validation_result.get('passes_validation') is True:
@@ -566,7 +609,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                     "visual_alignment": validation_result.get('visual_alignment_score'),
                     "engagement": validation_result.get('engagement_score'),
                     "transitions": validation_result.get('transition_score'),
-                    "subtitle_timing": validation_result.get('subtitle_timing_score')
+                    "subtitle_timing": validation_result.get('subtitle_timing_score'),
+                    "comment_bait": validation_result.get('comment_bait_score')
                 }
                 break
             else:
@@ -584,6 +628,23 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 if corrected_script:
                     final_script = corrected_script
                 validation_attempts += 1
+
+        # ── AGENT 7: TITLE VARIANTS ──
+        if final_script:
+            print("🧠 [AGENT 7] Title Variants Agent: Generating 3 click-worthy title options...")
+            title_variants_prompt = TITLE_VARIANTS_AGENT_TEMPLATE.format(
+                persona=SYSTEM_PERSONA,
+                script_text=final_script.get("script") or final_script.get("optimized_script") or optimized.get("optimized_script", "")
+            )
+            title_variants_res = call_gemini_api(client, title_variants_prompt)
+            if title_variants_res and "title_variants" in title_variants_res:
+                final_script["title_variants"] = title_variants_res["title_variants"]
+            else:
+                final_script["title_variants"] = [
+                    final_script.get("title", "Secret Trick!"),
+                    final_script.get("title", "Secret Trick!") + " 🤫",
+                    "Don't Miss This! 🚨"
+                ]
 
     if not final_script:
         print("⚠️ [gemini_script] Agent pipeline failed. Attempting offline fallback script...")
@@ -641,6 +702,16 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             final_script["original_news_headline"] = selected_headline
             final_script["original_news_url"] = selected_url
             final_script["use_case_evidence_url"] = selected_url
+        
+        # Populate fallback fields if missing (robustness checks)
+        if "title_variants" not in final_script:
+            final_script["title_variants"] = [
+                final_script.get("title", "Secret Trick!"),
+                final_script.get("title", "Secret Trick!") + " 🤫",
+                "Don't Miss This! 🚨"
+            ]
+        if "comment_bait_question" not in final_script:
+            final_script["comment_bait_question"] = final_script.get("comment_hook") or "Ethu best-nu neenga neneikiringa?"
         
         # Save output in logs for debug
         os.makedirs(LOGS_DIR, exist_ok=True)
