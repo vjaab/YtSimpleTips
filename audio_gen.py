@@ -182,13 +182,15 @@ def optimize_audio_gaps(audio_path, word_timestamps):
             segments.append(remaining)
             
         if modified and segments:
+            # Concatenate segments using clean cuts with 3ms micro fade-in/out on boundaries to prevent click pops
+            # without causing overlapping speech or timestamp drift.
             combined = segments[0]
+            if len(combined) > 6:
+                combined = combined.fade_in(3).fade_out(3)
             for seg in segments[1:]:
-                fade_len = min(40, len(combined), len(seg))
-                if fade_len > 0:
-                    combined = combined.append(seg, crossfade=fade_len)
-                else:
-                    combined += seg
+                if len(seg) > 6:
+                    seg = seg.fade_in(3).fade_out(3)
+                combined += seg
             combined.export(audio_path, format=os.path.splitext(audio_path)[1][1:])
             new_duration = len(combined) / 1000.0
             print(f"✂️ [audio_gen] Gap optimization: tightened pacing. New duration: {new_duration:.2f}s")
@@ -226,6 +228,39 @@ def clean_tts_text(text):
     """Strips AI meta directions and bracket symbols from voice script."""
     return preprocess_script_for_tts(text)
 
+def convert_numbers_to_words(text: str) -> str:
+    # A simple map for numbers 0 to 100 to English words for clean Tanglish synthesis
+    num_map = {
+        0: "zero", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+        6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten",
+        11: "eleven", 12: "twelve", 13: "thirteen", 14: "fourteen", 15: "fifteen",
+        16: "sixteen", 17: "seventeen", 18: "eighteen", 19: "nineteen", 20: "twenty",
+        30: "thirty", 40: "forty", 50: "fifty", 60: "sixty", 70: "seventy",
+        80: "eighty", 90: "ninety", 100: "one hundred"
+    }
+    
+    def get_word(n):
+        if n in num_map:
+            return num_map[n]
+        if 20 < n < 100:
+            tens = (n // 10) * 10
+            ones = n % 10
+            return f"{num_map[tens]}-{num_map[ones]}"
+        return str(n)
+        
+    def repl(match):
+        val_str = match.group(0)
+        try:
+            val = int(val_str)
+            if 0 <= val <= 100:
+                return get_word(val)
+        except ValueError:
+            pass
+        return val_str
+        
+    # Replace standalone numbers in range 0-100 with words
+    return re.sub(r'\b\d{1,3}\b', repl, text)
+
 def preprocess_script_for_tts(text: str) -> str:
     if not text:
         return ""
@@ -237,9 +272,17 @@ def preprocess_script_for_tts(text: str) -> str:
     text = text.replace(" - ", ", ")
     # Replace newlines "\n" with " "
     text = text.replace("\n", " ")
+    
+    # Deduplicate adjacent duplicate words (e.g., "the the" -> "the", "page page" -> "page")
+    text = re.sub(r'\b(\w+)\b\s+\1\b', r'\1', text, flags=re.IGNORECASE)
+    # Deduplicate adjacent duplicate 2-word phrases (e.g., "this page this page" or "this page, this page" -> "this page")
+    text = re.sub(r'\b(\w+\s+\w+)\b[\s,.]+\1\b', r'\1', text, flags=re.IGNORECASE)
+    
     # Replace "%" with " percent"
     text = text.replace("%", " percent")
     
+    # Convert digits to words (anti-stutter for ElevenLabs / Edge-TTS)
+    text = convert_numbers_to_words(text)
     # Replace numbers > 999 with word form (without commas)
     def replace_num(match):
         raw = match.group(0)
@@ -323,7 +366,6 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
     except Exception as e:
         print(f"   ✗ ElevenLabs chunk synthesis failed: {e}")
         return None
-
 def _concat_mp3_chunks(mp3_chunks, silence_ms=80):
     """Concatenates a list of raw MP3 byte chunks into a single AudioSegment with inter-chunk silence."""
     from pydub import AudioSegment
@@ -334,13 +376,17 @@ def _concat_mp3_chunks(mp3_chunks, silence_ms=80):
     
     for idx, mp3_bytes in enumerate(mp3_chunks):
         seg = AudioSegment.from_file(io.BytesIO(mp3_bytes), format="mp3")
+        # Apply 50ms (0.05s) micro fade-in/fade-out to prevent popping at junctions
+        if len(seg) > 100:
+            seg = seg.fade_in(50).fade_out(50)
+        elif len(seg) > 10:
+            seg = seg.fade_in(5).fade_out(5)
         if combined is None:
             combined = seg
         else:
             combined = combined + silence_gap + seg
     
     return combined
-
 def _generate_elevenlabs(text, output_path):
     print("📡 [audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
     if not ELEVENLABS_API_KEY:

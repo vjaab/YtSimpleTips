@@ -600,9 +600,9 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
             bgm_base_db = 20 * math.log10(BGM_VOLUME) if BGM_VOLUME > 0 else -60.0
             
             # Target volumes
-            # During voice activity: BGM ducked by an extra 6 dB relative to base (e.g., -28 dB)
+            # During voice activity: BGM ducked by an extra 11 dB relative to base (e.g., -33 dB)
             # During silence: BGM rises to base + 2 dB (e.g., -20 dB) to fill the gaps
-            ducked_db = bgm_base_db - 6
+            ducked_db = bgm_base_db - 11
             unducked_db = bgm_base_db + 2
             
             chunk_ms = 100

@@ -323,8 +323,8 @@ def run_pipeline(forced_category=None, dry_run=False):
     unique_angle = script_data.get("unique_angle", "")
     
     # Get video count for per-video metadata
-    from topic_tracker import get_total_uploaded
-    video_number = get_total_uploaded() + 1
+    from topic_tracker import get_fact_count
+    video_number = get_fact_count() + 1
     
     description = format_description(
         ai_desc, script, hashtags, slot=slot, source_url=fact_url,
