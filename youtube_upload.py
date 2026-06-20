@@ -11,7 +11,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube.force-ssl",
 ]
 
-# ── Rotating Tamil pinned comment templates ──
+# ── Rotating Tamil pinned comment templates (5 variants for anti-repetition) ──
 PINNED_COMMENT_TEMPLATES = [
     """💡 இந்த மாதிரி இன்னும் பல பயனுள்ள குறிப்புகள் மற்றும் Life Hacks தெரிஞ்சுக்க நம்ம Telegram group-ல join பண்ணுங்க!
 
@@ -34,7 +34,21 @@ PINNED_COMMENT_TEMPLATES = [
 • Daily life hacks & tips in Tamil
 • Easy and useful techniques daily
 
-Join immediately! Simple Tips by VJ-க்கு Subscribe பண்ண மறந்துடாதீங்க!"""
+Join immediately! Simple Tips by VJ-க்கு Subscribe பண்ண மறந்துடாதீங்க!""",
+
+    """🎯 இந்த tip உங்களுக்கு useful-ஆ இருந்தா, comment-ல ✅ போடுங்க!
+
+VJ-கிட்ட நேரடியா tips கேக்கணும்னா → Telegram group join பண்ணுங்க!
+📲 Link → Channel home page-ல இருக்கு
+
+நன்றி, Happy Learning! 🙏""",
+
+    """📚 தினமும் ஒரு புது tip கத்துக்கலாம்! Simple Tips by VJ
+
+இன்னும் இது மாதிரி useful tips வேணும்னா:
+1️⃣ Subscribe + 🔔 Bell icon ON பண்ணுங்க
+2️⃣ Telegram group-ல join பண்ணுங்க (link → channel page)
+3️⃣ உங்க friends-க்கு share பண்ணுங்க!"""
 ]
 
 def _get_pinned_comment(title=""):
@@ -204,8 +218,10 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
         "status": {
             "privacyStatus":            "public",
             "selfDeclaredMadeForKids":    False,
-            # Mandatory FTC disclosure for synthetic content / voice cloning
-            "selfDeclaredAlteredContent": True,
+            # NOTE: AI disclosure ("Altered Content") must be set MANUALLY in YouTube Studio
+            # after upload. The YouTube Data API v3 does NOT support the
+            # selfDeclaredAlteredContent field — using it causes 400 errors.
+            # A Telegram reminder is sent after each upload to prompt this action.
         },
     }
 

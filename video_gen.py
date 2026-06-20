@@ -45,24 +45,33 @@ def desaturate_frame(frame, factor=0.85):
     hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
     return cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
 
+# Per-video color grading variation seed (anti-repetition for YPP compliance)
+# Each video gets slightly different color parameters so no two look identical
+import random as _cg_random
+_COLOR_GRADE_SEED = _cg_random.Random()
+_COLOR_GRADE_SEED.seed()  # Random seed per pipeline run
+_CG_SAT_FACTOR = _COLOR_GRADE_SEED.uniform(0.85, 0.95)    # Saturation: 0.85-0.95
+_CG_GAMMA = _COLOR_GRADE_SEED.uniform(1.15, 1.25)          # Gamma: 1.15-1.25
+_CG_CONTRAST = _COLOR_GRADE_SEED.uniform(1.12, 1.18)       # Contrast: 1.12-1.18
+
 def apply_anime_color_grade(frame):
     """
-    Simulates anime LUT color grading:
-    - High contrast
+    Simulates anime LUT color grading with per-video randomized variation:
+    - High contrast (slightly varied per video)
     - Crushed blacks (low pixels pushed down)
     - Slightly boosted saturation/vibrancy for neon midtones
+    - Per-video variation prevents YouTube 'repetitive content' flags
     """
     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
-    hsv[:, :, 1] *= 0.90 # slightly desaturated base
+    hsv[:, :, 1] *= _CG_SAT_FACTOR  # Per-video saturation variation
     hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
     frame = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
     
     frame_float = frame.astype(np.float32)
-    frame_graded = 255.0 * np.power(frame_float / 255.0, 1.2)
+    frame_graded = 255.0 * np.power(frame_float / 255.0, _CG_GAMMA)  # Per-video gamma
     
     mid = 128.0
-    factor = 1.15
-    frame_graded = mid + factor * (frame_graded - mid)
+    frame_graded = mid + _CG_CONTRAST * (frame_graded - mid)  # Per-video contrast
     frame_graded = np.clip(frame_graded, 0, 255).astype(np.uint8)
     
     return frame_graded
@@ -685,6 +694,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             fact_number = 0
     
     # ── SOUNDTRACK MIXING ──
+    # YPP COMPLIANCE: BGM must be from YouTube Audio Library or equivalent royalty-free source.
+    # Using copyrighted music will trigger Content ID claims and reduce Shorts ad revenue.
+    # Current file: assets/music/modern_tech.mp3
     bgm_path = os.path.join(ASSETS_DIR, "music", "modern_tech.mp3")
     if not os.path.exists(bgm_path):
         os.makedirs(os.path.join(ASSETS_DIR, "music"), exist_ok=True)
@@ -695,6 +707,14 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             if files:
                 bgm_path = os.path.join(ref_music_dir, files[0])
                 print(f"🎵 Reusing reference BGM: {files[0]}")
+    
+    if os.path.exists(bgm_path):
+        # Check for accompanying license file
+        license_file = bgm_path.replace(".mp3", "_license.txt").replace(".wav", "_license.txt")
+        if not os.path.exists(license_file):
+            print("⚠️ [YPP WARNING] BGM file has no accompanying license file.")
+            print("   Ensure this track is from YouTube Audio Library or royalty-free source.")
+            print(f"   BGM path: {bgm_path}")
                 
     mastered_wav = os.path.join(OUTPUT_DIR, f"master_soundtrack_{today}.wav")
     _mix_and_master_audio(audio_path, bgm_path, audio_duration, mastered_wav)

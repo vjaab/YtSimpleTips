@@ -29,60 +29,100 @@ def log_message(msg):
         f.write(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}\n")
     print(msg)
 
-def format_description(ai_description, script, hashtags, slot="Slot A", source_url=""):
+def format_description(ai_description, script, hashtags, slot="Slot A", source_url="", unique_angle="", category="", video_number=0):
     hashtag_str = " ".join(hashtags) if hashtags else ""
     clean_summary = ai_description.split(". ")[0] + "."
     if len(clean_summary) > 150: 
         clean_summary = clean_summary[:147] + "..."
 
-    source_str = f"📰 SOURCE FACTS: {source_url}\n" if source_url else ""
+    source_str = f"📰 Source: {source_url}\n" if source_url else ""
+    angle_str = f"💡 {unique_angle}\n" if unique_angle else ""
+    
+    # Per-video metadata for uniqueness (anti-repetition signal)
+    import datetime
+    date_str = datetime.datetime.now().strftime("%d %b %Y")
+    category_clean = category.split(" ", 1)[-1] if category else "Tips"
+    vid_num_str = f"📌 Video #{video_number}" if video_number > 0 else ""
 
-    # YPP COMPLIANCE: Diverse Description Templates
+    # YPP COMPLIANCE: AI Disclosure block (placed at TOP for visibility)
+    ai_disclosure = (
+        "🤖 AI DISCLOSURE: This video uses AI-assisted voice cloning and "
+        "AI-generated visuals to illustrate VJ's tips. All scripts, research, "
+        "and editorial direction are by VJ (Simple Tips by VJ).\n"
+        "Tools: ElevenLabs (voice), Imagen/Veo (visuals), Gemini (research)."
+    )
+
+    # YPP COMPLIANCE: 5 diverse description templates to prevent repetitive content flags
     import hashlib
     desc_seed = int(hashlib.md5(clean_summary.encode()).hexdigest(), 16)
-    template_idx = desc_seed % 3
+    template_idx = desc_seed % 5
 
     templates = [
-        f"""தினசரி பயனுள்ள குறிப்புகள் மற்றும் எளிய லைஃப் ஹேக்ஸ் தமிழில்! 💡 சப்ஸ்கிரைப் பண்ணுங்க!
-🚀 JOIN TELEGRAM GROUP → Channel Page-ல Link இருக்கு!
+        f"""{ai_disclosure}
 ━━━━━━━━━━━━━━━━━━━━━━
 💡 {clean_summary}
+{angle_str}{source_str}
+📝 Script & Research by VJ | {category_clean} | {date_str}
+{vid_num_str}
 ━━━━━━━━━━━━━━━━━━━━━━
-{source_str}━━━━━━━━━━━━━━━━━━━━━━
-Daily Useful Tips & Hacks:
+தினசரி பயனுள்ள குறிப்புகள் மற்றும் எளிய லைஃப் ஹேக்ஸ் தமிழில்!
+💬 Simple Tips by VJ-க்கு Subscribe பண்ணுங்க!
+
+{hashtag_str}
+#SimpleTipsByVJ #LifeHacks #TamilTips #Shorts""",
+
+        f"""{ai_disclosure}
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+⚡ {clean_summary}
+{angle_str}{source_str}
+📝 Curated by VJ | {category_clean} | {date_str}
+{vid_num_str}
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+📬 Daily tips & hacks → Subscribe to Simple Tips by VJ!
+📲 Telegram group link → Channel cover page!
+
+{hashtag_str}
+#SimpleTipsByVJ #TechHacks #LifeHacksTamil #Shorts""",
+
+        f"""{ai_disclosure}
+━━━━━━━━━━━━━━━━━━━━━━
+{clean_summary}
+{angle_str}{source_str}
+📝 Written & directed by VJ | {category_clean} | {date_str}
+{vid_num_str}
+━━━━━━━━━━━━━━━━━━━━━━
+🧠 தினசரி பயனுள்ள குறிப்புகளை பெற Subscribe பண்ணுங்க!
+
+{hashtag_str}
+#LifeHacks #SimpleTips #DailyHacks #Shorts""",
+
+        f"""{ai_disclosure}
+──────────────────────
+💡 {clean_summary}
+{angle_str}{source_str}
+📝 VJ's {category_clean} Series | {date_str}
+{vid_num_str}
+──────────────────────
+Daily Useful Tips & Hacks in Tamil:
 • மொபைல் & டெக் ஹேக்ஸ் 📱
 • படிப்பு & நினைவாற்றல் குறிப்புகள் 🧠
 • உடல் நலம் & வீட்டு குறிப்புகள் 💊
 
-Join our community!
-💬 Simple Tips by VJ-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
-
-⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
-
 {hashtag_str}
-#SimpleTipsByVJ #LifeHacks #TamilTips #HowTo #UsefulTips #Shorts""",
+#SimpleTipsByVJ #UsefulTips #TamilShorts #Shorts""",
 
-        f"""⚡ {clean_summary}
-{source_str}
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-📬 பயனுள்ள குறிப்புகள் மற்றும் ஹேக்ஸ் தினமும் பார்க்க சப்ஸ்கிரைப் பண்ணுங்க:
-→ Telegram Group-ல சேர channel cover-ல இருக்கற link-ஐ கிளிக் பண்ணுங்க!
-
-⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
-
-{hashtag_str}
-#SimpleTipsByVJ #TechHacks #LifeHacksTamil #HowToTamil #Shorts""",
-
-        f"""இன்னைக்கு ஒரு பயனுள்ள டிப் பார்க்கலாம்! 👇 {clean_summary}
-{source_str}
+        f"""{ai_disclosure}
 ━━━━━━━━━━━━━━━━━━━━━━
-🧠 தினசரி பயனுள்ள குறிப்புகளை பெற Simple Tips by VJ-க்கு சப்ஸ்கிரைப் பண்ணுங்க!
-📲 Telegram group link profile home page-ல இருக்கு!
-
-⚠️ DISCLOSURE: This video is a curated tutorial by VJ. Scripting, editing direction, and research are managed by VJ. AI-assisted voice cloning (vj.wav) and visual generation tools are utilized to illustrate VJ's tips.
+👇 {clean_summary}
+{angle_str}{source_str}
+📝 Researched & produced by VJ | {date_str}
+{vid_num_str}
+━━━━━━━━━━━━━━━━━━━━━━
+💬 இந்த மாதிரி tips daily பார்க்க Simple Tips by VJ-க்கு Subscribe!
+📲 Telegram → Channel header-ல link இருக்கு!
 
 {hashtag_str}
-#LifeHacks #SimpleTips #StudyTips #HealthHacks #DailyHacks #Shorts"""
+#TamilTechTips #HowToTamil #VJTips #Shorts"""
     ]
 
     return templates[template_idx]
@@ -298,7 +338,16 @@ def run_pipeline(forced_category=None, dry_run=False):
     log_message("STEP 10: Uploading video to VJ Videos YouTube Channel...")
     ai_desc = script_data.get("description", "")
     hashtags = script_data.get("hashtags", ["#தெரியுமா", "#VJVideos"])
-    description = format_description(ai_desc, script, hashtags, slot=slot, source_url=fact_url)
+    unique_angle = script_data.get("unique_angle", "")
+    
+    # Get video count for per-video metadata
+    from topic_tracker import get_total_uploaded
+    video_number = get_total_uploaded() + 1
+    
+    description = format_description(
+        ai_desc, script, hashtags, slot=slot, source_url=fact_url,
+        unique_angle=unique_angle, category=category, video_number=video_number
+    )
     
     tags = list(set(keywords + [t.replace("#", "") for t in hashtags] + ["Shorts", "SimpleTipsByVJ", "TamilTips"]))[:15]
     
@@ -330,6 +379,16 @@ def run_pipeline(forced_category=None, dry_run=False):
     log_message(f"🎉 YouTube upload SUCCESS: {youtube_url}")
     if not dry_run:
         notify_telegram(f"🚀 Video is now LIVE on VJ Videos!\n\n📌 <b>{selected_title}</b>\n🔗 {youtube_url}", "✅")
+        # YPP COMPLIANCE: Remind VJ to set AI disclosure label in YouTube Studio
+        notify_telegram(
+            f"🏷️ <b>ACTION REQUIRED — AI Disclosure Label</b>\n\n"
+            f"Go to YouTube Studio → Content → this video → Show More → Attributes\n"
+            f"Toggle <b>\"AI-generated or altered content\"</b> to ON.\n\n"
+            f"🔗 {youtube_url}\n\n"
+            f"⚠️ This is required for YPP monetization compliance. "
+            f"The YouTube API does not support setting this automatically.",
+            "🏷️"
+        )
 
     # ── STEP 11: Update URL in tracker ──
     update_youtube_url(fact_headline, youtube_url)

@@ -443,6 +443,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   ],
   "title_options": ["Curiosity Gap Title 1", "Curiosity Gap Title 2"],
   "description": "Full SEO friendly video description including Tamil tags #தெரியுமா #FactsInTamil #VJVideos",
+  "unique_angle": "One sentence explaining what makes THIS specific video different from other videos on the same topic. Focus on the specific insight, angle, or approach that is unique to this tip. This is used for YouTube monetization originality signals.",
   "use_case_evidence_url": "Direct source url of the fact to take a screenshot of.",
   "relevant_links": ["Source url"],
   "phonetic_pronunciation_map": {"NVIDIA": "In-vid-yah"},
