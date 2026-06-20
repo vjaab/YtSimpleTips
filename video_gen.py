@@ -388,11 +388,11 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
             
             if is_active:
                 font = get_font_for_text(word_text, int(base_size * 1.15), "extrabold")
-                # Draw electric blue glow behind the active word (offset multiple times)
-                for dx in [-3, -2, -1, 0, 1, 2, 3]:
-                    for dy in [-3, -2, -1, 0, 1, 2, 3]:
+                # Cleaner 2px glow behind the active word (reduced from 3px for sharper look)
+                for dx in [-2, -1, 0, 1, 2]:
+                    for dy in [-2, -1, 0, 1, 2]:
                         if abs(dx) + abs(dy) > 0:
-                            draw.text((cur_x + dx, line_y - 4 + dy), word_text, fill=(0, 212, 255, 120), font=font)
+                            draw.text((cur_x + dx, line_y - 4 + dy), word_text, fill=(0, 212, 255, 90), font=font)
                 # Main active text is bold white
                 draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
             else:
@@ -562,26 +562,8 @@ def _render_sound_on_indicator(draw, t, accent_color):
     draw.text((px, py), text, fill=(255, 255, 255, alpha), font=font)
 
 
-def _render_voice_fallback_warning(draw, accent_color):
-    """Draws a premium yellow warning badge at the top: '⚠️ Voice Fallback Used'."""
-    text = "⚠️ Voice Fallback Used"
-    font = get_font_for_text(text, 28, "bold")
-    bbox = font.getbbox(text)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    
-    px = (FRAME_W - tw) // 2
-    py = int(FRAME_H * 0.14)
-    
-    # Semi-transparent pill background with red-orange outline
-    draw.rounded_rectangle(
-        [px - 20, py - 10, px + tw + 20, py + th + 10],
-        radius=15, fill=(15, 10, 10, 220)
-    )
-    draw.rounded_rectangle(
-        [px - 20, py - 10, px + tw + 20, py + th + 10],
-        radius=15, outline=(255, 69, 0, 255), width=3
-    )
-    draw.text((px, py), text, fill=(255, 69, 0, 255), font=font)
+# Voice fallback warning removed from video rendering — it was visible to viewers.
+# Fallback status is still reported in Telegram consent notification.
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -885,13 +867,38 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # Frame Assembly Loop
     def make_final_frame(t):
         if t < 1.5:
-            # solid black background card (no anime visual yet)
-            bg_color = (15, 15, 20)
+            # Premium gradient hook card with neon glow text
             hook_text = script_json.get("hook", "")
-            img = Image.new("RGB", (FRAME_W, FRAME_H), bg_color)
+            img = Image.new("RGB", (FRAME_W, FRAME_H), (8, 8, 18))
             draw = ImageDraw.Draw(img)
             
-            # Hook sentence in 64pt+ bold text, centered
+            # Draw vertical gradient: deep navy (top) → dark purple (bottom)
+            for y in range(FRAME_H):
+                ratio = y / FRAME_H
+                r = int(8 + 18 * ratio)
+                g = int(8 + 5 * ratio)
+                b = int(18 + 22 * ratio)
+                draw.line([(0, y), (FRAME_W, y)], fill=(r, g, b))
+            
+            # Radial center glow (subtle)
+            glow_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+            glow_draw = ImageDraw.Draw(glow_img)
+            cx, cy_center = FRAME_W // 2, FRAME_H // 2
+            for radius in range(400, 0, -5):
+                alpha = int(15 * (1.0 - radius / 400.0))
+                ar, ag, ab = accent_color
+                glow_draw.ellipse(
+                    [cx - radius, cy_center - radius, cx + radius, cy_center + radius],
+                    fill=(ar, ag, ab, alpha)
+                )
+            img.paste(Image.alpha_composite(Image.new("RGBA", (FRAME_W, FRAME_H), (0,0,0,0)), glow_img).convert("RGB"), (0, 0))
+            draw = ImageDraw.Draw(img)
+            
+            # Accent line at top (category color)
+            ar, ag, ab = accent_color
+            draw.rectangle([0, 0, FRAME_W, 4], fill=(ar, ag, ab))
+            
+            # Hook text with neon glow effect
             base_size = int(68 * (FRAME_W / 1080.0))
             words = hook_text.split()
             lines = []
@@ -913,13 +920,34 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             total_h = len(lines) * line_h
             y_pos = (FRAME_H - total_h) // 2
             
+            # Fade-in animation for text (0 → 1.0 over first 0.4s)
+            text_alpha = min(255, int(255 * (t / 0.4))) if t < 0.4 else 255
+            
             for i, line in enumerate(lines):
                 font = get_font_for_text(line, base_size, "bold")
                 bbox = font.getbbox(line)
                 lw = bbox[2] - bbox[0]
                 lx = (FRAME_W - lw) // 2
-                draw.text((lx, y_pos + i * line_h), line, fill=(255, 255, 255, 255), font=font)
-                
+                # Subtle glow behind text using accent color
+                for dx in [-2, -1, 0, 1, 2]:
+                    for dy in [-2, -1, 0, 1, 2]:
+                        if abs(dx) + abs(dy) > 0:
+                            draw.text((lx + dx, y_pos + i * line_h + dy), line, fill=(ar, ag, ab, int(text_alpha * 0.35)), font=font)
+                draw.text((lx, y_pos + i * line_h), line, fill=(255, 255, 255, text_alpha), font=font)
+            
+            # Cross-dissolve into first content frame during last 0.3s of hook
+            if t > 1.2:
+                dissolve_progress = (t - 1.2) / 0.3
+                try:
+                    content_frame = base_comp.get_frame(1.5)
+                    content_frame = desaturate_frame(content_frame, 0.85)
+                    content_frame = apply_anime_color_grade(content_frame)
+                    hook_arr = np.array(img)
+                    blended = cv2.addWeighted(hook_arr, 1.0 - dissolve_progress, content_frame, dissolve_progress, 0)
+                    return blended
+                except Exception:
+                    pass
+            
             return np.array(img)
 
         frame = base_comp.get_frame(t)
@@ -928,9 +956,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         frame = desaturate_frame(frame, 0.85)
         frame = apply_anime_color_grade(frame)
         
-        # ── ATTENTION-GRAB SCREEN FLICKER (0:00 - 0:02) ──
+        # ── ATTENTION-GRAB SCREEN FLICKER (0:00 - 0:02) — reduced intensity ──
         if t <= 2.0:
-            flicker_factor = 1.0 + 0.08 * math.sin(t * 50.0) * random.uniform(0.5, 1.0)
+            # Fade-out curve so flicker diminishes naturally
+            flicker_fade = max(0.0, 1.0 - (t / 2.0))
+            flicker_factor = 1.0 + 0.04 * math.sin(t * 50.0) * random.uniform(0.5, 1.0) * flicker_fade
             frame = np.clip(frame.astype(np.float32) * flicker_factor, 0, 255).astype(np.uint8)
         
         # ── HOOK FLASH: Rapid zoom-in + shake in first 0.5s to stop scrolling ──
@@ -992,14 +1022,14 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     frame = np.clip(frame * (1 - flash_alpha) + white * flash_alpha, 0, 255).astype(np.uint8)
                     break
         
-        # ── BEAT CUT: Mid-chunk zoom shifts every 2.5s for constant visual motion ──
-        beat_interval = 2.5
+        # ── BEAT CUT: Mid-chunk zoom shifts every 3.5s for subtler visual motion ──
+        beat_interval = 3.5
         beat_duration = 0.15
         time_in_beat = t % beat_interval
         if time_in_beat < beat_duration and t > 0.5:  # Skip during hook flash
             beat_progress = time_in_beat / beat_duration
-            # Subtle zoom pulse: 1.0 → 1.05 → 1.0
-            beat_scale = 1.0 + 0.05 * math.sin(beat_progress * math.pi)
+            # Subtle zoom pulse: 1.0 → 1.03 → 1.0 (reduced from 1.05)
+            beat_scale = 1.0 + 0.03 * math.sin(beat_progress * math.pi)
             h_b, w_b = frame.shape[:2]
             new_w_b, new_h_b = int(w_b * beat_scale), int(h_b * beat_scale)
             if new_w_b > w_b and new_h_b > h_b:
@@ -1025,9 +1055,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if ENABLE_SOUND_ON_INDICATOR:
             _render_sound_on_indicator(p_draw, t, accent_color)
             
-        # Voice Fallback warning (top-center)
-        if script_json.get("voice_fallback_used"):
-            _render_voice_fallback_warning(p_draw, accent_color)
+        # Voice Fallback warning removed — only reported via Telegram notification
+        # (Previously rendered an orange badge on the video visible to viewers)
         
         # ── DUAL-LAYER CAPTIONS ──
         active_chunk = None
@@ -1093,7 +1122,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     except Exception:
                         pass
                 
-        # ── Dynamic glowing progress bar with pulse at midpoint ──
+        # ── Premium thin progress bar with rounded leading dot ──
         progress_ratio = t / audio_duration
         progress_w = int(FRAME_W * progress_ratio)
         if progress_w > 0:
@@ -1103,13 +1132,21 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             glow_intensity = 0
             if 0.35 < progress_ratio < 0.65:
                 glow_phase = (progress_ratio - 0.35) / 0.30
-                glow_intensity = int(40 * math.sin(glow_phase * math.pi))
-            bar_height = 12 + (glow_intensity // 10)
-            # Glow layer (slightly wider, semi-transparent)
+                glow_intensity = int(30 * math.sin(glow_phase * math.pi))
+            bar_height = 6 + (glow_intensity // 15)  # Thinner bar (6px base instead of 12px)
+            # Subtle glow layer
             if glow_intensity > 0:
-                bar_draw.rectangle([0, FRAME_H - bar_height - 4, progress_w + 3, FRAME_H], fill=(pr, pg, pb, glow_intensity))
+                bar_draw.rectangle([0, FRAME_H - bar_height - 3, progress_w + 2, FRAME_H], fill=(pr, pg, pb, glow_intensity))
             # Main bar
             bar_draw.rectangle([0, FRAME_H - bar_height, progress_w, FRAME_H], fill=(pr, pg, pb, 255))
+            # Leading dot (rounded indicator) for premium feel
+            dot_radius = bar_height + 2
+            dot_x = min(progress_w, FRAME_W - dot_radius)
+            dot_y = FRAME_H - bar_height // 2
+            bar_draw.ellipse(
+                [dot_x - dot_radius, dot_y - dot_radius, dot_x + dot_radius, dot_y + dot_radius],
+                fill=(pr, pg, pb, 255)
+            )
             
         frame = np.array(pil_frame.convert("RGB"))
         return frame

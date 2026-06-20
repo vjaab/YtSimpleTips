@@ -71,25 +71,65 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
 
 
 def _fetch_reddit_trending_keywords():
-    """Fetches trending keywords from tech/tips subreddits."""
+    """Fetches trending keywords from tech/tips subreddits using OAuth."""
     subreddits = ["LifeProTips", "Android", "iphone", "technology"]
     trending_keywords = []
 
-    headers = {"User-Agent": "SimpleTipsByVJ/1.0"}
-
-    for sub in subreddits[:2]:  # Limit to 2 to stay fast
+    # Reddit API requires OAuth for reliable access
+    if REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET:
         try:
-            url = f"https://www.reddit.com/r/{sub}/hot.json?limit=10"
-            r = requests.get(url, headers=headers, timeout=10)
-            if r.status_code == 200:
-                data = r.json()
-                for post in data.get("data", {}).get("children", []):
-                    title = post.get("data", {}).get("title", "")
-                    words = re.findall(r'[A-Za-z]{3,}', title.lower())
-                    trending_keywords.extend(words)
-            time.sleep(0.5)
+            # Obtain OAuth token
+            auth = requests.auth.HTTPBasicAuth(REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET)
+            token_data = {"grant_type": "client_credentials"}
+            token_headers = {"User-Agent": "SimpleTipsByVJ/1.0"}
+            token_resp = requests.post(
+                "https://www.reddit.com/api/v1/access_token",
+                auth=auth, data=token_data, headers=token_headers, timeout=10
+            )
+            if token_resp.status_code != 200:
+                print(f"  ⚠️ [trending_boost] Reddit OAuth token failed: {token_resp.status_code}")
+                return []
+            access_token = token_resp.json().get("access_token", "")
+            if not access_token:
+                print("  ⚠️ [trending_boost] Reddit OAuth returned empty token")
+                return []
+            
+            headers = {
+                "Authorization": f"Bearer {access_token}",
+                "User-Agent": "SimpleTipsByVJ/1.0"
+            }
+            
+            for sub in subreddits[:2]:
+                try:
+                    url = f"https://oauth.reddit.com/r/{sub}/hot?limit=10"
+                    r = requests.get(url, headers=headers, timeout=10)
+                    if r.status_code == 200:
+                        data = r.json()
+                        for post in data.get("data", {}).get("children", []):
+                            title = post.get("data", {}).get("title", "")
+                            words = re.findall(r'[A-Za-z]{3,}', title.lower())
+                            trending_keywords.extend(words)
+                    time.sleep(0.5)
+                except Exception as e:
+                    print(f"  ⚠️ [trending_boost] Reddit fetch failed for r/{sub}: {e}")
         except Exception as e:
-            print(f"  ⚠️ [trending_boost] Reddit fetch failed for r/{sub}: {e}")
+            print(f"  ⚠️ [trending_boost] Reddit OAuth setup failed: {e}")
+    else:
+        # Fallback: try unauthenticated (may return limited results)
+        headers = {"User-Agent": "SimpleTipsByVJ/1.0"}
+        for sub in subreddits[:2]:
+            try:
+                url = f"https://www.reddit.com/r/{sub}/hot.json?limit=10"
+                r = requests.get(url, headers=headers, timeout=10)
+                if r.status_code == 200:
+                    data = r.json()
+                    for post in data.get("data", {}).get("children", []):
+                        title = post.get("data", {}).get("title", "")
+                        words = re.findall(r'[A-Za-z]{3,}', title.lower())
+                        trending_keywords.extend(words)
+                time.sleep(0.5)
+            except Exception as e:
+                print(f"  ⚠️ [trending_boost] Reddit fetch failed for r/{sub}: {e}")
 
     stopwords = {"the", "this", "that", "with", "from", "what", "how", "why", "for", "and", "you", "your",
                  "are", "not", "can", "will", "all", "has", "have", "but", "just", "most", "new", "more"}

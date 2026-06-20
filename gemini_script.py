@@ -32,7 +32,12 @@ Language Rules:
 Constraint Checklist:
 - SCRIPT WORD COUNT: Strictly 55-70 words in Tanglish.
 - SCRIPT SENTENCES: Every sentence must be under 9 words.
-- HYPER-SPECIFIC HOOKS: First line MUST be a scroll-stopping, high-curiosity hook that a friendly South Indian tech guy would use (e.g., "உங்களுக்கு இந்த ரகசிய செட்டிங் தெரியுமா?", "உங்க போன்ல உடனே இதை மாத்துங்க!", "இதை மட்டும் மாத்துனீங்கன்னா உங்க லைஃப் ரொம்ப ஈஸியாயிடும்!"), immediately mentioning the specific topic/benefit (e.g., 'Samsung gallery-la intha lock setting irukka?'). Do NOT use anime tropes, cartoonish drama, or fantasy language in the voice hooks.
+- HYPER-SPECIFIC HOOKS: First line MUST be a scroll-stopping, high-curiosity hook using one of these PROVEN VIRAL PATTERNS:
+  Pattern 1 (Direct Challenge): "உங்க [specific thing]-ல இந்த [setting/feature]-ஐ மாத்துங்க... [specific benefit]!" (e.g., "உங்க phone-ல இந்த secret setting-ஐ மாத்துங்க... battery 2x ஆகும்!")
+  Pattern 2 (Shocking Stat): "[Number]% பேருக்கு இது தெரியாது!" (e.g., "90% பேருக்கு இந்த WhatsApp trick தெரியாது!")
+  Pattern 3 (Fear/Urgency): "உடனே இதை check பண்ணுங்க... இல்லன்னா [consequence]!" (e.g., "உடனே இந்த app-ஐ delete பண்ணுங்க... data leak ஆகுது!")
+  Pattern 4 (Curiosity Gap): "[Topic]-ல யாருக்கும் தெரியாத ஒரு hidden [feature/trick]..." (e.g., "Google Maps-ல யாருக்கும் தெரியாத ஒரு hidden shortcut...")
+  The hook MUST mention the specific topic/app/setting name. Do NOT use anime tropes, cartoonish drama, or fantasy language in the voice hooks.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (immediately after the hook), explicitly introduce the name of the topic, setting, or concept being discussed. The audience must know exactly what specific feature/setting/app this video is about within the first 5 seconds.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "oru second wait pannunga..." or "ithai parunga..." to break the pattern and regain interest.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
@@ -107,6 +112,11 @@ Include:
 3. Escalation (6-28s) - Step-by-step instructions with pattern interrupts. Keep sentences VERY short.
 4. Retention Loop (28-33s) - Seamless bridge back to the exact opening words of the hook.
 5. Outro CTA (33-38s) - A provocative question in Tanglish to drive comments.
+
+INFORMATION GAP RULE (MANDATORY):
+Every 3-5 seconds of the script MUST introduce ONE new piece of information, actionable step, or surprising detail.
+The viewer should feel like they are constantly learning something new. If any 5-second window repeats the same point without adding value, the viewer WILL swipe away.
+Map each sentence to a NEW fact, step, or insight. Never repeat or rephrase the same point.
 
 RESEARCH:
 {research_json}

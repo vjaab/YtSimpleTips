@@ -293,6 +293,7 @@ def split_text_into_chunks(text: str) -> list[str]:
     return chunks
 
 def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
+    """Synthesizes a single text chunk via ElevenLabs API. Returns raw MP3 bytes."""
     cleaned_text = preprocess_script_for_tts(text)
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
     
@@ -309,7 +310,6 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
     
     try:
         import requests
-        # Collect all chunks into a single bytes buffer
         response = requests.post(url, json=data, headers=headers, params=params, stream=True)
         if response.status_code == 200:
             audio_data = b""
@@ -324,6 +324,23 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
         print(f"   ✗ ElevenLabs chunk synthesis failed: {e}")
         return None
 
+def _concat_mp3_chunks(mp3_chunks, silence_ms=80):
+    """Concatenates a list of raw MP3 byte chunks into a single AudioSegment with inter-chunk silence."""
+    from pydub import AudioSegment
+    import io
+    
+    combined = None
+    silence_gap = AudioSegment.silent(duration=silence_ms, frame_rate=44100)
+    
+    for idx, mp3_bytes in enumerate(mp3_chunks):
+        seg = AudioSegment.from_file(io.BytesIO(mp3_bytes), format="mp3")
+        if combined is None:
+            combined = seg
+        else:
+            combined = combined + silence_gap + seg
+    
+    return combined
+
 def _generate_elevenlabs(text, output_path):
     print("📡 [audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
     if not ELEVENLABS_API_KEY:
@@ -335,39 +352,48 @@ def _generate_elevenlabs(text, output_path):
         "Content-Type": "application/json",
         "xi-api-key": ELEVENLABS_API_KEY
     }
+    # Use mp3_44100_128 format — available on all ElevenLabs tiers (Starter, Creator, Pro)
+    # pcm_44100 requires Pro tier and causes 403 errors on lower tiers
     params = {
-        "output_format": "pcm_44100"
+        "output_format": "mp3_44100_128"
     }
     
     words = text.split()
+    mp3_chunks = []
+    
     if len(words) > 50:
         print(f"📝 Long script detected ({len(words)} words). Using chunked synthesis...")
         chunks = split_text_into_chunks(text)
         print(f"👉 Split script into {len(chunks)} chunks.")
         
-        all_pcm_bytes = b""
-        silence_samples = int(44100 * 0.080)  # exactly 80ms silence
-        silence_bytes = b'\x00' * (silence_samples * 2)  # 16-bit mono
-        
         for idx, chunk in enumerate(chunks):
             print(f"🎙️ Synthesizing chunk {idx+1}/{len(chunks)}...")
-            chunk_pcm = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
-            if not chunk_pcm:
+            chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
+            if not chunk_mp3:
                 print(f"   ✗ Failed to synthesize chunk {idx+1}")
                 return None
-            if idx > 0:
-                all_pcm_bytes += silence_bytes
-            all_pcm_bytes += chunk_pcm
+            mp3_chunks.append(chunk_mp3)
     else:
         print("🎙️ Script is short. Synthesizing as a single ElevenLabs chunk...")
-        all_pcm_bytes = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
-        if not all_pcm_bytes:
+        single_mp3 = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
+        if not single_mp3:
             return None
+        mp3_chunks.append(single_mp3)
             
     try:
-        from pydub import AudioSegment
-        audio_seg = AudioSegment(data=all_pcm_bytes, sample_width=2, frame_rate=44100, channels=1)
+        if len(mp3_chunks) == 1:
+            # Single chunk — convert directly from MP3 bytes to WAV
+            import io
+            from pydub import AudioSegment
+            audio_seg = AudioSegment.from_file(io.BytesIO(mp3_chunks[0]), format="mp3")
+        else:
+            # Multiple chunks — concatenate with silence gaps
+            audio_seg = _concat_mp3_chunks(mp3_chunks, silence_ms=80)
+        
+        # Normalize to 44100Hz mono WAV for downstream processing
+        audio_seg = audio_seg.set_frame_rate(44100).set_channels(1).set_sample_width(2)
         audio_seg.export(output_path, format="wav")
+        print(f"✅ [audio_gen] ElevenLabs synthesis complete: {output_path}")
         return output_path
     except Exception as e:
         print(f"   ✗ ElevenLabs output conversion failed: {e}")
@@ -375,7 +401,9 @@ def _generate_elevenlabs(text, output_path):
 
 async def _async_generate_edge_tts(text, output_path):
     import edge_tts
-    communicate = edge_tts.Communicate(text, "ta-IN-ValluvarNeural", rate="+8%")
+    # Slower rate (+5% instead of +8%) for more natural pacing
+    # Added pitch adjustment for warmer vocal tone
+    communicate = edge_tts.Communicate(text, "ta-IN-ValluvarNeural", rate="+5%", pitch="+2Hz")
     await communicate.save(output_path)
 
 def _generate_edge_tts(text, output_path):
