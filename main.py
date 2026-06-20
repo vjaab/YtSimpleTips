@@ -310,29 +310,11 @@ def run_pipeline(forced_category=None, dry_run=False):
     log_message("STEP 8: Generating premium YouTube thumbnail...")
     thumbnail_variants = generate_thumbnail(script_data)  # Generates 3 variants [pathA, pathB, pathC]
 
-    # ── STEP 9: Telegram Verification & Consent ──
-    log_message("STEP 9: Requesting VJ's upload approval via Telegram...")
+    # ── STEP 9: Auto-select title & thumbnail (no consent gate) ──
+    log_message("STEP 9: Auto-selecting title variant 1 and thumbnail A for upload...")
     title_variants = script_data.get("title_variants", [title, title, title])
-    
-    if dry_run:
-        log_message("⏳ [DRY-RUN] Simulating Telegram consent: Selecting Variant A and Title Variant 1...")
-        approved_choice = {
-            "title": title_variants[0],
-            "thumbnail": thumbnail_variants[0]
-        }
-    else:
-        approved_choice = send_upload_consent(
-            thumbnail_variants, title_variants, duration,
-            voice_fallback_used=script_data.get("voice_fallback_used", False)
-        )
-    
-    if not approved_choice:
-        log_message("❌ Upload skipped by user rejection or timeout.")
-        notify_telegram("❌ YouTube upload skipped. Video saved locally in output/.", "⚠️")
-        return True
-
-    selected_title = approved_choice["title"]
-    selected_thumbnail = approved_choice["thumbnail"]
+    selected_title = title_variants[0]
+    selected_thumbnail = thumbnail_variants[0] if thumbnail_variants else None
 
     # ── STEP 10: YouTube Upload & Instagram Reels Cross-post ──
     log_message("STEP 10: Uploading video to VJ Videos YouTube Channel...")
