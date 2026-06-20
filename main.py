@@ -361,15 +361,12 @@ def run_pipeline(forced_category=None, dry_run=False):
     log_message(f"🎉 YouTube upload SUCCESS: {youtube_url}")
     if not dry_run:
         notify_telegram(f"🚀 Video is now LIVE on VJ Videos!\n\n📌 <b>{selected_title}</b>\n🔗 {youtube_url}", "✅")
-        # YPP COMPLIANCE: Remind VJ to set AI disclosure label in YouTube Studio
+        # YPP COMPLIANCE: Notify VJ that AI disclosure label has been set automatically
         notify_telegram(
-            f"🏷️ <b>ACTION REQUIRED — AI Disclosure Label</b>\n\n"
-            f"Go to YouTube Studio → Content → this video → Show More → Attributes\n"
-            f"Toggle <b>\"AI-generated or altered content\"</b> to ON.\n\n"
-            f"🔗 {youtube_url}\n\n"
-            f"⚠️ This is required for YPP monetization compliance. "
-            f"The YouTube API does not support setting this automatically.",
-            "🏷️"
+            f"🤖 <b>AI Disclosure Label Automatically Set</b>\n\n"
+            f"The video has been flagged as <b>\"AI-generated or altered content\"</b> (containsSyntheticMedia: True) automatically during upload for YPP compliance.\n\n"
+            f"🔗 {youtube_url}",
+            "🤖"
         )
 
     # ── STEP 11: Update URL in tracker ──

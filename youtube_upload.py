@@ -218,10 +218,8 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
         "status": {
             "privacyStatus":            "public",
             "selfDeclaredMadeForKids":    False,
-            # NOTE: AI disclosure ("Altered Content") must be set MANUALLY in YouTube Studio
-            # after upload. The YouTube Data API v3 does NOT support the
-            # selfDeclaredAlteredContent field — using it causes 400 errors.
-            # A Telegram reminder is sent after each upload to prompt this action.
+            # AI disclosure ("Altered Content"): Automatically set via containsSyntheticMedia for YPP compliance.
+            "containsSyntheticMedia":     True,
         },
     }
 
