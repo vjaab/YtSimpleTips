@@ -72,8 +72,9 @@ def trim_audio_silence(path, word_timestamps):
     end_trim = detect_leading_silence(reversed_audio, silence_threshold=-50.0)
 
     duration = len(audio)
-    # Cut final audio clip exactly 0.3s (300ms) before natural termination for loop optimization
-    end_cut_ms = end_trim + 300
+    # Keep exactly 100ms of silence at the end for smooth loop transitions
+    # without cutting into the actual speech (loop optimization)
+    end_cut_ms = max(0, end_trim - 100)
     if duration - start_trim - end_cut_ms > 100:
         trimmed_audio = audio[start_trim:duration-end_cut_ms]
     else:
@@ -131,10 +132,8 @@ def optimize_audio_gaps(audio_path, word_timestamps):
                 else:
                     target_gap_s = gap_s  # leave untouched
                 
-                # Enforce minimum gap of 0.15s (150ms)
-                if target_gap_s < 0.15:
-                    target_gap_s = 0.15
-                    
+                # Do NOT enforce a minimum gap if it is already very small (e.g. natural spacing or estimated zero gaps)
+                # target_gap_s is kept as is.
                 target_gap_ms = int(target_gap_s * 1000)
                 
                 # If target_gap_ms is different from original gap_ms, we compress/expand it
@@ -214,9 +213,11 @@ def _estimate_timestamps(text, duration):
 
 def get_audio_duration(path):
     try:
-        from mutagen.mp3 import MP3
-        return MP3(path).info.length
-    except Exception:
+        from pydub import AudioSegment
+        audio = AudioSegment.from_file(path)
+        return len(audio) / 1000.0
+    except Exception as e:
+        print(f"⚠️ get_audio_duration fallback from pydub: {e}")
         try:
             import soundfile as sf
             data, sr = sf.read(path)
@@ -454,12 +455,25 @@ async def _async_generate_edge_tts(text, output_path):
 
 def _generate_edge_tts(text, output_path):
     print("📡 [audio_gen] Synthesizing with Edge TTS (ta-IN-ValluvarNeural)...")
+    temp_mp3 = output_path + ".temp.mp3"
     try:
-        asyncio.run(_async_generate_edge_tts(text, output_path))
-        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+        # Edge TTS generates MP3. We save it as temp_mp3, then convert it to a WAV format matching the extension
+        asyncio.run(_async_generate_edge_tts(text, temp_mp3))
+        if os.path.exists(temp_mp3) and os.path.getsize(temp_mp3) > 0:
+            from pydub import AudioSegment
+            audio = AudioSegment.from_file(temp_mp3)
+            # Normalize to 44100Hz mono WAV
+            audio = audio.set_frame_rate(44100).set_channels(1).set_sample_width(2)
+            audio.export(output_path, format="wav")
+            os.remove(temp_mp3)
             return output_path
     except Exception as e:
         print(f"   ✗ Edge TTS failed: {e}")
+        if os.path.exists(temp_mp3):
+            try:
+                os.remove(temp_mp3)
+            except:
+                pass
     return None
 
 def detect_audio_breaks(audio_path: str) -> list[tuple]:
@@ -715,13 +729,19 @@ def measure_loudness_and_peaks(audio_path: str) -> tuple[float, float, int]:
         res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         stderr = res.stderr
         
+        # Split by Summary to get final summary block and avoid matching frame-by-frame stats (e.g. matching initial frame's -70 LUFS)
+        if "Summary:" in stderr:
+            summary_part = stderr.split("Summary:")[-1]
+        else:
+            summary_part = stderr
+            
         # Parse Integrated loudness (I:)
-        i_match = re.search(r'I:\s+([-\d.]+)\s+LUFS', stderr)
+        i_match = re.search(r'I:\s+([-\d.]+)\s+LUFS', summary_part)
         if i_match:
             lufs = float(i_match.group(1))
             
         # Parse True peak (Peak:)
-        tp_match = re.search(r'Peak:\s+([-\d.]+)\s+dBFS', stderr)
+        tp_match = re.search(r'Peak:\s+([-\d.]+)\s+dBFS', summary_part)
         if tp_match:
             true_peak = float(tp_match.group(1))
             
