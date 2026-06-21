@@ -1,0 +1,27 @@
+{
+    "top_categories": [
+        "tech",
+        "study"
+    ],
+    "average_script_length": 58,
+    "average_view_percentage": 82.5,
+    "top_videos": [
+        {
+            "title": "Secret WhatsApp setting you must change! 🤫",
+            "category": "tech",
+            "script_word_count": 55,
+            "likes": 1200,
+            "comments": 150,
+            "averageViewPercentage": 88.2
+        },
+        {
+            "title": "Clear browser speed boost hack 🚀",
+            "category": "tech",
+            "script_word_count": 59,
+            "likes": 980,
+            "comments": 95,
+            "averageViewPercentage": 79.5
+        }
+    ],
+    "last_updated": "2026-06-21T05:24:39.725100"
+}
