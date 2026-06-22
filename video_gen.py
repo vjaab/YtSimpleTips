@@ -340,7 +340,10 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
     word_widths = []
     
     for i, wd in enumerate(word_status_list):
-        font = get_font_for_text(words[i], base_size, "bold")
+        is_active = wd["is_active"]
+        weight = "extrabold" if is_active else "bold"
+        size = int(base_size * 1.15) if is_active else base_size
+        font = get_font_for_text(words[i], size, weight)
         bbox = font.getbbox(words[i])
         word_widths.append(bbox[2] - bbox[0])
         
@@ -746,6 +749,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         vpath = chunk.get("visual_path")
         has_info = chunk.get("has_infographic", False)
         
+        # Ensure a small overlap to prevent one-frame rendering gaps between consecutive visual clips
+        overlap = 0.1
+        safe_dur = c_dur + overlap if (i < len(chunks) - 1) else c_dur
+        
         # Store first chunk visual for loop engineering
         if i == 0 and vpath:
             first_chunk_visual_path = vpath
@@ -769,10 +776,12 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
         # 1. Overlay infographic card if flagged
         if has_info:
-            card_clip, overlay_clip = build_infographic_clip(chunk, accent_color, is_longform=is_longform)
+            chunk_copy = dict(chunk)
+            chunk_copy["duration"] = safe_dur
+            card_clip, overlay_clip = build_infographic_clip(chunk_copy, accent_color, is_longform=is_longform)
             if card_clip:
                 # Add whiteboard backing clip for the card
-                dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
+                dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
                 background_clips.append(dark_bg)
                 background_clips.append(overlay_clip)
                 background_clips.append(card_clip)
@@ -784,28 +793,28 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 # Screenshot evidence panel canvas
                 img = Image.open(vpath).convert("RGBA")
                 canvas = _prepare_evidence_canvas(img, url=chunk.get("source_url"))
-                c_clip = ImageClip(np.array(canvas)).with_duration(c_dur).with_start(c_start)
+                c_clip = ImageClip(np.array(canvas)).with_duration(safe_dur).with_start(c_start)
                 
                 # Gentle Ken Burns scale zoom effect on screenshots
-                c_clip = c_clip.resized(lambda t: 1.0 + 0.04 * (t / max(0.1, c_dur)))
+                c_clip = c_clip.resized(lambda t: 1.0 + 0.04 * (t / max(0.1, safe_dur)))
                 
                 # Overlay on off-white whiteboard backing clip
-                whiteboard_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
+                whiteboard_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
                 background_clips.append(whiteboard_bg)
                 background_clips.append(c_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
                 # Ken burns zoom with randomized direction for visual variety
                 zoom_dir = "in" if i % 2 == 0 else "out"
-                c_clip = build_ken_burns(vpath, c_dur, zoom_direction=zoom_dir).with_start(c_start)
+                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir).with_start(c_start)
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Video clip (Pexels or Veo 3.1)
                 c_clip = VideoFileClip(vpath).without_audio().with_start(c_start)
-                if c_clip.duration < c_dur:
+                if c_clip.duration < safe_dur:
                     # Loop video if too short
-                    c_clip = c_clip.with_effects([vfx.Loop(duration=c_dur)])
+                    c_clip = c_clip.with_effects([vfx.Loop(duration=safe_dur)])
                 else:
-                    c_clip = c_clip.subclipped(0, c_dur)
+                    c_clip = c_clip.subclipped(0, safe_dur)
                     
                 # Resize and crop to crop-fill vertical frame
                 w, h = c_clip.size
@@ -822,7 +831,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 background_clips.append(c_clip)
         else:
             # Fallback whiteboard color clip
-            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=c_dur).with_start(c_start)
+            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
             background_clips.append(c_clip)
 
     # Compile the base composited backgrounds

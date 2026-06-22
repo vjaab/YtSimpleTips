@@ -24,7 +24,8 @@ Language Rules:
 2. Subtitles & Captions (`subtitle_chunks`):
    - The `text` field MUST contain the spoken Tanglish segment for that chunk to ensure perfect audio-to-text alignment.
    - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words in English in uppercase, e.g., "PHONE SETTING", "BOOST SPEED", "5-SECOND RULE", "FOCUS HACK") representing the central concept spoken in that chunk. Do NOT write Tamil text or complete sentences in `english_caption`. These will be displayed as bold, clean English captions on screen to highlight important takeaways.
-3. Visual prompts (`nano_visual_prompt`): MUST be written in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Focus on high-retention elements:
+3. Spacing Guard: Ensure proper spaces are placed between words. Never concatenate Tamil and English words together (e.g. write 'Replacement இருக்கு' instead of 'Replacementஇருக்கு'), never concatenate distinct English words (e.g. write 'shortcut code' instead of 'shortcutcode', 'time save' instead of 'timesave'), and never concatenate distinct Tamil words (e.g. write 'இதை பாருங்க' instead of 'இதைபாருங்க'). Always verify word boundaries.
+4. Visual prompts (`nano_visual_prompt`): MUST be written in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Focus on high-retention elements:
    - Art style: Clean modern anime (similar to Jujutsu Kaisen / Demon Slayer style and color palette).
    - Color grading: Deep navy + electric blue + neon orange accent glows. No text overlays or watermarks.
    - Characters: Stylized silhouette or faceless anime protagonist. Any characters depicted should look South Indian Tamil but in stylized anime format.

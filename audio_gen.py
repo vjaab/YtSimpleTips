@@ -267,6 +267,9 @@ def preprocess_script_for_tts(text: str) -> str:
         return ""
     # Strip brackets/parentheses
     text = re.sub(r'\[[^\]]*\]|\([^)]*\)', '', text)
+    # Spacing Guard: Ensure proper spaces between English/Latin and Tamil runs
+    text = re.sub(r'([a-zA-Z0-9])([\u0b80-\u0bff])', r'\1 \2', text)
+    text = re.sub(r'([\u0b80-\u0bff])([a-zA-Z0-9])', r'\1 \2', text)
     # Replace "..." with ", "
     text = text.replace("...", ", ")
     # Replace " - " with ", "
@@ -623,10 +626,8 @@ def upsample_audio_to_44100(audio_path: str) -> None:
 
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
-    Generates Tamil/Tanglish voiceover with 3-tier fallback architecture:
-    1. Primary: ElevenLabs Multilingual (Cloud vj.wav Voice Clone)
-    2. Fallback 1: Kaggle GPU offloaded IndicF5 Voice Cloning (Local vj.wav)
-    3. Fallback 2: Edge TTS Tamil (Free cloud narrator)
+    Generates Tamil/Tanglish voiceover using ElevenLabs Multilingual (Cloud vj.wav Voice Clone).
+    Other fallbacks (Kaggle, Edge TTS) are disabled.
     """
     clean_text = preprocess_script_for_tts(text)
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -635,46 +636,14 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     global VOICE_FALLBACK_USED
     VOICE_FALLBACK_USED = False
     
-    path = None
-    is_indic_f5 = False
-    
-    # ── PRIMARY: ELEVENLABS CLONED VOICE ──
     path = _generate_elevenlabs(clean_text, wav_path)
     if not path:
-        print("⚠️ ElevenLabs primary generation failed. Triggering Fallback 1 (Kaggle GPU)...")
-        # ── FALLBACK 1: KAGGLE GPU JOB ──
-        if KAGGLE_USERNAME and KAGGLE_KEY:
-            print("🎙️ [audio_gen] Running Fallback 1: Kaggle GPU IndicF5 Voice Cloning...")
-            script_payload = {"script": clean_text}
-            
-            job_result = trigger_kaggle_gpu_job(script_payload, custom_phonetic_map)
-            
-            if job_result and "error" not in job_result:
-                local_wav = job_result.get("audio_path")
-                if local_wav and os.path.exists(local_wav):
-                    shutil.copy(local_wav, wav_path)
-                    path = wav_path
-                    is_indic_f5 = True
-                else:
-                    print("⚠️ Kaggle job succeeded but audio file not found. Falling back...")
-            else:
-                reason = job_result.get("message") if job_result else "Unknown Kaggle error"
-                print(f"⚠️ Kaggle GPU voice cloning failed: {reason}. Triggering Fallback 2...")
-        
-        if not path:
-            # ── FALLBACK 2: EDGE TTS TAMIL ──
-            VOICE_FALLBACK_USED = True
-            print("⚠️ Edge TTS fallback active — voice clone not matched")
-            path = _generate_edge_tts(clean_text, wav_path)
-            
-    if not path:
-        raise RuntimeError("🚨 ALL audio generation methods failed! Aborting pipeline.")
+        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled. Aborting pipeline.")
         
     # ── UNIFIED POST-PROCESSING PIPELINE ──
     
     # Step 1: Upsample if IndicF5 was used
-    if is_indic_f5:
-        upsample_audio_to_44100(path)
+    # (IndicF5 is disabled, so we skip upsampling)
         
     # Step 2: Run break detection and fixing before mastering
     breaks = detect_audio_breaks(path)
@@ -696,10 +665,6 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     dur, word_timestamps = trim_audio_silence(path, word_timestamps)
     dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
     
-    # Final warning log if voice fallback was used
-    if VOICE_FALLBACK_USED:
-        print("⚠️ WARNING: Edge TTS fallback active — voice clone not matched")
-        
     print(f"⭐ [audio_gen] Audio generation and processing complete. Path: {path}, Duration: {dur:.2f}s")
     return path, dur, word_timestamps
 

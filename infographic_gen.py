@@ -41,15 +41,28 @@ _font_cache = {}
 def _load_font(path, size):
     key = (path, size)
     if key not in _font_cache:
+        font_obj = None
         for p in [path] + _FALLBACKS:
             if os.path.exists(p):
                 try:
-                    _font_cache[key] = ImageFont.truetype(p, size)
+                    font_obj = ImageFont.truetype(p, size)
+                    try:
+                        if hasattr(font_obj, "set_variation_by_name"):
+                            basename = os.path.basename(p).lower()
+                            if "extrabold" in basename:
+                                font_obj.set_variation_by_name(b"ExtraBold")
+                            elif "bold" in basename:
+                                font_obj.set_variation_by_name(b"Bold")
+                            elif "regular" in basename:
+                                font_obj.set_variation_by_name(b"Regular")
+                    except Exception:
+                        pass
                     break
                 except Exception:
                     pass
-        if key not in _font_cache:
-            _font_cache[key] = ImageFont.load_default()
+        if font_obj is None:
+            font_obj = ImageFont.load_default()
+        _font_cache[key] = font_obj
     return _font_cache[key]
 
 def is_emoji(text):
