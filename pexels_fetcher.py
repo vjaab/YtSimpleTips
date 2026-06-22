@@ -80,19 +80,28 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
     return None
 
 def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
-    """Free, no-key AI image generation fallback if Imagen and Veo fail."""
-    try:
-        width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
-        encoded_prompt = requests.utils.quote(prompt)
-        url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
-        print(f"     → Attempting Pollinations AI fallback...")
-        resp = requests.get(url, timeout=30)
-        if resp.status_code == 200:
-            with open(output_path, "wb") as f:
-                f.write(resp.content)
-            return output_path
-    except Exception as e:
-        print(f"  ⚠️ [pollinations] Generation failed: {e}")
+    """Free, no-key AI image generation fallback if Imagen and Veo fail. With robust retry logic."""
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    encoded_prompt = requests.utils.quote(prompt)
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+    
+    max_attempts = 3
+    for attempt in range(1, max_attempts + 1):
+        try:
+            print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})...")
+            resp = requests.get(url, timeout=35)
+            if resp.status_code == 200:
+                with open(output_path, "wb") as f:
+                    f.write(resp.content)
+                return output_path
+            else:
+                print(f"  ⚠️ [pollinations] Attempt {attempt} returned status: {resp.status_code}")
+        except Exception as e:
+            print(f"  ⚠️ [pollinations] Attempt {attempt} failed: {e}")
+        
+        if attempt < max_attempts:
+            time.sleep(2)
+            
     return None
 
 def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longform=False):

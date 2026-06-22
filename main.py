@@ -373,15 +373,18 @@ def run_pipeline(forced_category=None, dry_run=False):
     update_youtube_url(fact_headline, youtube_url)
 
     # ── STEP 12: Cleanup temp files ──
-    log_message("STEP 12: Cleaning up output files...")
-    cleaned_count = 0
-    for f in glob.glob(os.path.join(OUTPUT_DIR, "*")):
-        try:
-            if os.path.isfile(f):
-                os.remove(f)
-                cleaned_count += 1
-        except Exception as e:
-            log_message(f"Failed to delete {f}: {e}")
+    if not dry_run:
+        log_message("STEP 12: Cleaning up output files...")
+        cleaned_count = 0
+        for f in glob.glob(os.path.join(OUTPUT_DIR, "*")):
+            try:
+                if os.path.isfile(f):
+                    os.remove(f)
+                    cleaned_count += 1
+            except Exception as e:
+                log_message(f"Failed to delete {f}: {e}")
+    else:
+        log_message("ℹ️ [DRY-RUN] Skipping cleanup to preserve generated video and assets for verification.")
 
     log_message("=== PIPELINE COMPLETED SUCCESSFULLY ===")
     return True

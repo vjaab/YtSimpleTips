@@ -435,7 +435,7 @@ def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
     cx = (FRAME_W - tw) // 2
-    cy = int(FRAME_H * 0.76)  # Moved down for dual-caption layout
+    cy = int(FRAME_H * 0.67)  # Positioned closer to center subtitles
     
     # Pop-in animation: scale from 0 → 1.1 → 1.0
     if progress < 0.15:
@@ -855,10 +855,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             print(f"⚠️ [video_gen] Could not pre-load first frame for loop: {e}")
     
     # ── RETENTION OVERLAYS & SUBTITLES ──
-    if audio_duration > 1.5:
-        vignette = _gradient_overlay(audio_duration - 1.5).with_start(1.5)
-    else:
-        vignette = _gradient_overlay(audio_duration)
+    vignette = _gradient_overlay(audio_duration)
     
     # Generate Header bar watermark
     header_clip = None
@@ -872,10 +869,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
         header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
-        if audio_duration > 1.5:
-            header_clip = ImageClip(np.array(header_img)).with_start(1.5).with_duration(audio_duration - 1.5)
-        else:
-            header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
+        header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
     # ── EMOJI OVERLAY CONFIG ──
     emoji_moments = []
@@ -895,92 +889,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     
     # Frame Assembly Loop
     def make_final_frame(t):
-        if t < 1.5:
-            # Premium gradient hook card with neon glow text
-            hook_text = script_json.get("hook", "")
-            img = Image.new("RGB", (FRAME_W, FRAME_H), (8, 8, 18))
-            draw = ImageDraw.Draw(img)
-            
-            # Draw vertical gradient: deep navy (top) → dark purple (bottom)
-            for y in range(FRAME_H):
-                ratio = y / FRAME_H
-                r = int(8 + 18 * ratio)
-                g = int(8 + 5 * ratio)
-                b = int(18 + 22 * ratio)
-                draw.line([(0, y), (FRAME_W, y)], fill=(r, g, b))
-            
-            # Radial center glow (subtle)
-            glow_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-            glow_draw = ImageDraw.Draw(glow_img)
-            cx, cy_center = FRAME_W // 2, FRAME_H // 2
-            for radius in range(400, 0, -5):
-                alpha = int(15 * (1.0 - radius / 400.0))
-                ar, ag, ab = accent_color
-                glow_draw.ellipse(
-                    [cx - radius, cy_center - radius, cx + radius, cy_center + radius],
-                    fill=(ar, ag, ab, alpha)
-                )
-            img.paste(Image.alpha_composite(Image.new("RGBA", (FRAME_W, FRAME_H), (0,0,0,0)), glow_img).convert("RGB"), (0, 0))
-            draw = ImageDraw.Draw(img)
-            
-            # Accent line at top (category color)
-            ar, ag, ab = accent_color
-            draw.rectangle([0, 0, FRAME_W, 4], fill=(ar, ag, ab))
-            
-            # Hook text with neon glow effect
-            base_size = int(68 * (FRAME_W / 1080.0))
-            words = hook_text.split()
-            lines = []
-            current_line = []
-            for w in words:
-                current_line.append(w)
-                line_str = " ".join(current_line)
-                font = get_font_for_text(line_str, base_size, "bold")
-                bbox = font.getbbox(line_str)
-                lw = bbox[2] - bbox[0]
-                if lw > FRAME_W * 0.85 and len(current_line) > 1:
-                    current_line.pop()
-                    lines.append(" ".join(current_line))
-                    current_line = [w]
-            if current_line:
-                lines.append(" ".join(current_line))
-                
-            line_h = int(110 * (FRAME_W / 1080.0))
-            total_h = len(lines) * line_h
-            y_pos = (FRAME_H - total_h) // 2
-            
-            # Fade-in animation for text (0 → 1.0 over first 0.4s)
-            text_alpha = min(255, int(255 * (t / 0.4))) if t < 0.4 else 255
-            
-            for i, line in enumerate(lines):
-                font = get_font_for_text(line, base_size, "bold")
-                bbox = font.getbbox(line)
-                lw = bbox[2] - bbox[0]
-                lx = (FRAME_W - lw) // 2
-                # Subtle glow behind text using accent color
-                for dx in [-2, -1, 0, 1, 2]:
-                    for dy in [-2, -1, 0, 1, 2]:
-                        if abs(dx) + abs(dy) > 0:
-                            draw.text((lx + dx, y_pos + i * line_h + dy), line, fill=(ar, ag, ab, int(text_alpha * 0.35)), font=font)
-                draw.text((lx, y_pos + i * line_h), line, fill=(255, 255, 255, text_alpha), font=font)
-            
-            # Cross-dissolve into first content frame during last 0.3s of hook
-            if t > 1.2:
-                dissolve_progress = (t - 1.2) / 0.3
-                try:
-                    content_frame = base_comp.get_frame(1.5)
-                    content_frame = desaturate_frame(content_frame, 0.85)
-                    content_frame = apply_anime_color_grade(content_frame)
-                    hook_arr = np.array(img)
-                    blended = cv2.addWeighted(hook_arr, 1.0 - dissolve_progress, content_frame, dissolve_progress, 0)
-                    return blended
-                except Exception:
-                    pass
-            
-            return np.array(img)
-
         frame = base_comp.get_frame(t)
-        
         # ── ANIME COLOR GRADE & DESATURATION ──
         frame = desaturate_frame(frame, 0.85)
         frame = apply_anime_color_grade(frame)
