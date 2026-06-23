@@ -722,6 +722,43 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
         print(f"⚠️ [audio_mastering] Audio mixing failed: {e}. Copying raw voice.")
         shutil.copy(voice_path, output_path)
 
+def _generate_lipsync_video(audio_path, face_path=None):
+    if face_path is None:
+        face_path = os.path.join(ASSETS_DIR, "video", "Firefly_video_final.mp4")
+    if not os.path.exists(face_path):
+        print(f"{os.path.basename(face_path)} not found in assets. Skipping lip sync.")
+        return None
+
+    output_path = os.path.join(OUTPUT_DIR, "temp_lipsync.mp4")
+    
+    # If Kaggle was enabled but failed to return a lipsync (e.g., crashed), do NOT fall back to local MPS/CPU 
+    # to avoid extremely long 30+ min processing times.
+    has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
+    use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
+    
+    if has_kaggle and not use_local_only:
+        print("⚠️ Kaggle GPU was enabled but no lip-sync received. Skipping slow local fallback.")
+        return None
+
+    try:
+        from lip_sync import get_available_engine, generate_lip_sync
+        engine = get_available_engine()
+        print(f"🎭 Lip-sync engine: {engine or 'None available'}")
+
+        result = generate_lip_sync(
+            face_path=face_path,
+            audio_path=audio_path,
+            output_path=output_path,
+        )
+
+        if result and os.path.exists(result):
+            print(f"🎭 Lip-sync successful: {result}")
+            return result
+    except Exception as e:
+        print(f"🎭 Lip-sync helper import/execution failed: {e}")
+
+    print("🎭 Lip-sync generation failed or unavailable.")
+    return None
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ── MAIN VIDEO RENDERING ENGINE ──────────────────────────────────────────────
@@ -912,6 +949,105 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
     middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color).with_start(0).with_position((0, 864))
     background_clips.append(middle_clip)
+
+    # ── AVATAR VIDEO PIP OVERLAY ──
+    skip_avatar = script_json.get("skip_avatar", False)
+    if not skip_avatar:
+        lipsync_path = script_json.get("kaggle_lipsync_path")
+        face_template = script_json.get("lipsync_face_path") or os.path.join(ASSETS_DIR, "video", "Firefly_video_final.mp4")
+        if not lipsync_path or not os.path.exists(lipsync_path):
+            lipsync_path = _generate_lipsync_video(audio_path, face_template)
+            
+        avatar_video_path = lipsync_path if lipsync_path else face_template
+        if avatar_video_path and os.path.exists(avatar_video_path):
+            print(f"Preparing Talking Head Avatar PiP from: {avatar_video_path}")
+            try:
+                vid_clip = VideoFileClip(avatar_video_path).without_audio()
+                if vid_clip.duration < audio_duration:
+                    vid_clip = vid_clip.with_effects([vfx.Loop(duration=audio_duration)])
+                else:
+                    vid_clip = vid_clip.subclipped(0, audio_duration)
+                
+                w_a, h_a = vid_clip.size
+                target_aspect = 9 / 16
+                if w_a / h_a > target_aspect:
+                    new_w = int(h_a * target_aspect)
+                    x1 = (w_a - new_w) // 2
+                    vid_clip = vid_clip.cropped(x1=x1, y1=0, x2=x1+new_w, y2=h_a)
+                else:
+                    new_h = int(w_a / target_aspect)
+                    y1 = int((h_a - new_h) * 0.12) if h_a > new_h else 0
+                    vid_clip = vid_clip.cropped(x1=0, y1=y1, x2=w_a, y2=y1+new_h)
+                w_a, h_a = vid_clip.size
+                
+                height_pip = int(FRAME_H * 0.40)
+                width_pip = int(height_pip * (w_a / h_a))
+                avatar_clip = vid_clip.resized((width_pip, height_pip))
+                
+                # AI Background Removal with rembg
+                try:
+                    from rembg import remove, new_session
+                    print("👤 [video_gen] Initializing AI Background Removal (Dynamic u2net_human_seg)...")
+                    rembg_session = new_session(model_name="u2net_human_seg")
+                    unmasked_avatar = avatar_clip
+                    mask_cache = {}
+                    fps = getattr(vid_clip, "fps", 30.0) or 30.0
+                    
+                    def make_mask_frame(t):
+                        frame_idx = int(round(t * fps))
+                        if frame_idx in mask_cache:
+                            return mask_cache[frame_idx]
+                        frame = unmasked_avatar.get_frame(t)
+                        rgba = remove(
+                            frame,
+                            session=rembg_session,
+                            alpha_matting=False,
+                            post_process_mask=True
+                        )
+                        mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
+                        # Watermark erasure: zero out bottom 12%
+                        h_mask, w_mask = mask.shape
+                        watermark_height = int(h_mask * 0.12)
+                        mask[-watermark_height:, :] = 0.0
+                        mask_cache[frame_idx] = mask
+                        return mask
+                        
+                    mclip = VideoClip(make_mask_frame, is_mask=True, duration=audio_duration)
+                    avatar_clip = avatar_clip.with_mask(mclip)
+                    print("   ✅ Dynamic AI background removal applied frame-by-frame.")
+                except Exception as re_err:
+                    print(f"⚠️ rembg failed: {re_err}. Falling back to Rounded Authority Card.")
+                    rad = int(min(width_pip, height_pip) * 0.15)
+                    mask = np.ones((height_pip, width_pip), dtype=np.float32)
+                    Y, X = np.ogrid[:height_pip, :width_pip]
+                    for y, x in [(rad, rad), (rad, width_pip-rad), (height_pip-rad, rad), (height_pip-rad, width_pip-rad)]:
+                        dist = np.sqrt((Y-y)**2 + (X-x)**2)
+                        corner_mask = (dist > rad) & ( ( (Y<rad) if y==rad else (Y>height_pip-rad) ) & ( (X<rad) if x==rad else (X>width_pip-rad) ) )
+                        mask[corner_mask] = 0.0
+                    mclip = VideoClip(lambda t: mask, is_mask=True, duration=audio_duration)
+                    avatar_clip = avatar_clip.with_mask(mclip)
+                
+                # "Alive" motion (head-bob and breathing)
+                zoom_speed = 0.10 / max(audio_duration, 1.0)
+                avatar_clip = avatar_clip.with_effects([
+                    vfx.Resize(lambda t: 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)),
+                    vfx.Rotate(lambda t: 0.6 * math.sin(t * 1.4 + 0.5))
+                ])
+                
+                # Position avatar at bottom-center
+                def pip_position(t):
+                    current_scale = 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)
+                    scaled_w = int(width_pip * current_scale)
+                    scaled_h = int(height_pip * current_scale)
+                    base_x = (FRAME_W - scaled_w) // 2
+                    base_y = FRAME_H - scaled_h - 30
+                    return (base_x, base_y)
+                    
+                avatar_pip = avatar_clip.with_position(pip_position).with_start(0)
+                background_clips.append(avatar_pip)
+                print("✅ [video_gen] Avatar PiP added successfully to composite background layers!")
+            except Exception as av_err:
+                print(f"❌ [video_gen] Failed to process avatar video clip: {av_err}")
 
     # Compile the base composited backgrounds
     base_comp = CompositeVideoClip(background_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)

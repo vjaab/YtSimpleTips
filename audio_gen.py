@@ -624,10 +624,177 @@ def upsample_audio_to_44100(audio_path: str) -> None:
     except Exception as e:
         print(f"⚠️ [audio_gen] Upsampling failed: {e}")
 
+# ── F5-TTS Config ─────────────────────────────────────────────────────────────
+VJ_REF_WAV = os.path.join(ASSETS_DIR, "vj.wav")
+VJ_REF_TEXT = (
+    "Welcome you are listening to your channel, we bring you the best insights, ideas and stories. Drafted just for you Stay tuned and let's get started."
+)
+
+_f5_instance = None
+
+def _get_f5_model():
+    global _f5_instance
+    if _f5_instance is None:
+        import torch
+        from f5_tts.api import F5TTS
+
+        device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
+        print(f"Initialising F5-TTS (Local Voice Cloning) on {device}...")
+        _f5_instance = F5TTS(device=device)
+    return _f5_instance
+
+def unload_f5_model():
+    """Explicitly unload F5-TTS model from GPU to free up memory."""
+    global _f5_instance
+    if _f5_instance is not None:
+        import torch
+        import gc
+        print("🧹 Unloading F5-TTS model and clearing CUDA cache...")
+        _f5_instance = None
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.ipc_collect()
+
+def _smart_split_sentences(text, max_chars=120):
+    """
+    Split text into natural sentence-boundary chunks for F5-TTS.
+    Keeps chunks under max_chars to prevent the 12s clipping issue.
+    Splits at sentence boundaries (.?!) then at clause boundaries (,;:—) as fallback.
+    """
+    import re
+    # First split into sentences
+    parts = re.split(r'(?<=[.!?])\s+', text)
+    chunks = []
+    current = ""
+    for part in parts:
+        if len(current + " " + part) < max_chars:
+            current = (current + " " + part).strip()
+        else:
+            if current:
+                chunks.append(current.strip())
+            # If a single sentence is still too long, split at clause boundaries
+            if len(part) > max_chars:
+                clause_parts = re.split(r'(?<=[,;:\—])\s+', part)
+                sub_current = ""
+                for cp in clause_parts:
+                    if len(sub_current + " " + cp) < max_chars:
+                        sub_current = (sub_current + " " + cp).strip()
+                    else:
+                        if sub_current:
+                            chunks.append(sub_current.strip())
+                        sub_current = cp
+                current = sub_current
+            else:
+                current = part
+    if current:
+        chunks.append(current.strip())
+    return [c for c in chunks if c]
+
+def _postprocess_voice_audio(wav_path):
+    """
+    Professional post-processing chain to enhance clarity and presence:
+    1. High-pass filter at 120Hz to remove low-end rumble and mud.
+    2. Three-Band Presence EQ Crossover Network:
+       - Lows (100Hz - 200Hz): warm chest boost (+1.5dB).
+       - Mids (200Hz - 3kHz): vocal core.
+       - Highs (3kHz - 15kHz): crisp sparkle presence boost (+3.5dB) and high-end air.
+    3. Dynamic Range Compression to level out the voice and make it "pop".
+    4. Final normalization to -1dB for consistent loudness.
+    5. Subtle fade-in/out to prevent clicks.
+    """
+    try:
+        from pydub import AudioSegment
+        from pydub.effects import normalize, compress_dynamic_range
+        
+        audio = AudioSegment.from_wav(wav_path)
+        
+        # 1. High-pass filter (120Hz) - Removes low-frequency room rumble
+        audio = audio.high_pass_filter(120)
+        
+        # 2. Three-Band Presence EQ Crossover
+        lows = audio.low_pass_filter(200).high_pass_filter(100)
+        mids = audio.high_pass_filter(200).low_pass_filter(3000)
+        highs = audio.high_pass_filter(3000)
+        
+        # Apply premium boosting gains
+        lows = lows + 1.5   # Warmth chest boost
+        highs = highs + 3.5 # Sparkle & presence air boost
+        
+        # Recombine frequency crossover bands
+        audio = lows.overlay(mids).overlay(highs)
+        
+        # 3. Dynamic Compression - Makes the voice sound authoritative and professional
+        audio = compress_dynamic_range(audio, threshold=-15.0, ratio=3.0, attack=5.0, release=50.0)
+        
+        # 4. Final Normalization
+        audio = normalize(audio, headroom=1.0)
+        
+        # 5. Prevent click artifacts
+        audio = audio.fade_in(5).fade_out(5)
+        
+        audio.export(wav_path, format="wav")
+        print(f"   🎙️ Audio enhanced: 120Hz HPF, 3-band presence EQ, dynamic compression, normalized to -1dB")
+    except Exception as e:
+        print(f"   ⚠ Audio post-processing skipped: {e}")
+
+def _generate_f5_clone(text, output_path):
+    print("F5-TTS → Cloning VJ's Voice (High-Quality Pipeline)...")
+    
+    wav_path = output_path.replace(".mp3", ".wav")
+    
+    # Smart sentence-boundary splitting (120 chars max per chunk)
+    chunks = _smart_split_sentences(text, max_chars=120)
+    print(f"   Split into {len(chunks)} voice segments")
+    
+    # Generate each segment with F5-TTS
+    f5 = _get_f5_model()
+    segment_paths = []
+    for i, chunk in enumerate(chunks):
+        seg_path = wav_path.replace(".wav", f"_seg_{i}.wav")
+        f5.infer(
+            ref_file=VJ_REF_WAV,
+            ref_text=VJ_REF_TEXT,
+            gen_text=chunk,
+            file_wave=seg_path,
+            nfe_step=64,      # Increased from 32 for higher audio fidelity and clarity
+            remove_silence=True, # Cleanup of chunk edges
+            speed=1.0
+        )
+        segment_paths.append(seg_path)
+        
+    # Combine segments with 30ms cross-fade for seamless joins
+    CROSSFADE_MS = 30
+    from pydub import AudioSegment
+    combined = AudioSegment.from_wav(segment_paths[0]) if segment_paths else AudioSegment.empty()
+    for sp in segment_paths[1:]:
+        seg = AudioSegment.from_wav(sp)
+        combined = combined.append(seg, crossfade=CROSSFADE_MS)
+    
+    # Clean up segment files
+    for sp in segment_paths:
+        try: os.remove(sp)
+        except: pass
+        
+    combined.export(wav_path, format="wav")
+    
+    # Post-process for professional voice quality
+    _postprocess_voice_audio(wav_path)
+    
+    duration = get_audio_duration(wav_path)
+    
+    # Word timestamps via stable-ts
+    word_timestamps = _apply_stable_ts(wav_path, text)
+    if not word_timestamps:
+        word_timestamps = _estimate_timestamps(text, duration)
+        
+    print(f"F5-TTS done: {duration:.2f}s | {len(word_timestamps)} word timestamps")
+    return wav_path, duration, word_timestamps
+
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
     Generates Tamil/Tanglish voiceover using ElevenLabs Multilingual (Cloud vj.wav Voice Clone).
-    Other fallbacks (Kaggle, Edge TTS) are disabled.
+    Falls back to F5-TTS or Edge TTS if ElevenLabs fails.
     """
     clean_text = preprocess_script_for_tts(text)
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -638,12 +805,39 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     
     path = _generate_elevenlabs(clean_text, wav_path)
     if not path:
-        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled. Aborting pipeline.")
+        print("🎙️ ElevenLabs failed. Trying F5-TTS fallback...")
+        try:
+            import torch
+            has_gpu = torch.cuda.is_available() or torch.backends.mps.is_available()
+            if has_gpu:
+                # F5-TTS logic
+                f5_wav, f5_dur, f5_ts = _generate_f5_clone(clean_text, wav_path)
+                if f5_wav and os.path.exists(f5_wav):
+                    path = f5_wav
+                    VOICE_FALLBACK_USED = True
+            else:
+                print("   Local GPU not found. Skipping F5-TTS fallback.")
+        except Exception as f5_err:
+            print(f"❌ F5-TTS voice cloning failed: {f5_err}")
+            path = None
+
+    if not path:
+        print("🎙️ ElevenLabs and F5-TTS failed. Trying Edge TTS fallback...")
+        try:
+            path = _generate_edge_tts(clean_text, wav_path)
+            if path:
+                VOICE_FALLBACK_USED = True
+        except Exception as edge_err:
+            print(f"❌ Edge-TTS failed: {edge_err}")
+            path = None
+
+    if not path:
+        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled or failed. Aborting pipeline.")
         
     # ── UNIFIED POST-PROCESSING PIPELINE ──
     
-    # Step 1: Upsample if IndicF5 was used
-    # (IndicF5 is disabled, so we skip upsampling)
+    # Step 1: Upsample if F5 was used
+    upsample_audio_to_44100(path)
         
     # Step 2: Run break detection and fixing before mastering
     breaks = detect_audio_breaks(path)

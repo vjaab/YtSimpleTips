@@ -9,8 +9,9 @@ from datetime import datetime
 
 from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY
 from fetch_topics import fetch_facts_for_category
-from topic_tracker import record_story, update_youtube_url
+from topic_tracker import record_story, update_youtube_url, get_next_avatar
 from gemini_script import pick_and_generate_script
+from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
 from audio_gen import generate_voiceover, clean_tts_text
 from chunk_builder import build_chunks, redistribute_to_audio_duration
@@ -233,14 +234,84 @@ def run_pipeline(forced_category=None, dry_run=False):
 
         # ── STEP 4: Generate Cloned Voice Audio ──
         log_message("STEP 4: Generating Tamil cloned voiceover...")
-        try:
-            audio_path, duration, word_timestamps = generate_voiceover(
-                script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
-            )
-        except Exception as e:
-            log_message(f"❌ Voiceover failed: {e}")
-            audio_path = None
+        
+        # Select Intro Video for Lip-Sync (Rotation)
+        intro_videos = glob.glob("assets/video/*.mp4")
+        if not intro_videos:
+            intro_videos = ["assets/video/Firefly_video_final.mp4"]
+        selected_avatar = get_next_avatar(intro_videos)
+        script_data["lipsync_face_path"] = selected_avatar
+        log_message(f"Selected Lip-Sync Template: {selected_avatar} (from {len(intro_videos)} options)")
+        
+        has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
+        use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
+        
+        if has_kaggle and not use_local_only:
+            log_message("🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...")
+            custom_map = script_data.get("phonetic_pronunciation_map", {})
+            results = trigger_kaggle_gpu_job(script_data, custom_map)
             
+            kaggle_failed = False
+            if results is None:
+                kaggle_failed = True
+                log_message("❌ Kaggle Handover returned None.")
+            elif isinstance(results, dict) and "error" in results:
+                kaggle_failed = True
+                log_message(f"❌ Kaggle Handover failed: {results.get('error')} - {results.get('message', '')}")
+                
+            if not kaggle_failed:
+                audio_path = results.get("audio_path")
+                duration = results.get("duration")
+                word_timestamps = results.get("word_timestamps")
+                ls_path = results.get("lipsync_path")
+                script_data["kaggle_lipsync_path"] = ls_path
+                
+                audio_received = audio_path and os.path.exists(audio_path)
+                ls_received = ls_path and os.path.exists(ls_path)
+                
+                if audio_received and ls_received:
+                    log_message("✅ Received Audio and Lip-Sync from Kaggle GPU!")
+                elif audio_received:
+                    log_message("✅ Received Audio from Kaggle GPU! (Lip-Sync was missing/failed)")
+                else:
+                    log_message("❌ Kaggle job finished but critical audio output is missing.")
+                    kaggle_failed = True
+            
+            if kaggle_failed:
+                log_message("🔄 Kaggle GPU failed. Falling back to local/cloud ElevenLabs voiceovers...")
+                try:
+                    audio_path, duration, word_timestamps = generate_voiceover(
+                        script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
+                    )
+                except Exception as e:
+                    log_message(f"❌ Voiceover failed: {e}")
+                    audio_path = None
+                script_data["kaggle_lipsync_path"] = None
+                if dry_run:
+                    script_data["skip_avatar"] = False
+                    log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
+                else:
+                    script_data["skip_avatar"] = True
+        else:
+            # Fallback/Local execution only: no Kaggle credentials
+            try:
+                audio_path, duration, word_timestamps = generate_voiceover(
+                    script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
+                )
+            except Exception as e:
+                log_message(f"❌ Voiceover failed: {e}")
+                audio_path = None
+            script_data["kaggle_lipsync_path"] = None
+            if dry_run:
+                script_data["skip_avatar"] = False
+                log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
+            else:
+                script_data["skip_avatar"] = True
+            
+        # Propagate Voice Fallback Status
+        import audio_gen
+        script_data["voice_fallback_used"] = getattr(audio_gen, "VOICE_FALLBACK_USED", False)
+        
         if not audio_path:
             log_message("❌ Audio generation failed. Retrying...")
             failed_topics.append(fact_headline)
@@ -253,9 +324,6 @@ def run_pipeline(forced_category=None, dry_run=False):
             attempts += 1
             continue
             
-        # Propagate Voice Fallback Status
-        import audio_gen
-        script_data["voice_fallback_used"] = getattr(audio_gen, "VOICE_FALLBACK_USED", False)
         break  # Success
 
     if not audio_path or not script_data or duration < min_dur:
@@ -268,7 +336,8 @@ def run_pipeline(forced_category=None, dry_run=False):
     keywords = script_data.get("keywords", [])
     record_story(
         title, fact_headline, subcat, keywords,
-        voice_used="VJ_Cloned_Voice", youtube_url="pending_upload", source_url=fact_url
+        voice_used="VJ_Cloned_Voice", youtube_url="pending_upload", source_url=fact_url,
+        avatar_used=None if script_data.get("skip_avatar") else script_data.get("lipsync_face_path")
     )
 
     # ── STEP 5: Build Word Visual Chunks ──

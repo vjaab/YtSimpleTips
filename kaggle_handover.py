@@ -31,6 +31,7 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
         "custom_map": custom_map or {},
         "elevenlabs_api_key": ELEVENLABS_API_KEY,
         "elevenlabs_voice_id": ELEVENLABS_VOICE_ID,
+        "face_path": script_data.get("lipsync_face_path", "assets/video/Firefly_video_final.mp4")
     }
     
     worker_script_path = os.path.join(scripts_dir, "kaggle_worker.py")
@@ -185,6 +186,8 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
             
             if results.get("audio_path"):
                 results["audio_path"] = os.path.abspath(os.path.join(output_dir, results["audio_path"]))
+            if results.get("lipsync_path"):
+                results["lipsync_path"] = os.path.abspath(os.path.join(output_dir, results["lipsync_path"]))
                 
             # Copy temp files out of scripts folder to clean up git workspace
             try:
