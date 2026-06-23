@@ -169,23 +169,98 @@ def _prepare_evidence_canvas(img, url=None):
         
     return canvas
 
-def build_ken_burns(img_path, duration, zoom_direction=None):
+def prepare_top_panel_screenshot_clip(screenshot_path, duration):
+    """Loads screenshot, pads/crops to 1080x864, and returns an ImageClip."""
+    if not screenshot_path or not os.path.exists(screenshot_path):
+        # Create a fallback blank card or solid color if file not found
+        img = Image.new("RGBA", (1080, 864), (15, 15, 20, 255))
+        return ImageClip(np.array(img)).with_duration(duration)
+        
+    img = Image.open(screenshot_path).convert("RGBA")
+    
+    # Target size is 1080 x 864
+    target_w, target_h = 1080, 864
+    
+    canvas = Image.new("RGBA", (target_w, target_h), (10, 10, 15, 255)) # Dark charcoal/black bg
+    
+    img_w, img_h = img.size
+    aspect = img_w / float(img_h)
+    
+    # If it is vertical (height > width, e.g. mobile screenshot), we scale to fit height 864 and pad the sides
+    if aspect < (target_w / float(target_h)):
+        new_h = target_h
+        new_w = int(new_h * aspect)
+        resized_img = img.resize((new_w, new_h), Image.LANCZOS)
+        cx = (target_w - new_w) // 2
+        canvas.paste(resized_img, (cx, 0))
+    else:
+        # Landscape: scale to fit width 1080 and pad the top/bottom
+        new_w = target_w
+        new_h = int(new_w / aspect)
+        resized_img = img.resize((new_w, new_h), Image.LANCZOS)
+        cy = (target_h - new_h) // 2
+        canvas.paste(resized_img, (0, cy))
+        
+    return ImageClip(np.array(canvas)).with_duration(duration)
+
+def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255, 0)):
+    """Creates a persistent title/hook banner of size 1080x192."""
+    width, height = 1080, 192
+    img = Image.new("RGBA", (width, height), (0, 0, 0, 255)) # Solid black banner
+    draw = ImageDraw.Draw(img)
+    
+    # Draw border lines or glowing accent lines at top and bottom of the banner
+    r, g, b = accent_color
+    draw.line([(0, 0), (width, 0)], fill=(r, g, b, 255), width=4) # Top border line
+    draw.line([(0, height - 4), (width, height - 4)], fill=(r, g, b, 255), width=4) # Bottom border line
+    
+    title_text = "".join(c for c in title_text if ord(c) < 0x2000).strip()
+    title_text = title_text.upper().strip()
+    
+    # We want a bold, high-impact font
+    font_size = 48
+    font = get_font_for_text(title_text, font_size, "extrabold")
+    
+    # Adjust font size if text is too long to fit in 980px wide
+    max_text_w = 980
+    for fs in range(48, 24, -2):
+        font = get_font_for_text(title_text, fs, "extrabold")
+        bbox = font.getbbox(title_text)
+        tw = bbox[2] - bbox[0]
+        if tw <= max_text_w:
+            break
+            
+    bbox = font.getbbox(title_text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    # Center the text in the banner
+    tx = (width - tw) // 2
+    ty = (height - th) // 2 - bbox[1] # Align vertically
+    
+    # Draw bold white text
+    draw.text((tx + 2, ty + 2), title_text, fill=(10, 10, 15, 200), font=font)
+    draw.text((tx, ty), title_text, fill=(255, 255, 255, 255), font=font)
+    
+    return ImageClip(np.array(img)).with_duration(duration)
+
+def build_ken_burns(img_path, duration, zoom_direction=None, target_size=(FRAME_W, FRAME_H)):
     """Builds a smooth Ken Burns effect clip with randomized zoom direction."""
     clip = ImageClip(img_path).with_duration(duration)
     w, h = clip.size
+    target_w_val, target_h_val = target_size
     
     # Crop to aspect ratio first
-    target_h = int(w * FRAME_H / FRAME_W)
+    target_h = int(w * target_h_val / target_w_val)
     if target_h <= h:
         y1 = (h - target_h) // 2
         clip = clip.cropped(x1=0, y1=y1, x2=w, y2=y1 + target_h)
     else:
-        target_w = int(h * FRAME_W / FRAME_H)
+        target_w = int(h * target_w_val / target_h_val)
         x1 = (w - target_w) // 2
         clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
         
     # Resize to match target frame dimensions
-    clip = clip.resized(new_size=(FRAME_W, FRAME_H))
+    clip = clip.resized(new_size=(target_w_val, target_h_val))
     
     # Guard against zero or extremely small duration to prevent NaN division
     safe_duration = max(0.1, duration) if duration else 1.0
@@ -367,7 +442,7 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
         lines.append(current_line)
         
     line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = int(FRAME_H * 0.58) - (len(lines) * line_h // 2) + y_shift
+    y_pos = int(FRAME_H * 0.16) - (len(lines) * line_h // 2) + y_shift
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -435,7 +510,7 @@ def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
     cx = (FRAME_W - tw) // 2
-    cy = int(FRAME_H * 0.67)  # Positioned closer to center subtitles
+    cy = int(FRAME_H * 0.78)
     
     # Pop-in animation: scale from 0 → 1.1 → 1.0
     if progress < 0.15:
@@ -780,32 +855,24 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             chunk_copy["duration"] = safe_dur
             card_clip, overlay_clip = build_infographic_clip(chunk_copy, accent_color, is_longform=is_longform)
             if card_clip:
-                # Add whiteboard backing clip for the card
-                dark_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
-                background_clips.append(dark_bg)
-                background_clips.append(overlay_clip)
-                background_clips.append(card_clip)
+                # Add bottom whiteboard backing clip for the card (cropped to bottom panel)
+                bottom_bg = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 1056))
+                background_clips.append(bottom_bg)
+                # Crop the centered card clip to fit the bottom panel and position it
+                card_clip_cropped = card_clip.cropped(x1=0, y1=528, x2=FRAME_W, y2=1392).with_position((0, 1056))
+                background_clips.append(card_clip_cropped)
                 continue
                 
         # 2. Add normal background images / video b-roll
         if vpath and os.path.exists(vpath):
             if vpath.endswith(".png") and "screenshot" in vpath.lower():
-                # Screenshot evidence panel canvas
-                img = Image.open(vpath).convert("RGBA")
-                canvas = _prepare_evidence_canvas(img, url=chunk.get("source_url"))
-                c_clip = ImageClip(np.array(canvas)).with_duration(safe_dur).with_start(c_start)
-                
-                # Gentle Ken Burns scale zoom effect on screenshots
-                c_clip = c_clip.resized(lambda t: 1.0 + 0.04 * (t / max(0.1, safe_dur)))
-                
-                # Overlay on off-white whiteboard backing clip
-                whiteboard_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
-                background_clips.append(whiteboard_bg)
-                background_clips.append(c_clip)
+                # Since we already have the screenshot in the top panel, fallback to bottom whiteboard bg
+                bottom_bg = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 1056))
+                background_clips.append(bottom_bg)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
-                # Ken burns zoom with randomized direction for visual variety
+                # Ken burns zoom with randomized direction for visual variety (sized to bottom panel)
                 zoom_dir = "in" if i % 2 == 0 else "out"
-                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir).with_start(c_start)
+                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, 864)).with_start(c_start).with_position((0, 1056))
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Video clip (Pexels or Veo 3.1)
@@ -816,23 +883,35 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 else:
                     c_clip = c_clip.subclipped(0, safe_dur)
                     
-                # Resize and crop to crop-fill vertical frame
+                # Resize and crop to crop-fill bottom panel
                 w, h = c_clip.size
-                target_h = int(w * FRAME_H / FRAME_W)
-                if target_h <= h:
-                    y1 = (h - target_h) // 2
-                    c_clip = c_clip.cropped(x1=0, y1=y1, x2=w, y2=y1 + target_h)
+                panel_h = 864
+                target_h_crop = int(w * panel_h / FRAME_W)
+                if target_h_crop <= h:
+                    y1 = (h - target_h_crop) // 2
+                    c_clip = c_clip.cropped(x1=0, y1=y1, x2=w, y2=y1 + target_h_crop)
                 else:
-                    target_w = int(h * FRAME_W / FRAME_H)
-                    x1 = (w - target_w) // 2
-                    c_clip = c_clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
+                    target_w_crop = int(h * FRAME_W / panel_h)
+                    x1 = (w - target_w_crop) // 2
+                    c_clip = c_clip.cropped(x1=x1, y1=0, x2=x1 + target_w_crop, y2=h)
                     
-                c_clip = c_clip.resized((FRAME_W, FRAME_H))
+                c_clip = c_clip.resized((FRAME_W, panel_h)).with_position((0, 1056))
                 background_clips.append(c_clip)
         else:
-            # Fallback whiteboard color clip
-            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start)
+            # Fallback bottom whiteboard color clip
+            c_clip = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 1056))
             background_clips.append(c_clip)
+
+    # ── TOP PANEL & MIDDLE BANNER ──
+    # Top Panel: Screenshot
+    screenshot_path = script_json.get("screenshot_path")
+    top_clip = prepare_top_panel_screenshot_clip(screenshot_path, audio_duration).with_start(0).with_position((0, 0))
+    background_clips.append(top_clip)
+    
+    # Middle Banner: Title Hook
+    title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
+    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color).with_start(0).with_position((0, 864))
+    background_clips.append(middle_clip)
 
     # Compile the base composited backgrounds
     base_comp = CompositeVideoClip(background_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)

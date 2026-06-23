@@ -10,15 +10,15 @@ def create_fallback_card(url, output_path):
     Creates a beautiful verified evidence card as a fallback when live screenshots fail
     or when encountering Google Grounding internal redirects.
     """
-    # Create image canvas
-    width, height = 1080, 1920
+    # Create image canvas (adjusted to fit top panel)
+    width, height = 1080, 864
     img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
-    # Card dimensions
-    cw, ch = 900, 600
+    # Card dimensions (centered in 864px height)
+    cw, ch = 980, 600
     cx = (width - cw) // 2
-    cy = 650 - ch // 2
+    cy = 432 - ch // 2
     
     # Shadow
     draw.rounded_rectangle(
@@ -99,7 +99,7 @@ def create_fallback_card(url, output_path):
     print(f"🎨 Fallback programmatic card created at: {output_path}")
     return output_path
 
-def capture_article_screenshot(url, output_filename, desktop=False):
+def capture_article_screenshot(url, output_filename, desktop=True):
     """
     Captures a screenshot of the article URL using Playwright via npx.
     Falls back to a beautiful programmatic card if the URL fails or is a Google Grounding redirect.
