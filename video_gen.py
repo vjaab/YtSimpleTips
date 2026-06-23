@@ -445,7 +445,7 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
         lines.append(current_line)
         
     line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = 1056 + int(FRAME_H * 0.16) - (len(lines) * line_h // 2) + y_shift
+    y_pos = 920 - (len(lines) * line_h // 2) + y_shift
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -513,7 +513,7 @@ def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
     cx = (FRAME_W - tw) // 2
-    cy = int(FRAME_H * 0.78)
+    cy = 1040
     
     # Pop-in animation: scale from 0 → 1.1 → 1.0
     if progress < 0.15:
@@ -905,13 +905,13 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # 2. Add normal background images / video b-roll
         if vpath and os.path.exists(vpath):
             if vpath.endswith(".png") and "screenshot" in vpath.lower():
-                # Since we already have the screenshot in the bottom panel, fallback to top whiteboard bg
-                top_bg = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
+                # Full-screen fallback whiteboard bg
+                top_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
                 background_clips.append(top_bg)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
-                # Ken burns zoom with randomized direction for visual variety (sized to top panel)
+                # Ken burns zoom with randomized direction for visual variety (sized to full screen)
                 zoom_dir = "in" if i % 2 == 0 else "out"
-                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, 864)).with_start(c_start).with_position((0, 0))
+                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, FRAME_H)).with_start(c_start).with_position((0, 0))
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Video clip (Pexels or Veo 3.1)
@@ -922,9 +922,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 else:
                     c_clip = c_clip.subclipped(0, safe_dur)
                     
-                # Resize and crop to crop-fill bottom panel
+                # Resize and crop to crop-fill full screen
                 w, h = c_clip.size
-                panel_h = 864
+                panel_h = FRAME_H
                 target_h_crop = int(w * panel_h / FRAME_W)
                 if target_h_crop <= h:
                     y1 = (h - target_h_crop) // 2
@@ -937,19 +937,14 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 c_clip = c_clip.resized((FRAME_W, panel_h)).with_position((0, 0))
                 background_clips.append(c_clip)
         else:
-            # Fallback top whiteboard color clip
-            c_clip = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
+            # Fallback full screen whiteboard color clip
+            c_clip = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
             background_clips.append(c_clip)
 
-    # ── BOTTOM PANEL & MIDDLE BANNER ──
-    # Bottom Panel: Screenshot Evidence
-    screenshot_path = script_json.get("screenshot_path")
-    bottom_clip = prepare_top_panel_screenshot_clip(screenshot_path, audio_duration).with_start(0).with_position((0, 1056))
-    background_clips.append(bottom_clip)
-    
-    # Middle Banner: Title Hook
+    # ── BOTTOM PANEL & TITLE BANNER ──
+    # Top Banner: Title Hook (at top of shorts, y=0)
     title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
-    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color).with_start(0).with_position((0, 864))
+    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color).with_start(0).with_position((0, 0))
     background_clips.append(middle_clip)
 
     # ── AVATAR VIDEO PIP OVERLAY ──
@@ -1118,8 +1113,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
         text_x = 50
         # Draw premium semi-translucent text watermark with dark drop shadow (readable on any background)
-        header_draw.text((text_x + 2, 1056 + 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
-        header_draw.text((text_x, 1056 + 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
+        header_draw.text((text_x + 2, 222), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
+        header_draw.text((text_x, 220), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
