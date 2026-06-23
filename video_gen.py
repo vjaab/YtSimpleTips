@@ -290,6 +290,9 @@ def _gradient_overlay(duration):
         cx, cy = w // 2, h // 2
         draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=alpha)
         
+    # Clear the top half of the vignette (y < 864) to keep top panel visual completely clean
+    draw.rectangle([0, 0, w, 864], fill=0)
+    
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     vignette = Image.new("RGBA", (w, h), (10, 10, 15, 255))
     img = Image.composite(vignette, img, mask)
@@ -442,7 +445,7 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
         lines.append(current_line)
         
     line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = int(FRAME_H * 0.16) - (len(lines) * line_h // 2) + y_shift
+    y_pos = 1056 + int(FRAME_H * 0.16) - (len(lines) * line_h // 2) + y_shift
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -574,7 +577,7 @@ def _render_fact_counter_badge(draw, fact_number, accent_color):
     bbox = font.getbbox(badge_text)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
-    bx, by = 40, 140  # Below the watermark area
+    bx, by = 40, 1056 + 140  # Below the watermark area in bottom panel
     pw, ph = tw + 30, th + 16
     
     r, g, b = accent_color
@@ -585,7 +588,7 @@ def _render_fact_counter_badge(draw, fact_number, accent_color):
 
 def _render_countdown_timer(draw, t, total_duration, accent_color):
     """Draws a circular countdown arc in the top-right corner."""
-    cx, cy = FRAME_W - 70, 160
+    cx, cy = FRAME_W - 70, 1056 + 160
     radius = 22
     remaining = max(0, total_duration - t)
     progress = t / total_duration  # 0 → 1 as video plays
@@ -635,7 +638,7 @@ def _render_sound_on_indicator(draw, t, accent_color):
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     
     px = (FRAME_W - tw) // 2
-    py = int(FRAME_H * 0.12)
+    py = 1056 + int(FRAME_H * 0.12)
     
     # Semi-transparent pill background
     draw.rounded_rectangle(
@@ -898,18 +901,17 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 # Crop the centered card clip to fit the bottom panel and position it
                 card_clip_cropped = card_clip.cropped(x1=0, y1=528, x2=FRAME_W, y2=1392).with_position((0, 1056))
                 background_clips.append(card_clip_cropped)
-                continue
                 
         # 2. Add normal background images / video b-roll
         if vpath and os.path.exists(vpath):
             if vpath.endswith(".png") and "screenshot" in vpath.lower():
-                # Since we already have the screenshot in the top panel, fallback to bottom whiteboard bg
-                bottom_bg = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 1056))
-                background_clips.append(bottom_bg)
+                # Since we already have the screenshot in the bottom panel, fallback to top whiteboard bg
+                top_bg = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
+                background_clips.append(top_bg)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
-                # Ken burns zoom with randomized direction for visual variety (sized to bottom panel)
+                # Ken burns zoom with randomized direction for visual variety (sized to top panel)
                 zoom_dir = "in" if i % 2 == 0 else "out"
-                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, 864)).with_start(c_start).with_position((0, 1056))
+                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, 864)).with_start(c_start).with_position((0, 0))
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Video clip (Pexels or Veo 3.1)
@@ -932,18 +934,18 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     x1 = (w - target_w_crop) // 2
                     c_clip = c_clip.cropped(x1=x1, y1=0, x2=x1 + target_w_crop, y2=h)
                     
-                c_clip = c_clip.resized((FRAME_W, panel_h)).with_position((0, 1056))
+                c_clip = c_clip.resized((FRAME_W, panel_h)).with_position((0, 0))
                 background_clips.append(c_clip)
         else:
-            # Fallback bottom whiteboard color clip
-            c_clip = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 1056))
+            # Fallback top whiteboard color clip
+            c_clip = ColorClip(size=(FRAME_W, 864), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
             background_clips.append(c_clip)
 
-    # ── TOP PANEL & MIDDLE BANNER ──
-    # Top Panel: Screenshot
+    # ── BOTTOM PANEL & MIDDLE BANNER ──
+    # Bottom Panel: Screenshot Evidence
     screenshot_path = script_json.get("screenshot_path")
-    top_clip = prepare_top_panel_screenshot_clip(screenshot_path, audio_duration).with_start(0).with_position((0, 0))
-    background_clips.append(top_clip)
+    bottom_clip = prepare_top_panel_screenshot_clip(screenshot_path, audio_duration).with_start(0).with_position((0, 1056))
+    background_clips.append(bottom_clip)
     
     # Middle Banner: Title Hook
     title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
@@ -986,35 +988,70 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 
                 # AI Background Removal with rembg
                 try:
-                    from rembg import remove, new_session
-                    print("👤 [video_gen] Initializing AI Background Removal (Dynamic u2net_human_seg)...")
-                    rembg_session = new_session(model_name="u2net_human_seg")
-                    unmasked_avatar = avatar_clip
-                    mask_cache = {}
-                    fps = getattr(vid_clip, "fps", 30.0) or 30.0
+                    use_fast_chromakey = os.getenv("USE_LOCAL_ONLY") == "true"
                     
-                    def make_mask_frame(t):
-                        frame_idx = int(round(t * fps))
-                        if frame_idx in mask_cache:
-                            return mask_cache[frame_idx]
-                        frame = unmasked_avatar.get_frame(t)
-                        rgba = remove(
-                            frame,
-                            session=rembg_session,
-                            alpha_matting=False,
-                            post_process_mask=True
-                        )
-                        mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
-                        # Watermark erasure: zero out bottom 12%
-                        h_mask, w_mask = mask.shape
-                        watermark_height = int(h_mask * 0.12)
-                        mask[-watermark_height:, :] = 0.0
-                        mask_cache[frame_idx] = mask
-                        return mask
+                    if use_fast_chromakey:
+                        print("👤 [video_gen] Fast Chromakey Background Removal enabled for local dry-run...")
+                        unmasked_avatar = avatar_clip
+                        mask_cache = {}
+                        fps = getattr(vid_clip, "fps", 30.0) or 30.0
+                        
+                        def make_mask_frame(t):
+                            frame_idx = int(round(t * fps))
+                            if frame_idx in mask_cache:
+                                return mask_cache[frame_idx]
+                            frame = unmasked_avatar.get_frame(t)
+                            
+                            # Sample background color from top corners (average of 15x15 regions)
+                            bg_color = (frame[0:15, 0:15].mean(axis=(0, 1)) + frame[0:15, -15:].mean(axis=(0, 1))) / 2.0
+                            # Calculate distance from background color
+                            diff = np.abs(frame.astype(np.float32) - bg_color)
+                            # Create binary mask where diff > 30 (tolerance) in any channel
+                            mask = np.any(diff > 30, axis=2).astype(np.uint8) * 255
+                            
+                            # Smooth with morphology
+                            kernel = np.ones((5, 5), np.uint8)
+                            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+                            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+                            mask = (mask / 255.0).astype(np.float32)
+                            
+                            # Watermark erasure: zero out bottom 12%
+                            h_mask, w_mask = mask.shape
+                            watermark_height = int(h_mask * 0.12)
+                            mask[-watermark_height:, :] = 0.0
+                            mask_cache[frame_idx] = mask
+                            return mask
+                            
+                    else:
+                        from rembg import remove, new_session
+                        print("👤 [video_gen] Initializing AI Background Removal (Dynamic u2net_human_seg)...")
+                        rembg_session = new_session(model_name="u2net_human_seg")
+                        unmasked_avatar = avatar_clip
+                        mask_cache = {}
+                        fps = getattr(vid_clip, "fps", 30.0) or 30.0
+                        
+                        def make_mask_frame(t):
+                            frame_idx = int(round(t * fps))
+                            if frame_idx in mask_cache:
+                                return mask_cache[frame_idx]
+                            frame = unmasked_avatar.get_frame(t)
+                            rgba = remove(
+                                frame,
+                                session=rembg_session,
+                                alpha_matting=False,
+                                post_process_mask=True
+                            )
+                            mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
+                            # Watermark erasure: zero out bottom 12%
+                            h_mask, w_mask = mask.shape
+                            watermark_height = int(h_mask * 0.12)
+                            mask[-watermark_height:, :] = 0.0
+                            mask_cache[frame_idx] = mask
+                            return mask
                         
                     mclip = VideoClip(make_mask_frame, is_mask=True, duration=audio_duration)
                     avatar_clip = avatar_clip.with_mask(mclip)
-                    print("   ✅ Dynamic AI background removal applied frame-by-frame.")
+                    print("   ✅ Background removal applied frame-by-frame.")
                 except Exception as re_err:
                     print(f"⚠️ rembg failed: {re_err}. Falling back to Rounded Authority Card.")
                     rad = int(min(width_pip, height_pip) * 0.15)
@@ -1081,8 +1118,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_font = get_font_for_text("Simple Tips by VJ", 38, "bold")
         text_x = 50
         # Draw premium semi-translucent text watermark with dark drop shadow (readable on any background)
-        header_draw.text((text_x + 2, 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
-        header_draw.text((text_x, 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
+        header_draw.text((text_x + 2, 1056 + 82), "Simple Tips by VJ", fill=(10, 10, 15, 180), font=header_font)
+        header_draw.text((text_x, 1056 + 80), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
     
@@ -1093,10 +1130,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         emoji_pool_reveal = ["🧠", "💡", "🔥"]
         emoji_pool_cta = ["💬", "👇", "🚀"]
         emoji_moments = [
-            {"start": 0.5, "end": 2.0, "emoji": random.choice(emoji_pool_hook), "x": FRAME_W - 180, "y": 200},
-            {"start": audio_duration * 0.3, "end": audio_duration * 0.3 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": 80, "y": 250},
-            {"start": audio_duration * 0.55, "end": audio_duration * 0.55 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": FRAME_W - 200, "y": 300},
-            {"start": audio_duration - 5.0, "end": audio_duration - 3.0, "emoji": random.choice(emoji_pool_cta), "x": FRAME_W - 180, "y": 220},
+            {"start": 0.5, "end": 2.0, "emoji": random.choice(emoji_pool_hook), "x": FRAME_W - 180, "y": 1056 + 200},
+            {"start": audio_duration * 0.3, "end": audio_duration * 0.3 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": 80, "y": 1056 + 250},
+            {"start": audio_duration * 0.55, "end": audio_duration * 0.55 + 1.5, "emoji": random.choice(emoji_pool_reveal), "x": FRAME_W - 200, "y": 1056 + 300},
+            {"start": audio_duration - 5.0, "end": audio_duration - 3.0, "emoji": random.choice(emoji_pool_cta), "x": FRAME_W - 180, "y": 1056 + 220},
         ]
 
     # ── TRANSITION DURATION CONFIG ──
