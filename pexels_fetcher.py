@@ -85,11 +85,11 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
     encoded_prompt = requests.utils.quote(prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
     
-    max_attempts = 3
+    max_attempts = 2
     for attempt in range(1, max_attempts + 1):
         try:
             print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})...")
-            resp = requests.get(url, timeout=35)
+            resp = requests.get(url, timeout=8)
             if resp.status_code == 200:
                 with open(output_path, "wb") as f:
                     f.write(resp.content)
