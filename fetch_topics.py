@@ -28,23 +28,24 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
     
     prompt = f"""
-    Generate 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
-    These tips must be highly actionable, surprising, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    Generate 5 highly viral, generic, and fact-oriented topics, science trivia, life hacks, or settings/shortcuts related to the category: "{category}".
+    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences (similar to channels like 'Science Facts in Tamil' or 'Dummy Scientist').
+    They must be surprising, scientifically accurate, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
     DEMOGRAPHIC & TRENDING CRITERIA:
-    1. The tip must have high appeal and immediate utility for parents, middle-aged, or young people in daily life.
-    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, app shortcuts, or simple sports/fitness routines that simplify life or improve health.
+    1. The topic must be highly generic with universal appeal across all ages (young, middle-aged, parents).
+    2. Focus on a high "curiosity gap" (e.g. unknown space/science wonders, biological/anatomy facts, everyday physics/chemistry anomalies, historical mysteries, or highly shared tech settings and life hacks).
     
     {avoid_instruction}
     
-    CRITICAL REQUIREMENT: For each tip/hack, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each fact/hack, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
     Return ONLY a JSON object containing a "tips" array matching this schema:
     {{
       "tips": [
         {{
-          "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
-          "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English...",
+          "title": "Short descriptive English title of the fact (e.g. Quantum Entanglement Mystery)",
+          "description": "A rich, detailed 2-3 sentence explanation of the fact/hack in English...",
           "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
           "source_name": "Name of the source",
           "keywords": ["keyword1", "keyword2", "keyword3"],
@@ -162,27 +163,25 @@ def fetch_facts_for_category(category):
     avoid_titles = list(headlines_to_avoid)
     
     prompt = f"""
-    Search the web for 5 highly viral, trending, practical, and true life hacks, tips, or settings/shortcuts related to the category: "{category}".
-    These tips must be highly actionable, surprising, and optimized for a 30-40 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    Search the web for 5 highly viral, generic, and fact-oriented topics, science trivia, life hacks, or settings/shortcuts related to the category: "{category}".
+    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences (similar to channels like 'Science Facts in Tamil' or 'Dummy Scientist').
+    They must be surprising, scientifically accurate, and optimized for a 30-40 second infotainment YouTube Short titled "Simple Tips by VJ".
     
     DEMOGRAPHIC & TRENDING CRITERIA:
-    1. The tip must have high appeal and immediate utility for at least one of these groups:
-       - Parents: Kid-safety features, smart home efficiency, budgeting/saving on bills.
-       - Middle-aged: Phone settings, WhatsApp tips, UPI/online security, daily life convenience, spam blocking.
-       - Young People: Focus/study apps, tech shortcuts, productivity tools, sports/fitness hacks, hidden settings.
-    2. Strongly prioritize tech-infused tips, digital settings, phone/smart-device hacks, app shortcuts, or athletic/fitness hacks that simplify life.
-    3. Focus on tips that are NEW or recently updated (2025-2026 relevance).
+    1. The topic must be highly generic with universal appeal across all ages (young, middle-aged, parents).
+    2. Focus on a high "curiosity gap" (e.g. unknown space/science wonders, biological/anatomy facts, everyday physics/chemistry anomalies, historical mysteries, or highly shared tech settings and life hacks).
+    3. Focus on facts that are surprising or counter-intuitive (make viewers say "I didn't know that!").
     {trending_context}
     
-    CRITICAL REQUIREMENT: For each tip/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, life hack publication, scientific study, or official guide) that supports this tip. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each fact/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, scientific study, or official guide) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
     Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the tip (e.g. WhatsApp Screen Lock Setup)",
-        "description": "A rich, detailed 2-3 sentence explanation of the tip/hack in English, explaining exactly how it works, how to apply it, and the direct benefit to parents, middle-aged, or young people.",
-        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific tip",
-        "source_name": "Name of the source (e.g. Wikipedia, Healthline, Medium)",
+        "title": "Short descriptive English title of the fact (e.g. Quantum Entanglement Mystery)",
+        "description": "A rich, detailed 2-3 sentence explanation of the fact/hack in English, explaining exactly what it is, how it works, and why it is surprising or useful.",
+        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific fact",
+        "source_name": "Name of the source (e.g. Wikipedia, NASA, Healthline)",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "category": "{category}"
       }}

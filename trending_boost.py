@@ -22,12 +22,13 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
         return []
 
     search_queries = {
-        "💰 Finance Quick Tips": ["money saving hacks", "UPI security tips", "finance tips Tamil", "stock market tips"],
-        "📱 Tech & AI Quick Facts": ["phone hidden settings", "Android tricks", "iPhone secret features", "AI tools"],
-        "🚀 Motivation Bites": ["success quotes", "life lessons", "study hacks"],
-        "🧠 Facts & Trivia": ["interesting facts", "top 3 lists", "did you know"],
-        "🛠️ How-To Tutorials": ["how to quickly", "excel shortcuts", "skill hacks"],
-        "🤖 AI/ML Quick Learn": ["machine learning tips", "Python tricks", "ChatGPT facts"],
+        "🧠 Amazing Science & Space": ["space facts", "astronomy discoveries", "cosmos mysteries", "black hole science"],
+        "🧬 Biology & Human Body": ["human body secrets", "brain psychology facts", "biology trivia", "animal anomalies"],
+        "⚡ Everyday Science Facts": ["everyday science physics", "chemistry hacks", "science experiments magic", "how things work"],
+        "🏺 Mysteries & Unknown History": ["unsolved mysteries history", "Bermuda triangle secrets", "Keeladi history facts", "ancient civilizations"],
+        "💡 Life Hacks & Smart Tips": ["life hacks daily tips", "kitchen hacks tricks", "household hacks shortcuts", "study hacks"],
+        "📱 Tech & Smart Device Hacks": ["phone hidden settings", "WhatsApp secret features", "UPI security tips", "mobile shortcuts"],
+        "💰 Money & Wealth Secrets": ["money saving hacks", "wealth building tips", "smart financial tips", "passive saving rules"],
     }
 
     queries = search_queries.get(category, ["tech tips hidden features", "finance hacks"])
@@ -138,7 +139,7 @@ def _fetch_reddit_trending_keywords():
     return unique[:20]
 
 
-def get_trending_context(category="💰 Finance Quick Tips"):
+def get_trending_context(category="🧠 Amazing Science & Space"):
     """
     Returns a formatted string of trending keywords and topics that can be
     injected into the Gemini Search Grounding query for higher relevance.
@@ -172,7 +173,7 @@ def get_trending_context(category="💰 Finance Quick Tips"):
     return context
 
 
-def boost_articles_with_trending(articles, category="💰 Finance Quick Tips"):
+def boost_articles_with_trending(articles, category="🧠 Amazing Science & Space"):
     """
     Cross-references fetched articles/facts with trending signals.
     Articles matching trending keywords get a 2x priority boost.
