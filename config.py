@@ -117,3 +117,8 @@ ENABLE_FACT_COUNTER = False         # "FACT #N" badge creates series loyalty and
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
 ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash boosts audio engagement by 15-20%
 ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop
+
+# YouTube Partner Program (YPP) compliance settings
+DEFAULT_PRIVACY_STATUS = "private"   # Privacy of uploaded videos: "private" (recommended for review), "unlisted", or "public"
+ENABLE_TTS_FALLBACK = False          # Prevent fallback to low-quality/robotic Edge TTS if premium voice cloning fails
+

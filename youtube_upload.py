@@ -4,7 +4,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 from googleapiclient.http import MediaFileUpload
-from config import YOUTUBE_CLIENT_SECRET_FILE
+from config import YOUTUBE_CLIENT_SECRET_FILE, DEFAULT_PRIVACY_STATUS
 
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload",
@@ -216,7 +216,7 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
             "defaultAudioLanguage": "ta",
         },
         "status": {
-            "privacyStatus":            "public",
+            "privacyStatus":            DEFAULT_PRIVACY_STATUS,
             "selfDeclaredMadeForKids":    False,
             # AI disclosure ("Altered Content"): Automatically set via containsSyntheticMedia for YPP compliance.
             "containsSyntheticMedia":     True,

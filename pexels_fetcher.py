@@ -164,6 +164,13 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         # Define search query for Pexels (use the clean query directly to match real stock footage)
         pexels_query = clean_query
 
+        # ── PRIORITY 0: Evidence Screenshot (Assigned to chunk index 1, context/evidence) ──
+        if i == 1 and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
+            print("     → Assigning captured evidence screenshot to context chunk...")
+            visual_path = script_data["screenshot_path"]
+            visual_type = "photo"
+            source = "Evidence Screenshot"
+
         # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
         if veo_generate and prompt and veo_consecutive_fails < 2:
             print("     → Attempting Veo 3.1 video generation...")
@@ -233,6 +240,13 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "photo"
                 source = "Pexels Photo"
+                
+        # ── PRIORITY 4.5: Fallback to Screenshot ──
+        if not visual_path and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
+            print("     → Visual resolved: Falling back to evidence screenshot.")
+            visual_path = script_data["screenshot_path"]
+            visual_type = "photo"
+            source = "Fallback Screenshot"
                 
         # ── PRIORITY 5: Graceful degradation — reuse last visual ──
         if not visual_path:

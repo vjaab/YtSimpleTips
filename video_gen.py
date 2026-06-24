@@ -202,17 +202,36 @@ def prepare_top_panel_screenshot_clip(screenshot_path, duration):
         canvas.paste(resized_img, (0, cy))
         
     return ImageClip(np.array(canvas)).with_duration(duration)
-
-def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255, 0)):
-    """Creates a persistent title/hook banner of size 1080x192."""
+def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255, 0), style_mode=0):
+    """Creates a persistent title/hook banner of size 1080x192 with various visual styles."""
     width, height = 1080, 192
-    img = Image.new("RGBA", (width, height), (0, 0, 0, 255)) # Solid black banner
+    r, g, b = accent_color
+    
+    if style_mode == 1:
+        # Category accent solid background, dark text
+        img = Image.new("RGBA", (width, height), (r, g, b, 255))
+        text_fill = (15, 15, 15, 255)
+        shadow_fill = (255, 255, 255, 120)
+    elif style_mode == 2:
+        # Dark translucent / glassmorphic, glowing accent text
+        img = Image.new("RGBA", (width, height), (15, 15, 20, 200))
+        text_fill = (r, g, b, 255)
+        shadow_fill = (0, 0, 0, 180)
+    else:
+        # Style 0: Solid black background, white text
+        img = Image.new("RGBA", (width, height), (0, 0, 0, 255))
+        text_fill = (255, 255, 255, 255)
+        shadow_fill = (10, 10, 15, 200)
+        
     draw = ImageDraw.Draw(img)
     
     # Draw border lines or glowing accent lines at top and bottom of the banner
-    r, g, b = accent_color
-    draw.line([(0, 0), (width, 0)], fill=(r, g, b, 255), width=4) # Top border line
-    draw.line([(0, height - 4), (width, height - 4)], fill=(r, g, b, 255), width=4) # Bottom border line
+    if style_mode != 1:
+        draw.line([(0, 0), (width, 0)], fill=(r, g, b, 255), width=4) # Top border line
+        draw.line([(0, height - 4), (width, height - 4)], fill=(r, g, b, 255), width=4) # Bottom border line
+    else:
+        draw.line([(0, 0), (width, 0)], fill=(255, 255, 255, 255), width=4) # White top border line
+        draw.line([(0, height - 4), (width, height - 4)], fill=(255, 255, 255, 255), width=4) # White bottom border line
     
     title_text = "".join(c for c in title_text if ord(c) < 0x2000).strip()
     title_text = title_text.upper().strip()
@@ -237,11 +256,12 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
     tx = (width - tw) // 2
     ty = (height - th) // 2 - bbox[1] # Align vertically
     
-    # Draw bold white text
-    draw.text((tx + 2, ty + 2), title_text, fill=(10, 10, 15, 200), font=font)
-    draw.text((tx, ty), title_text, fill=(255, 255, 255, 255), font=font)
+    # Draw bold text with drop shadow
+    draw.text((tx + 2, ty + 2), title_text, fill=shadow_fill, font=font)
+    draw.text((tx, ty), title_text, fill=text_fill, font=font)
     
     return ImageClip(np.array(img)).with_duration(duration)
+
 
 def build_ken_burns(img_path, duration, zoom_direction=None, target_size=(FRAME_W, FRAME_H)):
     """Builds a smooth Ken Burns effect clip with randomized zoom direction."""
@@ -779,6 +799,26 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
     print(f"🎬 [video_gen] Initiating video compilation to: {output_path}")
     
+    # ── RANDOMIZED TYPOGRAPHY THEME (typography diversity) ──
+    title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
+    import hashlib
+    import infographic_gen
+    
+    font_options = [
+        ("Montserrat-ExtraBold.ttf", "Montserrat-Bold.ttf", "Roboto-Regular.ttf"),
+        ("Roboto-Bold.ttf", "Roboto-Bold.ttf", "Roboto-Regular.ttf"),
+        ("Montserrat-Black.ttf", "Montserrat-Bold.ttf", "Montserrat-Italic.ttf")
+    ]
+    font_seed = int(hashlib.md5(title_text.encode()).hexdigest(), 16)
+    selected_fonts = font_options[font_seed % len(font_options)]
+    
+    infographic_gen._FONT_EXTRA_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[0])
+    infographic_gen._FONT_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[1])
+    infographic_gen._FONT_REGULAR = os.path.join(ASSETS_DIR, "fonts", selected_fonts[2])
+    print(f"🔤 [video_gen] Dynamically selected font theme: {selected_fonts[0]} for typography diversity.")
+    
+    banner_style_mode = font_seed % 3  # Support Style 0, 1, 2
+    
     if not os.path.exists(audio_path) or os.path.getsize(audio_path) == 0:
         print(f"🚨 Audio file empty: {audio_path}")
         return None
@@ -908,6 +948,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 # Full-screen fallback whiteboard bg
                 top_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
                 background_clips.append(top_bg)
+                # Render screenshot on the top panel (y=192 to 1056)
+                ss_clip = prepare_top_panel_screenshot_clip(vpath, safe_dur).with_start(c_start).with_position((0, 192))
+                background_clips.append(ss_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
                 # Ken burns zoom with randomized direction for visual variety (sized to full screen)
                 zoom_dir = "in" if i % 2 == 0 else "out"
@@ -944,7 +987,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # ── BOTTOM PANEL & TITLE BANNER ──
     # Top Banner: Title Hook (at top of shorts, y=0)
     title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
-    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color).with_start(0).with_position((0, 0))
+    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color, style_mode=banner_style_mode).with_start(0).with_position((0, 0))
     background_clips.append(middle_clip)
 
     # ── AVATAR VIDEO PIP OVERLAY ──

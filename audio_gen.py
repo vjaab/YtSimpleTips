@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
-    KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR
+    KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_TTS_FALLBACK
 )
 from kaggle_handover import trigger_kaggle_gpu_job
 
@@ -822,14 +822,18 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
             path = None
 
     if not path:
-        print("🎙️ ElevenLabs and F5-TTS failed. Trying Edge TTS fallback...")
-        try:
-            path = _generate_edge_tts(clean_text, wav_path)
-            if path:
-                VOICE_FALLBACK_USED = True
-        except Exception as edge_err:
-            print(f"❌ Edge-TTS failed: {edge_err}")
+        if not ENABLE_TTS_FALLBACK:
+            print("🚫 [audio_gen] Edge TTS fallback is disabled in config. Skipping fallback voiceover generation.")
             path = None
+        else:
+            print("🎙️ ElevenLabs and F5-TTS failed. Trying Edge TTS fallback...")
+            try:
+                path = _generate_edge_tts(clean_text, wav_path)
+                if path:
+                    VOICE_FALLBACK_USED = True
+            except Exception as edge_err:
+                print(f"❌ Edge-TTS failed: {edge_err}")
+                path = None
 
     if not path:
         raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled or failed. Aborting pipeline.")
