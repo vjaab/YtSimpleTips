@@ -501,8 +501,8 @@ _LAYOUT_REGISTRY = [
 def generate_thumbnail(script_json):
     """
     Generates three CTR-boosting infotainment thumbnail variants:
-    - Variant A: Current style (anime background visual + text layout).
-    - Variant B: Close-up anime character face with high-contrast text overlay.
+    - Variant A: Current style (3D cartoon background visual + text layout).
+    - Variant B: Close-up 3D cartoon character face with high-contrast text overlay.
     - Variant C: Split-screen comparison layout (before/after).
     Returns [pathA, pathB, pathC].
     """
@@ -533,7 +533,7 @@ def generate_thumbnail(script_json):
     
     # ── VARIANT B: CLOSE-UP PORTRAIT ──
     print("🎨 Generating Thumbnail Variant B (Close-up Face)...")
-    bg_prompt_b = f"Close-up of a shocked South Indian Tamil anime character looking at the screen, clean modern anime illustration style, dramatic neon lighting, {headline}"
+    bg_prompt_b = f"Close-up of a shocked South Indian Tamil character looking at the screen, Pixar 3D cartoon style, expressive eyes, clay textures, cinematic lighting, depth of field, {headline}"
     bg_b = _generate_imagen_background(bg_prompt_b)
     canvas_b = bg_b.resize((THUMB_W, THUMB_H), Image.LANCZOS)
     draw_b = ImageDraw.Draw(canvas_b)
@@ -551,7 +551,7 @@ def generate_thumbnail(script_json):
     
     # ── VARIANT C: SPLIT-SCREEN COMPARISON ──
     print("🎨 Generating Thumbnail Variant C (Split-Screen)...")
-    bg_prompt_c = f"A split screen comparison showing a bad state on the left and a perfect good state on the right, modern anime illustration style, high contrast, {headline}"
+    bg_prompt_c = f"A split screen comparison showing a bad state on the left and a perfect good state on the right, Pixar 3D cartoon style, clay textures, high contrast, {headline}"
     bg_c = _generate_imagen_background(bg_prompt_c)
     canvas_c = bg_c.resize((THUMB_W, THUMB_H), Image.LANCZOS)
     draw_c = ImageDraw.Draw(canvas_c)

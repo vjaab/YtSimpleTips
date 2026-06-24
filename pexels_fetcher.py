@@ -175,9 +175,9 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         if veo_generate and prompt and veo_consecutive_fails < 2:
             print("     → Attempting Veo 3.1 video generation...")
             enhanced_prompt = (
-                f"{prompt}. Art style: Clean modern anime (similar to Jujutsu Kaisen / Demon Slayer style and color palette). "
-                f"Color grading: Deep navy + electric blue + neon orange accent glows, no dialogue or text overlays, "
-                f"no watermarks, stylized silhouette or faceless anime protagonist, smooth camera movement, "
+                f"{prompt}. Art style: 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting. "
+                f"Color grading: Vibrant colors, depth of field, warm volume lighting, no dialogue or text overlays, "
+                f"no watermarks, stylized 3D cartoon style character, smooth camera movement, "
                 f"9:16 aspect ratio, vertical video format, highly dynamic."
             )
             output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{TODAY}.mp4")
@@ -197,10 +197,10 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             print("     → Generating Imagen image...")
             output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
             enhanced_imagen_prompt = prompt
-            if "anime" not in prompt.lower():
+            if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
                 enhanced_imagen_prompt = (
-                    f"{prompt}. Clean modern anime illustration, vibrant neon lighting, Jujutsu Kaisen meets cyberpunk visual style, "
-                    f"deep navy, electric blue and neon orange glowing details, high contrast, crushed blacks."
+                    f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
+                    f"depth of field, vibrant colors, high contrast."
                 )
             visual_path = _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:
@@ -217,10 +217,10 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         if not visual_path and prompt:
             output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
             enhanced_pollinations_prompt = prompt
-            if "anime" not in prompt.lower():
+            if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
                 enhanced_pollinations_prompt = (
-                    f"{prompt}. Clean modern anime illustration, vibrant neon lighting, Jujutsu Kaisen meets cyberpunk visual style, "
-                    f"deep navy, electric blue and neon orange glowing details, high contrast, crushed blacks."
+                    f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
+                    f"depth of field, vibrant colors, high contrast."
                 )
             visual_path = _generate_pollinations_image(enhanced_pollinations_prompt, output_jpg, aspect_ratio=aspect_ratio)
             if visual_path:

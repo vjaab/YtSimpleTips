@@ -54,12 +54,12 @@ _CG_SAT_FACTOR = _COLOR_GRADE_SEED.uniform(0.85, 0.95)    # Saturation: 0.85-0.9
 _CG_GAMMA = _COLOR_GRADE_SEED.uniform(1.15, 1.25)          # Gamma: 1.15-1.25
 _CG_CONTRAST = _COLOR_GRADE_SEED.uniform(1.12, 1.18)       # Contrast: 1.12-1.18
 
-def apply_anime_color_grade(frame):
+def apply_cartoon_color_grade(frame):
     """
-    Simulates anime LUT color grading with per-video randomized variation:
-    - High contrast (slightly varied per video)
-    - Crushed blacks (low pixels pushed down)
-    - Slightly boosted saturation/vibrancy for neon midtones
+    Simulates Pixar-style 3D cartoon color grading with per-video randomized variation:
+    - Vibrant, warm colors (slightly varied per video)
+    - Depth-of-field lighting feel (midtones enhanced)
+    - Slightly boosted saturation/vibrancy for a high-quality claymation render
     - Per-video variation prevents YouTube 'repetitive content' flags
     """
     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
@@ -76,9 +76,9 @@ def apply_anime_color_grade(frame):
     
     return frame_graded
 
-def _apply_anime_flash_cut(outgoing, incoming, progress):
+def _apply_cartoon_flash_cut(outgoing, incoming, progress):
     """
-    Fast anime-style flash cut:
+    Fast cartoon-style flash cut:
     - 2 frames (approx first 25% of transition) white flash.
     - Zoom incoming by 1.05.
     """
@@ -404,18 +404,18 @@ def _apply_cross_dissolve(outgoing, incoming, progress):
 # Transition type mapping from retention_cue effect names
 TRANSITION_MAP = {
     "zoom_in": _apply_zoom_burst,
-    "zoom_burst": _apply_anime_flash_cut,
+    "zoom_burst": _apply_cartoon_flash_cut,
     "hook_impact": _apply_rgb_glitch,
     "glitch": _apply_rgb_glitch,
     "emphasis": _apply_shake,
     "shake": _apply_shake,
-    "flash": _apply_anime_flash_cut,
+    "flash": _apply_cartoon_flash_cut,
     "dissolve": _apply_cross_dissolve,
 }
 
 # Pool of transitions for random selection when no specific cue is given
 _TRANSITION_POOL = [
-    _apply_anime_flash_cut,
+    _apply_cartoon_flash_cut,
     _apply_rgb_glitch,
     _apply_cross_dissolve,
     _apply_shake,
@@ -1182,9 +1182,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # Frame Assembly Loop
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
-        # ── ANIME COLOR GRADE & DESATURATION ──
+        # ── CARTOON COLOR GRADE & DESATURATION ──
         frame = desaturate_frame(frame, 0.85)
-        frame = apply_anime_color_grade(frame)
+        frame = apply_cartoon_color_grade(frame)
         
         # ── ATTENTION-GRAB SCREEN FLICKER (0:00 - 0:02) — reduced intensity ──
         if t <= 2.0:

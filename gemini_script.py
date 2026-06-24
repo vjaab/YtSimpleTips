@@ -26,10 +26,10 @@ Language Rules:
    - The `english_caption` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words in English in uppercase, e.g., "PHONE SETTING", "BOOST SPEED", "5-SECOND RULE", "FOCUS HACK") representing the central concept spoken in that chunk. Do NOT write Tamil text or complete sentences in `english_caption`. These will be displayed as bold, clean English captions on screen to highlight important takeaways.
 3. Spacing Guard: Ensure proper spaces are placed between words. Never concatenate Tamil and English words together (e.g. write 'Replacement இருக்கு' instead of 'Replacementஇருக்கு'), never concatenate distinct English words (e.g. write 'shortcut code' instead of 'shortcutcode', 'time save' instead of 'timesave'), and never concatenate distinct Tamil words (e.g. write 'இதை பாருங்க' instead of 'இதைபாருங்க'). Always verify word boundaries.
 4. Visual prompts (`nano_visual_prompt`): MUST be written in English. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Focus on high-retention elements:
-   - Art style: Clean modern anime (similar to Jujutsu Kaisen / Demon Slayer style and color palette).
-   - Color grading: Deep navy + electric blue + neon orange accent glows. No text overlays or watermarks.
-   - Characters: Stylized silhouette or faceless anime protagonist. Any characters depicted should look South Indian Tamil but in stylized anime format.
-   - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning", "speed lines background").
+   - Art style: 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volumetric lighting, depth of field.
+   - Color grading: Vibrant colors, warm volumetric lighting, soft shadow detail, depth of field. No text overlays or watermarks.
+   - Characters: Stylized 3D cartoon style character. Any characters depicted should look South Indian Tamil in 3D Pixar/Disney cartoon format.
+   - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning").
 Constraint Checklist:
 - SCRIPT WORD COUNT: Strictly 55-70 words in Tanglish.
 - SCRIPT SENTENCES: Every sentence must be under 9 words.
@@ -230,7 +230,7 @@ In the `storyboard` array:
 - The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
 - Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics', 'PATTERN_INTERRUPT').
 - At exactly the midpoint (50% position) of the storyboard array, you must include a mandatory pattern interrupt scene where `visual_type` is set to "PATTERN_INTERRUPT". The spoken narration for this midpoint scene must use a phrase like "oru second wait pannunga..." or "ithai parunga..." to break the pattern and regain attention.
-- The `visual_prompt` MUST be in English and specify "clean modern anime illustration" style. To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open in clean modern anime illustration style", "amazed gasping in clean modern anime illustration style"), or visual metaphors ("glowing data streams flowing into phone in clean modern anime illustration style").
+- The `visual_prompt` MUST be in English and specify "3D Pixar/Disney cartoon style, clay textures, expressive eyes". To maximize viewer retention throughout the video, each prompt MUST describe a unique, highly dynamic, and visually shocking scene that changes rapidly. Avoid static or boring descriptions. E.g., camera motion ("extreme macro zoom on screen", "rapid low-angle pan"), rich emotional expressions ("shocked expression with eyes wide open, 3D Pixar/Disney cartoon style, clay textures, expressive eyes", "amazed gasping, 3D Pixar/Disney cartoon style, clay textures, expressive eyes"), or visual metaphors ("glowing data streams flowing into phone, 3D Pixar/Disney cartoon style, clay textures, expressive eyes").
 - Any people depicted in `visual_prompt` must look like they are from Tamil Nadu, India (South Indian Tamil ethnicity), and locations must resemble settings in Tamil Nadu, India.
 - Set `camera_motion` (e.g. 'Slow zoom', 'Dolly-in', 'Orbit', 'Pan', 'Tracking shot', 'None') and `transition` (e.g. 'Match cut', 'Zoom transition', 'Morph', 'Swipe', 'Object continuity', 'Story continuity').
 - Enforce the 2-3 second visual change rule: keep the duration of each scene short (e.g. 2 or 3 seconds).
@@ -416,7 +416,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "narration": "The exact spoken Tanglish phrase for this scene (3-5 words maximum for punchy subtitles, e.g. 'namma brain-la almost')",
       "scene_objective": "Explain the concept visually, not just verbally",
       "visual_type": "Google Video Generation|Animated Infographics|Whiteboard Animation|Motion Graphics",
-      "visual_prompt": "A detailed image/video prompt in English. Must specify 'clean modern anime illustration' style, e.g., 'A young South Indian Tamil guy sitting late at night scrolling on smartphone, phone screen glowing on face, clean modern anime illustration, vibrant neon lighting, deep navy background with glowing orange sparks, dramatic low-angle tilt'. Avoid generic backgrounds.",
+      "visual_prompt": "A detailed image/video prompt in English. Must specify '3D Pixar/Disney cartoon style, clay textures, expressive eyes' style, e.g., 'A young South Indian Tamil guy sitting late at night scrolling on smartphone, phone screen glowing on face, 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, depth of field, dramatic low-angle tilt'. Avoid generic backgrounds.",
       "camera_motion": "Slow zoom|Dolly-in|Orbit|Pan|Tracking shot|None",
       "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
       "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
