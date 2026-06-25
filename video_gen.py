@@ -240,8 +240,8 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
     font_size = 48
     font = get_font_for_text(title_text, font_size, "extrabold")
     
-    # Adjust font size if text is too long to fit in 980px wide
-    max_text_w = 980
+    # Adjust font size if text is too long to fit in 840px wide to leave room for countdown timer on the right
+    max_text_w = 840
     for fs in range(48, 24, -2):
         font = get_font_for_text(title_text, fs, "extrabold")
         bbox = font.getbbox(title_text)
@@ -608,7 +608,7 @@ def _render_fact_counter_badge(draw, fact_number, accent_color):
 
 def _render_countdown_timer(draw, t, total_duration, accent_color):
     """Draws a circular countdown arc in the top-right corner."""
-    cx, cy = FRAME_W - 70, 1056 + 160
+    cx, cy = FRAME_W - 70, 96
     radius = 22
     remaining = max(0, total_duration - t)
     progress = t / total_duration  # 0 → 1 as video plays

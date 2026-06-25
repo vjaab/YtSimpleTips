@@ -8,7 +8,6 @@
         "The Pratfall Effect",
         "Venus: Day > Year?!",
         "Diamonds on Other Planets",
-        "Venus: Day > Year?!",
         "Space Dust Collection",
         "Ocean's SHOCKING Oxygen Secret!",
         "Oceans Produce Most of Earth's Oxygen",
@@ -40,18 +39,10 @@
         "The Two-Minute Rule: How to stop procrastinating",
         "Venus-ல ஒரு நாள் ஒரு வருஷத்தை விட பெருசு!",
         "A day is longer than a year on Venus",
-        "Procrastination-அ விரட்டுங்க!",
-        "The Two-Minute Rule: How to stop procrastinating",
-        "Procrastination-அ விரட்டுங்க!",
-        "The Two-Minute Rule: How to stop procrastinating",
-        "Procrastination-அ விரட்டுங்க!",
-        "The Two-Minute Rule: How to stop procrastinating",
         "Bank Fraud-அ உடனே கண்டுபிடிங்க! 🚨",
         "Set Up Mobile Banking Spending Alerts",
         "FICO Score-அ Rocket Speed-ல ஏத்துங்க!",
         "Boost Credit Score with Utility Bill Payments",
-        "Procrastination-அ விரட்டுங்க!",
-        "The Two-Minute Rule: How to stop procrastinating",
         "Phone Speed Hack! 🚀 (ஒரே Setting!)",
         "Boost Android Speed: Reduce Animations",
         "WhatsApp: நோ Unknown Calls! 🤫",
@@ -105,7 +96,9 @@
         "🚨 SOS Secret: Phone Life Saver!",
         "Emergency SOS Life Saver!",
         "Phone Lock Trick! 📱🔒",
-        "Android Screen Pinning Feature"
+        "Android Screen Pinning Feature",
+        "🔋 Battery Hack: Background Apps Myth!",
+        "The Battery Myth: Don't Close Background Apps!"
     ],
     "used_keywords": [
         "Turkmenistan",
@@ -226,24 +219,24 @@
         "🔥 Trending Reaction": 1,
         "📱 Tech Hacks": 1,
         "💰 Finance Quick Tips": 2,
-        "📱 Tech & AI Quick Facts": 17,
+        "📱 Tech & AI Quick Facts": 18,
         "🧠 Facts & Trivia": 1,
         "🚀 Motivation Bites": 1,
         "🚀 Tech Tips": 1,
         "🛠️ How-To Tutorials": 1,
-        "📱 Tech & Smart Device Hacks": 4
+        "📱 Tech & Smart Device Hacks": 5
     },
     "last_7_days_stories": [
-        "📶 Secret Wi‑Fi Hack 🔒",
         "📞 AI Call Block Hack 🚀",
         "🔊 Live Transcribe Hack! 📱",
+        "Phone Lock Trick! 📱🔒",
         "Calculator Swipe Hack ⚡️",
         "Phone Radiation Hack ⚡",
         "🚨 SOS Secret: Phone Life Saver!",
-        "Phone Lock Trick! 📱🔒"
+        "🔋 Battery Hack: Background Apps Myth!"
     ],
-    "total_uploaded": 58,
-    "last_upload": "2026-06-24",
+    "total_uploaded": 59,
+    "last_upload": "2026-06-25",
     "history": [
         {
             "date": "2026-05-30",
@@ -1071,6 +1064,21 @@
             "avatar_used": null
         },
         {
+            "date": "2026-06-24",
+            "title": "Phone Lock Trick! 📱🔒",
+            "news_headline": "Android Screen Pinning Feature",
+            "category": "📱 Tech & Smart Device Hacks",
+            "keywords": [
+                "Tamil Tech Tips",
+                "Android Tricks",
+                "Privacy Hack"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/Wd4etDPunxE",
+            "source_url": "https://support.google.com/android/answer/9079635?hl=en",
+            "avatar_used": null
+        },
+        {
             "date": "2026-06-25",
             "title": "Calculator Swipe Hack ⚡️",
             "news_headline": "Calculator Swipe to Delete Hack",
@@ -1114,19 +1122,18 @@
             "avatar_used": "assets/video/black_terminal.mp4"
         },
         {
-            "date": "2026-06-24",
-            "title": "Phone Lock Trick! 📱🔒",
-            "news_headline": "Android Screen Pinning Feature",
+            "date": "2026-06-25",
+            "title": "🔋 Battery Hack: Background Apps Myth!",
+            "news_headline": "The Battery Myth: Don't Close Background Apps!",
             "category": "📱 Tech & Smart Device Hacks",
             "keywords": [
-                "Tamil Tech Tips",
-                "Android Tricks",
-                "Privacy Hack"
+                "Tamil Facts",
+                "Did You Know"
             ],
             "voice_used": "VJ_Cloned_Voice",
-            "youtube_url": "https://youtu.be/Wd4etDPunxE",
-            "source_url": "https://support.google.com/android/answer/9079635?hl=en",
-            "avatar_used": null
+            "youtube_url": "https://youtu.be/dry_run_video_id",
+            "source_url": "https://premiernetworx.com/tech-myth-de-bunked-why-closing-apps-on-your-phone-wont-save-battery-life-and-might-drain-it-faster/",
+            "avatar_used": "assets/video/black_vest.mp4"
         }
     ]
 }
