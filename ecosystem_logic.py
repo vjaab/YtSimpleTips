@@ -240,20 +240,7 @@ def get_category_color_palette(category):
     return _CATEGORY_PALETTES.get(category, _DEFAULT_PALETTE)
 
 def get_session_length_cap():
-    """
-    Checks performance_insights.json. If the average script length of top performers 
-    is under 60 words, returns 60, otherwise returns None.
-    """
-    import os
-    import json
-    insights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "performance_insights.json")
-    if os.path.exists(insights_path):
-        try:
-            with open(insights_path, 'r', encoding='utf-8') as f:
-                insights = json.load(f)
-                avg_len = insights.get("average_script_length", 60)
-                if avg_len < 60:
-                    return 60
-        except Exception as e:
-            print(f"⚠️ Failed to read performance_insights.json: {e}")
     return None
+
+
+

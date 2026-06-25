@@ -93,7 +93,7 @@ MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
 BGM_VOLUME = 0.08
-TARGET_AUDIO_DURATION = (20, 45)  # Shorter Shorts = higher completion rate = algorithm boost
+TARGET_AUDIO_DURATION = (35, 55)  # Shorter Shorts = higher completion rate = algorithm boost
 
 # Global Feature Flags
 ENABLE_LONGFORM = False
@@ -116,7 +116,7 @@ ENABLE_CATEGORY_COLORS = True         # Category-specific color palettes per vid
 ENABLE_FACT_COUNTER = False         # "FACT #N" badge creates series loyalty and FOMO
 ENABLE_COUNTDOWN_TIMER = True        # Circular countdown timer in top-right
 ENABLE_SOUND_ON_INDICATOR = False    # "Sound ON" flash boosts audio engagement by 15-20%
-ENABLE_SEAMLESS_LOOP = True          # Cross-dissolve last 3s with opening visual for loop
+ENABLE_SEAMLESS_LOOP = False          # Cross-dissolve last 3s with opening visual for loop
 
 # YouTube Partner Program (YPP) compliance settings
 DEFAULT_PRIVACY_STATUS = "private"   # Privacy of uploaded videos: "private" (recommended for review), "unlisted", or "public"

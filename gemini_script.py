@@ -31,19 +31,16 @@ Language Rules:
    - Characters: Stylized 3D cartoon style character. Any characters depicted should look South Indian Tamil in 3D Pixar/Disney cartoon format.
    - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning").
 Constraint Checklist:
-- SCRIPT WORD COUNT: Strictly 55-70 words in Tanglish.
-- SCRIPT SENTENCES: Every sentence must be under 9 words.
-- HYPER-SPECIFIC HOOKS: First line MUST be a scroll-stopping, high-curiosity hook using one of these PROVEN VIRAL PATTERNS:
-  Pattern 1 (Direct Challenge): "உங்க [specific thing]-ல இந்த [setting/feature]-ஐ மாத்துங்க... [specific benefit]!" (e.g., "உங்க phone-ல இந்த secret setting-ஐ மாத்துங்க... battery 2x ஆகும்!")
-  Pattern 2 (Shocking Stat): "[Number]% பேருக்கு இது தெரியாது!" (e.g., "90% பேருக்கு இந்த WhatsApp trick தெரியாது!")
-  Pattern 3 (Fear/Urgency): "உடனே இதை check பண்ணுங்க... இல்லன்னா [consequence]!" (e.g., "உடனே இந்த app-ஐ delete பண்ணுங்க... data leak ஆகுது!")
-  Pattern 4 (Curiosity Gap): "[Topic]-ல யாருக்கும் தெரியாத ஒரு hidden [feature/trick]..." (e.g., "Google Maps-ல யாருக்கும் தெரியாத ஒரு hidden shortcut...")
-  The hook MUST mention the specific topic/app/setting name. Do NOT use anime tropes, cartoonish drama, or fantasy language in the voice hooks.
-- EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (immediately after the hook), explicitly introduce the name of the topic, setting, or concept being discussed. The audience must know exactly what specific feature/setting/app this video is about within the first 5 seconds.
+- SCRIPT STRUCTURE (MANDATORY 4-PART FORMAT):
+  1. HOOK (0–3 seconds / ~10 words): A shocking fact or bold statement to stop scrolling immediately. Do NOT use greetings (like "வணக்கம்" or "நமஸ்காரம்").
+  2. PROBLEM (3–15 seconds / ~30-40 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
+  3. SOLUTION (15–45 seconds / ~70-80 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
+  4. ENGAGEMENT QUESTION (45–55 seconds / ~20-30 words): End with a simple, opinion-based question that anyone can answer, driving them to comment.
+- SCRIPT WORD COUNT: Strictly 120-150 words in Tanglish (to fit the 55-second total duration).
+- SCRIPT SENTENCES: Every sentence must be short and punchy (under 12 words) for fast-paced, enthusiastic creator delivery.
+- EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "aana wait pannunga, ithula oru twist irukku!" (highly recommended to match VJ's style), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain interest.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
-- SEAMLESS LOOP: Ensure the script's final sentence flows perfectly back into the hook's opening sentence to create an infinite, high-retention loop.
-- CTAs: At the end of every script, ask a provocative question or a soft CTA in Tanglish to drive comments. Example: "Save pannunga, maraakaadhey. Comment-la sollunga!" or a highly engaging tag like "seme-la? Comment-la sollunga!" to drive immediate engagement. Do NOT tell or ask the viewer to subscribe, follow, or share in the spoken voiceover script. End the script strictly on the question or soft CTA.
 """
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
@@ -99,20 +96,23 @@ Return ONLY a JSON object:
 NARRATIVE_AGENT_TEMPLATE = """{persona}
 
 NARRATIVE AGENT TASK:
-Using the selected hook and research, create a step-by-step tutorial or tip flow that is highly appealing to our target demographics (parents, middle-aged, and youth).
+Using the selected hook and research, create a step-by-step tutorial or tip flow that is highly appealing to our target demographics (parents, middle-aged, and youth) following our mandatory 4-part structure.
+
+MANDATORY STRUCTURE:
+1. HOOK (0-3 seconds): A shocking fact or bold statement. No greetings. Stop the scroll instantly.
+2. PROBLEM (3-15 seconds): Define a daily pain point that the viewer experiences directly.
+3. SOLUTION (15-45 seconds): Explain the simple, clear tip or hack. Explain a single idea clearly.
+4. ENGAGEMENT QUESTION (45-55 seconds): A simple opinion-based question in Tanglish to drive comments.
 
 VIRAL RETENTION TECHNIQUES (MANDATORY):
-- OPEN LOOP: In the first 5 seconds, plant an unresolved curiosity that only gets resolved at the 25-30 second mark.
-- PATTERN INTERRUPTS: Every 8-10 seconds, inject a micro-hook phrase to prevent drop-off.
-- RAPID PACING: Every sentence must be under 9 words. No long explanations.
-- TOPIC CLARITY DIRECTIVE: In the Context section (first 2-6s), you MUST explicitly state what specific tool, settings page, or technique is being used.
+- RAPID PACING: Every sentence must be under 12 words. No long explanations.
+- TOPIC CLARITY DIRECTIVE: Explicitly state what specific tool, settings page, or technique is being used in the first 5 seconds.
 
 Include:
-1. Hook (The selected problem-solving hook - must instantly capture attention + plant open loop)
-2. Context (2-6s) - Define the common daily problem.
-3. Escalation (6-28s) - Step-by-step instructions with pattern interrupts. Keep sentences VERY short.
-4. Retention Loop (28-33s) - Seamless bridge back to the exact opening words of the hook.
-5. Outro CTA (33-38s) - A provocative question in Tanglish to drive comments.
+1. HOOK (0-3s)
+2. PROBLEM (3-15s)
+3. SOLUTION (15-45s)
+4. ENGAGEMENT QUESTION (45-55s)
 
 INFORMATION GAP RULE (MANDATORY):
 Every 3-5 seconds of the script MUST introduce ONE new piece of information, actionable step, or surprising detail.
@@ -130,38 +130,36 @@ SELECTED HOOK:
 Return ONLY a JSON object representing the narrative draft (not the final schema yet):
 {{
   "hook": "...",
-  "open_loop_tease": "The unresolved curiosity planted in hook/context",
-  "context": "...",
-  "escalation": "...",
-  "pattern_interrupts_used": ["phrase1", "phrase2"],
-  "retention_loop": "...",
-  "outro_cta": "..."
+  "problem": "...",
+  "solution": "...",
+  "engagement_question": "..."
 }}"""
 
 RETENTION_OPTIMIZER_TEMPLATE = """{persona}
 
 RETENTION OPTIMIZER TASK:
-Rewrite the narrative draft to maximize retention, remove ALL fluff, and increase curiosity density.
+Rewrite the narrative draft to maximize retention, remove ALL fluff, and structure it strictly into the 4-part script format.
 The script must feel like a rapid-fire conversation, NOT a lecture.
 
 MANDATORY RULES:
-1. TOTAL WORD COUNT: Strictly 55-70 words. NOT more.
-2. Every sentence MUST be under 9 words.
-3. Ensure the script directly resonates with daily scenarios.
-4. PATTERN INTERRUPT: At exactly the midpoint (50%) of the timeline/duration, you must include a pattern interrupt scene with spoken narration using a phrase like "oru second wait pannunga..." or "ithai parunga..." to break visual and narrative monotony.
+1. TOTAL WORD COUNT: Strictly 120-150 words.
+2. SCRIPT STRUCTURE (MANDATORY):
+   - HOOK (0-3s): Shocking fact/bold statement. No greeting.
+   - PROBLEM (3-15s): Daily pain point.
+   - SOLUTION (15-45s): Simple, clear tip/hack (single idea).
+   - ENGAGEMENT QUESTION (45-55s): Simple opinion-based question to prompt comments.
+3. SCRIPT SENTENCES: Every sentence must be under 12 words.
+4. Ensure the script directly resonates with daily scenarios.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
-6. Make sure the last sentence merges seamlessly back into the very first sentence to make a perfect 100% looping short.
-7. The OPEN LOOP planted in the hook must be resolved around the 25-30 second mark.
-8. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds.
+6. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds.
 
 NARRATIVE DRAFT:
 {narrative_json}
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script. STRICTLY 55-70 words.",
-  "word_count": 0,
-  "pattern_interrupt_timestamps": ["~15s"]
+  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 120-150 words.",
+  "word_count": 0
 }}"""
 
 TITLE_VARIANTS_AGENT_TEMPLATE = """{persona}
@@ -224,7 +222,7 @@ SCHEMA REQUIREMENTS:
 CRITICAL STORYBOARD & SCENE RULES:
 In the `storyboard` array:
 - Each scene/chunk MUST be SHORT: 3-5 words maximum in the `narration` field to ensure punchy karaoke-style captions on screen.
-- You MUST produce at least 15-25 storyboard scenes for the full script to ensure perfect word-by-word alignment.
+- You MUST produce at least 25-40 storyboard scenes for the full script to ensure perfect word-by-word alignment.
 - The `narration` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
 - The `on_screen_text` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "PHONE SETTING", "STRENGTH") representing the central concept.
 - The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
@@ -271,10 +269,10 @@ Evaluate the following storyboard JSON against these strict criteria (rate each 
 TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
 - Is the script easily understandable by Tamil speakers globally (clear pronunciation, standard vocabulary, no obscure slang)?
-- Are all sentences under 9 words?
-- Is there a tension-build -> reveal -> payoff structure?
+- Are all sentences short and punchy (under 12 words)?
+- Does the script strictly follow the 4-part structure: HOOK (0-3s), PROBLEM (3-15s), SOLUTION (15-45s), and ENGAGEMENT QUESTION (45-55s)?
 - Does the script avoid generic phrases like "intha video-la"?
-- Is the CTA natural, not forced?
+- Is the CTA/Question natural, not forced?
 
 STORYBOARD TO EVALUATE:
 {storyboard_json}
@@ -312,11 +310,11 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     if session_length_cap:
         print(f"📉 [gemini_script] Applying session length cap of {session_length_cap} words.")
-        local_persona = local_persona.replace("55-70", f"50-{session_length_cap}")
-        local_optimizer = local_optimizer.replace("55-70", f"50-{session_length_cap}")
+        local_persona = local_persona.replace("120-150", f"50-{session_length_cap}")
+        local_optimizer = local_optimizer.replace("120-150", f"50-{session_length_cap}")
         word_count_limit_str = f"STRICT LIMIT: Total word count MUST be between 50-{session_length_cap} words."
     else:
-        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 55-70 words."
+        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 120-150 words."
 
     SYSTEM_PERSONA = local_persona
     RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
