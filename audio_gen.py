@@ -105,101 +105,11 @@ def trim_audio_silence(path, word_timestamps):
 
 def optimize_audio_gaps(audio_path, word_timestamps):
     """
-    Detects silent gaps between words and shortens them to keep the pacing
-    tight for high-retention Shorts.
+    Returns original duration and word_timestamps without slicing/modifying the audio stream.
+    This preserves the original continuous voice quality of the clone, avoiding click/pop artifacts.
     """
-    from pydub import AudioSegment
-    try:
-        audio = AudioSegment.from_file(audio_path)
-        
-        modified = False
-        segments = []
-        last_end_ms = 0
-        
-        for i, ws in enumerate(word_timestamps):
-            start_ms = int(ws["start"] * 1000)
-            end_ms = int(ws["end"] * 1000)
-            
-            if last_end_ms > 0:
-                gap_ms = start_ms - last_end_ms
-                gap_s = gap_ms / 1000.0
-                
-                # Determine target gap
-                if gap_s > 0.5:
-                    target_gap_s = 0.25
-                elif 0.3 < gap_s <= 0.5:
-                    target_gap_s = 0.20
-                else:
-                    target_gap_s = gap_s  # leave untouched
-                
-                # Do NOT enforce a minimum gap if it is already very small (e.g. natural spacing or estimated zero gaps)
-                # target_gap_s is kept as is.
-                target_gap_ms = int(target_gap_s * 1000)
-                
-                # If target_gap_ms is different from original gap_ms, we compress/expand it
-                if target_gap_ms != gap_ms:
-                    reduction_ms = gap_ms - target_gap_ms
-                    
-                    if target_gap_ms < gap_ms:
-                        # Compress: append a chunk of original silence of length target_gap_ms
-                        segments.append(audio[last_end_ms:last_end_ms + target_gap_ms])
-                    else:
-                        # Expand: append the original silence plus extra silence
-                        extra_silence_ms = target_gap_ms - gap_ms
-                        if extra_silence_ms > 0:
-                            silence_seg = AudioSegment.silent(duration=extra_silence_ms, frame_rate=audio.frame_rate)
-                            silence_seg = silence_seg.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
-                            segments.append(audio[last_end_ms:start_ms] + silence_seg)
-                        else:
-                            segments.append(audio[last_end_ms:start_ms])
-                            
-                    # Adjust timestamps for all subsequent words
-                    for j in range(i, len(word_timestamps)):
-                        word_timestamps[j]["start"] = max(0.0, round(word_timestamps[j]["start"] - reduction_ms / 1000.0, 3))
-                        word_timestamps[j]["end"] = max(0.0, round(word_timestamps[j]["end"] - reduction_ms / 1000.0, 3))
-                    
-                    if reduction_ms != 0:
-                        modified = True
-                else:
-                    # No modification needed
-                    if last_end_ms < start_ms:
-                        segments.append(audio[last_end_ms:start_ms])
-            else:
-                # First word, just append silence before it if any
-                if last_end_ms < start_ms:
-                    segments.append(audio[last_end_ms:start_ms])
-            
-            segments.append(audio[start_ms:end_ms])
-            last_end_ms = end_ms
-            
-        # Add any remaining audio after the last word
-        if last_end_ms < len(audio):
-            remaining = audio[last_end_ms:]
-            # Trim trailing silence to max 0.3s
-            if len(remaining) > 300:
-                remaining = remaining[:300]
-            segments.append(remaining)
-            
-        if modified and segments:
-            # Concatenate segments using clean cuts with 3ms micro fade-in/out on boundaries to prevent click pops
-            # without causing overlapping speech or timestamp drift.
-            combined = segments[0]
-            if len(combined) > 6:
-                combined = combined.fade_in(3).fade_out(3)
-            for seg in segments[1:]:
-                if len(seg) > 6:
-                    seg = seg.fade_in(3).fade_out(3)
-                combined += seg
-            combined.export(audio_path, format=os.path.splitext(audio_path)[1][1:])
-            new_duration = len(combined) / 1000.0
-            print(f"✂️ [audio_gen] Gap optimization: tightened pacing. New duration: {new_duration:.2f}s")
-            return new_duration, word_timestamps
-            
-        duration = len(audio) / 1000.0
-        return duration, word_timestamps
-    except Exception as e:
-        print(f"⚠️ Gap pacing optimization failed: {e}")
-        return 0.0, word_timestamps
+    duration = get_audio_duration(audio_path)
+    return duration, word_timestamps
 
 def _estimate_timestamps(text, duration):
     words = text.split()
@@ -483,7 +393,7 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
     """
     Loads audio with librosa (sr=44100, mono=True)
     Computes RMS energy in 10ms windows (441 samples at 44.1kHz)
-    Flags any contiguous silence where RMS < 0.005 and duration > 150ms as a "break".
+    Flags any contiguous silence where RMS < 0.005 and duration > 600ms as a "break".
     Returns a list of (start_time_ms, end_time_ms).
     """
     import librosa
@@ -513,7 +423,7 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
         else:
             if in_break:
                 duration_ms = (i - break_start_frame) * 10.0
-                if duration_ms > 150.0:
+                if duration_ms > 600.0:
                     start_time = break_start_frame * 10.0
                     end_time = i * 10.0
                     breaks.append((start_time, end_time))
@@ -521,7 +431,7 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
                 
     if in_break:
         duration_ms = (num_frames - break_start_frame) * 10.0
-        if duration_ms > 150.0:
+        if duration_ms > 600.0:
             start_time = break_start_frame * 10.0
             end_time = num_frames * 10.0
             breaks.append((start_time, end_time))
@@ -530,9 +440,8 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
 
 def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     """
-    Compresses or removes silent breaks in the audio using pydub.
-    - If break duration < 300ms: replace with 60ms silence.
-    - If break duration >= 300ms: remove entirely and crossfade adjacent segments with 20ms linear fade.
+    Shortens unusually long silences (>600ms) to a natural 200ms pause.
+    This prevents breathless delivery and avoids robotic crossfading hiccups.
     """
     if not breaks:
         return audio_path
@@ -548,23 +457,15 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     for start_ms, end_ms in reversed(breaks):
         start_ms = int(start_ms)
         end_ms = int(end_ms)
-        duration_ms = end_ms - start_ms
         
         left_part = audio[:start_ms]
         right_part = audio[end_ms:]
         
-        if duration_ms < 300:
-            # Replace with 60ms silence
-            silence_gap = AudioSegment.silent(duration=60, frame_rate=audio.frame_rate)
-            silence_gap = silence_gap.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
-            audio = left_part + silence_gap + right_part
-        else:
-            # Remove entirely and crossfade adjacent segments with 20ms linear fade
-            if len(left_part) >= 20 and len(right_part) >= 20:
-                audio = left_part.append(right_part, crossfade=20)
-            else:
-                audio = left_part + right_part
-                
+        # Replace the long break with a clean, natural 200ms pause
+        silence_gap = AudioSegment.silent(duration=200, frame_rate=audio.frame_rate)
+        silence_gap = silence_gap.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
+        audio = left_part + silence_gap + right_part
+        
     audio.export(audio_path, format="wav")
     return audio_path
 
@@ -796,6 +697,11 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     Generates Tamil/Tanglish voiceover using ElevenLabs Multilingual (Cloud vj.wav Voice Clone).
     Falls back to F5-TTS or Edge TTS if ElevenLabs fails.
     """
+    if custom_phonetic_map:
+        for word, phonetic in custom_phonetic_map.items():
+            pattern = re.compile(r'\b' + re.escape(word) + r'\b', re.IGNORECASE)
+            text = pattern.sub(phonetic, text)
+            
     clean_text = preprocess_script_for_tts(text)
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")

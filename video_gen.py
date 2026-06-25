@@ -240,8 +240,8 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
     font_size = 48
     font = get_font_for_text(title_text, font_size, "extrabold")
     
-    # Adjust font size if text is too long to fit in 840px wide to leave room for countdown timer on the right
-    max_text_w = 840
+    # Adjust font size if text is too long to fit in 760px wide to leave room for countdown timer on the right
+    max_text_w = 760
     for fs in range(48, 24, -2):
         font = get_font_for_text(title_text, fs, "extrabold")
         bbox = font.getbbox(title_text)

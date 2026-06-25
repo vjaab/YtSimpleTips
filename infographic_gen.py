@@ -148,22 +148,28 @@ class MultilingualFontWrapper:
 
     def getbbox(self, text, *args, **kwargs):
         runs = get_text_runs(text)
-        total_w = 0
-        max_h = 0
-        min_top = 0
+        ascent_latin = self.font_latin.getmetrics()[0]
+        ascent_tamil = self.font_tamil.getmetrics()[0]
+        ascent_max = max(ascent_latin, ascent_tamil)
         
+        min_top = 9999
+        max_bottom = -9999
+        x = 0
         for run_text, is_tamil in runs:
             f = self.get_font_for_run(is_tamil)
             bbox = f.getbbox(run_text, *args, **kwargs)
-            w = bbox[2] - bbox[0]
-            h = bbox[3] - bbox[1]
-            total_w += w
-            if h > max_h:
-                max_h = h
-            if bbox[1] < min_top:
-                min_top = bbox[1]
-                
-        return (0, min_top, total_w, min_top + max_h)
+            y_run = ascent_max - f.getmetrics()[0]
+            run_top = y_run + bbox[1]
+            run_bottom = y_run + bbox[3]
+            run_width = bbox[2] - bbox[0]
+            
+            if run_top < min_top:
+                min_top = run_top
+            if run_bottom > max_bottom:
+                max_bottom = run_bottom
+            x += run_width
+            
+        return (0, min_top if min_top != 9999 else 0, x, max_bottom if max_bottom != -9999 else 0)
 
     def getmask(self, text, mode="L", *args, **kwargs):
         bbox = self.getbbox(text, *args, **kwargs)
@@ -173,13 +179,18 @@ class MultilingualFontWrapper:
         temp_img = Image.new("L", (w + 20, h), 0)
         temp_draw = ImageDraw.Draw(temp_img)
         
-        x = 0
-        y = -bbox[1] if bbox[1] < 0 else 0
+        ascent_latin = self.font_latin.getmetrics()[0]
+        ascent_tamil = self.font_tamil.getmetrics()[0]
+        ascent_max = max(ascent_latin, ascent_tamil)
         
+        y_offset = -bbox[1] if bbox[1] < 0 else 0
+        
+        x = 0
         runs = get_text_runs(text)
         for run_text, is_tamil in runs:
             f = self.get_font_for_run(is_tamil)
-            temp_draw.text((x, y), run_text, font=f, fill=255)
+            y_run = ascent_max - f.getmetrics()[0] + y_offset
+            temp_draw.text((x, y_run), run_text, font=f, fill=255)
             x += f.getbbox(run_text)[2] - f.getbbox(run_text)[0]
             
         return temp_img.im

@@ -19,7 +19,7 @@ Target Audience: Tamil-speaking viewers aged 16–35 who love tech, hacks, and s
 2) Middle-aged (cares about smartphone utility, WhatsApp/finance security, spam blocking, and daily efficiency).
 3) Young People (cares about AI tools, phone/PC customization, study hacks, fast tricks, and speed).
 Language Rules:
-1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in TANGLISH (Tamil words in Tamil script, mixed with English words in English alphabet where natural, e.g. "shortcut", "setting", "battery", "focus", "memory"). This is exactly how young Tamil speakers talk and ensures the TTS handles the pronunciation naturally. Enforce standard, clean, and universally understandable Tanglish/Tamil vocabulary, avoiding obscure local dialects, heavy colloquialisms, or region-specific slang that would confuse Tamil speakers globally (e.g. in Singapore, Malaysia, Sri Lanka, and the west).
+1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in colloquial, day-to-day spoken Tamil (Tanglish) mixed with common English words as naturally spoken in conversation (e.g. "phone settings", "shortcut", "verify", "memory" written in their English alphabet or phonetic forms where appropriate). Do NOT use overly formal, literary, or archaic Tamil words (e.g., use standard spoken words like 'பண்ணுங்க' instead of 'செய்யுங்கள்'). Enforce clean and universally understandable Tanglish/colloquial vocabulary, avoiding obscure local dialects or heavy slang that would confuse Tamil speakers globally.
    Example: "உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க! உங்க browser speed-ஐ boost பண்ண ஒரு simple hack..."
 2. Subtitles & Captions (`subtitle_chunks`):
    - The `text` field MUST contain the spoken Tanglish segment for that chunk to ensure perfect audio-to-text alignment.
@@ -210,7 +210,7 @@ Return ONLY a JSON object:
 HUMANIZER_AGENT_TEMPLATE = """{persona}
 
 HUMANIZER AGENT TASK:
-This is the final step. Fix any robotic phrasing. Ensure the speech is highly conversational Tanglish (natural, friendly, high-energy).
+This is the final step. Fix any robotic phrasing or overly formal/literary Tamil words. Ensure the speech is in highly colloquial, day-to-day spoken Tamil (Tanglish) with a natural mix of English words (natural, friendly, high-energy).
 Format the output EXACTLY matching the required schema below.
 
 OPTIMIZED SCRIPT:
@@ -415,6 +415,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "scene_objective": "Explain the concept visually, not just verbally",
       "visual_type": "Google Video Generation|Animated Infographics|Whiteboard Animation|Motion Graphics",
       "visual_prompt": "A detailed image/video prompt in English. Must specify '3D Pixar/Disney cartoon style, clay textures, expressive eyes' style, e.g., 'A young South Indian Tamil guy sitting late at night scrolling on smartphone, phone screen glowing on face, 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, depth of field, dramatic low-angle tilt'. Avoid generic backgrounds.",
+      "stock_search_query": "A simple 2-3 word English search query to find relevant real-world B-roll stock video footage on Pexels (e.g., 'spirit level', 'iphone settings', 'crooked frame', 'measuring tape', 'wall shelf'). Do NOT include stylistic keywords like '3D', 'Pixar', 'cartoon', 'claymation', 'realistic', 'detailed'.",
       "camera_motion": "Slow zoom|Dolly-in|Orbit|Pan|Tracking shot|None",
       "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
       "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
@@ -681,10 +682,12 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 has_info = info_type not in ("none", "")
                 info_data = scene.get("infographic_data", {})
                 
-                # Extract stock_search_query from visual_prompt or narration
+                # Extract stock_search_query from storyboard or fall back to visual_prompt
                 vis_prompt = scene.get("visual_prompt", "")
-                words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
-                stock_query = " ".join(words) if words else "tech"
+                stock_query = scene.get("stock_search_query", "").strip()
+                if not stock_query:
+                    words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
+                    stock_query = " ".join(words) if words else "tech"
                 
                 chunk = {
                     "chunk_id": scene_num,
