@@ -21,6 +21,8 @@ from screenshot_gen import capture_article_screenshot
 from thumbnail_gen import generate_thumbnail
 from youtube_upload import upload_video
 from telegram_selector import notify_telegram, send_upload_consent
+from entity_fetcher import fetch_all_entities, get_retention_layers_config
+from x_upload import upload_video_to_x
 
 def log_message(msg):
     today = datetime.now().strftime("%Y-%m-%d")
@@ -359,6 +361,16 @@ def run_pipeline(forced_category=None, dry_run=False):
     chunks = build_chunks(word_timestamps, sub_chunks)
     chunks = redistribute_to_audio_duration(chunks, duration)
 
+    # ── STEP 5.5: Fetch Entities (People/Companies) ──
+    log_message("STEP 5.5: Fetching entity photos and company logos...")
+    try:
+        script_data = fetch_all_entities(script_data)
+        retention_config = get_retention_layers_config()
+        script_data["retention_config"] = retention_config
+        log_message(f"Engagement Layers Active: {list(retention_config.keys())}")
+    except Exception as e:
+        log_message(f"⚠️ Entity fetching failed (non-fatal): {e}")
+
     # ── STEP 6: Resolve Background Visuals ──
     log_message("STEP 6: Resolving background visual clips...")
     chunks = fetch_all_chunk_visuals(chunks, topic_context=fact_headline, script_data=script_data)
@@ -437,6 +449,17 @@ def run_pipeline(forced_category=None, dry_run=False):
             f"🔗 {youtube_url}",
             "🤖"
         )
+
+    # ── STEP 10b: X.com Auto-Post ──
+    log_message("STEP 10b: Auto-posting Short to X.com...")
+    try:
+        x_uploaded, x_result = upload_video_to_x(video_path, script_data, youtube_url)
+        if x_uploaded:
+            log_message(f"✅ Posted video to X.com! Tweet ID: {x_result}")
+        else:
+            log_message(f"⚠️ X.com posting skipped/failed: {x_result}")
+    except Exception as ex:
+        log_message(f"⚠️ X.com auto-post failed (non-fatal): {ex}")
 
     # ── STEP 11: Update URL in tracker ──
     update_youtube_url(fact_headline, youtube_url)

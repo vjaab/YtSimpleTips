@@ -3,6 +3,8 @@ video_gen.py — 15-Layer Faceless Video Rendering Engine with Bilingual Tamil C
 V2: Dual-layer captions, advanced transitions, retention overlays, seamless loop, category colors.
 Compiles Ken Burns images, Pexels video clips, Veo AI clips, and infographic cards
 with mixed Tamil+English kinetic captions.
+
+Enhanced with: Layout Profile System (YPP Compliance), Entity Overlays, Advanced Transitions
 """
 
 import os
@@ -11,6 +13,7 @@ import cv2
 import numpy as np
 import random
 import math
+import hashlib
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from moviepy import (
@@ -27,6 +30,7 @@ from config import (
     ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
+from entity_fetcher import fetch_all_entities
 
 FRAME_W, FRAME_H = 1080, 1920  # Default 9:16
 
@@ -37,6 +41,127 @@ _DEFAULT_PALETTE = {
     "caption_highlight": (0, 212, 255),  # Electric Blue
     "progress_bar": (0, 212, 255),
 }
+
+# ════════════════════════════════════════════════════════════════════════════════
+# ── LAYOUT PROFILE SYSTEM (YPP Compliance) ────────────────────────────────────
+# Each video gets a deterministic-but-unique visual layout based on headline hash.
+# This breaks the 'template fingerprint' that YouTube's Inauthentic Content policy flags.
+# ═════════════════════════════════════════════════════════════════════════════════
+
+def _generate_layout_profile(headline: str) -> dict:
+    """
+    Generate a deterministic-but-unique visual layout for each video based on its headline hash.
+    This breaks the 'template fingerprint' that YouTube's Inauthentic Content policy flags.
+    """
+    seed = int(hashlib.md5(headline.encode()).hexdigest(), 16)
+    rng = random.Random(seed)
+
+    # Gradient
+    gradient_height_pct = rng.uniform(0.40, 0.50)          # 40-50-50% (was fixed 45%)
+    gradient_position = rng.choice(["bottom", "top"])       # was always bottom
+
+    # Title box
+    title_bottom_gap = rng.randint(165, 220)                # was fixed 192px
+
+    # Particles
+    particle_style = rng.choice(["bokeh", "digital", "stars", "digital_rain", "lens_dust"])
+
+    # Progress bar
+    progress_bar_height = rng.randint(4, 8)                 # was fixed 6px
+    progress_bar_position = rng.choice(["bottom", "top"])    # was always bottom
+
+    # Hook transition
+    hook_transition_time = rng.uniform(3.5, 5.0)            # was fixed 4.2s
+
+    # Avatar horizontal offset
+    avatar_x_offset = rng.randint(-60, 60)                  # was always centered
+
+    # Subtitle Y jitter
+    subtitle_y_jitter = rng.randint(-30, 30)                # was fixed 0
+
+    # CTA end card style
+    cta_variant = rng.randint(0, 3)                         # 4 CTA styles
+    cta_pill_colors = [
+        (204, 255, 0),    # Neon green (original)
+        (0, 200, 255),    # Cyan
+        (255, 100, 100),  # Coral
+        (180, 130, 255),  # Lavender
+    ]
+    cta_pill_color = cta_pill_colors[cta_variant]
+    cta_headlines = [
+        "Full {topic} guide + source code",
+        "Get the complete {topic} breakdown",
+        "{topic} implementation playbook",
+        "Deep dive: {topic} explained",
+    ]
+    cta_headline_template = cta_headlines[cta_variant]
+    cta_descriptions = [
+        "Join the community 🚀",
+        "Free access — link in bio 📥",
+        "Grab it before it's gone ⚡",
+        "Level up your stack 🔧",
+    ]
+    cta_description = cta_descriptions[cta_variant]
+
+    profile = {
+        "gradient_height_pct": gradient_height_pct,
+        "gradient_position": gradient_position,
+        "title_bottom_gap": title_bottom_gap,
+        "particle_style": particle_style,
+        "progress_bar_height": progress_bar_height,
+        "progress_bar_position": progress_bar_position,
+        "hook_transition_time": hook_transition_time,
+        "avatar_x_offset": avatar_x_offset,
+        "subtitle_y_jitter": subtitle_y_jitter,
+        "cta_pill_color": cta_pill_color,
+        "cta_headline_template": cta_headline_template,
+        "cta_description": cta_description,
+    }
+    print(f"🎲 Layout Profile: gradient={gradient_position}@{gradient_height_pct:.0%}, "
+          f"particles={particle_style}, title_gap={title_bottom_gap}px, "
+          f"progress={progress_bar_position}@{progress_bar_height}px, "
+          f"avatar_offset={avatar_x_offset}px, cta_variant={cta_variant}")
+    return profile
+
+
+def apply_tech_grade(frame):
+    """
+    Applies a premium cinematic color grading to the background image:
+    1. Contrast enhancement via an S-curve.
+    2. Split-toning: cool teal/blue in shadows, warm orange/gold in highlights.
+    """
+    # Convert to float32 in [0, 1]
+    arr = frame.astype(np.float32) / 255.0
+
+    # 1. S-curve contrast boost: f(x) = 3x^2 - 2x^3
+    arr = 3 * (arr ** 2) - 2 * (arr ** 3)
+
+    # 2. Split toning based on luminance
+    lum = 0.299 * arr[:, :, 0] + 0.587 * arr[:, :, 1] + 0.114 * arr[:, :, 2]
+    lum = np.expand_dims(lum, axis=2) # Shape: (H, W, 1)
+
+    shadow_mask = np.clip(1.0 - lum, 0, 1)
+    highlight_mask = np.clip(lum, 0, 1)
+
+    # Cool shadows: slight boost to Blue, minor boost to Green
+    arr[:, :, 2] += shadow_mask[:, :, 0] * 0.04  # Blue
+    arr[:, :, 1] += shadow_mask[:, :, 0] * 0.01  # Green
+
+    # Warm highlights: slight boost to Red, drop Blue
+    arr[:, :, 0] += highlight_mask[:, :, 0] * 0.05  # Red
+    arr[:, :, 1] += highlight_mask[:, :, 0] * 0.02  # Green
+    arr[:, :, 2] -= highlight_mask[:, :, 0] * 0.02  # Reduce Blue
+
+    return np.clip(arr * 255.0, 0, 255).astype(np.uint8).astype(np.uint8)
+
+
+# Per-video color grading variation seed (anti-repetition for YPP compliance)
+# Each video gets slightly different color parameters so no two look identical
+_COLOR_GRADE_SEED = random.Random()
+_COLOR_GRADE_SEED.seed()  # Random seed per pipeline run
+_CG_SAT_FACTOR = _COLOR_GRADE_SEED.uniform(0.85, 0.95)    # Saturation: 0.85-0.95
+_CG_GAMMA = _COLOR_GRADE_SEED.uniform(1.15, 1.25)          # Gamma: 1.15-1.25
+_CG_CONTRAST = _COLOR_GRADE_SEED.uniform(1.12, 1.18)       # Contrast: 1.12-1.18
 
 def desaturate_frame(frame, factor=0.85):
     """Reduces saturation of an RGB frame by factor (0.85 = 15% desaturation)."""
@@ -426,17 +551,17 @@ _TRANSITION_POOL = [
 # ── DUAL-LAYER CAPTION SYSTEM ───────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=0):
+def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=0, y_jitter=0):
     """Renders high-impact kinetic subtitle frame with dynamic active-word popping."""
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    
+
     base_size = int(60 * (FRAME_W / 1080.0))
-    
+
     # Form layout and line-wrap words
     words = [wd["word"] for wd in word_status_list]
     word_widths = []
-    
+
     for i, wd in enumerate(word_status_list):
         is_active = wd["is_active"]
         weight = "extrabold" if is_active else "bold"
@@ -444,15 +569,15 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
         font = get_font_for_text(words[i], size, weight)
         bbox = font.getbbox(words[i])
         word_widths.append(bbox[2] - bbox[0])
-        
+
     max_w = int(FRAME_W * 0.85)
-    
+
     # Simple wrap
     lines = []
     current_line = []
     current_w = 0
     space_w = int(18 * (FRAME_W / 1080.0))
-    
+
     for word, w in zip(words, word_widths):
         if not current_line or (current_w + w <= max_w):
             current_line.append(word)
@@ -463,9 +588,9 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
             current_w = w + space_w
     if current_line:
         lines.append(current_line)
-        
+
     line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = 920 - (len(lines) * line_h // 2) + y_shift
+    y_pos = 920 - (len(lines) * line_h // 2) + y_shift + y_jitter
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -837,10 +962,17 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 print(f"🎨 [video_gen] Using color palette: {palette.get('name', 'default')} for '{category}'")
         except Exception as e:
             print(f"⚠️ [video_gen] Could not load category palette: {e}. Using default.")
-    
+
     accent_color = palette.get("primary", (204, 255, 0))
     progress_bar_color = palette.get("progress_bar", accent_color)
     caption_highlight = palette.get("caption_highlight", accent_color)
+
+    # ── APPLY LAYOUT PROFILE ──
+    TITLE_BOTTOM_GAP = layout_profile.get("title_bottom_gap", 192)
+    progress_bar_height = layout_profile.get("progress_bar_height", 6)
+    progress_bar_position = layout_profile.get("progress_bar_position", "bottom")
+    avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
+    subtitle_y_jitter = layout_profile.get("subtitle_y_jitter", 0)
     
     # ── RESOLVE FACT COUNTER ──
     fact_number = 0
@@ -880,6 +1012,13 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     
     # ── VISUAL BACKGROUND LAYER ASSEMBLE ──
     print("🎬 Assembling fullscreen background clips...")
+
+    # ── GENERATE LAYOUT PROFILE (YPP Compliance) ──
+    layout_profile = _generate_layout_profile(title_text)
+
+    # ── FETCH ENTITIES FOR OVERLAYS ──
+    script_json = fetch_all_entities(script_json)
+
     background_clips = []
     
     # Track chunk boundaries for transitions
@@ -1110,21 +1249,94 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     vfx.Resize(lambda t: 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)),
                     vfx.Rotate(lambda t: 0.6 * math.sin(t * 1.4 + 0.5))
                 ])
-                
-                # Position avatar at bottom-center
+
+                # Position avatar at bottom-center with layout profile offset
+                avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
+
                 def pip_position(t):
                     current_scale = 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)
                     scaled_w = int(width_pip * current_scale)
                     scaled_h = int(height_pip * current_scale)
-                    base_x = (FRAME_W - scaled_w) // 2
+                    base_x = (FRAME_W - scaled_w) // 2 + avatar_x_offset
                     base_y = FRAME_H - scaled_h - 30
                     return (base_x, base_y)
-                    
+
                 avatar_pip = avatar_clip.with_position(pip_position).with_start(0)
                 background_clips.append(avatar_pip)
                 print("✅ [video_gen] Avatar PiP added successfully to composite background layers!")
             except Exception as av_err:
                 print(f"❌ [video_gen] Failed to process avatar video clip: {av_err}")
+
+    # ════════════════════════════════════════════════════════════════════════════════════
+    # ── ENTITY OVERLAY RENDERERS ─────────────────────────────────────────────────
+    # ══════════════════════════════════════════════════════════════════════════════════
+
+    def _render_entity_overlays(draw: ImageDraw.Draw, script_json: dict, t: float, accent_color: tuple):
+        """
+        Render company logos and person photos as overlays on the video.
+        Entities are shown at specific timestamps based on script mentions.
+        """
+        # Check for company logos
+        for company in script_json.get("companies", []):
+            if isinstance(company, dict) and company.get("local_logo_path"):
+                logo_path = company.get("local_logo_path")
+                if os.path.exists(logo_path):
+                    try:
+                        logo_img = Image.open(logo_path).convert("RGBA")
+                        # Resize logo to reasonable size (max 150px)
+                        logo_img.thumbnail((150, 150), Image.LANCZOS)
+                        # Position: top-right corner with some padding
+                        x = FRAME_W - logo_img.width - 30
+                        y = 30
+                        # Fade in/out animation
+                        fade_duration = 1.0
+                        alpha = 255
+                        # Add subtle pulse
+                        pulse = 1.0 + 0.05 * math.sin(t * 2)
+                        new_w = int(logo_img.width * pulse)
+                        new_h = int(logo_img.height * pulse)
+                        logo_img = logo_img.resize((new_w, new_h), Image.LANCZOS)
+                        draw.bitmap((x, y), logo_img, fill=(255, 255, 255, alpha))
+                    except Exception as e:
+                        print(f"⚠️ Failed to render company logo: {e}")
+
+        # Check for person photos
+        for person in script_json.get("people", []):
+            if isinstance(person, dict) and person.get("local_image_path"):
+                photo_path = person.get("local_image_path")
+                if os.path.exists(photo_path):
+                    try:
+                        photo_img = Image.open(photo_path).convert("RGBA")
+                        # Resize photo to reasonable size (max 200px)
+                        photo_img.thumbnail((200, 200), Image.LANCZOS)
+                        # Position: top-left corner
+                        x = 30
+                        y = 30
+                        fade_duration = 1.0
+                        alpha = 255
+                        pulse = 1.0 + 0.05 * math.sin(t * 2)
+                        new_w = int(photo_img.width * pulse)
+                        new_h = int(photo_img.height * pulse)
+                        photo_img = photo_img.resize((new_w, new_h), Image.LANCZOS)
+                        draw.bitmap((x, y), photo_img, fill=(255, 255, 255, alpha))
+                    except Exception as e:
+                        print(f"⚠️ Failed to render person photo: {e}")
+
+        # Check for key entities
+        for entity in script_json.get("key_entities", []):
+            if isinstance(entity, dict) and entity.get("local_logo_path"):
+                logo_path = entity.get("local_logo_path")
+                if os.path.exists(logo_path):
+                    try:
+                        logo_img = Image.open(logo_path).convert("RGBA")
+                        logo_img.thumbnail((150, 150), Image.LANCZOS)
+                        # Position: center-top
+                        x = (FRAME_W - logo_img.width) // 2
+                        y = 30
+                        alpha = 255
+                        draw.bitmap((x, y), logo_img, fill=(255, 255, 255, alpha))
+                    except Exception as e:
+                        print(f"⚠️ Failed to render key entity logo: {e}")
 
     # Compile the base composited backgrounds
     base_comp = CompositeVideoClip(background_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
@@ -1272,22 +1484,25 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         p_draw = ImageDraw.Draw(pil_frame)
         
         # ── RETENTION OVERLAYS ──
-        
+
         # Fact Counter Badge (top-left)
         if ENABLE_FACT_COUNTER and fact_number > 0:
             _render_fact_counter_badge(p_draw, fact_number, accent_color)
-        
+
         # Countdown Timer (top-right)
         if ENABLE_COUNTDOWN_TIMER:
             _render_countdown_timer(p_draw, t, audio_duration, accent_color)
-        
+
         # Sound-On Indicator (first 2.5s)
         if ENABLE_SOUND_ON_INDICATOR:
             _render_sound_on_indicator(p_draw, t, accent_color)
-            
+
         # Voice Fallback warning removed — only reported via Telegram notification
         # (Previously rendered an orange badge on the video visible to viewers)
-        
+
+        # ── ENTITY OVERLAYS ──
+        _render_entity_overlays(p_draw, script_json, t, accent_color)
+
         # ── DUAL-LAYER CAPTIONS ──
         active_chunk = None
         for chunk in chunks:
@@ -1352,7 +1567,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     except Exception:
                         pass
                 
-        # ── Premium thin progress bar with rounded leading dot ──
+        # ── Premium thin progress bar with rounded leading dot (Layout Profile aware) ──
         progress_ratio = t / audio_duration
         progress_w = int(FRAME_W * progress_ratio)
         if progress_w > 0:
@@ -1363,16 +1578,28 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             if 0.35 < progress_ratio < 0.65:
                 glow_phase = (progress_ratio - 0.35) / 0.30
                 glow_intensity = int(30 * math.sin(glow_phase * math.pi))
-            bar_height = 6 + (glow_intensity // 15)  # Thinner bar (6px base instead of 12px)
-            # Subtle glow layer
-            if glow_intensity > 0:
-                bar_draw.rectangle([0, FRAME_H - bar_height - 3, progress_w + 2, FRAME_H], fill=(pr, pg, pb, glow_intensity))
+            # Use layout profile for bar height
+            bar_height = progress_bar_height + (glow_intensity // 15)
+            # Position based on layout profile
+            if progress_bar_position == "top":
+                bar_y_start = 0
+                bar_y_end = bar_height
+                dot_y = bar_height // 2
+                # Glow layer at top
+                if glow_intensity > 0:
+                    bar_draw.rectangle([0, 0, progress_w + 2, bar_height + 3], fill=(pr, pg, pb, glow_intensity))
+            else:
+                bar_y_start = FRAME_H - bar_height
+                bar_y_end = FRAME_H
+                dot_y = FRAME_H - bar_height // 2
+                # Glow layer at bottom
+                if glow_intensity > 0:
+                    bar_draw.rectangle([0, FRAME_H - bar_height - 3, progress_w + 2, FRAME_H], fill=(pr, pg, pb, glow_intensity))
             # Main bar
-            bar_draw.rectangle([0, FRAME_H - bar_height, progress_w, FRAME_H], fill=(pr, pg, pb, 255))
+            bar_draw.rectangle([0, bar_y_start, progress_w, bar_y_end], fill=(pr, pg, pb, 255))
             # Leading dot (rounded indicator) for premium feel
             dot_radius = bar_height + 2
             dot_x = min(progress_w, FRAME_W - dot_radius)
-            dot_y = FRAME_H - bar_height // 2
             bar_draw.ellipse(
                 [dot_x - dot_radius, dot_y - dot_radius, dot_x + dot_radius, dot_y + dot_radius],
                 fill=(pr, pg, pb, 255)

@@ -5,7 +5,10 @@ import os
 from datetime import datetime
 import time
 import random
-from config import GEMINI_API_KEY, LOGS_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
+from config import (
+    GEMINI_API_KEY, LOGS_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS,
+    GEMINI_PRO_MODEL, GEMINI_FLASH_MODEL, GEMINI_FLASH_LITE_MODEL, GEMINI_RPM_SLEEP
+)
 from topic_tracker import load_tracker, check_story_uniqueness, check_cooldowns
 from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
@@ -162,6 +165,63 @@ Return ONLY a JSON object:
   "word_count": 0
 }}"""
 
+# ── PHASE 2: RETENTION SCIENTIST AGENT ────────────────────────────────────────
+RETENTION_SCIENTIST_TEMPLATE = """{persona}
+
+RETENTION SCIENTIST TASK:
+Analyze the optimized Tamil/Tanglish script and inject PROVEN retention patterns at calculated intervals.
+You are a YouTube Shorts retention strategist for Tamil infotainment content. Your ONLY job is to maximize the percentage of viewers who watch to the end.
+
+CRITICAL RETENTION RULES (based on 2026 YouTube Shorts algorithm data):
+1. HOOK DENSITY: The first 1.5 seconds (first 6 words) MUST contain a surprising claim, stat, or contradiction in Tanglish.
+   - BAD: "Intha video-la namma paarka porom..."
+   - GOOD: "Ungka phone-la irukura intha setting ungkalai spy panudhu!"
+
+2. OPEN LOOPS: Plant at least 2-3 "open loops" (unanswered questions) in the first 20 seconds.
+   - Technique: Mention something intriguing but don't resolve it for 8-12 seconds.
+   - Example: "Aana ithu mattum illa, oru periya problem irukku..." then continue with OTHER info before resolving.
+
+3. PATTERN INTERRUPTS: Every 8-12 seconds, inject a cognitive shift:
+   - Rhetorical question ("Aana wait pannunga...")
+   - Contradiction ("Aana ithu thaan twist!")
+   - Number/stat bomb ("86 billion neurons!")
+   - Direct address ("Ithu ungkalukku yen mukkiyam-nu theriyuma?")
+   - Emotional pivot ("Athu thaan yellaam maariduchu.")
+
+4. CURIOSITY GAPS: End every major point with an incomplete thought that requires the next sentence to resolve.
+   - BAD: "Intha setting-ai maaththunga. Adhula ungka phone fast aagum."
+   - GOOD: "Intha setting-ai maaththunga. Aana adhukku apram nadapadhu thaan unmaiyaana surprise..."
+
+5. PAYOFF STACKING: The most valuable, surprising, or controversial information MUST be in the LAST 15 seconds.
+   Front-load curiosity, back-load payoff.
+
+6. VOCAL VARIETY MARKERS: Add explicit markers for TTS energy:
+   - "..." for dramatic pauses (1-2 per 15 seconds)
+   - Short sentences (< 12 words) after complex explanations
+   - "!" for energy spikes at key reveals
+
+SCRIPT TO ENHANCE:
+{optimized_script}
+
+Return ONLY a JSON object:
+{{
+  "retention_enhanced_script": "The full rewritten Tanglish script with all retention patterns injected",
+  "retention_map": {{
+    "open_loops": [
+      {{"text": "The phrase that opens the loop", "planted_at_word": 15, "resolved_at_word": 45}}
+    ],
+    "pattern_interrupts": [
+      {{"type": "contradiction", "text": "Aana ithu thaan twist...", "at_word": 30}}
+    ],
+    "curiosity_gap_ratio": 0.65,
+    "hook_word_count": 6,
+    "payoff_zone_start_word": 100,
+    "retention_risk_zones": [
+      {{"at_word": 50, "risk": "explanation_fatigue", "mitigation": "Added rhetorical question"}}
+    ]
+  }}
+}}"""
+
 TITLE_VARIANTS_AGENT_TEMPLATE = """{persona}
 
 TITLE VARIANTS AGENT TASK:
@@ -289,6 +349,59 @@ Return ONLY a JSON object:
   "feedback": "Detailed feedback on what is wrong and which scenes need improvement/regeneration."
 }}"""
 
+# ── GOOGLE TRENDS INTEGRATION ─────────────────────────────────────────────────
+
+def get_hottest_tech_topic(client, avoid_list=""):
+    """Uses Gemini Search grounding to find today's most VIRAL fact/tip trending in India for Tamil audience."""
+    print(f"🔥 Fetching hottest trending topic for today in India (Google Trends Analysis)...")
+    
+    avoid_prompt = f"\n\nCRITICAL: DO NOT pick any topics related to the following recently covered stories:\n{avoid_list}" if avoid_list else ""
+    
+    attempts = 0
+    while attempts < 3:
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_FLASH_MODEL,
+                contents=(
+                    "Analyze today's Google Trends and viral content in India. "
+                    "What is the single most trending topic right now that would work as a Tamil infotainment YouTube Short? "
+                    "Look for: fascinating science facts, mind-blowing biology/human body facts, "
+                    "hidden phone settings, life hacks, smart money tips, historical mysteries, "
+                    "everyday science anomalies, or any fact going viral on social media in India. "
+                    "CRITICAL: The topic must appeal to Tamil-speaking audiences aged 16-35 in India and globally. "
+                    "Focus on universal curiosity-gap themes: science wonders, body mysteries, phone/tech hacks, "
+                    "money-saving tips, or surprising everyday facts. "
+                    "Do NOT choose developer news, programming tutorials, API releases, or corporate tech updates. "
+                    f"{avoid_prompt}\n\n"
+                    "Return ONLY a JSON object with two fields: "
+                    "'topic' (3-6 word phrase in English, e.g. 'human brain sleep mystery') and "
+                    "'keywords' (list of 6-8 specific search keywords). No markdown, no explanation."
+                ),
+                config=types.GenerateContentConfig(
+                    tools=[{'google_search': {}}]
+                )
+            )
+            raw = response.text.strip()
+            if "{" in raw and "}" in raw:
+                raw = raw[raw.find("{"):raw.rfind("}")+1]
+            
+            data = json.loads(raw)
+            print(f"📈 Google Trends Hot Topic (India): {data.get('topic', 'N/A')}")
+            return data
+        except Exception as e:
+            err_str = str(e).upper()
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                wait = (attempts + 1) * 5
+                print(f"⚠️ Google Trends rate limited (429). Retrying in {wait}s... (Attempt {attempts+1}/3)")
+                time.sleep(wait)
+                attempts += 1
+                continue
+            print(f"⚠️ Could not fetch Google Trends topic: {e}. Proceeding without trending signal.")
+            return None
+    
+    print("⚠️ Google Trends exhausted after retries. Proceeding without trending signal.")
+    return None
+
 def pick_and_generate_script(articles=None, extra_instruction="", forced_article=None, topic_type="research", failed_topics=[]):
     """
     Orchestrates the multi-agent pipeline to generate a high-retention Tanglish fact script.
@@ -330,7 +443,16 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     avoid_list_str = "\n".join([f"- {t}" for t in combined_avoid if t])
     avoid_instruction = f"CRITICAL: RECENTLY COVERED TOPICS (DO NOT REPEAT THESE):\n{avoid_list_str}\n\n" if avoid_list_str else ""
 
-    news_context = avoid_instruction
+    # ── GOOGLE TRENDS SIGNAL ──
+    hot_topic = get_hottest_tech_topic(client, avoid_list=avoid_list_str)
+    hot_keywords = [kw.lower() for kw in hot_topic.get("keywords", [])] if hot_topic else []
+    hot_topic_str = hot_topic.get("topic", "") if hot_topic else ""
+    if hot_topic_str:
+        trending_signal = f"\n📈 TRENDING SIGNAL (India): Today's hottest topic is '{hot_topic_str}'. If any of the provided facts align with this trend, STRONGLY PREFER it.\n\n"
+    else:
+        trending_signal = ""
+
+    news_context = avoid_instruction + trending_signal
     
     if forced_article:
         print(f"🎯 Forced Topic selected: {forced_article.get('title')}")
@@ -467,6 +589,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             news_context=news_context
         )
         selection = call_gemini_api(client, selector_prompt)
+        if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
         if not selection or "selected_headline" not in selection:
             print("⚠️ Selector Agent failed. Attempting offline fallback script...")
             return get_offline_fallback_script(category, failed_topics)
@@ -511,6 +634,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         context=isolated_context
     )
     sharpened_data = call_gemini_api(client, sharpener_prompt)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if sharpened_data:
         isolated_context += f"\nSharpened Facts: {json.dumps(sharpened_data)}"
 
@@ -521,6 +645,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         news_context=isolated_context
     )
     research = call_gemini_api(client, research_prompt)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not research:
         print("⚠️ Research Agent failed. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
@@ -532,6 +657,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         research_json=json.dumps(research)
     )
     hooks_data = call_gemini_api(client, hook_prompt)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not hooks_data or "hooks" not in hooks_data:
         print("⚠️ Hook Agent failed. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
@@ -549,6 +675,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         selection_instruction=selection_instruction
     )
     narrative = call_gemini_api(client, narrative_prompt)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not narrative:
         print("⚠️ Narrative Agent failed. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
@@ -560,11 +687,33 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         narrative_json=json.dumps(narrative)
     )
     optimized = call_gemini_api(client, retention_prompt)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not optimized:
         print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
 
+    # ── AGENT 4.5: RETENTION SCIENTIST ──
+    print("🧬 [AGENT 4.5] Retention Scientist: Injecting proven retention patterns...")
+    retention_sci_prompt = RETENTION_SCIENTIST_TEMPLATE.format(
+        persona=SYSTEM_PERSONA,
+        optimized_script=optimized.get("optimized_script", "")
+    )
+    retention_result = call_gemini_api(client, retention_sci_prompt, model=GEMINI_PRO_MODEL)
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
+    
+    retention_map = {}
+    if retention_result and "retention_enhanced_script" in retention_result:
+        optimized["optimized_script"] = retention_result["retention_enhanced_script"]
+        retention_map = retention_result.get("retention_map", {})
+        cgr = retention_map.get("curiosity_gap_ratio", 0)
+        loops = len(retention_map.get("open_loops", []))
+        interrupts = len(retention_map.get("pattern_interrupts", []))
+        print(f"   ✅ Retention: {loops} open loops, {interrupts} pattern interrupts, {cgr:.0%} curiosity gap ratio")
+    else:
+        print("   ⚠️ Retention Scientist failed (non-fatal). Using optimizer output directly.")
+
     # ── AGENT 5: HUMANIZER & SCHEMATIZER ──
+    if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     print("🗣️ [AGENT 5] Humanizer: Structuring final Tamil schema...")
     refined_requirements = prompt_requirements
     refined_requirements = refined_requirements.replace('"original_news_headline": "Fact Title"', f'"original_news_headline": "{selected_headline}"')
@@ -725,6 +874,12 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             ]
         if "comment_bait_question" not in final_script:
             final_script["comment_bait_question"] = final_script.get("comment_hook") or "Ethu best-nu neenga neneikiringa?"
+        
+        # Attach Retention Scientist data and trending signal to output
+        if retention_map:
+            final_script["retention_map"] = retention_map
+        if hot_topic_str:
+            final_script["trending_topic"] = hot_topic_str
         
         # Save output in logs for debug
         os.makedirs(LOGS_DIR, exist_ok=True)
