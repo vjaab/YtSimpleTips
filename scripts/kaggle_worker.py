@@ -580,6 +580,15 @@ def setup_project():
         "diffusers", "transformers", "accelerate", "g2p_en",
         "--extra-index-url", "https://download.pytorch.org/whl/cu121"])
     
+    # Uninstall pre-installed flash-attn and xformers to prevent binary/type compatibility issues
+    # with the downgraded PyTorch 2.4.0 version.
+    print("🧹 Uninstalling incompatible pre-installed flash-attn and xformers...")
+    try:
+        run_cmd(["pip", "uninstall", "-y", "flash-attn", "xformers"])
+        print("   ✅ flash-attn and xformers uninstalled.")
+    except Exception as e:
+        print(f"   ⚠️ Failed to uninstall flash-attn/xformers (non-critical): {e}")
+    
     # CRITICAL: Clean swap of numpy and numba
     # Standardizing on numpy 1.26.4 and numba 0.60.0 for MMLab / Python 3.12 compatibility
     print("🔁 Performing clean swap of numba and numpy (v1.x for MMLab stability)...")
