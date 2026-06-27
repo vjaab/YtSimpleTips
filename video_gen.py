@@ -1167,7 +1167,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 try:
                     # Default to False to ensure clean deep-learning human segmentation (rembg)
                     # even during local dry-run, unless fast chromakey is explicitly requested.
-                    use_fast_chromakey = os.getenv("USE_FAST_CHROMAKEY", "true") == "true"
+                    use_fast_chromakey = os.getenv("USE_FAST_CHROMAKEY", "false") == "true"
                     
                     if use_fast_chromakey:
                         print("👤 [video_gen] Fast Chromakey Background Removal enabled for local dry-run...")
@@ -1217,7 +1217,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                             rgba = remove(
                                 frame,
                                 session=rembg_session,
-                                alpha_matting=False,
+                                alpha_matting=True,
                                 post_process_mask=True
                             )
                             mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
