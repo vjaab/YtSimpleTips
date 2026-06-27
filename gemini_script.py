@@ -633,7 +633,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         target_headline=selected_headline,
         context=isolated_context
     )
-    sharpened_data = call_gemini_api(client, sharpener_prompt)
+    sharpened_data = call_gemini_api(client, sharpener_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if sharpened_data:
         isolated_context += f"\nSharpened Facts: {json.dumps(sharpened_data)}"
@@ -656,7 +656,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         persona=SYSTEM_PERSONA,
         research_json=json.dumps(research)
     )
-    hooks_data = call_gemini_api(client, hook_prompt)
+    hooks_data = call_gemini_api(client, hook_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not hooks_data or "hooks" not in hooks_data:
         print("⚠️ Hook Agent failed. Attempting offline fallback script...")
@@ -686,7 +686,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         persona=SYSTEM_PERSONA,
         narrative_json=json.dumps(narrative)
     )
-    optimized = call_gemini_api(client, retention_prompt)
+    optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not optimized:
         print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
@@ -796,7 +796,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 persona=SYSTEM_PERSONA,
                 script_text=final_script.get("script") or final_script.get("optimized_script") or optimized.get("optimized_script", "")
             )
-            title_variants_res = call_gemini_api(client, title_variants_prompt)
+            title_variants_res = call_gemini_api(client, title_variants_prompt, prefer_fallback=True)
             if title_variants_res and "title_variants" in title_variants_res:
                 final_script["title_variants"] = title_variants_res["title_variants"]
             else:
@@ -1105,7 +1105,15 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {openrouter_key}",
             "Content-Type": "application/json"
         }
-        openrouter_models = ["qwen/qwen-2.5-72b-instruct", "meta-llama/llama-3.3-70b-instruct:free", "google/gemini-2.5-flash", "deepseek/deepseek-chat:free", "nvidia/llama-3.1-nemotron-70b-instruct:free"]
+        openrouter_models = [
+            "qwen/qwen-2.5-72b-instruct",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "moonshotai/kimi-k2.6",
+            "nvidia/nemotron-3-ultra:free",
+            "google/gemini-2.5-flash",
+            "deepseek/deepseek-chat:free",
+            "nvidia/llama-3.1-nemotron-70b-instruct:free"
+        ]
         for or_model in openrouter_models:
             print(f"🔮 Falling back to OpenRouter ({or_model})...")
             try:
@@ -1127,12 +1135,20 @@ def call_fallback_model(prompt):
 
     return None
 
-def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash'):
+def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallback=False):
     """
     Helper to execute Gemini API call with robust fallback to alternate models and APIs.
     Automatically rotates Gemini API keys. If a model fails on all keys, it is removed 
     from rotation and we immediately proceed to the next fallback without waiting.
     """
+    if prefer_fallback:
+        print("💡 Lighter/cheaper task detected. Attempting fallback model first to conserve Gemini quota...")
+        fallback_res = call_fallback_model(prompt)
+        if fallback_res:
+            print("   ✅ Handled successfully by fallback model!")
+            return fallback_res
+        print("   🔄 Fallback failed or not configured. Routing back to Gemini API.")
+
     client = client_arg or get_gemini_client()
     if not client:
         client = get_gemini_client()

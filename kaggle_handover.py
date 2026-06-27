@@ -108,7 +108,12 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
         print(f"✅ Kernel pushed successfully!")
         print(f"🔗 Kaggle URL: https://www.kaggle.com/code/{kernel_id}")
     except subprocess.CalledProcessError as cpe:
-        err_detail = cpe.stderr.strip() if cpe.stderr else str(cpe)
+        parts = []
+        if cpe.output:
+            parts.append(f"STDOUT: {cpe.output.strip()}")
+        if cpe.stderr:
+            parts.append(f"STDERR: {cpe.stderr.strip()}")
+        err_detail = " | ".join(parts) if parts else str(cpe)
         msg = f"Failed to push Kaggle kernel: {err_detail}"
         print(f"❌ {msg}")
         _notify_kaggle_failure(f"🚨 Kaggle Push Failed\n\n{msg}\n\nPipeline will attempt ElevenLabs fallback.")

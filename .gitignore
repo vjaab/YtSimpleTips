@@ -25,3 +25,4 @@ kaggle.json
 !assets/fonts/*.ttf
 !assets/music/*.mp3
 !assets/logo.png
+logs/
