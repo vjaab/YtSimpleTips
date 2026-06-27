@@ -1,5 +1,5 @@
 
-JOB_PAYLOAD = {"script": "Big phone-\u0bb2\u0bcd thumb-\u0bb5\u0bc7\u0ba4\u0ba9\u0bbe?  Screen reach \u0b9a\u0bbf\u0b95\u0bcd\u0b95\u0bb2\u0bbe?  Apps \u0bb2\u0bc7\u0b9f\u0bcd \u0b86\u0b95\u0bc1\u0ba4\u0bbe?  Scroll \u0bb2\u0bc7\u0bb8\u0bcd \u0b89\u0ba3\u0bb0\u0bb2\u0bbe?  Settings-\u0b95\u0bcd\u0b95\u0bc1 \u0baa\u0bcb\u0b99\u0bcd\u0b95  System-\u0b90 tap \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95  Gestures-\u0bb2\u0bcd One-Handed Mode  Enable \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 \u0b87\u0baa\u0bcd\u0baa\u0bcb  Double tap screen-\u0bb2\u0bcd  Screen 50% shrink \u0b86\u0b95\u0bc1\u0bae\u0bcd  Size adjust \u0baa\u0ba3\u0bcd\u0ba3\u0bb2\u0bbe\u0bae\u0bcd  Battery \u0b9a\u0bc7\u0bb5\u0bcd \u0b95\u0bc2\u0b9f\u0bc1\u0bae\u0bcd  Quick toggle shortcut  Double tap home button  aana wait pannunga!  Mode on/off instantly  Thumb \u0b8e\u0bb2\u0bcd\u0bb2\u0bbe\u0bae\u0bcd reach  App open \u0bb5\u0bc7\u0b95\u0bae\u0bcd fast  RAM usage \u0b95\u0bc1\u0bb1\u0bc8\u0bb5\u0bc7  Try \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 \u0b87\u0baa\u0bcd\u0baa\u0bcb  Performance boost \u0b95\u0bbf\u0b9f\u0bc8\u0b95\u0bcd\u0b95\u0bc1\u0bae\u0bcd  \u0ba8\u0bc0\u0b99\u0bcd\u0b95 favorite shortcut?  Comment-\u0bb2\u0bcd \u0b9a\u0bca\u0bb2\u0bcd\u0bb2\u0bc1\u0b99\u0bcd\u0b95  Share \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 friends-\u0b95\u0bcd\u0b95\u0bc1  Subscribe for more hacks  Stay tuned VJ style  Next tip \u0baa\u0bbe\u0bb0\u0bcd soon  Thanks for watching  Enjoy smooth phone  Happy hacking!", "custom_map": {"One-Handed": "One-Han-ded"}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "8Oo4d9mNNwVwK369qOwl", "face_path": "assets/video/code.mp4"}
+JOB_PAYLOAD = {"script": "Ads \u0baa\u0bcb\u0ba9\u0bcd-\u0bb2\u0bcd flood  Battery drain \u0bb5\u0bc7\u0b95\u0bae\u0bcd  Data waste \u0b85\u0ba4\u0bbf\u0b95\u0bae\u0bcd  Privacy risk \u0b95\u0bc2\u0b9f  Simple setting \u0ba4\u0bc7\u0bb5\u0bc8  Settings-\u0bb2\u0bcd \u0b9a\u0bc6\u0bb2\u0bcd  Network & Internet tap  Private DNS \u0ba4\u0bc7\u0bb0\u0bcd\u0bb5\u0bc1  Hostname \u0baa\u0bc1\u0bb2\u0bcd\u0bb2  'dns.adguard.com' type  Save click \u0baa\u0ba3\u0bcd\u0ba3  Wait, twist coming  Phone restart \u0baa\u0ba3\u0bcd\u0ba3  Ads \u0b87\u0bb2\u0bcd\u0bb2\u0bbe\u0bae\u0bb2\u0bcd clean  aana wait pannunga, twist irukku!  Speed rocket \u0b86\u0b95\u0bc1\u0ba4\u0bc1  Buffering \u0b87\u0bb2\u0bcd\u0bb2  Data saved \u0b85\u0ba4\u0bbf\u0b95\u0bae\u0bcd  Battery backup \u0baa\u0bc6\u0bb0\u0bbf\u0baf  Privacy secure \u0b86\u0ba9\u0ba4\u0bc1  All apps smooth  Kids safe browsing  No unwanted videos  Check DNS settings  Test speed now  Feel difference?  Try it today  Comment your result  Share with friends  Subscribe for more", "custom_map": {"NVIDIA": "In-vid-yah"}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "8Oo4d9mNNwVwK369qOwl", "face_path": "assets/video/gemini.mp4"}
 import os
 os.environ["PYTHONHASHSEED"] = "0"
 import subprocess
@@ -237,7 +237,8 @@ def _install_mmlab():
     # Step 2: mmcv (needs CUDA ops — use pre-built wheels)
     import torch
     torch_v_full = torch.__version__
-    torch_v_simple = torch_v_full.split('+')[0]
+    # Extract major.minor only: e.g. "2.4.0+cu121" -> "2.4"
+    torch_v_simple = ".".join(torch_v_full.split('+')[0].split('.')[:2])
     cuda_v = torch.version.cuda
     
     print(f"🔍 Environment Check:")
@@ -261,13 +262,15 @@ def _install_mmlab():
 
     if not mmcv_installed:
         # Strategy: Try the OpenMMLab index first with various torch version tags.
-        # Kaggle might have Torch 2.5/2.6, but indexes usually stop at 2.4.
+        # Kaggle might have Torch 2.5/2.6/2.10, but indexes usually stop at 2.4.
         # We try them in descending order of recency.
         trial_torch_versions = [torch_v_simple]
-        if "2.5" in torch_v_simple or "2.6" in torch_v_simple:
-            trial_torch_versions += ["2.4.0", "2.3.0"]
+        if torch_v_simple in ["2.5", "2.6", "2.10", "2.11", "2.12"]:
+            trial_torch_versions += ["2.4", "2.3"]
         else:
-            trial_torch_versions += ["2.4.0", "2.3.0", "2.2.0", "2.1.0"]
+            for v in ["2.4", "2.3", "2.2", "2.1", "2.0"]:
+                if v not in trial_torch_versions:
+                    trial_torch_versions.append(v)
 
         for trial_v in trial_torch_versions:
                 # Also try common CUDA tags if exact tag fails (e.g. cu121 often works on cu124)
@@ -275,9 +278,10 @@ def _install_mmlab():
                     try:
                         mm_index = f"https://download.openmmlab.com/mmcv/dist/{trial_cuda}/torch{trial_v}/index.html"
                         print(f"   Checking: {mm_index}")
-                        run_cmd(["pip", "install", "-q", "mmcv==2.1.0", "-f", mm_index])
+                        # Install mmcv (full with CUDA ops) version compatible with the torch build
+                        run_cmd(["pip", "install", "-q", "mmcv>=2.1.0", "-f", mm_index])
                         mmcv_installed = True
-                        print(f"   ✅ mmcv==2.1.0 (via {trial_cuda}/torch{trial_v})")
+                        print(f"   ✅ mmcv>=2.1.0 (via {trial_cuda}/torch{trial_v})")
                         break
                     except:
                         continue

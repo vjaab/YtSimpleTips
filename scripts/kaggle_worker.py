@@ -235,7 +235,8 @@ def _install_mmlab():
     # Step 2: mmcv (needs CUDA ops — use pre-built wheels)
     import torch
     torch_v_full = torch.__version__
-    torch_v_simple = torch_v_full.split('+')[0]
+    # Extract major.minor only: e.g. "2.4.0+cu121" -> "2.4"
+    torch_v_simple = ".".join(torch_v_full.split('+')[0].split('.')[:2])
     cuda_v = torch.version.cuda
     
     print(f"🔍 Environment Check:")
@@ -259,13 +260,15 @@ def _install_mmlab():
 
     if not mmcv_installed:
         # Strategy: Try the OpenMMLab index first with various torch version tags.
-        # Kaggle might have Torch 2.5/2.6, but indexes usually stop at 2.4.
+        # Kaggle might have Torch 2.5/2.6/2.10, but indexes usually stop at 2.4.
         # We try them in descending order of recency.
         trial_torch_versions = [torch_v_simple]
-        if "2.5" in torch_v_simple or "2.6" in torch_v_simple:
-            trial_torch_versions += ["2.4.0", "2.3.0"]
+        if torch_v_simple in ["2.5", "2.6", "2.10", "2.11", "2.12"]:
+            trial_torch_versions += ["2.4", "2.3"]
         else:
-            trial_torch_versions += ["2.4.0", "2.3.0", "2.2.0", "2.1.0"]
+            for v in ["2.4", "2.3", "2.2", "2.1", "2.0"]:
+                if v not in trial_torch_versions:
+                    trial_torch_versions.append(v)
 
         for trial_v in trial_torch_versions:
                 # Also try common CUDA tags if exact tag fails (e.g. cu121 often works on cu124)
@@ -273,9 +276,10 @@ def _install_mmlab():
                     try:
                         mm_index = f"https://download.openmmlab.com/mmcv/dist/{trial_cuda}/torch{trial_v}/index.html"
                         print(f"   Checking: {mm_index}")
-                        run_cmd(["pip", "install", "-q", "mmcv==2.1.0", "-f", mm_index])
+                        # Install mmcv (full with CUDA ops) version compatible with the torch build
+                        run_cmd(["pip", "install", "-q", "mmcv>=2.1.0", "-f", mm_index])
                         mmcv_installed = True
-                        print(f"   ✅ mmcv==2.1.0 (via {trial_cuda}/torch{trial_v})")
+                        print(f"   ✅ mmcv>=2.1.0 (via {trial_cuda}/torch{trial_v})")
                         break
                     except:
                         continue
