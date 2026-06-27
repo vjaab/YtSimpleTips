@@ -2,7 +2,7 @@ import os
 import requests
 import random
 import time
-from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO
+from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO, ENABLE_STOCK_FOOTAGE
 from nano_scene_gen import _generate_imagen_image
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
@@ -12,6 +12,8 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
     Queries Pexels API for vertical stock videos or photos.
     Returns local path to downloaded file or None.
     """
+    if not ENABLE_STOCK_FOOTAGE:
+        return None
     if not PEXELS_API_KEY or "XXX" in PEXELS_API_KEY or not PEXELS_API_KEY.strip():
         print("⚠️ Pexels API Key missing or invalid. Skipping stock search.")
         return None

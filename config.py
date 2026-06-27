@@ -135,6 +135,7 @@ ENABLE_SEAMLESS_LOOP = False
 ENABLE_WATERMARK = True               # Channel watermark overlay on video
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
 ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video
+ENABLE_STOCK_FOOTAGE = False          # Control whether to include stock footage (Pexels)
 
 # Retention Engine Settings
 VISUAL_CUT_TARGET_SECONDS = 2.0

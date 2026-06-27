@@ -37,7 +37,9 @@ def _get_accent_colors(script_json):
 def _generate_pexels_background(prompt_context):
     """Fetches a high-quality landscape stock photo from Pexels as a fallback."""
     import requests
-    from config import PEXELS_API_KEY
+    from config import PEXELS_API_KEY, ENABLE_STOCK_FOOTAGE
+    if not ENABLE_STOCK_FOOTAGE:
+        return None
     if not PEXELS_API_KEY or not PEXELS_API_KEY.strip() or "XXX" in PEXELS_API_KEY:
         print("⚠️ [thumbnail] Pexels API Key missing or invalid. Skipping stock search fallback.")
         return None
