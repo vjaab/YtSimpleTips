@@ -967,6 +967,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     progress_bar_color = palette.get("progress_bar", accent_color)
     caption_highlight = palette.get("caption_highlight", accent_color)
 
+    # ── GENERATE LAYOUT PROFILE (YPP Compliance) ──
+    layout_profile = _generate_layout_profile(title_text)
+
     # ── APPLY LAYOUT PROFILE ──
     TITLE_BOTTOM_GAP = layout_profile.get("title_bottom_gap", 192)
     progress_bar_height = layout_profile.get("progress_bar_height", 6)
@@ -1012,9 +1015,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     
     # ── VISUAL BACKGROUND LAYER ASSEMBLE ──
     print("🎬 Assembling fullscreen background clips...")
-
-    # ── GENERATE LAYOUT PROFILE (YPP Compliance) ──
-    layout_profile = _generate_layout_profile(title_text)
 
     # ── FETCH ENTITIES FOR OVERLAYS ──
     script_json = fetch_all_entities(script_json)
