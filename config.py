@@ -84,6 +84,8 @@ YOUTUBE_CLIENT_SECRET_FILE = os.getenv("YOUTUBE_CLIENT_SECRET_FILE", "client_sec
 YOUTUBE_DATA_API_KEY = os.getenv("YOUTUBE_DATA_API_KEY", "")
 REDDIT_CLIENT_ID = os.getenv("REDDIT_CLIENT_ID", "")
 REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET", "")
+VIDIQ_API_KEY = os.getenv("VIDIQ_API_KEY", "")
+
 
 # X.com (Twitter) API Credentials
 X_API_KEY = os.getenv("X_API_KEY", "")

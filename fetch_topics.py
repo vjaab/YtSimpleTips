@@ -152,13 +152,48 @@ def fetch_facts_for_category(category):
         if h: headlines_to_avoid.add(h)
     avoid_titles = list(headlines_to_avoid)
 
+    # Fetch VidIQ topics for this category
+    vidiq_topics = []
+    try:
+        # Map category to a clean category for VidIQ
+        vidiq_category = "AI"
+        if "Science" in category or "Biology" in category:
+            vidiq_category = "Science"
+        elif "Money" in category or "Wealth" in category:
+            vidiq_category = "Finance"
+        elif "Tech" in category or "Hacks" in category or "Tips" in category or "Mysteries" in category:
+            vidiq_category = "Technology"
+            
+        from vidiq_trending import get_pipeline_topics
+        vidiq_raw = get_pipeline_topics(category=vidiq_category)
+        for item in vidiq_raw:
+            title = item.get("title", "")
+            url = item.get("url", "")
+            if not title:
+                continue
+            is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+            if is_unique:
+                vidiq_topics.append({
+                    "title": title,
+                    "description": f"vidIQ Opportunity Score: {item.get('score', 60)} (Volume: {item.get('search_volume', 5000)}, Competition: {item.get('competition', 35)})",
+                    "source_url": url,
+                    "source_name": "vidIQ",
+                    "keywords": ["vidIQ", vidiq_category],
+                    "category": category
+                })
+                if len(vidiq_topics) >= 3:
+                    break
+        print(f"📈 [fetch_topics] Fetched {len(vidiq_topics)} unique, high-signal VidIQ topics.")
+    except Exception as e:
+        print(f"⚠️ [fetch_topics] VidIQ integration failed (non-fatal): {e}")
+
     client = get_gemini_client()
     if not client:
         print("⚠️ Gemini API Client missing/disabled. Skipping Search Grounding and attempting LLM fallback directly.")
         unique_fallback_facts = fetch_facts_from_llm_fallback(category, avoid_titles)
         if unique_fallback_facts:
-            return unique_fallback_facts
-        return get_historical_fallback(category)
+            return unique_fallback_facts + vidiq_topics
+        return get_historical_fallback(category) + vidiq_topics
 
     # Fetch trending signals to inject into the search query
     trending_context = ""
@@ -237,7 +272,7 @@ def fetch_facts_for_category(category):
                         unique_facts = boost_articles_with_trending(unique_facts, category)
                     except Exception as e:
                         print(f"  ⚠️ [fetch_topics] Trending boost failed (non-fatal): {e}")
-                return unique_facts
+                return unique_facts + vidiq_topics
             else:
                 print("⚠️ All fetched facts were duplicates. Retrying fetch...")
                 attempts += 1
@@ -278,10 +313,11 @@ def fetch_facts_for_category(category):
     print("🚨 [fetch_topics] All search grounding attempts failed or returned duplicates. Attempting LLM fallback...")
     unique_fallback_facts = fetch_facts_from_llm_fallback(category, avoid_titles)
     if unique_fallback_facts:
-        return unique_fallback_facts
+        return unique_fallback_facts + vidiq_topics
         
     print("🚨 [fetch_topics] LLM fallback failed. Loading historical backup as absolute last resort...")
-    return get_historical_fallback(category)
+    return get_historical_fallback(category) + vidiq_topics
+
 
 def get_historical_fallback(category):
     """

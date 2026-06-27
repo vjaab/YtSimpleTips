@@ -13,31 +13,31 @@ def get_slot_info():
     
     morning_categories = {
         "Mon": "🧠 Amazing Science & Space",
-        "Tue": "🧬 Biology & Human Body",
+        "Tue": "🤖 AI Demystified & Future Tech",
         "Wed": "⚡ Everyday Science Facts",
         "Thu": "🧠 Amazing Science & Space",
-        "Fri": "🧬 Biology & Human Body",
+        "Fri": "🤖 AI Demystified & Future Tech",
         "Sat": "⚡ Everyday Science Facts",
-        "Sun": "🧠 Amazing Science & Space"
+        "Sun": "🤖 AI Demystified & Future Tech"
     }
     
     afternoon_categories = {
         "Mon": "🏺 Mysteries & Unknown History",
         "Tue": "💡 Life Hacks & Smart Tips",
-        "Wed": "🧬 Biology & Human Body",
+        "Wed": "🤖 Practical AI Tools & Jobs",
         "Thu": "🏺 Mysteries & Unknown History",
         "Fri": "💡 Life Hacks & Smart Tips",
-        "Sat": "🧠 Amazing Science & Space",
-        "Sun": "🏺 Mysteries & Unknown History"
+        "Sat": "🤖 Practical AI Tools & Jobs",
+        "Sun": "🤖 Practical AI Tools & Jobs"
     }
     
     evening_categories = {
-        "Mon": "📱 Tech & Smart Device Hacks",
+        "Mon": "🤖 Simple AI Hacks for Everyone",
         "Tue": "💰 Money & Wealth Secrets",
         "Wed": "💡 Life Hacks & Smart Tips",
-        "Thu": "📱 Tech & Smart Device Hacks",
+        "Thu": "🤖 Simple AI Hacks for Everyone",
         "Fri": "💰 Money & Wealth Secrets",
-        "Sat": "💡 Life Hacks & Smart Tips",
+        "Sat": "🤖 Simple AI Hacks for Everyone",
         "Sun": "🏺 Mysteries & Unknown History"
     }
     
@@ -69,7 +69,10 @@ def get_slot_info():
                     "mysteries": "🏺 Mysteries & Unknown History",
                     "life": "💡 Life Hacks & Smart Tips",
                     "tech": "📱 Tech & Smart Device Hacks",
-                    "money": "💰 Money & Wealth Secrets"
+                    "money": "💰 Money & Wealth Secrets",
+                    "simple_ai": "🤖 Simple AI Hacks for Everyone",
+                    "practical_ai": "🤖 Practical AI Tools & Jobs",
+                    "future_ai": "🤖 AI Demystified & Future Tech"
                 }
                 
                 top_mapped = []
@@ -116,6 +119,24 @@ def get_category_prompt_enhancement(category, slot):
     )
     
     enhancements = {
+        "🤖 AI Demystified & Future Tech": f"""
+            {base_instructions}
+            CATEGORY: AI Demystified & Future Tech
+            GOAL: Demystify an AI concept (how neural nets work, how LLMs think, how deepfakes are made) or share a future tech update. Make it extremely simple for everyday Tamil people of all ages to understand. Keep it fascinating and highly visual to drive maximum views. Include tips on AI safety (e.g. avoiding audio/video deepfake scams).
+            HOOK TEMPLATE (Tamil): "விஞ்ஞான உலகத்துல அடுத்ததா வரப்போற இந்த ஒரு மிரட்டலான AI விஷயம் பத்தி தெரியுமா?"
+        """,
+        "🤖 Practical AI Tools & Jobs": f"""
+            {base_instructions}
+            CATEGORY: Practical AI Tools & Jobs
+            GOAL: Show students, job seekers, and office workers how to use free AI tools (ChatGPT, Claude, Gamma, slides AI) to write, learn, automate tasks, or prepare for interviews. Pacing must be extremely practical and step-by-step.
+            HOOK TEMPLATE (Tamil): "உங்க study அல்லது office work-ஐ 10 மடங்கு வேகமாக்க இந்த ஒரு free AI tool-ஐ உடனே use பண்ணுங்க..."
+        """,
+        "🤖 Simple AI Hacks for Everyone": f"""
+            {base_instructions}
+            CATEGORY: Simple AI Hacks for Everyone
+            GOAL: Share simple AI features built into everyday tools like WhatsApp, Google search, keyboard apps, or phone settings (e.g. Google Lens, Live Translate) that kids, parents, and grandmas can easily use to make daily life simpler. Avoid all jargon.
+            HOOK TEMPLATE (Tamil): "உங்க phone-ல WhatsApp-ல இருக்குற இந்த ஒரு ரகசிய AI feature பத்தி தெரியுமா?"
+        """,
         "🧠 Amazing Science & Space": f"""
             {base_instructions}
             CATEGORY: Amazing Science & Space
@@ -164,6 +185,33 @@ def get_category_prompt_enhancement(category, slot):
 
 # Curated Category Color Palette System
 _CATEGORY_PALETTES = {
+    "🤖 AI Demystified & Future Tech": {
+        "name": "Electric Purple",
+        "primary": (180, 80, 255),
+        "secondary": (15, 10, 30),
+        "caption_highlight": (200, 120, 255),
+        "progress_bar": (180, 80, 255),
+        "thumbnail_accent": (180, 80, 255),
+        "emoji": "🤖",
+    },
+    "🤖 Practical AI Tools & Jobs": {
+        "name": "Neon Cyan",
+        "primary": (0, 255, 230),
+        "secondary": (8, 25, 30),
+        "caption_highlight": (80, 255, 240),
+        "progress_bar": (0, 255, 230),
+        "thumbnail_accent": (0, 255, 230),
+        "emoji": "🤖",
+    },
+    "🤖 Simple AI Hacks for Everyone": {
+        "name": "Bright Amber",
+        "primary": (255, 170, 0),
+        "secondary": (25, 15, 5),
+        "caption_highlight": (255, 190, 50),
+        "progress_bar": (255, 170, 0),
+        "thumbnail_accent": (255, 170, 0),
+        "emoji": "🤖",
+    },
     "🧠 Amazing Science & Space": {
         "name": "Warm Gold",
         "primary": (255, 184, 0),
