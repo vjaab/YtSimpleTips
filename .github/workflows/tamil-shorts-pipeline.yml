@@ -129,12 +129,19 @@ jobs:
         run: |
           mkdir -p ~/.kaggle
           echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > ~/.kaggle/kaggle.json
+          if [ ! -z "${{ secrets.KAGGLE_KEY }}" ]; then
+            echo -n "${{ secrets.KAGGLE_KEY }}" > ~/.kaggle/access_token
+          fi
           chmod 600 ~/.kaggle/kaggle.json
+          if [ -f ~/.kaggle/access_token ]; then
+            chmod 600 ~/.kaggle/access_token
+          fi
           
       - name: Run Pipeline (Kaggle GPU Priority)
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_KEY }}
         run: |
           python main.py --now
          

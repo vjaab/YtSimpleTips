@@ -21,6 +21,36 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
     """
     print("🚀 [kaggle_handover] Initiating Kaggle GPU Handover for IndicF5 Tamil Voice Cloning...")
     
+    # Configure environment variables for both legacy and new Kaggle CLI versions
+    from config import KAGGLE_USERNAME, KAGGLE_KEY
+    if KAGGLE_KEY:
+        os.environ["KAGGLE_KEY"] = KAGGLE_KEY
+        os.environ["KAGGLE_API_TOKEN"] = KAGGLE_KEY
+    if KAGGLE_USERNAME:
+        os.environ["KAGGLE_USERNAME"] = KAGGLE_USERNAME
+        
+    # Dynamically write ~/.kaggle/kaggle.json and ~/.kaggle/access_token to ensure auth works
+    try:
+        kaggle_dir = os.path.expanduser("~/.kaggle")
+        os.makedirs(kaggle_dir, exist_ok=True)
+        
+        # Legacy/standard API config file
+        kaggle_json_path = os.path.join(kaggle_dir, "kaggle.json")
+        with open(kaggle_json_path, "w", encoding="utf-8") as f:
+            json.dump({"username": KAGGLE_USERNAME, "key": KAGGLE_KEY}, f)
+        os.chmod(kaggle_json_path, 0o600)
+        
+        # New CLI version access token file
+        if KAGGLE_KEY:
+            access_token_path = os.path.join(kaggle_dir, "access_token")
+            with open(access_token_path, "w", encoding="utf-8") as f:
+                f.write(KAGGLE_KEY)
+            os.chmod(access_token_path, 0o600)
+            
+        print("🔒 Successfully updated Kaggle API configuration files.")
+    except Exception as e:
+        print(f"⚠️ Warning: Could not write Kaggle credential files: {e}")
+        
     scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts")
     os.makedirs(scripts_dir, exist_ok=True)
     
