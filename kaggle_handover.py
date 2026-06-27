@@ -90,10 +90,29 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
         elif os.path.exists("venv/Scripts/kaggle"):
             kaggle_cmd = "venv/Scripts/kaggle"
             
-        subprocess.run([kaggle_cmd, "kernels", "push", "-p", scripts_dir], check=True, timeout=90)
+        # Force NvidiaTeslaT4 accelerator to avoid incompatible Tesla P100 (which has compute capability 6.0, unsupported by PyTorch/CUDA wheels in the Kaggle environment)
+        push_res = subprocess.run(
+            [kaggle_cmd, "kernels", "push", "-p", scripts_dir, "--accelerator", "NvidiaTeslaT4"],
+            capture_output=True,
+            text=True,
+            timeout=90
+        )
+        if push_res.returncode != 0:
+            raise subprocess.CalledProcessError(
+                push_res.returncode,
+                push_res.args,
+                output=push_res.stdout,
+                stderr=push_res.stderr
+            )
         kernel_id = meta.get("id", "vijayakumarj/ytsimpletips-gpu-worker")
         print(f"✅ Kernel pushed successfully!")
         print(f"🔗 Kaggle URL: https://www.kaggle.com/code/{kernel_id}")
+    except subprocess.CalledProcessError as cpe:
+        err_detail = cpe.stderr.strip() if cpe.stderr else str(cpe)
+        msg = f"Failed to push Kaggle kernel: {err_detail}"
+        print(f"❌ {msg}")
+        _notify_kaggle_failure(f"🚨 Kaggle Push Failed\n\n{msg}\n\nPipeline will attempt ElevenLabs fallback.")
+        return {"error": "push_failed", "message": msg}
     except Exception as e:
         msg = f"Failed to push Kaggle kernel: {e}"
         print(f"❌ {msg}")

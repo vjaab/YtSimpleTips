@@ -1,0 +1,679 @@
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.0), please consider upgrading to the latest version (2.2.2)
+[{"stream_name":"stdout","time":0.761271043,"data":"--- Kaggle Worker Initiated ---\n"}
+,{"stream_name":"stdout","time":0.761331167,"data":"🖥️ Installing System Dependencies (espeak-ng, ffmpeg)...\n"}
+,{"stream_name":"stdout","time":1.262919352,"data":"Get:1 https://cli.github.com/packages stable InRelease [3,917 B]\n"}
+,{"stream_name":"stdout","time":1.262942975,"data":"Get:2 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64  InRelease [1,581 B]\n"}
+,{"stream_name":"stdout","time":1.263480216,"data":"Get:3 https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/ InRelease [3,632 B]\n"}
+,{"stream_name":"stdout","time":1.332268326,"data":"Hit:4 http://archive.ubuntu.com/ubuntu jammy InRelease\n"}
+,{"stream_name":"stdout","time":1.354584445,"data":"Get:5 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]\n"}
+,{"stream_name":"stdout","time":1.35460503,"data":"Get:6 https://r2u.stat.illinois.edu/ubuntu jammy InRelease [6,555 B]\n"}
+,{"stream_name":"stdout","time":1.456361662,"data":"Get:7 https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/ Packages [99.9 kB]\n"}
+,{"stream_name":"stdout","time":1.457014106,"data":"Get:8 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]\n"}
+,{"stream_name":"stdout","time":1.52233259,"data":"Get:9 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64  Packages [2,764 kB]\n"}
+,{"stream_name":"stdout","time":1.599392596,"data":"Get:10 https://cli.github.com/packages stable/main amd64 Packages [354 B]\n"}
+,{"stream_name":"stdout","time":1.6475083640000001,"data":"Get:11 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy InRelease [18.1 kB]\n"}
+,{"stream_name":"stdout","time":1.8060836729999998,"data":"Hit:12 https://ppa.launchpadcontent.net/graphics-drivers/ppa/ubuntu jammy InRelease\n"}
+,{"stream_name":"stdout","time":1.897795589,"data":"Hit:13 https://ppa.launchpadcontent.net/ubuntugis/ppa/ubuntu jammy InRelease\n"}
+,{"stream_name":"stdout","time":1.9051828849999999,"data":"Get:14 https://r2u.stat.illinois.edu/ubuntu jammy/main amd64 Packages [3,081 kB]\n"}
+,{"stream_name":"stdout","time":1.9293394990000001,"data":"Get:15 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]\n"}
+,{"stream_name":"stdout","time":1.993811742,"data":"Get:16 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1,307 kB]\n"}
+,{"stream_name":"stdout","time":2.056135896,"data":"Get:17 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [7,258 kB]\n"}
+,{"stream_name":"stdout","time":2.122949058,"data":"Get:18 https://r2u.stat.illinois.edu/ubuntu jammy/main all Packages [10.4 MB]\n"}
+,{"stream_name":"stdout","time":2.137558092,"data":"Get:19 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [4,046 kB]\n"}
+,{"stream_name":"stdout","time":2.25046352,"data":"Get:20 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy/main amd64 Packages [38.6 kB]\n"}
+,{"stream_name":"stdout","time":2.374940231,"data":"Get:21 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1,612 kB]\n"}
+,{"stream_name":"stdout","time":2.448854597,"data":"Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [4,379 kB]\n"}
+,{"stream_name":"stdout","time":2.51114843,"data":"Get:23 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [7,526 kB]\n"}
+,{"stream_name":"stdout","time":2.802812717,"data":"Get:24 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [82.8 kB]\n"}
+,{"stream_name":"stdout","time":2.820803894,"data":"Get:25 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.6 kB]\n"}
+,{"stream_name":"stdout","time":4.354189416,"data":"Fetched 43.1 MB in 3s (13.4 MB/s)\n"}
+,{"stream_name":"stdout","time":6.226684676,"data":"Reading package lists...\n"}
+,{"stream_name":"stderr","time":6.250488885,"data":"W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu jammy InRelease' does not seem to provide it (sources.list entry misspelt?)\n"}
+,{"stream_name":"stdout","time":8.09306633,"data":"Reading package lists...\n"}
+,{"stream_name":"stdout","time":8.533015285,"data":"Building dependency tree...\n"}
+,{"stream_name":"stdout","time":8.534948884,"data":"Reading state information...\n"}
+,{"stream_name":"stdout","time":8.820859983,"data":"ffmpeg is already the newest version (7:4.4.2-0ubuntu0.22.04.1).\n"}
+,{"stream_name":"stdout","time":8.820936051,"data":"The following additional packages will be installed:\n"}
+,{"stream_name":"stdout","time":8.82280178,"data":"  espeak-ng-data libespeak-ng1 libpcaudio0 libsonic0\n"}
+,{"stream_name":"stdout","time":8.860929264,"data":"The following NEW packages will be installed:\n"}
+,{"stream_name":"stdout","time":8.862409675,"data":"  espeak-ng espeak-ng-data libespeak-ng1 libpcaudio0 libsonic0\n"}
+,{"stream_name":"stdout","time":8.929334469,"data":"0 upgraded, 5 newly installed, 0 to remove and 180 not upgraded.\n"}
+,{"stream_name":"stdout","time":8.929361619,"data":"Need to get 4,526 kB of archives.\n"}
+,{"stream_name":"stdout","time":8.929368426,"data":"After this operation, 11.9 MB of additional disk space will be used.\n"}
+,{"stream_name":"stdout","time":8.929374322,"data":"Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpcaudio0 amd64 1.1-6build2 [8,956 B]\n"}
+,{"stream_name":"stdout","time":8.949020968,"data":"Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libsonic0 amd64 0.2.0-11build1 [10.3 kB]\n"}
+,{"stream_name":"stdout","time":8.95893928,"data":"Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 espeak-ng-data amd64 1.50+dfsg-10ubuntu0.1 [3,956 kB]\n"}
+,{"stream_name":"stdout","time":9.035104889,"data":"Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libespeak-ng1 amd64 1.50+dfsg-10ubuntu0.1 [207 kB]\n"}
+,{"stream_name":"stdout","time":9.045993664,"data":"Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 espeak-ng amd64 1.50+dfsg-10ubuntu0.1 [343 kB]\n"}
+,{"stream_name":"stdout","time":11.253016647,"data":"Fetched 4,526 kB in 0s (25.5 MB/s)\n"}
+,{"stream_name":"stdout","time":11.325635385,"data":"Selecting previously unselected package libpcaudio0:amd64.\r\n"}
+,{"stream_name":"stdout","time":11.981351107,"data":"(Reading database ... \r(Reading database ... 5%\r(Reading database ... 10%\r(Reading database ... 15%\r(Reading database ... 20%\r(Reading database ... 25%\r(Reading database ... 30%\r(Reading database ... 35%\r(Reading database ... 40%\r(Reading database ... 45%\r(Reading database ... 50%\r(Reading database ... 55%\r(Reading database ... 60%\r(Reading database ... 65%\r(Reading database ... 70%\r(Reading database ... 75%\r(Reading database ... 80%\r(Reading database ... 85%\r(Reading database ... 90%\r(Reading database ... 95%\r(Reading database ... 100%\r(Reading database ... 125128 files and directories currently installed.)\r\n"}
+,{"stream_name":"stdout","time":11.985456517,"data":"Preparing to unpack .../libpcaudio0_1.1-6build2_amd64.deb ...\r\n"}
+,{"stream_name":"stdout","time":12.012147526,"data":"Unpacking libpcaudio0:amd64 (1.1-6build2) ...\r\n"}
+,{"stream_name":"stdout","time":12.099218351,"data":"Selecting previously unselected package libsonic0:amd64.\r\n"}
+,{"stream_name":"stdout","time":12.111788493,"data":"Preparing to unpack .../libsonic0_0.2.0-11build1_amd64.deb ...\r\n"}
+,{"stream_name":"stdout","time":12.120519628,"data":"Unpacking libsonic0:amd64 (0.2.0-11build1) ...\r\n"}
+,{"stream_name":"stdout","time":12.177199896,"data":"Selecting previously unselected package espeak-ng-data:amd64.\r\n"}
+,{"stream_name":"stdout","time":12.189276858,"data":"Preparing to unpack .../espeak-ng-data_1.50+dfsg-10ubuntu0.1_amd64.deb ...\r\n"}
+,{"stream_name":"stdout","time":12.198788408,"data":"Unpacking espeak-ng-data:amd64 (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.371590461,"data":"Selecting previously unselected package libespeak-ng1:amd64.\r\n"}
+,{"stream_name":"stdout","time":12.384419411,"data":"Preparing to unpack .../libespeak-ng1_1.50+dfsg-10ubuntu0.1_amd64.deb ...\r\n"}
+,{"stream_name":"stdout","time":12.396714597,"data":"Unpacking libespeak-ng1:amd64 (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.459406523,"data":"Selecting previously unselected package espeak-ng.\r\n"}
+,{"stream_name":"stdout","time":12.471407263,"data":"Preparing to unpack .../espeak-ng_1.50+dfsg-10ubuntu0.1_amd64.deb ...\r\n"}
+,{"stream_name":"stdout","time":12.478980252,"data":"Unpacking espeak-ng (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.606966576,"data":"Setting up libpcaudio0:amd64 (1.1-6build2) ...\r\n"}
+,{"stream_name":"stdout","time":12.633276784,"data":"Setting up libsonic0:amd64 (0.2.0-11build1) ...\r\n"}
+,{"stream_name":"stdout","time":12.657342298,"data":"Setting up espeak-ng-data:amd64 (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.682529159,"data":"Setting up libespeak-ng1:amd64 (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.707625806,"data":"Setting up espeak-ng (1.50+dfsg-10ubuntu0.1) ...\r\n"}
+,{"stream_name":"stdout","time":12.733685662,"data":"Processing triggers for man-db (2.10.2-1) ...\r\n"}
+,{"stream_name":"stdout","time":13.192395893,"data":"Processing triggers for libc-bin (2.35-0ubuntu3.8) ...\r\n"}
+,{"stream_name":"stdout","time":13.529576072,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbbbind_2_5.so.3 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529602103,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529607492,"data":"/sbin/ldconfig.real: /usr/local/lib/libur_adapter_level_zero.so.0 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529611574,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529683769,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbbbind.so.3 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529690534,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529694596,"data":"/sbin/ldconfig.real: /usr/local/lib/libur_adapter_level_zero_v2.so.0 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529699243,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529825593,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbbbind_2_0.so.3 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529834355,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529838778,"data":"/sbin/ldconfig.real: /usr/local/lib/libur_loader.so.0 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529843156,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.5298473,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbb.so.12 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.52985197,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.52985624,"data":"/sbin/ldconfig.real: /usr/local/lib/libumf.so.1 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.529861511,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.529998029,"data":"/sbin/ldconfig.real: /usr/local/lib/libtcm_debug.so.1 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530034676,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.530040171,"data":"/sbin/ldconfig.real: /usr/local/lib/libur_adapter_opencl.so.0 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530044911,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.530049581,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbbmalloc_proxy.so.2 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530054069,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.530058252,"data":"/sbin/ldconfig.real: /usr/local/lib/libtcm.so.1 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530062606,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.530148909,"data":"/sbin/ldconfig.real: /usr/local/lib/libtbbmalloc.so.2 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530159155,"data":"\r\n"}
+,{"stream_name":"stdout","time":13.530163453,"data":"/sbin/ldconfig.real: /usr/local/lib/libhwloc.so.15 is not a symbolic link\r\n"}
+,{"stream_name":"stdout","time":13.530167938,"data":"\r\n"}
+,{"stream_name":"stdout","time":14.483562489,"data":"📥 Cloning Project Repository...\n"}
+,{"stream_name":"stdout","time":14.483590193,"data":"Executing: git clone -q https://github.com/vjaab/YtSimpleTips.git\n"}
+,{"stream_name":"stdout","time":18.153223856,"data":"🏠 Switched to project directory: /kaggle/working/YtSimpleTips\n"}
+,{"stream_name":"stdout","time":18.153258635,"data":"📦 Installing Python Dependencies...\n"}
+,{"stream_name":"stdout","time":18.153265907,"data":"Executing: pip install -q -U pip setuptools\u003c70 wheel packaging\n"}
+,{"stream_name":"stdout","time":21.692613526,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 22.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":21.728722345,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 894.6/894.6 kB 47.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stderr","time":39.765932639,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":39.765961813,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":39.765968171,"data":"torch 2.10.0+cu128 requires cuda-bindings==12.9.4; platform_system == \"Linux\", but you have cuda-bindings 13.2.0 which is incompatible.\n"}
+,{"stream_name":"stdout","time":39.851198895,"data":"Executing: pip install -q grpcio==1.62.2 grpcio-status==1.62.2\n"}
+,{"stream_name":"stderr","time":43.662820991,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":43.66286372,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":43.662872597,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":43.662879466,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stdout","time":43.863063036,"data":"Executing: pip install -q -r requirements.txt\n"}
+,{"stream_name":"stderr","time":68.596304067,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":68.59634579,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":68.596364332,"data":"kaggle-environments 1.29.3 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596369065,"data":"ydata-profiling 4.18.4 requires numba\u003c0.63,\u003e=0.60, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596373768,"data":"cesium 0.12.4 requires numpy\u003c3.0,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59637888,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596383321,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596390257,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596393978,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596397815,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59640143,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596407043,"data":"jaxlib 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596414933,"data":"cupy-cuda12x 14.0.1 requires numpy\u003c2.6,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59641768,"data":"opencv-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59642046,"data":"tobler 0.14.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596422998,"data":"cuml-cu12 26.2.0 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596425509,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59642805,"data":"jax 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596430499,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596432995,"data":"rasterio 1.5.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596436383,"data":"pytensor 2.38.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596438917,"data":"xarray-einstats 0.10.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596441406,"data":"cudf-cu12 26.2.1 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59644388,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.596447048,"data":"opencv-contrib-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":68.59648342,"data":"shap 0.51.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stdout","time":68.918097804,"data":"Executing: pip install -q onnxruntime-gpu espeakng-loader f5-tts stable-ts torch torchvision torchaudio av imageio-ffmpeg pyyaml joblib scikit-image safetensors trimesh face-alignment diffusers transformers accelerate g2p_en --extra-index-url https://download.pytorch.org/whl/cu121\n"}
+,{"stream_name":"stderr","time":107.355348296,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":107.355424792,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":107.355433086,"data":"ydata-profiling 4.18.4 requires numba\u003c0.63,\u003e=0.60, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355438661,"data":"ydata-profiling 4.18.4 requires numpy\u003c2.4,\u003e=1.22, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355443947,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355449035,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355454029,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355459011,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355464198,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355469274,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355479842,"data":"cuml-cu12 26.2.0 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355483939,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355487409,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355490864,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355508829,"data":"cudf-cu12 26.2.1 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":107.355515326,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":107.782405308,"data":"🔁 Performing clean swap of numba and numpy (v1.x for MMLab stability)...\n"}
+,{"stream_name":"stdout","time":108.254150386,"data":"Found existing installation: numba 0.65.1\n"}
+,{"stream_name":"stdout","time":108.309508809,"data":"Uninstalling numba-0.65.1:\n"}
+,{"stream_name":"stdout","time":108.926230827,"data":"  Successfully uninstalled numba-0.65.1\n"}
+,{"stream_name":"stdout","time":108.954614931,"data":"Found existing installation: numpy 2.4.6\n"}
+,{"stream_name":"stdout","time":109.000918245,"data":"Uninstalling numpy-2.4.6:\n"}
+,{"stream_name":"stdout","time":109.012436631,"data":"  Successfully uninstalled numpy-2.4.6\n"}
+,{"stream_name":"stderr","time":120.859219776,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":120.859250834,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":120.859257775,"data":"kaggle-environments 1.29.3 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859263409,"data":"cesium 0.12.4 requires numpy\u003c3.0,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859269359,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859274977,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859280243,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859285655,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859291325,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859296836,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859302437,"data":"jaxlib 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.85930774,"data":"cupy-cuda12x 14.0.1 requires numpy\u003c2.6,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859313034,"data":"opencv-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859318429,"data":"tobler 0.14.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859324,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859329507,"data":"jax 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859334695,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859340014,"data":"rasterio 1.5.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859345164,"data":"pytensor 2.38.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859350125,"data":"xarray-einstats 0.10.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859356715,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.859362182,"data":"opencv-contrib-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":120.85938552,"data":"shap 0.51.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":121.448142761,"data":"/usr/lib/python3.12/importlib/__init__.py:131: UserWarning: The NumPy module was reloaded (imported a second time). This can in some cases result in small but subtle issues and is discouraged.\n"}
+,{"stream_name":"stderr","time":121.448175236,"data":"  _bootstrap._exec(spec, module)\n"}
+,{"stream_name":"stdout","time":121.448862465,"data":"   ✅ numpy: 1.26.4 | numba: 0.60.0\n"}
+,{"stream_name":"stdout","time":121.448871365,"data":"   ✅ numpy C extensions OK\n"}
+,{"stream_name":"stdout","time":121.448900203,"data":"📥 Cloning MuseTalk...\n"}
+,{"stream_name":"stdout","time":121.448904816,"data":"Executing: git clone -q https://github.com/TMElyralab/MuseTalk.git\n"}
+,{"stream_name":"stdout","time":122.506814872,"data":"📦 Installing MuseTalk runtime dependencies (curated list)...\n"}
+,{"stream_name":"stdout","time":122.506843335,"data":"Executing: pip install -q diffusers accelerate transformers huggingface_hub einops omegaconf soundfile librosa gradio gdown ffmpeg-python moviepy imageio[ffmpeg]\n"}
+,{"stream_name":"stdout","time":124.747381838,"data":"   ✅ MuseTalk core deps installed\n"}
+,{"stream_name":"stdout","time":124.747428275,"data":"📦 Installing MMLab stack (bypassing broken mim)...\n"}
+,{"stream_name":"stdout","time":124.747432751,"data":"Executing: pip install -q numpy==1.26.4 setuptools\u003c70 packaging wheel yapf==0.40.1\n"}
+,{"stream_name":"stdout","time":127.012083828,"data":"   ✅ Global distutils/version.py stub created\n"}
+,{"stream_name":"stdout","time":127.012115584,"data":"Executing: pip uninstall -y mmdet mmpose mmengine\n"}
+,{"stream_name":"stderr","time":127.529896846,"data":"WARNING: Skipping mmdet as it is not installed.\n"}
+,{"stream_name":"stderr","time":127.560083048,"data":"WARNING: Skipping mmpose as it is not installed.\n"}
+,{"stream_name":"stderr","time":127.588722215,"data":"WARNING: Skipping mmengine as it is not installed.\n"}
+,{"stream_name":"stdout","time":127.635384161,"data":"Executing: pip install -q mmengine==0.10.4 --force-reinstall\n"}
+,{"stream_name":"stderr","time":150.504649469,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":150.504702249,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":150.504711544,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":150.504718538,"data":"moviepy 2.2.1 requires pillow\u003c12.0,\u003e=9.2.0, but you have pillow 12.2.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504725103,"data":"cached-path 1.8.10 requires rich\u003c14.0,\u003e=12.1, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504731684,"data":"numba 0.60.0 requires numpy\u003c2.1,\u003e=1.22, but you have numpy 2.5.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504737401,"data":"ydata-profiling 4.18.4 requires matplotlib\u003c=3.10,\u003e=3.5, but you have matplotlib 3.11.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504743283,"data":"ydata-profiling 4.18.4 requires numpy\u003c2.4,\u003e=1.22, but you have numpy 2.5.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504765896,"data":"sigstore 4.2.0 requires rich\u003c15,\u003e=13, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504769503,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504772506,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504775341,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504778241,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504781294,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.50478421,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504787964,"data":"bigframes 2.39.0 requires rich\u003c14,\u003e=12.4.4, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504807341,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504812561,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504817916,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.5.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504823975,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":150.504829134,"data":"pyiceberg 0.11.1 requires rich\u003c15.0.0,\u003e=10.11.0, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stdout","time":150.827772141,"data":"   ✅ mmengine==0.10.4 (forced)\n"}
+,{"stream_name":"stdout","time":150.827807089,"data":"🛠️ Applying robust physical patches to mmengine...\n"}
+,{"stream_name":"stdout","time":150.82908626,"data":"   ✅ Adafactor force=True patch applied (1 matches)\n"}
+,{"stream_name":"stdout","time":150.832259245,"data":"   ✅ Registry infer_scope TypeError patch applied (1 matches)\n"}
+,{"stream_name":"stdout","time":150.834420742,"data":"   ✅ mmcv_full_available ValueError patch applied (1 matches)\n"}
+,{"stream_name":"stdout","time":150.837099803,"data":"   ✅ checkpoint.py weights_only=False (broad) patch applied (4 matches)\n"}
+,{"stream_name":"stdout","time":150.839390069,"data":"   ✅ MuseTalk resnet.py legacy load patch applied (1 matches)\n"}
+,{"stream_name":"stdout","time":150.841284521,"data":"   📂 Patching directory: MuseTalk (MuseTalk recursive torch.load protection)\n"}
+,{"stream_name":"stdout","time":150.842572273,"data":"      ✅ Patched unet.py\n"}
+,{"stream_name":"stdout","time":150.842802253,"data":"      ✅ Patched vae.py\n"}
+,{"stream_name":"stdout","time":150.843235465,"data":"      ✅ Patched training_utils.py\n"}
+,{"stream_name":"stdout","time":150.844248162,"data":"      ✅ Patched sfd_detector.py\n"}
+,{"stream_name":"stdout","time":150.844576227,"data":"      ✅ Patched __init__.py\n"}
+,{"stream_name":"stdout","time":150.845474915,"data":"      ✅ Patched __init__.py\n"}
+,{"stream_name":"stdout","time":150.847154993,"data":"      ✅ Patched realtime_inference.py\n"}
+,{"stream_name":"stdout","time":155.248459669,"data":"🔍 Environment Check:\n"}
+,{"stream_name":"stdout","time":155.24849295,"data":"   PyTorch: 2.10.0+cu128\n"}
+,{"stream_name":"stdout","time":155.248504725,"data":"   CUDA: 12.8\n"}
+,{"stream_name":"stdout","time":155.248814825,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu128/torch2.10.0/index.html\n"}
+,{"stream_name":"stdout","time":155.248824061,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu128/torch2.10.0/index.html\n"}
+,{"stream_name":"stderr","time":163.386686673,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":163.386743328,"data":"  \n"}
+,{"stream_name":"stderr","time":163.386750617,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":163.386756905,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":163.38676232,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":163.386772228,"data":"  \n"}
+,{"stream_name":"stderr","time":163.386776816,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":163.387706264,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":163.471998646,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu121/torch2.10.0/index.html\n"}
+,{"stream_name":"stdout","time":163.472032404,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.10.0/index.html\n"}
+,{"stream_name":"stderr","time":170.504577961,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":170.50461579,"data":"  \n"}
+,{"stream_name":"stderr","time":170.504623626,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":170.504630058,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":170.504635534,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":170.504644389,"data":"  \n"}
+,{"stream_name":"stderr","time":170.504648101,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":170.505470364,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":170.588671598,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu118/torch2.10.0/index.html\n"}
+,{"stream_name":"stdout","time":170.588707326,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.10.0/index.html\n"}
+,{"stream_name":"stderr","time":178.493729223,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":178.493794264,"data":"  \n"}
+,{"stream_name":"stderr","time":178.493819067,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":178.493825758,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":178.493831159,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":178.493836741,"data":"  \n"}
+,{"stream_name":"stderr","time":178.493841641,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":178.494629822,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":178.578229669,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu128/torch2.4.0/index.html\n"}
+,{"stream_name":"stdout","time":178.578289907,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu128/torch2.4.0/index.html\n"}
+,{"stream_name":"stderr","time":185.364574083,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":185.364608387,"data":"  \n"}
+,{"stream_name":"stderr","time":185.364620782,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":185.364626403,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":185.36462989,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":185.364633698,"data":"  \n"}
+,{"stream_name":"stderr","time":185.364637016,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":185.365558387,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":185.450953974,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu121/torch2.4.0/index.html\n"}
+,{"stream_name":"stdout","time":185.450986478,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.4.0/index.html\n"}
+,{"stream_name":"stderr","time":189.47918764,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":189.479226055,"data":"  \n"}
+,{"stream_name":"stderr","time":189.479232543,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":189.479239761,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":189.479244934,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":189.479250436,"data":"  \n"}
+,{"stream_name":"stderr","time":189.479255514,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":189.480173509,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":189.56586339,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu118/torch2.4.0/index.html\n"}
+,{"stream_name":"stdout","time":189.565921424,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.4.0/index.html\n"}
+,{"stream_name":"stderr","time":193.835724939,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":193.835776201,"data":"  \n"}
+,{"stream_name":"stderr","time":193.835783088,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":193.835789424,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":193.835793956,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":193.835798803,"data":"  \n"}
+,{"stream_name":"stderr","time":193.835803366,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":193.836657571,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":193.91779681,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu128/torch2.3.0/index.html\n"}
+,{"stream_name":"stdout","time":193.917850992,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu128/torch2.3.0/index.html\n"}
+,{"stream_name":"stderr","time":200.379630658,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":200.379702939,"data":"  \n"}
+,{"stream_name":"stderr","time":200.379716358,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":200.379734068,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":200.37973837,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":200.379747769,"data":"  \n"}
+,{"stream_name":"stderr","time":200.379751022,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":200.380488417,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":200.462155791,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu121/torch2.3.0/index.html\n"}
+,{"stream_name":"stdout","time":200.462183878,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.3.0/index.html\n"}
+,{"stream_name":"stderr","time":204.129607825,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":204.129656285,"data":"  \n"}
+,{"stream_name":"stderr","time":204.129663234,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":204.129669039,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":204.129673806,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":204.12967861,"data":"  \n"}
+,{"stream_name":"stderr","time":204.129683085,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":204.1305479,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":204.215770967,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu118/torch2.3.0/index.html\n"}
+,{"stream_name":"stdout","time":204.215805627,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.3.0/index.html\n"}
+,{"stream_name":"stderr","time":208.227230442,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":208.227267528,"data":"  \n"}
+,{"stream_name":"stderr","time":208.22727273,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":208.227277191,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":208.227280577,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":208.227300154,"data":"  \n"}
+,{"stream_name":"stderr","time":208.22730588,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":208.22804745,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":208.310971184,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu128/torch2.2.0/index.html\n"}
+,{"stream_name":"stdout","time":208.311025315,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu128/torch2.2.0/index.html\n"}
+,{"stream_name":"stderr","time":214.472855486,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":214.472913772,"data":"  \n"}
+,{"stream_name":"stderr","time":214.472923639,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":214.472929986,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":214.472935616,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":214.472943595,"data":"  \n"}
+,{"stream_name":"stderr","time":214.472952489,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":214.47383343,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":214.562269383,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu121/torch2.2.0/index.html\n"}
+,{"stream_name":"stdout","time":214.562304756,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.2.0/index.html\n"}
+,{"stream_name":"stderr","time":218.853760167,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":218.853797807,"data":"  \n"}
+,{"stream_name":"stderr","time":218.853801919,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":218.85380607,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":218.853823303,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":218.853828733,"data":"  \n"}
+,{"stream_name":"stderr","time":218.853833122,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":218.854602977,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":218.943008636,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu118/torch2.2.0/index.html\n"}
+,{"stream_name":"stdout","time":218.943045709,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.2.0/index.html\n"}
+,{"stream_name":"stderr","time":222.871699322,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":222.871738408,"data":"  \n"}
+,{"stream_name":"stderr","time":222.871745824,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":222.87175484,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":222.871764067,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":222.871768446,"data":"  \n"}
+,{"stream_name":"stderr","time":222.871772133,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":222.872695003,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":222.96477792,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu128/torch2.1.0/index.html\n"}
+,{"stream_name":"stdout","time":222.964837057,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu128/torch2.1.0/index.html\n"}
+,{"stream_name":"stderr","time":231.010450907,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":231.010506943,"data":"  \n"}
+,{"stream_name":"stderr","time":231.010514933,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":231.010522157,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":231.010527365,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":231.010533137,"data":"  \n"}
+,{"stream_name":"stderr","time":231.010544571,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":231.011477174,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":231.107620299,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu121/torch2.1.0/index.html\n"}
+,{"stream_name":"stdout","time":231.107659066,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1.0/index.html\n"}
+,{"stream_name":"stderr","time":234.826639969,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":234.826672459,"data":"  \n"}
+,{"stream_name":"stderr","time":234.826677312,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":234.826681787,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":234.826690219,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":234.826693511,"data":"  \n"}
+,{"stream_name":"stderr","time":234.826695913,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":234.827652557,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":234.914192192,"data":"   Checking: https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/index.html\n"}
+,{"stream_name":"stdout","time":234.914225529,"data":"Executing: pip install -q mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/index.html\n"}
+,{"stream_name":"stderr","time":238.662277494,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":238.662315394,"data":"  \n"}
+,{"stream_name":"stderr","time":238.662323676,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":238.662329872,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":238.662336098,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":238.662342032,"data":"  \n"}
+,{"stream_name":"stderr","time":238.66234767,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":238.663197964,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":238.751474775,"data":"Executing: pip install -q --extra-index-url https://miropsota.github.io/torch_packages_builder mmcv\u003e=2.1.0,\u003c2.2.0\n"}
+,{"stream_name":"stderr","time":242.777921667,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":242.777964162,"data":"  \n"}
+,{"stream_name":"stderr","time":242.777989734,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":242.77799752,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":242.778003051,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":242.778009678,"data":"  \n"}
+,{"stream_name":"stderr","time":242.778015017,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":242.778781787,"data":"ERROR: Failed to build 'mmcv' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":242.867063947,"data":"Executing: pip install -q mmcv-lite\u003e=2.1.0,\u003c2.2.0\n"}
+,{"stream_name":"stdout","time":245.336245834,"data":"   ✅ mmcv-lite (fallback)\n"}
+,{"stream_name":"stdout","time":245.336277675,"data":"   🛠️ Hardening mmcv._ext to prevent import crash...\n"}
+,{"stream_name":"stdout","time":245.336547638,"data":"   ✅ mmcv._ext hardened\n"}
+,{"stream_name":"stdout","time":245.336564931,"data":"Executing: pip install -q mmdet==3.3.0\n"}
+,{"stream_name":"stdout","time":249.481388847,"data":"   ✅ mmdet==3.3.0\n"}
+,{"stream_name":"stdout","time":249.481430888,"data":"Executing: pip install -q --no-deps mmpose==1.3.2\n"}
+,{"stream_name":"stdout","time":251.933276512,"data":"Executing: pip install -q xtcocotools\n"}
+,{"stream_name":"stderr","time":255.637751582,"data":"  error: subprocess-exited-with-error\n"}
+,{"stream_name":"stderr","time":255.637803803,"data":"  \n"}
+,{"stream_name":"stderr","time":255.637808682,"data":"  × Getting requirements to build wheel did not run successfully.\n"}
+,{"stream_name":"stderr","time":255.637812198,"data":"  │ exit code: 1\n"}
+,{"stream_name":"stderr","time":255.637814749,"data":"  ╰─\u003e No available output.\n"}
+,{"stream_name":"stderr","time":255.637817619,"data":"  \n"}
+,{"stream_name":"stderr","time":255.637820147,"data":"  note: This error originates from a subprocess, and is likely not a problem with pip.\n"}
+,{"stream_name":"stderr","time":255.638685748,"data":"ERROR: Failed to build 'xtcocotools' when getting requirements to build wheel\n"}
+,{"stream_name":"stdout","time":255.718385503,"data":"   ⚠ mmpose failed: Command '['pip', 'install', '-q', 'xtcocotools']' returned non-zero exit status 1.\n"}
+,{"stream_name":"stdout","time":255.718424533,"data":"Executing: pip install -q munkres\n"}
+,{"stream_name":"stderr","time":257.703166613,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":257.703212846,"data":"mmpose 1.3.2 requires chumpy, which is not installed.\n"}
+,{"stream_name":"stderr","time":257.703221148,"data":"mmpose 1.3.2 requires json-tricks, which is not installed.\n"}
+,{"stream_name":"stderr","time":257.703228121,"data":"mmpose 1.3.2 requires xtcocotools\u003e=1.12, which is not installed.\n"}
+,{"stream_name":"stdout","time":257.913149663,"data":"Executing: pip install -q json_tricks\n"}
+,{"stream_name":"stderr","time":259.913073087,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":259.913105751,"data":"mmpose 1.3.2 requires chumpy, which is not installed.\n"}
+,{"stream_name":"stderr","time":259.913111162,"data":"mmpose 1.3.2 requires xtcocotools\u003e=1.12, which is not installed.\n"}
+,{"stream_name":"stdout","time":260.117966858,"data":"Executing: pip install -q scipy\n"}
+,{"stream_name":"stdout","time":262.016350339,"data":"Executing: pip install -q shapely\n"}
+,{"stream_name":"stdout","time":263.854857321,"data":"Executing: pip install -q face-alignment\n"}
+,{"stream_name":"stderr","time":269.493324628,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":269.493382605,"data":"mmpose 1.3.2 requires chumpy, which is not installed.\n"}
+,{"stream_name":"stderr","time":269.493388234,"data":"mmpose 1.3.2 requires xtcocotools\u003e=1.12, which is not installed.\n"}
+,{"stream_name":"stderr","time":269.493392609,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":269.493396635,"data":"moviepy 2.2.1 requires pillow\u003c12.0,\u003e=9.2.0, but you have pillow 12.2.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.49340073,"data":"ydata-profiling 4.18.4 requires matplotlib\u003c=3.10,\u003e=3.5, but you have matplotlib 3.11.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.49340486,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493408565,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493421745,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493425013,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493427998,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493430842,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.49343374,"data":"bigframes 2.39.0 requires rich\u003c14,\u003e=12.4.4, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493436695,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493439774,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":269.493442711,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":269.717986296,"data":"Executing: pip install -q pycocotools\n"}
+,{"stream_name":"stdout","time":271.598249323,"data":"Executing: pip install -q --no-build-isolation chumpy\n"}
+,{"stream_name":"stderr","time":276.364968816,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":276.365054905,"data":"mmpose 1.3.2 requires xtcocotools\u003e=1.12, which is not installed.\n"}
+,{"stream_name":"stdout","time":276.922777765,"data":"   ✅ chumpy installed\n"}
+,{"stream_name":"stdout","time":276.922818306,"data":"Executing: pip install -q Cython\n"}
+,{"stream_name":"stdout","time":278.808271866,"data":"Executing: pip install -q --no-build-isolation xtcocotools\n"}
+,{"stream_name":"stdout","time":291.674142235,"data":"   ✅ xtcocotools\n"}
+,{"stream_name":"stdout","time":291.674187134,"data":"Executing: pip install -q --no-deps mmpose\n"}
+,{"stream_name":"stdout","time":292.382760784,"data":"   ✅ mmpose core installed\n"}
+,{"stream_name":"stdout","time":292.382803228,"data":"📥 Downloading MuseTalk model weights...\n"}
+,{"stream_name":"stdout","time":293.116192988,"data":"   [1/5] Downloading MuseTalk model weights...\n"}
+,{"stream_name":"stderr","time":293.447190802,"data":"\rFetching 4 files:   0%|          | 0/4 [00:00\u003c?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stderr","time":310.955650958,"data":"\rFetching 4 files:  25%|██▌       | 1/4 [00:00\u003c00:00,  4.90it/s]\rFetching 4 files:  50%|█████     | 2/4 [00:17\u003c00:20, 10.36s/it]\rFetching 4 files: 100%|██████████| 4/4 [00:17\u003c00:00,  4.42s/it]\n"}
+,{"stream_name":"stdout","time":310.956327637,"data":"   [2/5] Downloading SD-VAE weights...\n"}
+,{"stream_name":"stderr","time":313.945321323,"data":"\rFetching 3 files:   0%|          | 0/3 [00:00\u003c?, ?it/s]\rFetching 3 files:  33%|███▎      | 1/3 [00:00\u003c00:00,  5.60it/s]\rFetching 3 files:  67%|██████▋   | 2/3 [00:02\u003c00:01,  1.60s/it]\rFetching 3 files: 100%|██████████| 3/3 [00:02\u003c00:00,  1.08it/s]\rFetching 3 files: 100%|██████████| 3/3 [00:02\u003c00:00,  1.03it/s]\n"}
+,{"stream_name":"stdout","time":313.945776156,"data":"   [3/5] Downloading Whisper weights...\n"}
+,{"stream_name":"stderr","time":315.747053547,"data":"\rFetching 10 files:   0%|          | 0/10 [00:00\u003c?, ?it/s]\rFetching 10 files:  10%|█         | 1/10 [00:00\u003c00:01,  7.12it/s]\rFetching 10 files:  40%|████      | 4/10 [00:01\u003c00:02,  2.63it/s]\rFetching 10 files:  70%|███████   | 7/10 [00:01\u003c00:00,  4.35it/s]\rFetching 10 files: 100%|██████████| 10/10 [00:01\u003c00:00,  5.72it/s]\n"}
+,{"stream_name":"stdout","time":315.748150807,"data":"   [4/5] Downloading DWPose weights...\n"}
+,{"stream_name":"stdout","time":318.847858867,"data":"   [5/5] Downloading Face Parse weights...\n"}
+,{"stream_name":"stdout","time":318.847911017,"data":"Executing: gdown --id 154JgKpzCPW82qINcVieuPH3fZ2e0P812 -O MuseTalk/models/face-parse-bisent/79999_iter.pth\n"}
+,{"stream_name":"stderr","time":319.600185998,"data":"/usr/local/lib/python3.12/dist-packages/gdown/__main__.py:139: FutureWarning: Option `--id` was deprecated in version 4.3.1 and will be removed in 5.0. You don't need to pass it anymore to use a file ID.\n"}
+,{"stream_name":"stderr","time":319.600216187,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":321.661451311,"data":"Downloading...\n"}
+,{"stream_name":"stderr","time":321.661490562,"data":"From: https://drive.google.com/uc?id=154JgKpzCPW82qINcVieuPH3fZ2e0P812\n"}
+,{"stream_name":"stderr","time":321.661498283,"data":"To: /kaggle/working/YtSimpleTips/MuseTalk/models/face-parse-bisent/79999_iter.pth\n"}
+,{"stream_name":"stderr","time":321.942118435,"data":"\r  0%|          | 0.00/53.3M [00:00\u003c?, ?B/s]\r 35%|███▌      | 18.9M/53.3M [00:00\u003c00:00, 182MB/s]\r 74%|███████▍  | 39.3M/53.3M [00:00\u003c00:00, 187MB/s]\r100%|██████████| 53.3M/53.3M [00:00\u003c00:00, 195MB/s]\n"}
+,{"stream_name":"stdout","time":321.996057741,"data":"Executing: curl -sL https://download.pytorch.org/models/resnet18-5c106cde.pth -o MuseTalk/models/face-parse-bisent/resnet18-5c106cde.pth\n"}
+,{"stream_name":"stdout","time":322.32705189,"data":"   ✅ MuseTalk UNet v1.5: 3242.6MB\n"}
+,{"stream_name":"stdout","time":322.327082743,"data":"   ✅ SD-VAE: 319.2MB\n"}
+,{"stream_name":"stdout","time":322.327088226,"data":"   ✅ Whisper: 144.1MB\n"}
+,{"stream_name":"stdout","time":322.327092886,"data":"   ✅ DWPose: 388.0MB\n"}
+,{"stream_name":"stdout","time":322.327097424,"data":"   ✅ All weights verified.\n"}
+,{"stream_name":"stdout","time":322.327101937,"data":"🔁 Finalizing environment: Locking numba==0.60.0 and numpy==1.26.4 (Clean Swap)...\n"}
+,{"stream_name":"stdout","time":322.859108079,"data":"Found existing installation: numba 0.60.0\n"}
+,{"stream_name":"stdout","time":322.92711721,"data":"Uninstalling numba-0.60.0:\n"}
+,{"stream_name":"stdout","time":322.938240155,"data":"  Successfully uninstalled numba-0.60.0\n"}
+,{"stream_name":"stdout","time":323.007841686,"data":"Found existing installation: numpy 2.0.2\n"}
+,{"stream_name":"stdout","time":323.062825809,"data":"Uninstalling numpy-2.0.2:\n"}
+,{"stream_name":"stdout","time":323.075039264,"data":"  Successfully uninstalled numpy-2.0.2\n"}
+,{"stream_name":"stderr","time":336.429440775,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":336.429474675,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":336.429482409,"data":"opencv-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429501613,"data":"moviepy 2.2.1 requires pillow\u003c12.0,\u003e=9.2.0, but you have pillow 12.2.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429507094,"data":"kaggle-environments 1.29.3 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429512039,"data":"ydata-profiling 4.18.4 requires matplotlib\u003c=3.10,\u003e=3.5, but you have matplotlib 3.11.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.42951702,"data":"cesium 0.12.4 requires numpy\u003c3.0,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429521957,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429526691,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429531593,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429536551,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429541446,"data":"dopamine-rl 4.1.2 requires gym\u003c=0.25.2, but you have gym 0.26.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.42954642,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429551939,"data":"jaxlib 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429556758,"data":"cupy-cuda12x 14.0.1 requires numpy\u003c2.6,\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429561927,"data":"bigframes 2.39.0 requires rich\u003c14,\u003e=12.4.4, but you have rich 15.0.0 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429566903,"data":"tobler 0.14.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429571817,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429576861,"data":"jax 0.7.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429582835,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429588251,"data":"rasterio 1.5.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.42959308,"data":"pytensor 2.38.2 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429597898,"data":"xarray-einstats 0.10.0 requires numpy\u003e=2.0, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.42960243,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429607381,"data":"opencv-contrib-python 4.13.0.92 requires numpy\u003e=2; python_version \u003e= \"3.9\", but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.429612583,"data":"shap 0.51.0 requires numpy\u003e=2, but you have numpy 1.26.4 which is incompatible.\n"}
+,{"stream_name":"stderr","time":336.691065533,"data":"/usr/lib/python3.12/importlib/__init__.py:131: UserWarning: The NumPy module was reloaded (imported a second time). This can in some cases result in small but subtle issues and is discouraged.\n"}
+,{"stream_name":"stderr","time":336.691098732,"data":"  _bootstrap._exec(spec, module)\n"}
+,{"stream_name":"stdout","time":336.691850619,"data":"   ✅ Final environment lock established: numpy 1.26.4 | numba 0.60.0\n"}
+,{"stream_name":"stdout","time":336.691861549,"data":"🎬 Starting GPU Job...\n"}
+,{"stream_name":"stdout","time":336.691869075,"data":"   ✅ Global torch.load protection enabled (weights_only=False by default)\n"}
+,{"stream_name":"stdout","time":336.691871963,"data":"🛠️ Applying robust physical patches to mmengine...\n"}
+,{"stream_name":"stdout","time":336.692157561,"data":"   ✅ Adafactor force=True already patched\n"}
+,{"stream_name":"stdout","time":336.692248864,"data":"   ✅ Registry infer_scope TypeError already patched\n"}
+,{"stream_name":"stdout","time":336.692413253,"data":"   ✅ mmcv_full_available ValueError already patched\n"}
+,{"stream_name":"stdout","time":336.692442952,"data":"   ✅ checkpoint.py weights_only=False (broad) already patched\n"}
+,{"stream_name":"stdout","time":336.692700162,"data":"   ⚠️ MuseTalk resnet.py legacy load pattern not found\n"}
+,{"stream_name":"stdout","time":336.692712132,"data":"   📂 Patching directory: MuseTalk (MuseTalk recursive torch.load protection)\n"}
+,{"stream_name":"stdout","time":336.698056687,"data":"🛠️ Verifying mmengine registry for Adafactor...\n"}
+,{"stream_name":"stderr","time":336.927767577,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":336.927817796,"data":"    Found GPU0 Tesla P100-PCIE-16GB which is of cuda capability 6.0.\n"}
+,{"stream_name":"stderr","time":336.927824662,"data":"    Minimum and Maximum cuda capability supported by this version of PyTorch is\n"}
+,{"stream_name":"stderr","time":336.927829728,"data":"    (7.0) - (12.0)\n"}
+,{"stream_name":"stderr","time":336.927834746,"data":"    \n"}
+,{"stream_name":"stderr","time":336.927839042,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":336.927843754,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":336.927848452,"data":"    Please install PyTorch with a following CUDA\n"}
+,{"stream_name":"stderr","time":336.92785339,"data":"    configurations:  12.6 following instructions at\n"}
+,{"stream_name":"stderr","time":336.927857534,"data":"    https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":336.92786169,"data":"    \n"}
+,{"stream_name":"stderr","time":336.927865705,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":336.928147543,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":336.92816516,"data":"Tesla P100-PCIE-16GB with CUDA capability sm_60 is not compatible with the current PyTorch installation.\n"}
+,{"stream_name":"stderr","time":336.928169902,"data":"The current PyTorch install supports CUDA capabilities sm_70 sm_75 sm_80 sm_86 sm_90 sm_100 sm_120.\n"}
+,{"stream_name":"stderr","time":336.928174468,"data":"If you want to use the Tesla P100-PCIE-16GB GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":336.928178976,"data":"\n"}
+,{"stream_name":"stderr","time":336.928182929,"data":"  queued_call()\n"}
+,{"stream_name":"stdout","time":353.361484205,"data":"   ✅ mmengine Adafactor patch verified (source)\n"}
+,{"stream_name":"stdout","time":353.361535001,"data":"🔍 Core Stack: numpy 1.26.4 | numba 0.60.0\n"}
+,{"stream_name":"stdout","time":353.361542032,"data":"🔍 System Check: PyTorch 2.10.0+cu128 | CUDA: True\n"}
+,{"stream_name":"stdout","time":353.361550401,"data":"🔍 mmengine: 0.10.4\n"}
+,{"stream_name":"stdout","time":353.740794238,"data":"🔍 mmpose:   1.3.2\n"}
+,{"stream_name":"stdout","time":353.808039398,"data":"✅ Template Video: 720x1280 (OpenCV verified)\n"}
+,{"stream_name":"stdout","time":353.808076197,"data":"🔍 NumPy at runtime: 1.26.4\n"}
+,{"stream_name":"stdout","time":353.809463334,"data":"📡 [audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...\n"}
+,{"stream_name":"stdout","time":353.809487931,"data":"📝 Long script detected (99 words). Using chunked synthesis...\n"}
+,{"stream_name":"stdout","time":353.809551969,"data":"👉 Split script into 1 chunks.\n"}
+,{"stream_name":"stdout","time":353.809573346,"data":"🎙️ Synthesizing chunk 1/1...\n"}
+,{"stream_name":"stdout","time":362.790701341,"data":"✅ [audio_gen] ElevenLabs synthesis complete: /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav\n"}
+,{"stream_name":"stdout","time":362.816279535,"data":"🔄 [audio_gen] Upsampling /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav to 44100 Hz using kaiser_best...\n"}
+,{"stream_name":"stdout","time":374.651819912,"data":"ℹ️ [audio_gen] Audio is already 44100 Hz.\n"}
+,{"stream_name":"stdout","time":375.954583281,"data":"🔍 [audio_gen] Detected 3 audio breaks.\n"}
+,{"stream_name":"stdout","time":375.967630557,"data":"🛠️ [audio_gen] Fixed 3 audio breaks.\n"}
+,{"stream_name":"stdout","time":376.252774147,"data":"⏳ Running stable-ts locally to extract real word timestamps...\n"}
+,{"stream_name":"stderr","time":377.332181014,"data":"\r  0%|                                              | 0.00/72.1M [00:00\u003c?, ?iB/s]\r  1%|▌                                    | 1.02M/72.1M [00:00\u003c00:07, 10.6MiB/s]\r 20%|███████▎                             | 14.2M/72.1M [00:00\u003c00:00, 85.8MiB/s]\r 31%|███████████▌                         | 22.4M/72.1M [00:00\u003c00:00, 83.4MiB/s]\r 42%|███████████████▋                     | 30.5M/72.1M [00:00\u003c00:00, 83.8MiB/s]\r 54%|████████████████████                 | 39.1M/72.1M [00:00\u003c00:00, 85.9MiB/s]\r 66%|████████████████████████▌            | 47.7M/72.1M [00:00\u003c00:00, 87.6MiB/s]\r 78%|████████████████████████████▊        | 56.1M/72.1M [00:00\u003c00:00, 79.2MiB/s]\r 89%|████████████████████████████████▉    | 64.2M/72.1M [00:00\u003c00:00, 80.7MiB/s]\r100%|████████████████████████████████████▉| 72.0M/72.1M [00:00\u003c00:00, 81.2MiB/s]\r100%|█████████████████████████████████████| 72.1M/72.1M [00:00\u003c00:00, 80.3MiB/s]\n"}
+,{"stream_name":"stdout","time":379.301790319,"data":"⚠️ stable-ts alignment skipped or failed: CUDA error: no kernel image is available for execution on the device\n"}
+,{"stream_name":"stdout","time":379.301838277,"data":"Search for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\n"}
+,{"stream_name":"stdout","time":379.301846419,"data":"CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\n"}
+,{"stream_name":"stderr","time":379.301788847,"data":"\rAlign:   0%|          | 0/51.78 [00:00\u003c?, ?sec/s]\rAlign:   0%|          | 0/51.78 [00:00\u003c?, ?sec/s]\n"}
+,{"stream_name":"stdout","time":379.301853003,"data":"For debugging consider passing CUDA_LAUNCH_BLOCKING=1\n"}
+,{"stream_name":"stdout","time":379.301915245,"data":"Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"}
+,{"stream_name":"stdout","time":379.301921095,"data":"\n"}
+,{"stream_name":"stdout","time":379.302132864,"data":"🎛️ [audio_gen] Applying FFmpeg mastering chain to /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav...\n"}
+,{"stream_name":"stdout","time":381.597605544,"data":"✨ [audio_gen] FFmpeg mastering chain applied successfully.\n"}
+,{"stream_name":"stdout","time":381.618728669,"data":"🔊 Audio trimmed: -0.02s from start. New duration: 51.59s\n"}
+,{"stream_name":"stdout","time":381.620139171,"data":"⭐ [audio_gen] Audio generation and processing complete. Path: /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav, Duration: 51.59s\n"}
+,{"stream_name":"stdout","time":381.62016239,"data":"✅ Audio generation complete: /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav (51.6s, 99 words)\n"}
+,{"stream_name":"stdout","time":381.620168451,"data":"🏎️ Optimizing template resolution (512px) and REMOVING audio for RAM safety...\n"}
+,{"stream_name":"stdout","time":381.620173772,"data":"Executing: ffmpeg -y -i assets/video/cloud_color_nvidia.mp4 -an -vf scale=512:-2 -c:v libx264 -crf 23 -preset veryfast assets/Firefly_video_optimized.mp4\n"}
+,{"stream_name":"stderr","time":381.705734907,"data":"ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers\n"}
+,{"stream_name":"stderr","time":381.705787817,"data":"  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)\n"}
+,{"stream_name":"stderr","time":381.705805145,"data":"  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared\n"}
+,{"stream_name":"stderr","time":381.705819295,"data":"  libavutil      56. 70.100 / 56. 70.100\n"}
+,{"stream_name":"stderr","time":381.705826832,"data":"  libavcodec     58.134.100 / 58.134.100\n"}
+,{"stream_name":"stderr","time":381.705834032,"data":"  libavformat    58. 76.100 / 58. 76.100\n"}
+,{"stream_name":"stderr","time":381.705841067,"data":"  libavdevice    58. 13.100 / 58. 13.100\n"}
+,{"stream_name":"stderr","time":381.705848531,"data":"  libavfilter     7.110.100 /  7.110.100\n"}
+,{"stream_name":"stderr","time":381.705855878,"data":"  libswscale      5.  9.100 /  5.  9.100\n"}
+,{"stream_name":"stderr","time":381.705863045,"data":"  libswresample   3.  9.100 /  3.  9.100\n"}
+,{"stream_name":"stderr","time":381.70587015,"data":"  libpostproc    55.  9.100 / 55.  9.100\n"}
+,{"stream_name":"stderr","time":381.741058992,"data":"Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'assets/video/cloud_color_nvidia.mp4':\n"}
+,{"stream_name":"stderr","time":381.741212698,"data":"  Metadata:\n"}
+,{"stream_name":"stderr","time":381.741477615,"data":"    major_brand     : isom\n"}
+,{"stream_name":"stderr","time":381.741628663,"data":"    minor_version   : 512\n"}
+,{"stream_name":"stderr","time":381.741642065,"data":"    compatible_brands: isomiso2avc1mp41\n"}
+,{"stream_name":"stderr","time":381.741648066,"data":"    encoder         : Google\n"}
+,{"stream_name":"stderr","time":381.741776374,"data":"  Duration: 00:00:10.00, start: 0.000000, bitrate: 2012 kb/s\n"}
+,{"stream_name":"stderr","time":381.744060556,"data":"  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 720x1280, 1860 kb/s, 24 fps, 24 tbr, 12288 tbn, 48 tbc (default)\n"}
+,{"stream_name":"stderr","time":381.744122149,"data":"    Metadata:\n"}
+,{"stream_name":"stderr","time":381.744129671,"data":"      handler_name    : VideoHandler\n"}
+,{"stream_name":"stderr","time":381.74413542,"data":"      vendor_id       : [0][0][0][0]\n"}
+,{"stream_name":"stderr","time":381.744140716,"data":"  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 139 kb/s (default)\n"}
+,{"stream_name":"stderr","time":381.744146808,"data":"    Metadata:\n"}
+,{"stream_name":"stderr","time":381.744152028,"data":"      handler_name    : SoundHandler\n"}
+,{"stream_name":"stderr","time":381.744157707,"data":"      vendor_id       : [0][0][0][0]\n"}
+,{"stream_name":"stderr","time":381.745228492,"data":"Stream mapping:\n"}
+,{"stream_name":"stderr","time":381.745518651,"data":"  Stream #0:0 -\u003e #0:0 (h264 (native) -\u003e h264 (libx264))\n"}
+,{"stream_name":"stderr","time":381.745622389,"data":"Press [q] to stop, [?] for help\n"}
+,{"stream_name":"stderr","time":381.794551523,"data":"[libx264 @ 0x5c95d38d1c00] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2 AVX512\n"}
+,{"stream_name":"stderr","time":381.801151219,"data":"[libx264 @ 0x5c95d38d1c00] profile High, level 3.1, 4:2:0, 8-bit\n"}
+,{"stream_name":"stderr","time":381.801454049,"data":"[libx264 @ 0x5c95d38d1c00] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=6 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=24 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00\n"}
+,{"stream_name":"stderr","time":381.801660091,"data":"Output #0, mp4, to 'assets/Firefly_video_optimized.mp4':\n"}
+,{"stream_name":"stderr","time":381.801765106,"data":"  Metadata:\n"}
+,{"stream_name":"stderr","time":381.801985763,"data":"    major_brand     : isom\n"}
+,{"stream_name":"stderr","time":381.802171165,"data":"    minor_version   : 512\n"}
+,{"stream_name":"stderr","time":381.802294037,"data":"    compatible_brands: isomiso2avc1mp41\n"}
+,{"stream_name":"stderr","time":381.802493274,"data":"    encoder         : Lavf58.76.100\n"}
+,{"stream_name":"stderr","time":381.803066735,"data":"  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 512x910, q=2-31, 24 fps, 12288 tbn (default)\n"}
+,{"stream_name":"stderr","time":381.80314079,"data":"    Metadata:\n"}
+,{"stream_name":"stderr","time":381.803312657,"data":"      handler_name    : VideoHandler\n"}
+,{"stream_name":"stderr","time":381.803456576,"data":"      vendor_id       : [0][0][0][0]\n"}
+,{"stream_name":"stderr","time":381.803668044,"data":"      encoder         : Lavc58.134.100 libx264\n"}
+,{"stream_name":"stderr","time":381.803674628,"data":"    Side data:\n"}
+,{"stream_name":"stderr","time":381.804015834,"data":"      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A\n"}
+,{"stream_name":"stderr","time":383.518134687,"data":"frame=    1 fps=0.0 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    \rframe=   71 fps=0.0 q=28.0 size=       0kB time=00:00:02.00 bitrate=   0.2kbits/s speed=3.76x    \rframe=  142 fps=137 q=28.0 size=     256kB time=00:00:04.95 bitrate= 423.0kbits/s speed=4.79x    \rframe=  215 fps=140 q=28.0 size=     512kB time=00:00:08.00 bitrate= 524.3kbits/s speed=5.19x    \rframe=  240 fps=135 q=-1.0 Lsize=     688kB time=00:00:09.87 bitrate= 570.5kbits/s speed=5.57x    \n"}
+,{"stream_name":"stderr","time":383.518167685,"data":"video:684kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.532534%\n"}
+,{"stream_name":"stderr","time":383.52042325,"data":"[libx264 @ 0x5c95d38d1c00] frame I:1     Avg QP:22.56  size: 27989\n"}
+,{"stream_name":"stderr","time":383.520449983,"data":"[libx264 @ 0x5c95d38d1c00] frame P:60    Avg QP:22.91  size:  7655\n"}
+,{"stream_name":"stderr","time":383.520455536,"data":"[libx264 @ 0x5c95d38d1c00] frame B:179   Avg QP:25.89  size:  1187\n"}
+,{"stream_name":"stderr","time":383.520461474,"data":"[libx264 @ 0x5c95d38d1c00] consecutive B-frames:  0.4%  0.0%  1.2% 98.3%\n"}
+,{"stream_name":"stderr","time":383.52046674,"data":"[libx264 @ 0x5c95d38d1c00] mb I  I16..4: 17.2% 42.8% 40.0%\n"}
+,{"stream_name":"stderr","time":383.520476355,"data":"[libx264 @ 0x5c95d38d1c00] mb P  I16..4:  1.8%  8.6%  2.2%  P16..4: 29.0% 15.0%  7.8%  0.0%  0.0%    skip:35.5%\n"}
+,{"stream_name":"stderr","time":383.52048124,"data":"[libx264 @ 0x5c95d38d1c00] mb B  I16..4:  0.1%  1.0%  0.1%  B16..8: 10.2%  3.7%  0.3%  direct: 2.1%  skip:82.4%  L0:34.1% L1:44.9% BI:20.9%\n"}
+,{"stream_name":"stderr","time":383.520485837,"data":"[libx264 @ 0x5c95d38d1c00] 8x8 transform intra:69.1% inter:41.8%\n"}
+,{"stream_name":"stderr","time":383.520489874,"data":"[libx264 @ 0x5c95d38d1c00] coded y,uvDC,uvAC intra: 74.4% 49.2% 16.4% inter: 5.4% 3.9% 0.1%\n"}
+,{"stream_name":"stderr","time":383.520494681,"data":"[libx264 @ 0x5c95d38d1c00] i16 v,h,dc,p: 15% 37% 12% 35%\n"}
+,{"stream_name":"stderr","time":383.520513026,"data":"[libx264 @ 0x5c95d38d1c00] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 17% 26% 12%  5%  8%  8% 10%  6%  9%\n"}
+,{"stream_name":"stderr","time":383.52051867,"data":"[libx264 @ 0x5c95d38d1c00] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 23% 10%  6% 10%  9% 10%  6%  6%\n"}
+,{"stream_name":"stderr","time":383.520523706,"data":"[libx264 @ 0x5c95d38d1c00] i8c dc,h,v,p: 51% 22% 18%  9%\n"}
+,{"stream_name":"stderr","time":383.520528894,"data":"[libx264 @ 0x5c95d38d1c00] Weighted P-Frames: Y:0.0% UV:0.0%\n"}
+,{"stream_name":"stderr","time":383.520534053,"data":"[libx264 @ 0x5c95d38d1c00] kb/s:559.79\n"}
+,{"stream_name":"stderr","time":383.799257095,"data":"av_interleaved_write_frame(): Broken pipe\n"}
+,{"stream_name":"stderr","time":383.799310595,"data":"Error writing trailer of pipe:: Broken pipe\n"}
+,{"stream_name":"stdout","time":383.823671663,"data":"🎤 MuseTalk [P1]: Starting high-end lip-sync...\n"}
+,{"stream_name":"stdout","time":383.823700404,"data":"   Face: assets/Firefly_video_optimized.mp4\n"}
+,{"stream_name":"stdout","time":383.823706079,"data":"   Audio: /kaggle/working/YtSimpleTips/output/audio_20260627_122058.wav\n"}
+,{"stream_name":"stdout","time":384.048730268,"data":"   Extracted reference frame: /kaggle/working/YtSimpleTips/musetalk_ref_frame.png\n"}
+,{"stream_name":"stdout","time":384.04956933,"data":"   Using MuseTalk v1.5 (highest quality)\n"}
+,{"stream_name":"stdout","time":384.049591194,"data":"   🔍 Pre-flight checks...\n"}
+,{"stream_name":"stdout","time":384.049597588,"data":"      ✅ UNet: MuseTalk/models/musetalkV15/unet.pth\n"}
+,{"stream_name":"stdout","time":384.049602541,"data":"      ✅ UNet Config: MuseTalk/models/musetalkV15/musetalk.json\n"}
+,{"stream_name":"stdout","time":384.049606536,"data":"      ✅ SD-VAE: MuseTalk/models/sd-vae/config.json\n"}
+,{"stream_name":"stdout","time":384.049610874,"data":"      ✅ Whisper: MuseTalk/models/whisper/config.json\n"}
+,{"stream_name":"stdout","time":384.049626538,"data":"      ✅ DWPose: MuseTalk/models/dwpose/dw-ll_ucoco_384.pth\n"}
+,{"stream_name":"stdout","time":384.049694666,"data":"      ✅ Config: /kaggle/working/YtSimpleTips/MuseTalk/configs/inference/_pipeline_run.yaml (181 bytes)\n"}
+,{"stream_name":"stdout","time":384.049702068,"data":"   CMD: python3 -m scripts.inference --inference_config /kaggle/working/YtSimpleTips/MuseTalk/configs/inference/_pipeline_run.yaml --result_dir /kaggle/working/YtSimpleTips/MuseTalk/results/pipeline_run --unet_model_path models/musetalkV15/unet.pth --unet_config models/musetalkV15/musetalk.json --version v15\n"}
+,{"stream_name":"stdout","time":384.050004188,"data":"      🚀 Executing MuseTalk Engine (Timeout: 10800s)...\n"}
+,{"stream_name":"stdout","time":439.765426975,"data":"   ized.mp4'}}\n"}
+,{"stream_name":"stdout","time":439.765470261,"data":"Error occurred during processing: CUDA error: no kernel image is available for execution on the device\n"}
+,{"stream_name":"stdout","time":439.765475974,"data":"Search for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\n"}
+,{"stream_name":"stdout","time":439.76548131,"data":"CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\n"}
+,{"stream_name":"stdout","time":439.765500272,"data":"For debugging consider passing CUDA_LAUNCH_BLOCKING=1\n"}
+,{"stream_name":"stdout","time":439.76550651,"data":"Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"}
+,{"stream_name":"stdout","time":439.765512495,"data":"\n"}
+,{"stream_name":"stdout","time":439.765518901,"data":"\n"}
+,{"stream_name":"stdout","time":439.765895683,"data":"   ✗ MuseTalk output not found in results directory.\n"}
+,{"stream_name":"stdout","time":440.020297516,"data":"🧹 Cleaning up repositories and models to speed up download...\n"}
+,{"stream_name":"stdout","time":441.428698324,"data":"❌ FATAL ERROR in Kaggle Worker: Pipeline aborted: MuseTalk produced no lip-sync output.\n"}
+,{"stream_name":"stderr","time":441.429143346,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":441.429352299,"data":"  File \"/kaggle/src/script.py\", line 814, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":441.429364151,"data":"    process_job()\n"}
+,{"stream_name":"stderr","time":441.42936979,"data":"  File \"/kaggle/src/script.py\", line 745, in process_job\n"}
+,{"stream_name":"stderr","time":441.429374846,"data":"    raise RuntimeError(\"Pipeline aborted: MuseTalk produced no lip-sync output.\")\n"}
+,{"stream_name":"stderr","time":441.429380014,"data":"RuntimeError: Pipeline aborted: MuseTalk produced no lip-sync output.\n"}
+,{"stream_name":"stderr","time":444.816572559,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":444.816605433,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":445.036220738,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":445.036268028,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":445.811863928,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":446.709434277,"data":"[NbConvertApp] Writing 413110 bytes to __results__.html\n"}
+]
