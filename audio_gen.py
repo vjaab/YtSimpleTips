@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
-    KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_TTS_FALLBACK
+    KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_TTS_FALLBACK, VOICE_SPEED
 )
 from kaggle_handover import trigger_kaggle_gpu_job
 
@@ -692,10 +692,35 @@ def _generate_f5_clone(text, output_path):
     print(f"F5-TTS done: {duration:.2f}s | {len(word_timestamps)} word timestamps")
     return wav_path, duration, word_timestamps
 
+def speed_up_audio(audio_path, factor):
+    if factor == 1.0:
+        return audio_path
+    temp_path = audio_path + ".sped.wav"
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", audio_path,
+        "-filter:a", f"atempo={factor}",
+        temp_path
+    ]
+    try:
+        print(f"⚡ [audio_gen] Speeding up audio by {factor}x...")
+        import subprocess
+        import shutil
+        subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        if os.path.exists(temp_path):
+            shutil.copy(temp_path, audio_path)
+            os.remove(temp_path)
+            print("⚡ [audio_gen] Audio speedup applied successfully.")
+    except Exception as e:
+        print(f"⚠️ [audio_gen] Audio speedup failed: {e}")
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+    return audio_path
+
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
     Generates Tamil/Tanglish voiceover using ElevenLabs Multilingual (Cloud vj.wav Voice Clone).
-    Falls back to F5-TTS or Edge TTS if ElevenLabs fails.
+    Exclusively uses ElevenLabs and falls back to a hard error if it fails, as directed.
     """
     if custom_phonetic_map:
         for word, phonetic in custom_phonetic_map.items():
@@ -706,43 +731,13 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
-    global VOICE_FALLBACK_USED
-    VOICE_FALLBACK_USED = False
-    
     path = _generate_elevenlabs(clean_text, wav_path)
     if not path:
-        print("🎙️ ElevenLabs failed. Trying F5-TTS fallback...")
-        try:
-            import torch
-            has_gpu = torch.cuda.is_available() or torch.backends.mps.is_available()
-            if has_gpu:
-                # F5-TTS logic
-                f5_wav, f5_dur, f5_ts = _generate_f5_clone(clean_text, wav_path)
-                if f5_wav and os.path.exists(f5_wav):
-                    path = f5_wav
-                    VOICE_FALLBACK_USED = True
-            else:
-                print("   Local GPU not found. Skipping F5-TTS fallback.")
-        except Exception as f5_err:
-            print(f"❌ F5-TTS voice cloning failed: {f5_err}")
-            path = None
-
-    if not path:
-        if not ENABLE_TTS_FALLBACK:
-            print("🚫 [audio_gen] Edge TTS fallback is disabled in config. Skipping fallback voiceover generation.")
-            path = None
-        else:
-            print("🎙️ ElevenLabs and F5-TTS failed. Trying Edge TTS fallback...")
-            try:
-                path = _generate_edge_tts(clean_text, wav_path)
-                if path:
-                    VOICE_FALLBACK_USED = True
-            except Exception as edge_err:
-                print(f"❌ Edge-TTS failed: {edge_err}")
-                path = None
-
-    if not path:
-        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled or failed. Aborting pipeline.")
+        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled as requested.")
+        
+    # Speed up audio to match the energetic pacing of reference short
+    if VOICE_SPEED != 1.0:
+        path = speed_up_audio(path, VOICE_SPEED)
         
     # ── UNIFIED POST-PROCESSING PIPELINE ──
     
