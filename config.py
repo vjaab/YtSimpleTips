@@ -49,7 +49,21 @@ def rotate_gemini_api_key():
     print(f"🔄 [config] Rotating Gemini API Key: Index {_old_idx+1} -> {_current_key_idx+1} (Total: {len(GEMINI_API_KEYS)} keys)")
     return True
 
+_GEMINI_COOLDOWN = False
+
+def is_gemini_disabled():
+    return _GEMINI_COOLDOWN
+
+def disable_gemini():
+    global _GEMINI_COOLDOWN
+    _GEMINI_COOLDOWN = True
+    print("🚨 [config] Gemini API has been globally disabled due to 429/Resource Exhausted. Using fallback models directly.")
+
 def get_gemini_client(refresh=False):
+    global _current_key_idx
+    if _GEMINI_COOLDOWN:
+        print("🚨 [config] Gemini API globally disabled due to cooldown/rate limits.")
+        return None
     from google import genai
     key = get_gemini_api_key()
     if not key:
@@ -120,7 +134,8 @@ ENABLE_TRENDING_ENGINE = True    # Phase 1: YouTube/Reddit/GitHub trending aggre
 ENABLE_KINETIC_CAPTIONS = True
 ENABLE_AUDIO_DUCKING = True
 ENABLE_PERIODIC_CUTS = True
-ENABLE_EVIDENCE_SCREENSHOTS = True
+ENABLE_EVIDENCE_SCREENSHOTS = False
+
 ENABLE_HORMOZI_STYLING = True
 
 # Visual Upgrade V2 Feature Flags (2026)

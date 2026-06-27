@@ -1,5 +1,5 @@
 
-JOB_PAYLOAD = {"script": "Phone Settings-ukku pogalam  Advanced Features open pannunga  Dual Messenger option find pannunga  Option enable pannalam  WhatsApp icon double aagum  First icon old account  Second icon new number  Icon tap pannitu verify  Code receive pannitu enter pannunga  Account setup complete aagum  Work messages separate aagum  Personal chats separate aagum  Aana wait pannunga, twist irukku!  Notifications split aagum  Battery usage same phone  Pocket weight light aagum  Data usage same stay panum  Privacy improve aagum  No extra device needed  All apps fast run panum  Setup quick, 2 minutes  Try it right now  Share your experience  Comment your tip  Follow for more hacks", "custom_map": {"NVIDIA": "In-vid-yah"}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "8Oo4d9mNNwVwK369qOwl", "face_path": "assets/video/cloud_color_nvidia.mp4"}
+JOB_PAYLOAD = {"script": "Big phone-\u0bb2\u0bcd thumb-\u0bb5\u0bc7\u0ba4\u0ba9\u0bbe?  Screen reach \u0b9a\u0bbf\u0b95\u0bcd\u0b95\u0bb2\u0bbe?  Apps \u0bb2\u0bc7\u0b9f\u0bcd \u0b86\u0b95\u0bc1\u0ba4\u0bbe?  Scroll \u0bb2\u0bc7\u0bb8\u0bcd \u0b89\u0ba3\u0bb0\u0bb2\u0bbe?  Settings-\u0b95\u0bcd\u0b95\u0bc1 \u0baa\u0bcb\u0b99\u0bcd\u0b95  System-\u0b90 tap \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95  Gestures-\u0bb2\u0bcd One-Handed Mode  Enable \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 \u0b87\u0baa\u0bcd\u0baa\u0bcb  Double tap screen-\u0bb2\u0bcd  Screen 50% shrink \u0b86\u0b95\u0bc1\u0bae\u0bcd  Size adjust \u0baa\u0ba3\u0bcd\u0ba3\u0bb2\u0bbe\u0bae\u0bcd  Battery \u0b9a\u0bc7\u0bb5\u0bcd \u0b95\u0bc2\u0b9f\u0bc1\u0bae\u0bcd  Quick toggle shortcut  Double tap home button  aana wait pannunga!  Mode on/off instantly  Thumb \u0b8e\u0bb2\u0bcd\u0bb2\u0bbe\u0bae\u0bcd reach  App open \u0bb5\u0bc7\u0b95\u0bae\u0bcd fast  RAM usage \u0b95\u0bc1\u0bb1\u0bc8\u0bb5\u0bc7  Try \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 \u0b87\u0baa\u0bcd\u0baa\u0bcb  Performance boost \u0b95\u0bbf\u0b9f\u0bc8\u0b95\u0bcd\u0b95\u0bc1\u0bae\u0bcd  \u0ba8\u0bc0\u0b99\u0bcd\u0b95 favorite shortcut?  Comment-\u0bb2\u0bcd \u0b9a\u0bca\u0bb2\u0bcd\u0bb2\u0bc1\u0b99\u0bcd\u0b95  Share \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95 friends-\u0b95\u0bcd\u0b95\u0bc1  Subscribe for more hacks  Stay tuned VJ style  Next tip \u0baa\u0bbe\u0bb0\u0bcd soon  Thanks for watching  Enjoy smooth phone  Happy hacking!", "custom_map": {"One-Handed": "One-Han-ded"}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "8Oo4d9mNNwVwK369qOwl", "face_path": "assets/video/code.mp4"}
 import os
 os.environ["PYTHONHASHSEED"] = "0"
 import subprocess
@@ -566,10 +566,13 @@ def setup_project():
     run_cmd(["pip", "install", "-q", "grpcio==1.62.2", "grpcio-status==1.62.2"]) # Fix for yanked versions
     run_cmd(["pip", "install", "-q", "-r", "requirements.txt"])
     
-    # Force GPU-specific backends
+    # Force GPU-specific backends with explicitly pinned PyTorch version (2.4.0+cu121)
+    # to overwrite the broken pre-installed torch 2.10.0+cu128 nightly/custom build
+    # and restore CUDA support on Nvidia Tesla T4.
     run_cmd(["pip", "install", "-q", 
         "onnxruntime-gpu", "espeakng-loader",
-        "f5-tts", "stable-ts", "torch", "torchvision", "torchaudio", 
+        "f5-tts", "stable-ts", 
+        "torch==2.4.0+cu121", "torchvision==0.19.0+cu121", "torchaudio==2.4.0+cu121", 
         "av", "imageio-ffmpeg", "pyyaml", "joblib", 
         "scikit-image", "safetensors", "trimesh", "face-alignment",
         "diffusers", "transformers", "accelerate", "g2p_en",

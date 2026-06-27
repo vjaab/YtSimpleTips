@@ -27,7 +27,7 @@ from config import (
     ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS,
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
-    ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM
+    ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 from entity_fetcher import fetch_all_entities
@@ -1083,7 +1083,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 
         # 2. Add normal background images / video b-roll
         if vpath and os.path.exists(vpath):
-            if vpath.endswith(".png") and "screenshot" in vpath.lower():
+            if ENABLE_EVIDENCE_SCREENSHOTS and vpath.endswith(".png") and "screenshot" in vpath.lower():
                 # Full-screen fallback whiteboard bg
                 top_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
                 background_clips.append(top_bg)

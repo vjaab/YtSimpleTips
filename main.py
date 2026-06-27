@@ -7,7 +7,7 @@ import random
 import traceback
 from datetime import datetime
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
 from gemini_script import pick_and_generate_script
@@ -215,24 +215,27 @@ def run_pipeline(forced_category=None, dry_run=False):
         log_message(f"Selected Fact: {fact_headline}")
         log_message(f"Source URL: {fact_url}")
 
-        # ── STEP 3b: Capture Evidence Screenshot (MANDATORY) ──
-        log_message("STEP 3b: Capturing evidence screenshot (before audio for fast fail)...")
-        screenshot_captured = False
-        
-        if fact_url:
-            screenshot_filename = f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-            screenshot_path = capture_article_screenshot(fact_url, screenshot_filename)
-            if screenshot_path:
-                script_data["screenshot_path"] = screenshot_path
-                log_message(f"✅ Screenshot captured: {screenshot_path}")
-                screenshot_captured = True
-        
-        if not screenshot_captured:
-            log_message(f"❌ Screenshot failed for: {fact_headline}. Rejecting topic.")
-            failed_topics.append(fact_headline)
-            script_data = None
-            attempts += 1
-            continue
+        # ── STEP 3b: Capture Evidence Screenshot (MANDATORY if enabled) ──
+        if ENABLE_EVIDENCE_SCREENSHOTS:
+            log_message("STEP 3b: Capturing evidence screenshot (before audio for fast fail)...")
+            screenshot_captured = False
+            
+            if fact_url:
+                screenshot_filename = f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                screenshot_path = capture_article_screenshot(fact_url, screenshot_filename)
+                if screenshot_path:
+                    script_data["screenshot_path"] = screenshot_path
+                    log_message(f"✅ Screenshot captured: {screenshot_path}")
+                    screenshot_captured = True
+            
+            if not screenshot_captured:
+                log_message(f"❌ Screenshot failed for: {fact_headline}. Rejecting topic.")
+                failed_topics.append(fact_headline)
+                script_data = None
+                attempts += 1
+                continue
+        else:
+            log_message("STEP 3b: Evidence screenshots are disabled in config. Skipping.")
 
         # ── STEP 4: Generate Cloned Voice Audio ──
         log_message("STEP 4: Generating Tamil cloned voiceover...")

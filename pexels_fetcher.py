@@ -2,7 +2,7 @@ import os
 import requests
 import random
 import time
-from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO, ENABLE_STOCK_FOOTAGE
+from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO, ENABLE_STOCK_FOOTAGE, ENABLE_EVIDENCE_SCREENSHOTS
 from nano_scene_gen import _generate_imagen_image
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
@@ -167,7 +167,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
         pexels_query = clean_query
 
         # ── PRIORITY 0: Evidence Screenshot (Assigned to chunk index 1, context/evidence) ──
-        if i == 1 and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
+        if ENABLE_EVIDENCE_SCREENSHOTS and i == 1 and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
             print("     → Assigning captured evidence screenshot to context chunk...")
             visual_path = script_data["screenshot_path"]
             visual_type = "photo"
@@ -244,7 +244,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                 source = "Pexels Photo"
                 
         # ── PRIORITY 4.5: Fallback to Screenshot ──
-        if not visual_path and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
+        if ENABLE_EVIDENCE_SCREENSHOTS and not visual_path and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
             print("     → Visual resolved: Falling back to evidence screenshot.")
             visual_path = script_data["screenshot_path"]
             visual_type = "photo"

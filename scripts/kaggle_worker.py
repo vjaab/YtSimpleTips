@@ -564,10 +564,13 @@ def setup_project():
     run_cmd(["pip", "install", "-q", "grpcio==1.62.2", "grpcio-status==1.62.2"]) # Fix for yanked versions
     run_cmd(["pip", "install", "-q", "-r", "requirements.txt"])
     
-    # Force GPU-specific backends
+    # Force GPU-specific backends with explicitly pinned PyTorch version (2.4.0+cu121)
+    # to overwrite the broken pre-installed torch 2.10.0+cu128 nightly/custom build
+    # and restore CUDA support on Nvidia Tesla T4.
     run_cmd(["pip", "install", "-q", 
         "onnxruntime-gpu", "espeakng-loader",
-        "f5-tts", "stable-ts", "torch", "torchvision", "torchaudio", 
+        "f5-tts", "stable-ts", 
+        "torch==2.4.0+cu121", "torchvision==0.19.0+cu121", "torchaudio==2.4.0+cu121", 
         "av", "imageio-ffmpeg", "pyyaml", "joblib", 
         "scikit-image", "safetensors", "trimesh", "face-alignment",
         "diffusers", "transformers", "accelerate", "g2p_en",

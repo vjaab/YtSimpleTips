@@ -20,9 +20,6 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     """
     print(f"🔮 [fetch_topics] Attempting LLM generation fallback (without search grounding) for category '{category}'...")
     client = get_gemini_client()
-    if not client:
-        print("⚠️ Gemini API Client missing! Cannot run LLM fallback.")
-        return []
     
     avoid_list_str = "\n".join([f"- {t}" for t in avoid_titles if t])
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
@@ -57,50 +54,60 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     Do NOT wrap in markdown tags like ```json.
     """
     
-    attempts = 0
-    while attempts < 3:
-        try:
-            response = client.models.generate_content(
-                model='gemini-2.5-flash',
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.7
+    if client:
+        attempts = 0
+        while attempts < 3:
+            try:
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.7
+                    )
                 )
-            )
-            raw = response.text.strip()
-            if "```json" in raw:
-                raw = raw[raw.find("```json")+7:raw.rfind("```")]
-            elif "```" in raw:
-                raw = raw[raw.find("```")+3:raw.rfind("```")]
-            raw = raw.strip()
-            if raw.startswith("["):
-                facts = json.loads(raw)
-            else:
-                data = json.loads(raw)
-                facts = data.get("tips", []) if isinstance(data, dict) else data
-            
-            # Filter unique facts
-            unique_facts = []
-            for fact in facts:
-                title = fact.get("title", "")
-                url = fact.get("source_url", "")
-                is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
-                if is_unique:
-                    unique_facts.append(fact)
+                raw = response.text.strip()
+                if "```json" in raw:
+                    raw = raw[raw.find("```json")+7:raw.rfind("```")]
+                elif "```" in raw:
+                    raw = raw[raw.find("```")+3:raw.rfind("```")]
+                raw = raw.strip()
+                if raw.startswith("["):
+                    facts = json.loads(raw)
                 else:
-                    print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
+                    data = json.loads(raw)
+                    facts = data.get("tips", []) if isinstance(data, dict) else data
+                
+                # Filter unique facts
+                unique_facts = []
+                for fact in facts:
+                    title = fact.get("title", "")
+                    url = fact.get("source_url", "")
+                    is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                    if is_unique:
+                        unique_facts.append(fact)
+                    else:
+                        print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
+                
+                if unique_facts:
+                    print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via LLM.")
+                    return unique_facts
+                
+                print("⚠️ [fetch_topics fallback] All LLM generated facts were duplicates. Retrying fallback generation...")
+                attempts += 1
+            except Exception as e:
+                err_str = str(e).lower()
+                is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+                if is_depleted_or_429:
+                    from config import disable_gemini
+                    disable_gemini()
+                    print("🚨 [fetch_topics fallback] Globally disabling Gemini after 429/credit depletion. Breaking to use non-Gemini fallback.")
+                    break
+                print(f"⚠️ [fetch_topics fallback] LLM fallback failed: {e}. Retrying...")
+                attempts += 1
+    else:
+        print("⚠️ Gemini API Client missing/disabled. Skipping Gemini LLM fallback.")
             
-            if unique_facts:
-                print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via LLM.")
-                return unique_facts
-            
-            print("⚠️ [fetch_topics fallback] All LLM generated facts were duplicates. Retrying fallback generation...")
-            attempts += 1
-        except Exception as e:
-            print(f"⚠️ [fetch_topics fallback] LLM fallback failed: {e}. Retrying...")
-            attempts += 1
-            
-    print("🚨 [fetch_topics fallback] Gemini API failed all attempts. Attempting non-Gemini fallback models (Groq/OpenAI/etc)...")
+    print("🚨 [fetch_topics fallback] Attempting non-Gemini fallback models (Groq/OpenAI/etc)...")
     try:
         from gemini_script import call_fallback_model
         fallback_res = call_fallback_model(prompt)
@@ -130,24 +137,7 @@ def fetch_facts_for_category(category):
     for the selected category.
     Returns a list of structured tip articles.
     """
-    print(f"📡 [fetch_topics] Fetching trending tips and hacks for category '{category}' using Gemini Search Grounding...")
-    
-    client = get_gemini_client()
-    if not client:
-        print("⚠️ Gemini API Client missing! Cannot fetch tips.")
-        return []
-    
-    # Fetch trending signals to inject into the search query
-    trending_context = ""
-    if _TRENDING_AVAILABLE:
-        try:
-            trending_context = get_trending_context(category)
-            if trending_context:
-                trending_context = f"\n    {trending_context}"
-        except Exception as e:
-            print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
-        
-    # Load avoid titles to pass to standard LLM fallback
+    # Load avoid titles early to support early fallback routing
     from topic_tracker import load_tracker
     tracker = load_tracker()
     headlines_to_avoid = set(
@@ -161,7 +151,25 @@ def fetch_facts_for_category(category):
         if t: headlines_to_avoid.add(t)
         if h: headlines_to_avoid.add(h)
     avoid_titles = list(headlines_to_avoid)
-    
+
+    client = get_gemini_client()
+    if not client:
+        print("⚠️ Gemini API Client missing/disabled. Skipping Search Grounding and attempting LLM fallback directly.")
+        unique_fallback_facts = fetch_facts_from_llm_fallback(category, avoid_titles)
+        if unique_fallback_facts:
+            return unique_fallback_facts
+        return get_historical_fallback(category)
+
+    # Fetch trending signals to inject into the search query
+    trending_context = ""
+    if _TRENDING_AVAILABLE:
+        try:
+            trending_context = get_trending_context(category)
+            if trending_context:
+                trending_context = f"\n    {trending_context}"
+        except Exception as e:
+            print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
+
     prompt = f"""
     Search the web for 5 highly viral, generic, and fact-oriented topics, science trivia, life hacks, or settings/shortcuts related to the category: "{category}".
     These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences (similar to channels like 'Science Facts in Tamil' or 'Dummy Scientist').
@@ -242,12 +250,18 @@ def fetch_facts_for_category(category):
             )
             is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
             
-            if is_depleted_or_429 and len(GEMINI_API_KEYS) > 1:
-                rotate_gemini_api_key()
-                client = get_gemini_client()
-                print("🔄 [fetch_topics] Successfully rotated API key after 429 / credit depletion. Retrying immediately...")
-                attempts += 1
-                continue
+            if is_depleted_or_429:
+                if len(GEMINI_API_KEYS) > 1:
+                    rotate_gemini_api_key()
+                    client = get_gemini_client()
+                    print("🔄 [fetch_topics] Successfully rotated API key after 429 / credit depletion. Retrying immediately...")
+                    attempts += 1
+                    continue
+                else:
+                    from config import disable_gemini
+                    disable_gemini()
+                    print("🚨 [fetch_topics] Only 1 key available or exhausted. Globally disabling Gemini after 429/credit depletion. Breaking to fallback.")
+                    break
                 
             if is_rate_limit:
                 import random

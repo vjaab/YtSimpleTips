@@ -355,6 +355,10 @@ Return ONLY a JSON object:
 
 def get_hottest_tech_topic(client, avoid_list=""):
     """Uses Gemini Search grounding to find today's most VIRAL fact/tip trending in India for Tamil audience."""
+    from config import is_gemini_disabled
+    if is_gemini_disabled():
+        print("⚠️ Gemini is globally disabled. Skipping Google Trends analysis.")
+        return None
     print(f"🔥 Fetching hottest trending topic for today in India (Google Trends Analysis)...")
     
     avoid_prompt = f"\n\nCRITICAL: DO NOT pick any topics related to the following recently covered stories:\n{avoid_list}" if avoid_list else ""
@@ -393,11 +397,10 @@ def get_hottest_tech_topic(client, avoid_list=""):
         except Exception as e:
             err_str = str(e).upper()
             if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                wait = (attempts + 1) * 5
-                print(f"⚠️ Google Trends rate limited (429). Retrying in {wait}s... (Attempt {attempts+1}/3)")
-                time.sleep(wait)
-                attempts += 1
-                continue
+                print("🚨 [google_trends] Gemini API rate limited / exhausted during Google Trends query. Disabling Gemini.")
+                from config import disable_gemini
+                disable_gemini()
+                return None
             print(f"⚠️ Could not fetch Google Trends topic: {e}. Proceeding without trending signal.")
             return None
     
@@ -408,8 +411,9 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     """
     Orchestrates the multi-agent pipeline to generate a high-retention Tanglish fact script.
     """
+    from config import is_gemini_disabled
     client = get_gemini_client()
-    if not client:
+    if not client and not is_gemini_disabled():
         print("⚠️ Gemini API Client missing! Cannot run multi-agent script generation.")
         return None
     
@@ -1143,6 +1147,11 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
     Automatically rotates Gemini API keys. If a model fails on all keys, it is removed 
     from rotation and we immediately proceed to the next fallback without waiting.
     """
+    from config import is_gemini_disabled
+    if is_gemini_disabled():
+        print("🚨 Gemini is currently disabled due to rate limit/depletion. Proceeding directly to fallback models.")
+        return call_fallback_model(prompt)
+
     if prefer_fallback:
         print("💡 Lighter/cheaper task detected. Attempting fallback model first to conserve Gemini quota...")
         fallback_res = call_fallback_model(prompt)
