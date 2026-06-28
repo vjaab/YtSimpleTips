@@ -108,8 +108,40 @@ def generate_musetalk_sync(face_path, audio_path, output_path, timeout=10800):
         print(f"      ✅ Config: {config_path} ({len(f.read())} bytes)")
 
     # ── Build the official inference command with quality flags ────────────
+    # Write a self-contained wrapper script that injects the flash_attn stub at startup
+    wrapper_path = os.path.join(musetalk_dir, "run_inference.py")
+    try:
+        wrapper_code = """# Wrapper that blocks flash_attn before anything else loads
+import sys, types, importlib.util
+
+_stub = types.ModuleType('flash_attn')
+_stub.__version__ = '0.0.0'
+_stub.__spec__ = importlib.util.spec_from_loader('flash_attn', loader=None)
+_stub.__path__ = []
+_stub.__package__ = 'flash_attn'
+def _noop(*a, **kw): return None
+_stub.flash_attn_func = _noop
+_stub.flash_attn_varlen_func = _noop
+_stub.flash_attn_with_kvcache = _noop
+_stub.flash_attn_supports_top_left_mask = lambda: False
+sys.modules['flash_attn'] = _stub
+sys.modules['flash_attn.flash_attn_interface'] = _stub
+sys.modules['flash_attn.bert_padding'] = _stub
+sys.modules['flash_attn.flash_attn_triton'] = _stub
+
+# Now run inference normally
+import runpy
+sys.argv[0] = 'scripts/inference.py'
+runpy.run_module('scripts.inference', run_name='__main__', alter_sys=True)
+"""
+        with open(wrapper_path, "w", encoding="utf-8") as f:
+            f.write(wrapper_code)
+        print(f"   Created MuseTalk wrapper at: {wrapper_path}")
+    except Exception as wrapper_err:
+        print(f"   ⚠️ Failed to create wrapper: {wrapper_err}")
+
     cmd = [
-        sys.executable, "-m", "scripts.inference",
+        sys.executable, "run_inference.py",
         "--inference_config", config_path,
         "--result_dir", result_dir,
         "--unet_model_path", unet_model_path,
@@ -126,26 +158,6 @@ def generate_musetalk_sync(face_path, audio_path, output_path, timeout=10800):
         env["PYTHONHASHSEED"] = "random"
         # Remove any stale PYTORCH_CUDA_ALLOC_CONF to avoid deprecation warning
         env.pop("PYTORCH_CUDA_ALLOC_CONF", None)
-
-        # Create fake flash_attn package that satisfies transformers' import checks
-        fake_dir = os.path.abspath(os.path.join(os.getcwd(), "..", "_flash_stub"))
-        os.makedirs(os.path.join(fake_dir, "flash_attn"), exist_ok=True)
-        with open(os.path.join(fake_dir, "flash_attn", "__init__.py"), "w") as f:
-            f.write(
-                "import types, importlib.util, sys\n"
-                "__version__ = '0.0.0'\n"
-                "__spec__ = importlib.util.spec_from_loader(__name__, loader=None)\n"
-                "__path__ = []\n"
-                "def flash_attn_func(*a,**kw): return None\n"
-                "def flash_attn_varlen_func(*a,**kw): return None\n"
-                "def flash_attn_with_kvcache(*a,**kw): return None\n"
-                "def flash_attn_supports_top_left_mask(): return False\n"
-            )
-        for sub in ['flash_attn_interface', 'bert_padding', 'flash_attn_triton']:
-            with open(os.path.join(fake_dir, "flash_attn", f"{sub}.py"), "w") as f:
-                f.write("def flash_attn_func(*a,**kw): return None\nflash_attn_varlen_func=flash_attn_func\n")
-
-        env["PYTHONPATH"] = f"{fake_dir}:" + env.get("PYTHONPATH", "")
 
         # ── Execution with Guardrails ──
         print(f"      🚀 Executing MuseTalk Engine (Timeout: {timeout}s)...")
