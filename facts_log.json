@@ -1,19 +1,25 @@
 {
     "used_titles": [
         "🔋 Phone Battery Hack! 2x Life",
-        "Airplane Mode Charging Speed Hack"
+        "Airplane Mode Charging Speed Hack",
+        "Phone Battery Secret Hack! 🔋",
+        "Android Developer Options Battery Life"
     ],
     "used_keywords": [
+        "Tamil Tech",
+        "Tamil Facts",
         "Did You Know",
-        "Tamil Facts"
+        "Android Tips",
+        "Battery Hack"
     ],
     "used_categories": {
-        "📱 Tech & Smart Device Hacks": 1
+        "📱 Tech & Smart Device Hacks": 2
     },
     "last_7_days_stories": [
-        "🔋 Phone Battery Hack! 2x Life"
+        "🔋 Phone Battery Hack! 2x Life",
+        "Phone Battery Secret Hack! 🔋"
     ],
-    "total_uploaded": 1,
+    "total_uploaded": 2,
     "last_upload": "2026-06-28",
     "history": [
         {
@@ -28,6 +34,21 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/u61-25Yd2LQ",
             "source_url": "https://www.howtogeek.com/294426/does-airplane-mode-make-your-phone-charge-faster/",
+            "avatar_used": null
+        },
+        {
+            "date": "2026-06-28",
+            "title": "Phone Battery Secret Hack! 🔋",
+            "news_headline": "Android Developer Options Battery Life",
+            "category": "📱 Tech & Smart Device Hacks",
+            "keywords": [
+                "Tamil Tech",
+                "Battery Hack",
+                "Android Tips"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/3hcc7xkRzhM",
+            "source_url": "https://www.androidauthority.com/best-developer-options-tricks-654735/",
             "avatar_used": null
         }
     ]
