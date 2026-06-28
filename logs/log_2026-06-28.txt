@@ -209,3 +209,23 @@
 [09:15:26] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
 [09:23:45] ❌ Kaggle Handover failed: job_error - Kaggle job 'vijayakumarj/ytsimpletips-gpu-worker' reported an error after 8.3 min.
 [09:23:45] 🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.
+[09:30:44] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[09:30:44] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[09:30:44] STEP 1: Strategy Check -> Day: Sun, Slot: Slot B (Afternoon), Category: 📱 Tech & Smart Device Hacks
+[09:30:44] STEP 2: Fetching facts using Search Grounding for '📱 Tech & Smart Device Hacks'...
+[09:31:14] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[09:32:27] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[09:32:27]    - Story Continuity: 80%
+[09:32:27]    - Visual Alignment: 85%
+[09:32:27]    - Engagement: 90%
+[09:32:27]    - Transitions: 75%
+[09:32:27]    - Subtitle Timing: 85%
+[09:32:27] Aligning script text with subtitle chunks...
+[09:32:27] Selected Fact: Stop Phone Spying: Turn Off Personalized Ads!
+[09:32:27] Source URL: https://privacy.ca.gov/consumer-privacy-rights/limit-mobile-device-tracking/
+[09:32:27] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[09:32:27] STEP 4: Generating Tamil cloned voiceover...
+[09:32:27] Selected Lip-Sync Template: assets/video/C_white.mp4 (from 42 options)
+[09:32:27] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[09:41:49] ❌ Kaggle Handover failed: job_error - Kaggle job 'vijayakumarj/ytsimpletips-gpu-worker' reported an error after 9.3 min.
+[09:41:49] 🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.
