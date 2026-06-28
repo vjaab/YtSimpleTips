@@ -679,10 +679,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 }""".replace("{category}", category)
 
     # ── AI EDUCATION CUSTOM PATH ──
-    is_ai_slot = False
-    if category:
-        is_ai_slot = any(x in category.lower() for x in ["ai", "artificial intelligence", "tech"]) or category in TOPIC_CATEGORIES or topic_type == "ai_education"
-        
+    is_ai_slot = True
     if is_ai_slot:
         print("🤖 [AI Education Path] Initializing 3-stage AI Shorts pipeline...")
         selected_category = random.choice(TOPIC_CATEGORIES)
