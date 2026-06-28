@@ -3,23 +3,26 @@
         "🔋 Phone Battery Hack! 2x Life",
         "Airplane Mode Charging Speed Hack",
         "Phone Battery Secret Hack! 🔋",
-        "Android Developer Options Battery Life"
+        "Android Developer Options Battery Life",
+        "Volume Button Secret Hack 📸",
+        "Volume Button Camera Shutter"
     ],
     "used_keywords": [
-        "Tamil Tech",
         "Tamil Facts",
-        "Did You Know",
         "Android Tips",
-        "Battery Hack"
+        "Battery Hack",
+        "Tamil Tech",
+        "Did You Know"
     ],
     "used_categories": {
-        "📱 Tech & Smart Device Hacks": 2
+        "📱 Tech & Smart Device Hacks": 3
     },
     "last_7_days_stories": [
         "🔋 Phone Battery Hack! 2x Life",
-        "Phone Battery Secret Hack! 🔋"
+        "Phone Battery Secret Hack! 🔋",
+        "Volume Button Secret Hack 📸"
     ],
-    "total_uploaded": 2,
+    "total_uploaded": 3,
     "last_upload": "2026-06-28",
     "history": [
         {
@@ -50,6 +53,20 @@
             "youtube_url": "https://youtu.be/3hcc7xkRzhM",
             "source_url": "https://www.androidauthority.com/best-developer-options-tricks-654735/",
             "avatar_used": null
+        },
+        {
+            "date": "2026-06-28",
+            "title": "Volume Button Secret Hack 📸",
+            "news_headline": "Volume Button Camera Shutter",
+            "category": "📱 Tech & Smart Device Hacks",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/O6eceXItako",
+            "source_url": "https://support.apple.com/guide/iphone/use-the-volume-buttons-to-take-photos-iph3a2a7d31/ios",
+            "avatar_used": "assets/video/C_white.mp4"
         }
     ]
 }
