@@ -14,6 +14,98 @@ from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
 # ── PROMPT TEMPLATES (TAMIL SHORTS AGENTIC LOOP) ──────────────────────────────────
 
+TOPIC_SELECTOR_PROMPT = """You are a Tamil AI education content strategist for YouTube Shorts.
+
+Generate 1 viral-worthy AI concept topic for a 45-60 second Tamil/Tanglish Short targeting:
+- Students (school/college) curious about AI
+- Working professionals wanting to understand AI tools they use daily
+- Elders (50+) who hear about AI on news and want to understand it
+
+TOPIC RULES:
+- Must connect to something the audience already experiences (phone, WhatsApp, Google, Swiggy, bank, hospital, etc.)
+- Must be explainable in 60 seconds without math
+- Must have a surprising or counterintuitive hook
+- Avoid: "Top 5 AI tools", "ChatGPT tricks", news-based topics
+- Focus on: HOW things work, WHY AI behaves certain ways, WHAT concepts mean in real life
+
+OUTPUT FORMAT (JSON only, no preamble):
+{
+  "topic": "short topic name in English",
+  "tamil_title": "YouTube title in Tanglish (max 60 chars, curiosity-driven)",
+  "hook_question": "opening question in Tanglish that makes viewer stop scrolling",
+  "core_concept": "the actual AI concept being taught (e.g. overfitting, attention, embeddings)",
+  "real_world_example": "specific Tamil-relatable example to explain it",
+  "surprising_fact": "one counterintuitive or wow fact about this concept",
+  "difficulty": "beginner/intermediate",
+  "target_segment": "students/professionals/elders/all"
+}"""
+
+SCRIPT_GENERATION_PROMPT = """You are a Tamil AI education YouTuber who makes complex AI concepts simple and fun.
+
+Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this topic:
+
+TOPIC: {topic}
+HOOK QUESTION: {hook_question}
+CORE CONCEPT: {core_concept}
+REAL WORLD EXAMPLE: {real_world_example}
+SURPRISING FACT: {surprising_fact}
+TARGET AUDIENCE: {target_segment}
+
+SCRIPT RULES:
+1. DURATION: 50-65 words max (approx 40-45 seconds at normal pace)
+2. LANGUAGE: Natural Tanglish — Tamil sentences with English technical terms inline. NOT translated English. NOT pure Tamil.
+   Good: "Ungal phone face unlock panna, oru neural network realtime-la ungal face-a 128 different points-la analyze pannum"
+   Bad: "Your phone uses artificial intelligence to recognize your face using neural network technology"
+3. STRUCTURE (strict):
+   - Hook (0-5 sec): Surprising question or statement. Start with "Oru vishayam theriyuma?" or similar
+   - Concept body (5-35 sec): Explain using the real world example. Use simple analogy.
+   - Wow moment (35-45 sec): The surprising fact that reframes everything
+   - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or similar
+4. TONE: Like an excited friend explaining something cool, not a teacher lecturing
+5. NO: Statistics, percentages, named researchers, paper citations
+6. YES: Specific product names (Swiggy, GPT, Google Maps), relatable situations, conversational fillers (aama, illaya, paarunga)
+
+OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
+
+TITLE_TAGS_PROMPT = """You are a Tamil YouTube SEO expert specializing in AI education content.
+
+Generate metadata for this Tamil AI education Short:
+
+TOPIC: {topic}
+CORE CONCEPT: {core_concept}
+SCRIPT SUMMARY: {first_two_sentences_of_script}
+
+OUTPUT FORMAT (JSON only):
+{
+  "title": "Tanglish title, max 60 chars, must include curiosity gap or number, avoid clickbait",
+  "description": "3-4 sentences in Tanglish explaining what viewer will learn. End with 'Comment pannunga - innum theriyanum-na!'",
+  "hashtags": ["#AITamil", "#TechTamil", 8 more relevant tags in English and Tamil],
+  "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity)",
+  "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
+}
+
+TITLE FORMULAS THAT WORK:
+- "Ungal [daily thing] ethana AI use pannudhu theriyuma?"
+- "[AI concept] - Simple-a explain pannuren!"
+- "Yen [AI tool] ungalai [behavior]? - Unmai theriyuma"
+- "[Number] seconds-la [concept] purinju vidunga!"
+"""
+
+PIPELINE_PROMPTS = {
+    "topic_selector": TOPIC_SELECTOR_PROMPT,
+    "script_writer": SCRIPT_GENERATION_PROMPT,
+    "metadata": TITLE_TAGS_PROMPT,
+}
+
+TOPIC_CATEGORIES = [
+    "how_daily_apps_work",      # Swiggy, Google Maps, YouTube
+    "ai_concepts_simplified",   # overfitting, embeddings, attention
+    "ai_myths_busted",          # "AI thinks", "AI is dangerous"
+    "ai_in_india_context",      # UPI fraud detection, Aadhaar, IRCTC
+    "career_and_future",        # what skills matter, what jobs change
+]
+
+
 SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in infotainment ("Simple Tips by VJ").
 Your goal is to explain extremely useful, trending tech/smart life hacks, study tricks, phone settings, health tips, and financial hacks in a super engaging, conversational way that helps everyday people improve their lives.
 Tone: Relatable, friendly, clear, and engaging South Indian Tamil guy (like a tech/lifestyle creator or a local RJ/VJ). Natural, enthusiastic, and easy to follow. Speak clearly and articulate every word so that Tamil viewers all over the world can understand easily. Speak with high-energy, fast-paced, direct, and enthusiastic conversational delivery (pacing, tone, and inflection should sound exactly like a high-retention popular infotainment short). Avoid overly dramatic anime narrator style, shouting, or hyper-reactive shouting. Maintain a clean, professional yet friendly creator tone.
@@ -585,6 +677,143 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "comment_hook": "Provocative question in Tanglish to drive comments.",
   "comment_bait_question": "A polarizing debate question in Tanglish or Tamil about the topic to spark discussion/arguments in comments (e.g. 'Ethu best-nu neenga neneikiringa?', 'WhatsApp call record panrathu right-a thapa?'). Avoid generic CTAs like 'Comment below'."
 }""".replace("{category}", category)
+
+    # ── AI EDUCATION CUSTOM PATH ──
+    is_ai_slot = False
+    if category:
+        is_ai_slot = any(x in category.lower() for x in ["ai", "artificial intelligence", "tech"]) or category in TOPIC_CATEGORIES or topic_type == "ai_education"
+        
+    if is_ai_slot:
+        print("🤖 [AI Education Path] Initializing 3-stage AI Shorts pipeline...")
+        selected_category = random.choice(TOPIC_CATEGORIES)
+        
+        # Step 1: Select a topic using TOPIC_SELECTOR_PROMPT
+        selector_prompt = PIPELINE_PROMPTS["topic_selector"] + f"\nRotate / Focus on Category: {selected_category}\n"
+        print("🕵️ [AGENT 0] Topic Selector Agent: Generating AI topic...")
+        topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True)
+        
+        if topic_data_res and "topic" in topic_data_res:
+            selected_headline = topic_data_res.get("topic")
+            selected_url = "https://github.com/vjaab/YtSimpleTips"
+            
+            # Step 2: Generate script using SCRIPT_GENERATION_PROMPT
+            script_writer_prompt = PIPELINE_PROMPTS["script_writer"].format(
+                topic=topic_data_res.get("topic"),
+                hook_question=topic_data_res.get("hook_question"),
+                core_concept=topic_data_res.get("core_concept"),
+                real_world_example=topic_data_res.get("real_world_example"),
+                surprising_fact=topic_data_res.get("surprising_fact"),
+                target_segment=topic_data_res.get("target_segment", "all")
+            )
+            print("📝 [AGENT 1] Script Writer Agent: Generating script...")
+            script_text = None
+            try:
+                # Direct generation without JSON constraints
+                response = client.models.generate_content(
+                    model=GEMINI_FLASH_MODEL,
+                    contents=script_writer_prompt
+                )
+                script_text = response.text.strip()
+            except Exception as e:
+                print(f"⚠️ Script Writer Agent failed: {e}")
+                
+            if script_text:
+                # Step 3: Generate Title, tags and metadata using TITLE_TAGS_PROMPT
+                sentences = [s.strip() for s in script_text.split(".") if s.strip()]
+                summary_sentences = " ".join(sentences[:2]) if len(sentences) >= 2 else script_text
+                
+                metadata_prompt = PIPELINE_PROMPTS["metadata"].format(
+                    topic=topic_data_res.get("topic"),
+                    core_concept=topic_data_res.get("core_concept"),
+                    first_two_sentences_of_script=summary_sentences
+                )
+                print("🏷️ [AGENT 2] Metadata Agent: Generating Title & Tags...")
+                metadata_res = call_gemini_api(client, metadata_prompt, prefer_fallback=True)
+                if not metadata_res:
+                    metadata_res = {}
+                
+                # Step 4: Generate storyboard for the script using Storyboard Agent
+                import site
+                sp = site.getsitepackages()[0]
+                refined_requirements = prompt_requirements
+                refined_requirements = refined_requirements.replace('"original_news_headline": "Fact Title"', f'"original_news_headline": "{selected_headline}"')
+                refined_requirements = refined_requirements.replace('"original_news_url": "Direct source url"', f'"original_news_url": "{selected_url}"')
+                refined_requirements = refined_requirements.replace('"use_case_evidence_url": "Direct source url of the fact to take a screenshot of."', f'"use_case_evidence_url": "{selected_url}"')
+                
+                storyboard_prompt = f"""{SYSTEM_PERSONA}
+
+STORYBOARD AGENT TASK:
+Given the following AI education script, break it down into a sequence of short narration segments (3-5 words each) and generate a detailed visual storyboard.
+You must produce at least 15-20 storyboard scenes to ensure fine-grained word-by-word alignment for the subtitles.
+
+SCRIPT:
+{script_text}
+
+Return ONLY a JSON object matching the required schema:
+{refined_requirements}
+"""
+                print("🎬 [AGENT 3] Storyboard Agent: Generating storyboard layout...")
+                final_script = call_gemini_api(client, storyboard_prompt, model='gemini-2.5-flash')
+                
+                if final_script and "storyboard" in final_script:
+                    final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
+                    final_script["description"] = metadata_res.get("description") or final_script.get("description")
+                    final_script["hashtags"] = metadata_res.get("hashtags") or final_script.get("hashtags")
+                    final_script["comment_bait_question"] = metadata_res.get("thumbnail_text") or final_script.get("comment_bait_question")
+                    final_script["original_news_headline"] = topic_data_res.get("topic")
+                    final_script["original_news_url"] = selected_url
+                    final_script["use_case_evidence_url"] = selected_url
+                    final_script["script"] = script_text
+                    
+                    subtitle_chunks = []
+                    rebuilt_script_parts = []
+                    for scene in final_script["storyboard"]:
+                        scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
+                        narration_text = scene.get("narration", "")
+                        rebuilt_script_parts.append(narration_text)
+                        
+                        v_type = scene.get("visual_type", "")
+                        info_type = scene.get("infographic_type", "none").lower()
+                        if "infographic" in v_type.lower() and info_type in ("none", ""):
+                            info_type = "stat"
+                        
+                        has_info = info_type not in ("none", "")
+                        info_data = scene.get("infographic_data", {})
+                        
+                        vis_prompt = scene.get("visual_prompt", "")
+                        stock_query = scene.get("stock_search_query", "").strip()
+                        if not stock_query:
+                            words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
+                            stock_query = " ".join(words) if words else "tech"
+                        
+                        chunk = {
+                            "chunk_id": scene_num,
+                            "text": narration_text,
+                            "english_caption": scene.get("on_screen_text", ""),
+                            "start": 0.0,
+                            "end": 0.0,
+                            "has_infographic": has_info,
+                            "infographic_type": info_type,
+                            "infographic_data": info_data,
+                            "stock_search_query": stock_query,
+                            "nano_visual_prompt": vis_prompt,
+                            "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
+                            "camera_motion": scene.get("camera_motion", "None"),
+                            "transition": scene.get("transition", "Match cut")
+                        }
+                        subtitle_chunks.append(chunk)
+                    
+                    final_script["subtitle_chunks"] = subtitle_chunks
+                    final_script["title_variants"] = [
+                        final_script.get("title", "Secret Trick!"),
+                        final_script.get("title", "Secret Trick!") + " 🤫",
+                        "Don't Miss This! 🚨"
+                    ]
+                    
+                    print("🎉 [AI Education Path] Script and storyboard generated successfully!")
+                    return final_script
+                    
+        print("⚠️ [AI Education Path] Custom generation failed/incomplete. Falling back to default generation path...")
 
     # ── AGENT 0: SELECTOR ──
     if not forced_article:
