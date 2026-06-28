@@ -339,7 +339,7 @@ def setup_musetalk():
         
         # Core ML deps that MuseTalk actually imports
         musetalk_deps = [
-            "diffusers", "accelerate", "transformers", "huggingface_hub",
+            "diffusers", "accelerate", "transformers==4.40.0", "huggingface_hub",
             "einops", "omegaconf", "soundfile", "librosa",
             "gradio", "gdown", "ffmpeg-python", "moviepy", "imageio[ffmpeg]",
         ]
@@ -755,7 +755,7 @@ def setup_project():
         "torch==2.4.0+cu121", "torchvision==0.19.0+cu121", "torchaudio==2.4.0+cu121", 
         "av", "imageio-ffmpeg", "pyyaml", "joblib", 
         "scikit-image", "safetensors", "trimesh", "face-alignment",
-        "diffusers", "transformers", "accelerate", "g2p_en",
+        "diffusers", "transformers==4.40.0", "accelerate", "g2p_en",
         "--extra-index-url", "https://download.pytorch.org/whl/cu121"])
     
     # Uninstall pre-installed flash-attn and xformers to prevent binary/type compatibility issues

@@ -156,6 +156,8 @@ runpy.run_module('scripts.inference', run_name='__main__', alter_sys=True)
         env = os.environ.copy()
         env["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
         env["PYTHONHASHSEED"] = "random"
+        env["TRANSFORMERS_NO_FLASH_ATTENTION"] = "1"
+        env["FLASH_ATTENTION_FORCE_BUILD"] = "0"
         # Remove any stale PYTORCH_CUDA_ALLOC_CONF to avoid deprecation warning
         env.pop("PYTORCH_CUDA_ALLOC_CONF", None)
 
