@@ -29,6 +29,36 @@ def run_cmd(cmd, cwd=None, quiet=False):
         subprocess.run(cmd, cwd=cwd, check=True)
 
 
+def _nuclear_delete_flash_attn():
+    print("🧹 Physically locating and deleting any residual flash_attn files in sys.path...")
+    import sys, shutil
+    search_paths = list(sys.path)
+    import site
+    try:
+        search_paths.extend(site.getsitepackages())
+    except:
+        pass
+    try:
+        search_paths.append(site.getusersitepackages())
+    except:
+        pass
+        
+    for path in set(search_paths):
+        if not path or not os.path.isdir(path):
+            continue
+        try:
+            for name in os.listdir(path):
+                if "flash_attn" in name.lower() or "flash-attn" in name.lower():
+                    target = os.path.join(path, name)
+                    print(f"   Removing residual flash_attn target: {target}")
+                    if os.path.isdir(target):
+                        shutil.rmtree(target, ignore_errors=True)
+                    else:
+                        os.remove(target)
+        except Exception as e:
+            print(f"   ⚠️ Error scanning/deleting in {path}: {e}")
+
+
 def setup_sitecustomize():
     print("🛠️ Setting up sitecustomize patch for PyTorch schema validation...")
     import site
@@ -339,7 +369,7 @@ def setup_musetalk():
         
         # Core ML deps that MuseTalk actually imports
         musetalk_deps = [
-            "diffusers", "accelerate", "transformers==4.40.0", "huggingface_hub",
+            "diffusers", "accelerate", "transformers", "huggingface_hub",
             "einops", "omegaconf", "soundfile", "librosa",
             "gradio", "gdown", "ffmpeg-python", "moviepy", "imageio[ffmpeg]",
         ]
@@ -755,7 +785,7 @@ def setup_project():
         "torch==2.4.0+cu121", "torchvision==0.19.0+cu121", "torchaudio==2.4.0+cu121", 
         "av", "imageio-ffmpeg", "pyyaml", "joblib", 
         "scikit-image", "safetensors", "trimesh", "face-alignment",
-        "diffusers", "transformers==4.40.0", "accelerate", "g2p_en",
+        "diffusers", "transformers", "accelerate", "g2p_en",
         "--extra-index-url", "https://download.pytorch.org/whl/cu121"])
     
     # Uninstall pre-installed flash-attn and xformers to prevent binary/type compatibility issues
@@ -766,6 +796,8 @@ def setup_project():
         print("   ✅ flash-attn and xformers uninstalled.")
     except Exception as e:
         print(f"   ⚠️ Failed to uninstall flash-attn/xformers (non-critical): {e}")
+        
+    _nuclear_delete_flash_attn()
     
     # CRITICAL: Clean swap of numpy and numba
     # Standardizing on numpy 1.26.4 and numba 0.60.0 for MMLab / Python 3.12 compatibility
@@ -1021,6 +1053,8 @@ if __name__ == "__main__":
             subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "flash-attn", "flash_attn"], capture_output=True)
         except Exception as e:
             print(f"⚠️ Nuclear uninstallation warning: {e}")
+            
+        _nuclear_delete_flash_attn()
             
         process_job()
     except Exception as e:
