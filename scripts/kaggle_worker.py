@@ -120,6 +120,46 @@ def _nuclear_delete_flash_attn():
         print(f"   [Post-cleanup] ✅ flash_attn is completely disabled/unimportable: {e}")
 
 
+def _clean_residual_torch():
+    print("🧹 Physically removing residual pre-installed PyTorch/Torchvision/Torchaudio to prevent linker conflicts...")
+    import sys, shutil, os, site
+    search_paths = list(sys.path)
+    try:
+        search_paths.extend(site.getsitepackages())
+    except:
+        pass
+    try:
+        search_paths.append(site.getusersitepackages())
+    except:
+        pass
+    
+    # Common system and user package directories
+    search_paths.extend(['/usr/local/lib/python3.12/dist-packages', '/usr/lib/python3/dist-packages', '/opt/conda/lib/python3.12/site-packages'])
+    
+    target_names = ['torch', 'torchvision', 'torchaudio', 'flash_attn', 'flash-attn', 'xformers']
+    
+    deleted_count = 0
+    for path in set(search_paths):
+        if not path or not os.path.isdir(path):
+            continue
+        try:
+            for name in os.listdir(path):
+                if any(t == name.lower() or name.lower().startswith(t + '-') or name.lower().startswith(t + '_') for t in target_names):
+                    target = os.path.join(path, name)
+                    print(f"   Removing residual package: {target}")
+                    if os.path.isdir(target):
+                        shutil.rmtree(target, ignore_errors=True)
+                    else:
+                        try:
+                            os.remove(target)
+                        except FileNotFoundError:
+                            pass
+                    deleted_count += 1
+        except Exception as e:
+            pass
+    print(f"   ✅ Cleaned {deleted_count} residual torch/flash_attn files/folders.")
+
+
 def setup_sitecustomize():
     print("🛠️ Setting up sitecustomize patch for PyTorch schema validation...")
     import site
@@ -832,6 +872,7 @@ def setup_project():
 
     
     # ── PYTHON DEPENDENCIES ────────────────────────────────────────────────
+    _clean_residual_torch()
     print("📦 Installing Python Dependencies...")
     run_cmd(["pip", "install", "-q", "-U", "pip", "setuptools<70", "wheel", "packaging"])
     run_cmd(["pip", "install", "-q", "grpcio==1.62.2", "grpcio-status==1.62.2"]) # Fix for yanked versions
