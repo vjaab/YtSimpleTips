@@ -271,3 +271,23 @@
 [10:23:34] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
 [10:33:14] ❌ Kaggle Handover failed: job_error - Kaggle job 'vijayakumarj/ytsimpletips-gpu-worker' reported an error after 9.6 min.
 [10:33:14] 🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.
+[11:57:03] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[11:57:03] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[11:57:03] STEP 1: Strategy Check -> Day: Sun, Slot: Slot C (Evening), Category: 📱 Tech & Smart Device Hacks
+[11:57:03] STEP 2: Fetching facts using Search Grounding for '📱 Tech & Smart Device Hacks'...
+[11:57:22] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[11:58:28] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[11:58:28]    - Story Continuity: 78%
+[11:58:28]    - Visual Alignment: 86%
+[11:58:28]    - Engagement: 92%
+[11:58:28]    - Transitions: 71%
+[11:58:28]    - Subtitle Timing: 80%
+[11:58:28] Aligning script text with subtitle chunks...
+[11:58:28] Selected Fact: Speed Up Your Android Phone Instantly with Hidden Settings
+[11:58:28] Source URL: https://www.zdnet.com/home-and-office/smart-office/changing-this-one-setting-on-my-android-phone-doubled-the-speed-literally/
+[11:58:28] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[11:58:28] STEP 4: Generating Tamil cloned voiceover...
+[11:58:28] Selected Lip-Sync Template: assets/video/C_white.mp4 (from 42 options)
+[11:58:28] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[12:08:07] ❌ Kaggle Handover failed: job_error - Kaggle job 'vijayakumarj/ytsimpletips-gpu-worker' reported an error after 9.6 min.
+[12:08:07] 🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.
