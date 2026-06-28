@@ -283,20 +283,8 @@ def run_pipeline(forced_category=None, dry_run=False):
                     kaggle_failed = True
             
             if kaggle_failed:
-                log_message("🔄 Kaggle GPU failed. Falling back to local/cloud ElevenLabs voiceovers...")
-                try:
-                    audio_path, duration, word_timestamps = generate_voiceover(
-                        script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
-                    )
-                except Exception as e:
-                    log_message(f"❌ Voiceover failed: {e}")
-                    audio_path = None
-                script_data["kaggle_lipsync_path"] = None
-                if dry_run:
-                    script_data["skip_avatar"] = False
-                    log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
-                else:
-                    script_data["skip_avatar"] = True
+                log_message("🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.")
+                return False
         else:
             # Fallback/Local execution only: no Kaggle credentials
             try:
