@@ -65,27 +65,25 @@ def _nuclear_delete_flash_attn():
 
     # 2. Find and neutralize any compiled flash_attn .so files in system library folders
     try:
-        import subprocess
-        # Search /usr/local/lib, /usr/lib, /opt for any flash_attn shared objects
+        # Search /usr/local/lib, /usr/lib, /opt for any flash_attn shared objects recursively
         for search_root in ['/usr/local/lib', '/usr/lib', '/opt']:
             if not os.path.exists(search_root):
                 continue
-            res = subprocess.run(
-                ['find', search_root, '-name', 'flash_attn*.so', '-o', '-name', '_flash_attn*.so', '-o', '-path', '*/flash_attn*/*.so'],
-                capture_output=True, text=True, timeout=30
-            )
-            for f in res.stdout.strip().split('\n'):
-                if f and os.path.exists(f):
-                    print(f"   🗑️ Renaming/neutralizing flash_attn SO file: {f}")
-                    try:
-                        os.rename(f, f + '.disabled')
-                    except Exception as err:
-                        print(f"   ⚠️ Failed to rename SO file {f}: {err}")
+            print(f"   Scanning root: {search_root} for flash_attn SO files...")
+            for root, dirs, files in os.walk(search_root):
+                for file in files:
+                    if file.endswith('.so') and ('flash_attn' in file.lower() or 'flash_attn' in root.lower()):
+                        target = os.path.join(root, file)
+                        print(f"   🗑️ Renaming/neutralizing flash_attn SO file: {target}")
                         try:
-                            os.remove(f)
-                            print(f"   Deleted fallback: {f}")
-                        except Exception as del_err:
-                            print(f"   ⚠️ Failed to delete fallback {f}: {del_err}")
+                            os.rename(target, target + '.disabled')
+                        except Exception as err:
+                            print(f"   ⚠️ Failed to rename SO file {target}: {err}")
+                            try:
+                                os.remove(target)
+                                print(f"   Deleted fallback: {target}")
+                            except Exception as del_err:
+                                print(f"   ⚠️ Failed to delete fallback {target}: {del_err}")
     except Exception as e:
         print(f"   ⚠️ Error running flash_attn SO files lookup: {e}")
 
