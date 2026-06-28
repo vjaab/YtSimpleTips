@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 import shutil
 import time
@@ -108,7 +109,7 @@ def generate_musetalk_sync(face_path, audio_path, output_path, timeout=10800):
 
     # ── Build the official inference command with quality flags ────────────
     cmd = [
-        "python3", "-m", "scripts.inference",
+        sys.executable, "-m", "scripts.inference",
         "--inference_config", config_path,
         "--result_dir", result_dir,
         "--unet_model_path", unet_model_path,
