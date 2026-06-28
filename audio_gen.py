@@ -258,9 +258,9 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
         "text": cleaned_text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            "stability": 0.35,
+            "stability": 0.50,
             "similarity_boost": 0.95,
-            "style": 0.45,
+            "style": 0.15,
             "use_speaker_boost": True
         }
     }
@@ -469,25 +469,37 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     audio.export(audio_path, format="wav")
     return audio_path
 
-def apply_mastering_chain(audio_path: str) -> None:
+def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
     """
     Applies the exact professional FFmpeg mastering filter chain for vocal clarity.
     Uses t=h (Hz width type) instead of t=o (octave) because widths of 200, 800, 2000
     are Hz values; using octave (t=o) causes coefficient corruption and silence.
     Also appends aresample=44100 to ensure sample rate is exactly 44100 Hz.
+    If is_elevenlabs is True, bypasses denoising (afftdn) and harsh EQ to preserve voice clone characteristics.
     """
     temp_path = audio_path + ".mastered.wav"
-    filter_str = (
-        "highpass=f=80,"  # removes low-frequency rumble below 80Hz
-        "lowpass=f=11000,"  # removes harsh air/TTS artifacts above 11kHz (was 12kHz)
-        "afftdn=nf=-25,"  # noise floor reduction at -25dB (gentler than current)
-        "equalizer=f=200:t=h:w=200:g=-3,"  # cut muddy low-mids
-        "equalizer=f=2500:t=h:w=800:g=+4,"  # boost vocal presence (clarity range)
-        "equalizer=f=8000:t=h:w=2000:g=+1,"  # subtle air/brightness (reduced from +2 to prevent TTS artifact amplification)
-        "acompressor=threshold=0.05:ratio=3:attack=10:release=100:makeup=1,"  # gentler compression to prevent pumping/ringing artifacts
-        "loudnorm=I=-14:TP=-1.5:LRA=7,"  # normalize to YouTube Shorts standard (-14 LUFS)
-        "aresample=44100"  # ensure sample rate is exactly 44100 Hz
-    )
+    if is_elevenlabs:
+        # ElevenLabs generates pristine studio-quality audio.
+        # Bypass denoising and heavy EQ to prevent watery phase cancellation artifacts
+        # and preserve 100% of the original voice match.
+        filter_str = (
+            "highpass=f=80,"  # removes low-frequency rumble below 80Hz
+            "acompressor=threshold=0.08:ratio=2:attack=10:release=100:makeup=1,"  # gentle dynamics normalization
+            "loudnorm=I=-14:TP=-1.5:LRA=7,"  # standard Shorts loudness target
+            "aresample=44100"  # keep consistent sample rate
+        )
+    else:
+        filter_str = (
+            "highpass=f=80,"  # removes low-frequency rumble below 80Hz
+            "lowpass=f=11000,"  # removes harsh air/TTS artifacts above 11kHz (was 12kHz)
+            "afftdn=nf=-25,"  # noise floor reduction at -25dB (gentler than current)
+            "equalizer=f=200:t=h:w=200:g=-3,"  # cut muddy low-mids
+            "equalizer=f=2500:t=h:w=800:g=+4,"  # boost vocal presence (clarity range)
+            "equalizer=f=8000:t=h:w=2000:g=+1,"  # subtle air/brightness (reduced from +2 to prevent TTS artifact amplification)
+            "acompressor=threshold=0.05:ratio=3:attack=10:release=100:makeup=1,"  # gentler compression to prevent pumping/ringing artifacts
+            "loudnorm=I=-14:TP=-1.5:LRA=7,"  # normalize to YouTube Shorts standard (-14 LUFS)
+            "aresample=44100"  # ensure sample rate is exactly 44100 Hz
+        )
     cmd = [
         "ffmpeg", "-y",
         "-i", audio_path,
@@ -758,7 +770,7 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
         word_timestamps = _estimate_timestamps(clean_text, dur)
         
     # Step 4: Apply professional FFmpeg mastering chain
-    apply_mastering_chain(path)
+    apply_mastering_chain(path, is_elevenlabs=True)
     
     # Step 5: Trim audio silence and optimize gaps
     dur, word_timestamps = trim_audio_silence(path, word_timestamps)
