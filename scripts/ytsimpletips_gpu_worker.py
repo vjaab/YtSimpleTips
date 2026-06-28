@@ -1,10 +1,14 @@
 
-JOB_PAYLOAD = {"script": "Ads \u0baa\u0bcb\u0ba9\u0bcd-\u0bb2\u0bcd flood  Battery drain \u0bb5\u0bc7\u0b95\u0bae\u0bcd  Data waste \u0b85\u0ba4\u0bbf\u0b95\u0bae\u0bcd  Privacy risk \u0b95\u0bc2\u0b9f  Simple setting \u0ba4\u0bc7\u0bb5\u0bc8  Settings-\u0bb2\u0bcd \u0b9a\u0bc6\u0bb2\u0bcd  Network & Internet tap  Private DNS \u0ba4\u0bc7\u0bb0\u0bcd\u0bb5\u0bc1  Hostname \u0baa\u0bc1\u0bb2\u0bcd\u0bb2  'dns.adguard.com' type  Save click \u0baa\u0ba3\u0bcd\u0ba3  Wait, twist coming  Phone restart \u0baa\u0ba3\u0bcd\u0ba3  Ads \u0b87\u0bb2\u0bcd\u0bb2\u0bbe\u0bae\u0bb2\u0bcd clean  aana wait pannunga, twist irukku!  Speed rocket \u0b86\u0b95\u0bc1\u0ba4\u0bc1  Buffering \u0b87\u0bb2\u0bcd\u0bb2  Data saved \u0b85\u0ba4\u0bbf\u0b95\u0bae\u0bcd  Battery backup \u0baa\u0bc6\u0bb0\u0bbf\u0baf  Privacy secure \u0b86\u0ba9\u0ba4\u0bc1  All apps smooth  Kids safe browsing  No unwanted videos  Check DNS settings  Test speed now  Feel difference?  Try it today  Comment your result  Share with friends  Subscribe for more", "custom_map": {"NVIDIA": "In-vid-yah"}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "8Oo4d9mNNwVwK369qOwl", "face_path": "assets/video/gemini.mp4"}
+JOB_PAYLOAD = {"script": "\u0b89\u0b99\u0bcd\u0b95 private videos leak \u0b86\u0b9a\u0bcd\u0b9a\u0bc1!  \u0b89\u0b9f\u0ba9\u0bc7 \u0b9a\u0bc6\u0b95\u0bcd \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95.  \u0ba8\u0bae\u0bcd\u0bae \u0ba4\u0bc6\u0bb0\u0bbf\u0baf\u0bbe\u0bae \u0b9a\u0bbf\u0bb2  hidden apps...  camera, microphone \u0baf\u0bc2\u0bb8\u0bcd \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0ba4\u0bc1.  \u0b89\u0b99\u0bcd\u0b95 personal \u0bb5\u0bbf\u0bb7\u0baf\u0b99\u0bcd\u0b95\u0bb3\u0bcd  leak \u0b86\u0b95\u0bb2\u0bbe\u0bae\u0bbe?  \u0baa\u0bc7\u0b9a\u0bc1\u0bb1\u0ba4\u0bc1 \u0b8e\u0bb2\u0bcd\u0bb2\u0bbe\u0bae\u0bcd record \u0b86\u0b95\u0bb2\u0bbe\u0bae\u0bbe?  \u0b87\u0ba4\u0bc1 \u0bb0\u0bca\u0bae\u0bcd\u0baa danger!  \u0b89\u0b9f\u0ba9\u0bc7 \u0b89\u0b99\u0bcd\u0b95 phone  settings \u0baa\u0bcb\u0b99\u0bcd\u0b95.  Privacy option-\u0b95\u0bcd\u0b95\u0bc1 \u0baa\u0bcb\u0b99\u0bcd\u0b95.  App Permissions-\u0bb2 check \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95.  Full list \u0b87\u0bb0\u0bc1\u0b95\u0bcd\u0b95\u0bc1\u0bae\u0bcd.  \u0b86\u0ba9\u0bbe wait \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95...  \u0b87\u0ba4\u0bc1\u0bb2 \u0b92\u0bb0\u0bc1 twist \u0b87\u0bb0\u0bc1\u0b95\u0bcd\u0b95\u0bc1!  \u0b85\u0b99\u0bcd\u0b95 Camera option-\u0bb2 \u0baa\u0bbe\u0bb0\u0bc1\u0b99\u0bcd\u0b95.  \u0b8e\u0ba8\u0bcd\u0ba4 app \u0baf\u0bc2\u0bb8\u0bcd \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0ba4\u0bc1\u0ba9\u0bcd\u0ba9\u0bc1 \u0ba4\u0bc6\u0bb0\u0bbf\u0baf\u0bc1\u0bae\u0bcd.  Microphone option-\u0bae\u0bcd check \u0baa\u0ba3\u0bcd\u0ba3\u0bc1\u0b99\u0bcd\u0b95.  \u0ba4\u0bc7\u0bb5\u0bc8 \u0b87\u0bb2\u0bcd\u0bb2\u0bbe\u0ba4 apps-\u0b95\u0bcd\u0b95\u0bc1  permission-\u0b90 off \u0baa\u0ba3\u0bcd\u0ba3\u0bbf\u0b9f\u0bc1\u0b99\u0bcd\u0b95.  \u0b87\u0baa\u0bcd\u0baa\u0bcb \u0b89\u0b99\u0bcd\u0b95 privacy  full safe-\u0b86 \u0b87\u0bb0\u0bc1\u0b95\u0bcd\u0b95\u0bc1\u0bae\u0bcd.  \u0b87\u0ba4\u0bc1 \u0baa\u0ba3\u0bcd\u0bb1\u0ba4\u0bc1 \u0ba4\u0bbe\u0ba9\u0bcd smart phone user!  \u0b89\u0b99\u0bcd\u0b95 phone-\u0bb2 suspicious apps \u0b87\u0bb0\u0bc1\u0b95\u0bcd\u0b95\u0bbe?  \u0baa\u0bcb\u0ba9\u0bcd\u0bb2 \u0b8e\u0bb2\u0bcd\u0bb2\u0bbe app-\u0b95\u0bcd\u0b95\u0bc1\u0bae\u0bcd  permission \u0b95\u0bca\u0b9f\u0bc1\u0b95\u0bcd\u0b95\u0bb1\u0ba4\u0bc1 right-a thapa?  \u0b89\u0b99\u0bcd\u0b95 opinion \u0b8e\u0ba9\u0bcd\u0ba9?  Comments-\u0bb2 \u0b9a\u0bca\u0bb2\u0bcd\u0bb2\u0bc1\u0b99\u0bcd\u0b95.", "custom_map": {}, "elevenlabs_api_key": "sk_b195e57ea3ba70946492f7c037cc86edd691b9b3aec66bf2", "elevenlabs_voice_id": "9ebDuCWUuBE6opsuSrhG", "face_path": "assets/video/green_azure.mp4"}
+import sys
+# 🛡️ Poison pill for flash_attn to block imports globally at startup
+sys.modules['flash_attn'] = None
+sys.modules['flash_attn.flash_attn_interface'] = None
+
 import os
 os.environ["PYTHONHASHSEED"] = "0"
 import subprocess
 import shutil
-import sys
 import time
 import re
 
@@ -18,6 +22,165 @@ def run_cmd(cmd, cwd=None, quiet=False):
     else:
         print(f"Executing: {' '.join(cmd)}")
         subprocess.run(cmd, cwd=cwd, check=True)
+
+
+def setup_sitecustomize():
+    print("🛠️ Setting up sitecustomize patch for PyTorch schema validation...")
+    import site
+    paths = []
+    try:
+        paths.extend(site.getsitepackages())
+    except Exception:
+        pass
+    try:
+        paths.append(site.getusersitepackages())
+    except Exception:
+        pass
+    
+    paths = list(set([p for p in paths if p and os.path.isdir(p)]))
+    print(f"   Candidate site-packages paths: {paths}")
+    
+    patch_content = """# 🛡️ GLOBAL PYTORCH INFER_SCHEMA PATCH FOR Python 3.10+ Union Types Compatibility
+import sys
+import typing
+import builtins
+
+# 🛡️ Poison pill for flash_attn to block imports globally at Python startup
+sys.modules['flash_attn'] = None
+sys.modules['flash_attn.flash_attn_interface'] = None
+
+try:
+    orig_import = builtins.__import__
+    _in_patch = False
+    
+    def _apply_infer_schema_patch():
+        try:
+            if "torch" in sys.modules:
+                for mod in ["torch.library", "torch._library", "torch._library.infer_schema", "torch._library.custom_ops", "torch._custom_op", "torch._custom_op.impl"]:
+                    try:
+                        import importlib
+                        importlib.import_module(mod)
+                    except Exception:
+                        pass
+
+                def clean_func_annotations(func):
+                    if not hasattr(func, "__annotations__") or not func.__annotations__:
+                        return func
+                    try:
+                        import torch
+                        new_annotations = {}
+                        for name, annotation in func.__annotations__.items():
+                            if isinstance(annotation, str):
+                                anno_str = annotation.replace(" ", "")
+                                if anno_str == "float|None":
+                                    annotation = typing.Optional[float]
+                                elif anno_str == "bool|None":
+                                    annotation = typing.Optional[bool]
+                                elif anno_str == "int|None":
+                                    annotation = typing.Optional[int]
+                                elif anno_str == "torch.Tensor":
+                                    annotation = torch.Tensor
+                                elif anno_str == "torch.Tensor|None":
+                                    annotation = typing.Optional[torch.Tensor]
+                                elif anno_str == "tuple[torch.Tensor,torch.Tensor]":
+                                    annotation = typing.Tuple[torch.Tensor, torch.Tensor]
+                                else:
+                                    try:
+                                        ns = {"torch": torch, "typing": typing, "Optional": typing.Optional, "List": typing.List, "Tuple": typing.Tuple}
+                                        if "|" in annotation:
+                                            parts = [p.strip() for p in annotation.split("|")]
+                                            if "None" in parts:
+                                                non_none = [p for p in parts if p != "None"]
+                                                if len(non_none) == 1:
+                                                    annotation = f"Optional[{non_none[0]}]"
+                                        annotation = eval(annotation, ns)
+                                    except Exception:
+                                        pass
+
+                            try:
+                                origin = typing.get_origin(annotation)
+                                args = typing.get_args(annotation)
+                                if origin in (typing.Union, getattr(typing, "UnionType", None)) or (hasattr(origin, "__name__") and origin.__name__ == "UnionType"):
+                                    if type(None) in args:
+                                        non_none = [a for a in args if a is not type(None)]
+                                        if len(non_none) == 1:
+                                            annotation = typing.Optional[non_none[0]]
+                                elif origin is tuple:
+                                    annotation = typing.Tuple[args]
+                                elif origin is list:
+                                    annotation = typing.List[args[0]]
+                            except Exception:
+                                pass
+
+                            new_annotations[name] = annotation
+                        func.__annotations__ = new_annotations
+                    except Exception:
+                        pass
+                    return func
+
+                def make_wrapper(orig_fn):
+                    def wrapper(prototype_function, *args, **kwargs):
+                        try:
+                            clean_func_annotations(prototype_function)
+                        except Exception:
+                            pass
+                        return orig_fn(prototype_function, *args, **kwargs)
+                    return wrapper
+
+                for m_name, module in list(sys.modules.items()):
+                    if m_name.startswith("torch") and module:
+                        for attr_name in dir(module):
+                            if attr_name == "infer_schema":
+                                try:
+                                    orig = getattr(module, attr_name)
+                                    if callable(orig) and not hasattr(orig, "_is_patched"):
+                                        wrapped = make_wrapper(orig)
+                                        wrapped._is_patched = True
+                                        setattr(module, attr_name, wrapped)
+                                except Exception:
+                                    pass
+        except Exception:
+            pass
+
+    def patched_import(name, globals=None, locals=None, fromlist=(), level=0):
+        global _in_patch
+        module = orig_import(name, globals, locals, fromlist, level)
+        if name.startswith("torch") and not _in_patch:
+            _in_patch = True
+            try:
+                _apply_infer_schema_patch()
+            except Exception:
+                pass
+            finally:
+                _in_patch = False
+        return module
+
+    builtins.__import__ = patched_import
+    _apply_infer_schema_patch()
+
+except Exception:
+    pass
+"""
+    for p in paths:
+        try:
+            sitecustomize_path = os.path.join(p, "sitecustomize.py")
+            if os.path.exists(sitecustomize_path):
+                with open(sitecustomize_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                if "GLOBAL PYTORCH INFER_SCHEMA PATCH" not in content:
+                    new_content = patch_content + "\n" + content
+                    with open(sitecustomize_path, "w", encoding="utf-8") as f:
+                        f.write(new_content)
+                    print(f"   ✅ Prepended to existing sitecustomize at: {sitecustomize_path}")
+                else:
+                    print(f"   ✅ sitecustomize at {sitecustomize_path} already patched")
+            else:
+                with open(sitecustomize_path, "w", encoding="utf-8") as f:
+                    f.write(patch_content)
+                print(f"   ✅ Created new sitecustomize at: {sitecustomize_path}")
+        except Exception as e:
+            print(f"   ⚠️ Failed writing to {p}: {e}")
+
 
 
 
@@ -582,6 +745,15 @@ def setup_project():
         "diffusers", "transformers", "accelerate", "g2p_en",
         "--extra-index-url", "https://download.pytorch.org/whl/cu121"])
     
+    # Uninstall pre-installed flash-attn and xformers to prevent binary/type compatibility issues
+    # with the downgraded PyTorch 2.4.0 version.
+    print("🧹 Uninstalling incompatible pre-installed flash-attn and xformers...")
+    try:
+        run_cmd(["pip", "uninstall", "-y", "flash-attn", "xformers"])
+        print("   ✅ flash-attn and xformers uninstalled.")
+    except Exception as e:
+        print(f"   ⚠️ Failed to uninstall flash-attn/xformers (non-critical): {e}")
+    
     # CRITICAL: Clean swap of numpy and numba
     # Standardizing on numpy 1.26.4 and numba 0.60.0 for MMLab / Python 3.12 compatibility
     print("🔁 Performing clean swap of numba and numpy (v1.x for MMLab stability)...")
@@ -796,6 +968,12 @@ def process_job():
 if __name__ == "__main__":
     try:
         print("--- Kaggle Worker Initiated ---")
+        # 🛡️ Initial run to hook PyTorch if already present or as packages install
+        try:
+            setup_sitecustomize()
+        except Exception as e:
+            print(f"⚠️ sitecustomize initial setup warning: {e}")
+            
         setup_project()
         setup_musetalk()
         
@@ -817,7 +995,20 @@ if __name__ == "__main__":
             print(f"   ✅ Final environment lock established: numpy {numpy.__version__} | numba {numba.__version__}")
         except Exception as e:
             print(f"   ⚠ Final environment lock failed: {e}")
-        
+
+        # 🛡️ sitecustomize setup again after potential environment changes
+        try:
+            setup_sitecustomize()
+        except Exception as e:
+            print(f"⚠️ sitecustomize lock setup warning: {e}")
+            
+        # 🧹 Nuclear flash_attn removal — must run AFTER all installs are complete
+        print("🧹 Running final nuclear uninstallation of flash-attn...")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "flash-attn", "flash_attn"], capture_output=True)
+        except Exception as e:
+            print(f"⚠️ Nuclear uninstallation warning: {e}")
+            
         process_job()
     except Exception as e:
         print(f"❌ FATAL ERROR in Kaggle Worker: {e}")
