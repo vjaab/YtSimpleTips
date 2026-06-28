@@ -160,7 +160,7 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
     print(f"⌛ Waiting for Kaggle job ({kernel_id}) to finish...")
     
     max_queued_mins = 10
-    max_running_mins = 15
+    max_running_mins = 30
     poll_interval_s = 20
     absolute_timeout_s = (max_queued_mins + max_running_mins + 5) * 60
     
