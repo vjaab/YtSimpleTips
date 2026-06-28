@@ -740,8 +740,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 storyboard_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
-Given the following AI education script, break it down into a sequence of short narration segments (3-5 words each) and generate a detailed visual storyboard.
-You must produce at least 15-20 storyboard scenes to ensure fine-grained word-by-word alignment for the subtitles.
+Given the following AI education script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
+You must produce exactly 9-12 storyboard scenes to align with the 50-65 words script length.
 
 SCRIPT:
 {script_text}
