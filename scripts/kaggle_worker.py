@@ -1,7 +1,14 @@
 import sys
+import types
+import importlib.util
 # 🛡️ Poison pill for flash_attn to block imports globally at startup
-sys.modules['flash_attn'] = None
-sys.modules['flash_attn.flash_attn_interface'] = None
+_flash_attn_stub = types.ModuleType('flash_attn')
+_flash_attn_stub.__spec__ = importlib.util.spec_from_loader('flash_attn', loader=None)
+_flash_attn_stub.__version__ = '0.0.0'
+_flash_attn_stub.flash_attn_varlen_func = None
+_flash_attn_stub.flash_attn_func = None
+sys.modules['flash_attn'] = _flash_attn_stub
+sys.modules['flash_attn.flash_attn_interface'] = _flash_attn_stub
 
 import os
 os.environ["PYTHONHASHSEED"] = "0"
@@ -40,12 +47,19 @@ def setup_sitecustomize():
     
     patch_content = """# 🛡️ GLOBAL PYTORCH INFER_SCHEMA PATCH FOR Python 3.10+ Union Types Compatibility
 import sys
+import types
+import importlib.util
 import typing
 import builtins
 
 # 🛡️ Poison pill for flash_attn to block imports globally at Python startup
-sys.modules['flash_attn'] = None
-sys.modules['flash_attn.flash_attn_interface'] = None
+_flash_attn_stub = types.ModuleType('flash_attn')
+_flash_attn_stub.__spec__ = importlib.util.spec_from_loader('flash_attn', loader=None)
+_flash_attn_stub.__version__ = '0.0.0'
+_flash_attn_stub.flash_attn_varlen_func = None
+_flash_attn_stub.flash_attn_func = None
+sys.modules['flash_attn'] = _flash_attn_stub
+sys.modules['flash_attn.flash_attn_interface'] = _flash_attn_stub
 
 try:
     orig_import = builtins.__import__
@@ -362,8 +376,12 @@ def _patch_musetalk_inference_script():
                 content = f.read()
             if "Poison pill for flash_attn" not in content:
                 patch_code = """import sys
+import types
+import importlib.util
 # 🛡️ Poison pill for flash_attn to block imports in MuseTalk subprocess
-_flash_attn_stub = type(sys)('flash_attn')
+_flash_attn_stub = types.ModuleType('flash_attn')
+_flash_attn_stub.__spec__ = importlib.util.spec_from_loader('flash_attn', loader=None)
+_flash_attn_stub.__version__ = '0.0.0'
 _flash_attn_stub.flash_attn_varlen_func = None
 _flash_attn_stub.flash_attn_func = None
 sys.modules['flash_attn'] = _flash_attn_stub
