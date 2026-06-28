@@ -1,486 +1,994 @@
 [
   {
-    "title_options": ["Mistakes = Trust?!", "Perfect-ஆ இருக்காதீங்க!"],
-    "description": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா? Pratfall Effect உளவியல் உண்மை! #தெரியுமா #FactsInTamil #VJVideos",
-    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Pratfall_effect",
-    "title": "Mistakes = Trust?!",
-    "hook_script": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-    "problem_context": "நம்ம எல்லாரும் மத்தவங்க முன்னாடி ரொம்ப perfect-ஆ கெத்தா இருக்கணும்னு தான் நினைப்போம். ஆனா உண்மை என்ன தெரியுமா? அப்படி ரொம்ப perfect-ஆ குறையே இல்லாம இருந்தா யாருக்கும் உங்களை பிடிக்காது, உங்ககிட்ட பழகவும் தயங்குவாங்க...",
-    "solution_tech": "ஆனா அதுக்கு பதிலா, நீங்க பண்ற சின்ன சின்ன தப்புக்கள், தடுமாற்றங்கள் தான் உங்களை மத்தவங்ககிட்ட ரொம்ப நெருக்கமாக்கும்! இதை உளவியல்ல Pratfall Effect-னு சொல்லுவாங்க... அதாவது, ஒரு திறமையான, தகுதியான நபர் சில நேரங்கள்ல தப்பு பண்ணும்போது, அவங்க ரொம்ப சாதாரண மனிதனா தெரிவாங்க. இதனால அவங்க மேல நமக்கு ஒரு பரிவும், நம்பிக்கையும் தானா அதிகமாகும்னு அறிவியல் சொல்லுது...",
-    "retention_loop": "அதனால நீங்க தப்பு பண்ணும்போது பதற்றப்படாம, வெட்கப்படாம அதை இயல்பா ஏத்துக்கோங்க! உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-    "outro_cta": "நீங்க மத்தவங்க முன்னாடி perfect-ஆ இருக்க ட்ரை பண்ணுவீங்களா? கமெண்ட் பண்ணுங்க!",
-    "script": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா? நம்ம எல்லாரும் மத்தவங்க முன்னாடி ரொம்ப perfect-ஆ கெத்தா இருக்கணும்னு தான் நினைப்போம். ஆனா உண்மை என்ன தெரியுமா? அப்படி ரொம்ப perfect-ஆ குறையே இல்லாம இருந்தா யாருக்கும் உங்களை பிடிக்காது, உங்ககிட்ட பழகவும் தயங்குவாங்க... ஆனா அதுக்கு பதிலா, நீங்க பண்ற சின்ன சின்ன தப்புக்கள், தடுமாற்றங்கள் தான் உங்களை மத்தவங்ககிட்ட ரொம்ப நெருக்கமாக்கும்! இதை உளவியல்ல Pratfall Effect-னு சொல்லுவாங்க... அதாவது, ஒரு திறமையான, தகுதியான நபர் சில நேரங்கள்ல தப்பு பண்ணும்போது, அவங்க ரொம்ப சாதாரண மனிதனா தெரிவாங்க. இதனால அவங்க மேல நமக்கு ஒரு பரிவும், நம்பிக்கையும் தானா அதிகமாகும்னு அறிவியல் சொல்லுது... அதனால நீங்க தப்பு பண்ணும்போது பதற்றப்படாம, வெட்கப்படாம அதை இயல்பா ஏத்துக்கோங்க! உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா? நீங்க மத்தவங்க முன்னாடி perfect-ஆ இருக்க ட்ரை பண்ணுவீங்களா? கமெண்ட் பண்ணுங்க!",
-    "hook_text": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-    "relevant_links": ["https://en.wikipedia.org/wiki/Pratfall_effect"],
-    "phonetic_pronunciation_map": {"Pratfall": "Prat-fall"},
-    "hook": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-    "summary": "The Pratfall effect explains why competent people become more likeable when they make mistakes.",
-    "sub_category": "🧠 Psychology & Mind",
-    "breaking_news_level": 8,
-    "retention_cues": [
-      {"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}
+    "title": "AI-nu enna? Robot-a? Illa... 🤔",
+    "description": "Artificial Intelligence-nu solluvaanga — aana ithukku intelligence-ae illa. Reality check in Tanglish! #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Oru vishayam theriyuma? \"Artificial Intelligence\" -nu solluvaanga — aana ithukku intelligence-ae illa. Seriously. Ungal brain-la oru kuzhanthai paakkaradhukku, colour theriyum, face theriyum, emotions theriyum. Aana AI? Lakhs of photos paarthu, \"ithuvum ithuvum ithuvum — kuzhanthai\" nu matram learn pannidudhu. Pattern match thaan — think pannaadhu, feel pannaadhu, understand pannaadhu. Adhanaal thaan AI-kku simple questions-ae confuse aagudhu — aana chess-la world champion-a thokkudhu. Ithu pathi neenga enna nenaikkareenga? Comment pannunga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
     ],
+    "phonetic_pronunciation_map": {
+      "Intelligence": "In-tel-i-gens",
+      "Artificial": "Ar-ti-fi-shal"
+    },
+    "hook": "Oru vishayam theriyuma? AI-ku intelligence-ae illa!",
+    "summary": "AI is pattern recognition, not real intelligence.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "AI Tamil",
+      "Artificial Intelligence",
+      "VJ Videos",
+      "Tamil Tech"
+    ],
+    "hashtags": [
+      "#AITamil",
+      "#TechTamil",
+      "#VJVideos"
+    ],
+    "comment_bait_question": "AI-ku real intelligence illa-nu neenga neneikiringala? Comment pannunga!",
     "subtitle_chunks": [
       {
         "chunk_id": 1,
-        "text": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-        "english_caption": "TRUST BUILDER",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Cinematic photorealistic shot of a person smiling friendly, South Indian Tamil ethnicity, warm glowing office background, vertical 9:16 aspect ratio."
+        "text": "Oru vishayam theriyuma? \"Artificial Intelligence\" -nu solluvaanga —",
+        "english_caption": "WHAT IS AI",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A young South Indian man pointing at a glowing holographic text 'ARTIFICIAL INTELLIGENCE', 3D Pixar style, clay textures, expressive eyes, warm volume lighting, vertical 9:16."
       },
       {
         "chunk_id": 2,
-        "text": "நம்ம எல்லாரும் மத்தவங்க முன்னாடி ரொம்ப perfect-ஆ கெத்தா இருக்கணும்னு தான் நினைப்போம்.",
-        "english_caption": "THE PERFECT IMAGE",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A young South Indian professional adjusting their blazer in front of a mirror, confident but slightly tense look, modern clean room, vertical 9:16."
+        "text": "aana ithukku intelligence-ae illa. Seriously.",
+        "english_caption": "NO INTELLIGENCE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute cartoon robot looking confused with question marks floating around its head, scratching its head, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 3,
-        "text": "ஆனா உண்மை என்ன தெரியுமா? அப்படி ரொம்ப perfect-ஆ குறையே இல்லாம இருந்தா யாருக்கும் உங்களை பிடிக்காது,",
-        "english_caption": "PERFECTION TRAP",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A group of office colleagues sitting together, looking distantly and uncomfortably at a highly formal rigid person, cold office lighting, vertical 9:16."
+        "text": "Ungal brain-la oru kuzhanthai paakkaradhukku,",
+        "english_caption": "HUMAN BRAIN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close-up of a human brain glowing with warm soft light, digital energy pathways pulsing, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 4,
-        "text": "உங்ககிட்ட பழகவும் தயங்குவாங்க... ஆனா அதுக்கு பதிலா,",
-        "english_caption": "SOCIAL BARRIER",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A person standing alone at a social gathering, looking isolated while others converse in groups, soft ambient lighting, vertical 9:16."
+        "text": "colour theriyum, face theriyum, emotions theriyum.",
+        "english_caption": "HUMAN PERCEPTION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A happy South Indian child looking at a colorful butterfly, smiling with bright expressive eyes, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 5,
-        "text": "நீங்க பண்ற சின்ன சின்ன தப்புக்கள், தடுமாற்றங்கள் தான்",
-        "english_caption": "MAKING MISTAKES",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A person spilling a tiny bit of coffee from their mug onto a table, surprised but smiling expression, cinematic photorealistic vertical 9:16."
+        "text": "Aana AI? Lakhs of photos paarthu,",
+        "english_caption": "AI SEEING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A wall of thousands of floating glowing digital photos of baby faces zooming past, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 6,
-        "text": "உங்களை மத்தவங்ககிட்ட ரொம்ப நெருக்கமாக்கும்! இதை உளவியல்ல Pratfall Effect-னு சொல்லுவாங்க...",
-        "english_caption": "PRATFALL EFFECT",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Glowing neon text hologram saying 'PRATFALL EFFECT' floating over a smart desk, volumetric lighting, photorealistic cinematic vertical 9:16."
+        "text": "\"ithuvum ithuvum ithuvum — kuzhanthai\" nu matram learn pannidudhu.",
+        "english_caption": "PATTERN MATCHING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A robotic scanner highlighting eyes, nose, and mouth points on a photo, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 7,
-        "text": "அதாவது, ஒரு திறமையான, தகுதியான நபர் சில நேரங்கள்ல தப்பு பண்ணும்போது,",
-        "english_caption": "HUMAN BLUNDER",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A highly qualified female doctor dropping her pen during a presentation and laughing with the audience, warm classroom setting, vertical 9:16."
+        "text": "Pattern match thaan — think pannaadhu, feel pannaadhu,",
+        "english_caption": "NO FEELINGS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A robot heart shape light flickering off, metallic surface, warm volumetric background, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 8,
-        "text": "அவங்க ரொம்ப சாதாரண மனிதனா தெரிவாங்க.",
-        "english_caption": "MORE HUMAN",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up of a smiling South Indian manager talking casually with team members, friendly approachable atmosphere, cinematic lighting, vertical 9:16."
+        "text": "understand pannaadhu. Adhanaal thaan AI-kku",
+        "english_caption": "NO UNDERSTANDING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A robot trying to read a simple book and looking puzzled, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 9,
-        "text": "இதனால அவங்க மேல நமக்கு ஒரு பரிவும், நம்பிக்கையும் தானா அதிகமாகும்னு அறிவியல் சொல்லுது...",
-        "english_caption": "TRUST BOOST",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A crowd of people smiling and clapping warmly, heart emojis popping out, bright warm illumination, vertical 9:16."
+        "text": "simple questions-ae confuse aagudhu —",
+        "english_caption": "CONFUSED AI",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A computer screen displaying '1+1=?' with errors and smoke coming out, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 10,
-        "text": "அதனால நீங்க தப்பு பண்ணும்போது பதற்றப்படாம, வெட்கப்படாம அதை இயல்பா ஏத்துக்கோங்க!",
-        "english_caption": "EMBRACE IMPERFECTION",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A confident young South Indian person smiling and gesturing 'it is okay' with hands, beautiful sunny background, vertical 9:16."
+        "text": "aana chess-la world champion-a thokkudhu.",
+        "english_caption": "CHESS WINNER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A giant metallic robotic arm moving a chess piece, winning a game against a shocked human player, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 11,
-        "text": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?",
-        "english_caption": "BUILD TRUST",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Cinematic photorealistic shot of two people shaking hands warmly, glowing light between hands, modern office environment, vertical 9:16."
-      },
-      {
-        "chunk_id": 12,
-        "text": "நீங்க மத்தவங்க முன்னாடி perfect-ஆ இருக்க ட்ரை பண்ணுவீங்களா? கமெண்ட் பண்ணுங்க!",
+        "text": "Ithu pathi neenga enna nenaikkareenga? Comment pannunga!",
         "english_caption": "COMMENT BELOW",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up of fingers typing a comment on a smartphone screen, phone interface visible, colorful blurred background, vertical 9:16."
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Close-up of a smartphone screen showing Tamil comments popping up with heart emojis, 3D Pixar style, vertical 9:16."
       }
-    ],
-    "original_news_headline": "The Pratfall Effect: How making mistakes makes you more likeable",
-    "original_news_url": "https://en.wikipedia.org/wiki/Pratfall_effect",
-    "keywords": ["Pratfall Effect", "Psychology", "Social Hack", "Tamil Facts"],
-    "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
-    "comment_hook": "உங்க மேல மத்தவங்களுக்கு நம்பிக்கை வரணுமா?"
+    ]
   },
   {
-    "title_options": ["Procrastination-அ விரட்டுங்க!", "2-Minute Productivity Hack!"],
-    "description": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா? இந்த simple டூ-மினிட் ரூலை உடனே ட்ரை பண்ணுங்க! #தெரியுமா #FactsInTamil #VJVideos",
-    "use_case_evidence_url": "https://todoist.com/productivity-methods/two-minute-rule",
-    "title": "Procrastination-அ விரட்டுங்க!",
-    "hook_script": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-    "problem_context": "நம்ம எல்லாருக்கும் ஏதாவது ஒரு முக்கியமான வேலையை நாளைக்கு பாத்துக்கலாம்னு தள்ளிப்போடுற வழக்கம் கண்டிப்பா இருக்கும். ஆனா இதை தடுக்க ஒரு சூப்பர் வழி இருக்கு, அதுதான் இந்த டூ-மினிட் ரூல்...",
-    "solution_tech": "விதி ரொம்ப சிம்பிள்! நீங்க செய்ய வேண்டிய ஒரு வேலையை முடிக்க இரண்டு நிமிஷத்துக்கும் கம்மியான நேரம் தான் ஆகும்னா, அதை யோசிக்கவே செய்யாம உடனே செஞ்சு முடிச்சிரணும்! உதாரணத்துக்கு, ஒரு முக்கியமான மெயிலுக்கு ரிப்ளை பண்றது, குப்பையை வெளிய போடுறது, அல்லது உங்க பெட்டியை மடிச்சு வைக்கிறது! இப்படி சின்ன சின்ன வேலைகளை நீங்க உடனே செய்யும்போது உங்க மூளைக்கு ஒரு புதிய momentum கிடைக்கும். இதனால பெரிய வேலைகளையும் நீங்க தள்ளிப்போடாம ஈஸியா செய்ய ஆரம்பிப்பீங்க...",
-    "retention_loop": "அதனால எந்த வேலையையும் இரண்டு நிமிஷத்துக்குள்ள முடிக்க முடியுமானா உடனே செய்யுங்க! வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-    "outro_cta": "நீங்க அதிகமா வேலையை தள்ளிப்போடுவீங்களா? கமெண்ட் பண்ணுங்க!",
-    "script": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா? நம்ம எல்லாருக்கும் ஏதாவது ஒரு முக்கியமான வேலையை நாளைக்கு பாத்துக்கலாம்னு தள்ளிப்போடுற வழக்கம் கண்டிப்பா இருக்கும். ஆனா இதை தடுக்க ஒரு சூப்பர் வழி இருக்கு, அதுதான் இந்த டூ-மினிட் ரூல்... விதி ரொம்ப சிம்பிள்! நீங்க செய்ய வேண்டிய ஒரு வேலையை முடிக்க இரண்டு நிமிஷத்துக்கும் கம்மியான நேரம் தான் ஆகும்னா, அதை யோசிக்கவே செய்யாம உடனே செஞ்சு முடிச்சிரணும்! உதாரணத்துக்கு, ஒரு முக்கியமான மெயிலுக்கு ரிப்ளை பண்றது, குப்பையை வெளிய போடுறது, அல்லது உங்க பெட்டியை மடிச்சு வைக்கிறது! இப்படி சின்ன சின்ன வேலைகளை நீங்க உடனே செய்யும்போது உங்க மூளைக்கு ஒரு புதிய momentum கிடைக்கும். இதனால பெரிய வேலைகளையும் நீங்க தள்ளிப்போடாம ஈஸியா செய்ய ஆரம்பிப்பீங்க... அதனால எந்த வேலையையும் இரண்டு நிமிஷத்துக்குள்ள முடிக்க முடியுமானா உடனே செய்யுங்க! வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா? நீங்க அதிகமா வேலையை தள்ளிப்போடுவீங்களா? கமெண்ட் பண்ணுங்க!",
-    "hook_text": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-    "relevant_links": ["https://todoist.com/productivity-methods/two-minute-rule"],
-    "phonetic_pronunciation_map": {"todoist": "to-do-ist"},
-    "hook": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-    "summary": "The two-minute rule helps combat procrastination by starting small.",
-    "sub_category": "🚀 Productivity & Time Tips",
-    "breaking_news_level": 8,
-    "retention_cues": [
-      {"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}
+    "title": "Iniku 10 times AI use panneenga — theriyaama! 😱",
+    "description": "Kaalaila ezhundhu phone eduththu unlock panneenga — AI. WhatsApp, Maps, Swiggy — everything is AI! #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Kaalaila ezhundhu phone eduththu unlock panneenga — AI. WhatsApp-la voice message Tamil-a type aachu — AI. Google Maps traffic avoid pannudhu — AI. Swiggy-la \"You might like\" solludhu — AI. Bank fraud alert SMS vandhadhu — AI. Ivlo use panneenga — aana theriyaama pochu, illa? Ithukku reason — good AI invisible-a irukum. Neenga notice pannaadha madhiri work pannudha mathiri design pannuvaanga. Naalaikku innum interesting — ithellam ethana learn pannudhu, eppadi learn pannudhu nu paapom. Follow pannunga — miss aagadheenga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
     ],
+    "phonetic_pronunciation_map": {
+      "unlock": "un-lok",
+      "WhatsApp": "Wats-ap",
+      "Swiggy": "Swig-ee"
+    },
+    "hook": "Iniku 10 times AI use panneenga — theriyaama!",
+    "summary": "AI is already deeply embedded and invisible in daily Tamil life.",
+    "sub_category": "🤖 Simple AI Hacks for Everyone",
+    "breaking_news_level": 8,
+    "keywords": [
+      "Daily AI",
+      "WhatsApp AI",
+      "Swiggy",
+      "Google Maps",
+      "Tamil Tech"
+    ],
+    "hashtags": [
+      "#DailyAI",
+      "#AITamil",
+      "#TechTamil"
+    ],
+    "comment_bait_question": "Neenga iniku Swiggy use panneengala? Comment-la sollunga!",
     "subtitle_chunks": [
       {
         "chunk_id": 1,
-        "text": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-        "english_caption": "STOP PROCRASTINATING",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A person looking at a huge pile of work documents, feeling overwhelmed, clock ticking in the background, dramatic cinematic lighting, vertical 9:16."
+        "text": "Kaalaila ezhundhu phone eduththu unlock panneenga — AI.",
+        "english_caption": "FACE UNLOCK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A young South Indian man unlocking his phone with face recognition, glowing scanner lines, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 2,
-        "text": "நம்ம எல்லாருக்கும் ஏதாவது ஒரு முக்கியமான வேலையை நாளைக்கு பாத்துக்கலாம்னு தள்ளிப்போடுற வழக்கம் கண்டிப்பா இருக்கும்.",
-        "english_caption": "DAILY HABIT",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A young South Indian man sleeping on desk, laptop open with task lists, cozy room with neon light accents, vertical 9:16."
+        "text": "WhatsApp-la voice message Tamil-a type aachu — AI.",
+        "english_caption": "SPEECH TO TEXT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing text bubble showing Tamil letters pop up as someone speaks into WhatsApp, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 3,
-        "text": "ஆனா இதை தடுக்க ஒரு சூப்பர் வழி இருக்கு, அதுதான் இந்த டூ-மினிட் ரூல்...",
-        "english_caption": "TWO-MINUTE RULE",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A digital countdown timer on a phone screen showing exactly '02:00' glowing in vibrant lime green, clean modern background, vertical 9:16."
+        "text": "Google Maps traffic avoid pannudhu — AI.",
+        "english_caption": "TRAFFIC ROUTING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing digital map showing red and green traffic lines with alternative routing arrows, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 4,
-        "text": "விதி ரொம்ப சிம்பிள்! நீங்க செய்ய வேண்டிய ஒரு வேலையை முடிக்க இரண்டு நிமிஷத்துக்கும் கம்மியா இருந்தா,",
-        "english_caption": "SIMPLE RULE",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Macro shot of a clock gear turning smoothly in golden light, highly detailed mechanical movement, vertical 9:16."
+        "text": "Swiggy-la \"You might like\" solludhu — AI.",
+        "english_caption": "FOOD RECOMMENDATION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A smartphone screen showing delicious Biryani recommendation on a food delivery app, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 5,
-        "text": "அதை யோசிக்கவே செய்யாம உடனே செஞ்சு முடிச்சிரணும்!",
-        "english_caption": "DO IT NOW",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A hand instantly sorting files on a clean workspace, fast motion, bright clean office room, photorealistic vertical 9:16."
+        "text": "Bank fraud alert SMS vandhadhu — AI.",
+        "english_caption": "FRAUD DETECTION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A digital shield glowing red, blocking an incoming spam message on a phone, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 6,
-        "text": "உதாரணத்துக்கு, ஒரு முக்கியமான மெயிலுக்கு ரிப்ளை பண்றது, குப்பையை வெளிய போடுறது, அல்லது பெட்டியை மடிச்சு வைக்கிறது!",
-        "english_caption": "SMALL TASKS",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up of fingers typing quickly on a phone keyboard, cleaning email app inbox, vertical 9:16."
+        "text": "Ivlo use panneenga — aana theriyaama pochu, illa?",
+        "english_caption": "DID YOU KNOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A South Indian guy looking in shock and scratching his chin, warm cozy background, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 7,
-        "text": "இப்படி சின்ன சின்ன வேலைகளை நீங்க உடனே செய்யும்போது உங்க மூளைக்கு ஒரு புதிய momentum கிடைக்கும்.",
-        "english_caption": "GET MOMENTUM",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A stylized digital energy flow rising upward, bright neon spark trails representing brain activity and motivation, vertical 9:16."
+        "text": "Ithukku reason — good AI invisible-a irukum.",
+        "english_caption": "INVISIBLE AI",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Abstract representation of digital data flows running invisibly through everyday home objects, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 8,
-        "text": "இதனால பெரிய வேலைகளையும் நீங்க தள்ளிப்போடாம ஈஸியா செய்ய ஆரம்பிப்பீங்க...",
-        "english_caption": "EASY EFFORT",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A happy South Indian young professional smiling confidently, crossing off an item on a large tasks list, volumetric lighting, vertical 9:16."
+        "text": "Neenga notice pannaadha madhiri work pannudha mathiri design pannuvaanga.",
+        "english_caption": "SMOOTH DESIGN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A person sitting relaxed at home while smart devices glow softly around them, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 9,
-        "text": "அதனால எந்த வேலையையும் இரண்டு நிமிஷத்துக்குள்ள முடிக்க முடியுமானா உடனே செய்யுங்க!",
-        "english_caption": "NO DELAY",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A running stop-watch held in hand in outdoor park, focus on the seconds needle ticking forward, vertical 9:16."
+        "text": "Naalaikku innum interesting — ithellam ethana learn pannudhu, eppadi learn pannudhu nu paapom.",
+        "english_caption": "NEXT EPISODE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A calendar turning to the next day with glowing sparkles, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 10,
-        "text": "வேலையை தள்ளிப்போடுற பழக்கம் இருக்கா?",
-        "english_caption": "DO YOU PROCRASTINATE",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A close up of a thoughtful South Indian man looking up at a clock, cinematic warm lighting, detailed skin texture, vertical 9:16."
-      },
-      {
-        "chunk_id": 11,
-        "text": "நீங்க அதிகமா வேலையை தள்ளிப்போடுவீங்களா? கமெண்ட் பண்ணுங்க!",
-        "english_caption": "COMMENT BELOW",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up of a mobile screen showing a comment section loading quickly with thumbs up icons, vertical 9:16."
+        "text": "Follow pannunga — miss aagadheenga!",
+        "english_caption": "FOLLOW VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A giant glowing 'Follow' button floating in warm volumetric space, 3D Pixar style, vertical 9:16."
       }
-    ],
-    "original_news_headline": "The Two-Minute Rule: How to stop procrastinating",
-    "original_news_url": "https://todoist.com/productivity-methods/two-minute-rule",
-    "keywords": ["Productivity", "Two-Minute Rule", "Life Hacks", "Time Management"],
-    "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
-    "comment_hook": "நீங்க வேலையை தள்ளிப்போடுவீங்களா? கமெண்ட் பண்ணுங்க!"
+    ]
   },
   {
-    "title_options": ["பொங்காம இருக்க Magic Hack!", "Kitchen Tips Tamil!"],
-    "description": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா? இந்த மேஜிக் ஹேக் உங்களுக்கு தான்! #தெரியுமா #FactsInTamil #VJVideos",
-    "use_case_evidence_url": "https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/",
-    "title": "பொங்காம இருக்க Magic Hack!",
-    "hook_script": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-    "problem_context": "சமையலறையில வேலை செய்யும்போது பால் அல்லது கொதிக்கிற சுடுதண்ணி பாத்திரத்தை விட்டு வெளிய பொங்கி வழிஞ்சு அடுப்பை எல்லாம் பாழாக்குறது பெரிய தொல்லையா இருக்கும். ஆனா இதை தடுக்க ஒரு சூப்பர் மேஜிக் ஹேக் இருக்கு...",
-    "solution_tech": "அது வேற ஒன்னும் இல்ல, பாத்திரத்தோட வாய் பகுதிக்கு மேல ஒரு மர கரண்டியை இப்படி குறுக்க வச்சிடுங்க! எவ்வளவு வேகமா கொதிச்சாலும் பால் வெளிய பொங்கி வராது! ஏன்னா, மர கரண்டி ஒரு hydrophobic பொருள், அதாவது இது ஈரப்பதத்தை விரட்டும் தன்மை கொண்டது. கொதிச்சு மேல வர்ற சூடான குமிழிகள் இந்த மர கரண்டியை தொட்ட உடனே உடைஞ்சு போயிடும்... இதனால அடுப்பு சுத்தமா இருக்கும், உங்க சமையலும் நிம்மதியா முடியும்...",
-    "retention_loop": "அதனால சமைக்கும்போது பாத்திரத்துக்கு மேல ஒரு மர கரண்டியை வைக்க மறக்காதீங்க! சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-    "outro_cta": "நீங்க இந்த ஹேக்கை இதுவரைக்கும் ட்ரை பண்ணி இருக்கீங்களா? கமெண்ட் பண்ணுங்க!",
-    "script": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா? சமையலறையில வேலை செய்யும்போது பால் அல்லது கொதிக்கிற சுடுதண்ணி பாத்திரத்தை விட்டு வெளிய பொங்கி வழிஞ்சு அடுப்பை எல்லாம் பாழாக்குறது பெரிய தொல்லையா இருக்கும். ஆனா இதை தடுக்க ஒரு சூப்பர் மேஜிக் ஹேக் இருக்கு... அது வேற ஒன்னும் இல்ல, பாத்திரத்தோட வாய் பகுதிக்கு மேல ஒரு மர கரண்டியை இப்படி குறுக்க வச்சிடுங்க! எவ்வளவு வேகமா கொதிச்சாலும் பால் வெளிய பொங்கி வராது! ஏன்னா, மர கரண்டி ஒரு hydrophobic பொருள், அதாவது இது ஈரப்பதத்தை விரட்டும் தன்மை கொண்டது. கொதிச்சு மேல வர்ற சூடான குமிழிகள் இந்த மர கரண்டியை தொட்ட உடனே உடைஞ்சு போயிடும்... இதனால அடுப்பு சுத்தமா இருக்கும், உங்க சமையலும் நிம்மதியா முடியும்... அதனால சமைக்கும்போது பாத்திரத்துக்கு மேல ஒரு மர கரண்டியை வைக்க மறக்காதீங்க! சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா? நீங்க இந்த ஹேக்கை இதுவரைக்கும் ட்ரை பண்ணி இருக்கீங்களா? கமெண்ட் பண்ணுங்க!",
-    "hook_text": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-    "relevant_links": ["https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/"],
-    "phonetic_pronunciation_map": {"hydrophobic": "hy-dro-pho-bic"},
-    "hook": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-    "summary": "Placing a wooden spoon over a pot prevents boiling over due to its hydrophobic nature.",
-    "sub_category": "🏠 Daily Life & Home Hacks",
-    "breaking_news_level": 8,
-    "retention_cues": [
-      {"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}
+    "title": "AI eppadi learn pannudhu? Ithuvum school mathiri thaan! 📚",
+    "description": "School-la teacher test panra mathiri thaan AI-um training edukkum! Shocking ChatGPT fact inside. #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Neenga school-la eppadi learn panneenga? Teacher question ketkaar — neenga answer solluvenga — wrong-na correct pannuvaar — brain update aagum. Repeat pannuvaar — neenga learn pannuveega. Exact same logic thaan AI-kku. Lakhs of cat photos kaattuvaanga — \"ithhu cat\" nu solluvaanga. AI wrong-a predict pannaa — correct pannivaanga. Millions of times repeat — AI learn pannidum. Ithuku \"Training\" nu solluvaanga. Oru shocking vishayam — ChatGPT-ku training-ku internet-la irukka almost ellaa text-um use pannaaanga — books, articles, Reddit, everything. Adhanaal thaan Tamil-a ketkeenga-nu romba wrong-a answer solludhu — Tamil training data kuravu. Ithu pathi innum therinja comment pannunga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
     ],
+    "phonetic_pronunciation_map": {
+      "supervised": "soo-per-vized",
+      "ChatGPT": "Chat-jee-pee-tee"
+    },
+    "hook": "AI-um school student mathiri thaan learn pannum!",
+    "summary": "AI training relies on feedback loop analogy of school learning.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "Supervised Learning",
+      "ChatGPT Tamil",
+      "AI Training",
+      "Tamil Education"
+    ],
+    "hashtags": [
+      "#AITamil",
+      "#TechTamil",
+      "#ChatGPT"
+    ],
+    "comment_bait_question": "Neenga ChatGPT-a Tamil-la use panni irukingala? Comment-la sollunga!",
     "subtitle_chunks": [
       {
         "chunk_id": 1,
-        "text": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-        "english_caption": "BOILING OVER",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A pot of boiling milk overflowing onto a clean kitchen stove, steam rising, dramatic cinematic close-up, vertical 9:16."
+        "text": "Neenga school-la eppadi learn panneenga?",
+        "english_caption": "SCHOOL DAYS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute 3D cartoon classroom with colorful desks, sunbeams coming through windows, Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 2,
-        "text": "சமையலறையில வேலை செய்யும்போது பால் அல்லது கொதிக்கிற சுடுதண்ணி பாத்திரத்தை விட்டு வெளிய பொங்கி வழிஞ்சு",
-        "english_caption": "KITCHEN MESS",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A messy kitchen counter with spilt boiling liquid on a metal gas stove, steam escaping, realistic textures, vertical 9:16."
+        "text": "Teacher question ketkaar — neenga answer solluvenga — wrong-na correct pannuvaar — brain update aagum.",
+        "english_caption": "FEEDBACK LOOP",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A friendly teacher pointing at a blackboard with a drawing of a smiling brain, Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 3,
-        "text": "அடுப்பை எல்லாம் பாழாக்குறது பெரிய தொல்லையா இருக்கும். ஆனா இதை தடுக்க ஒரு சூப்பர் மேஜிக் ஹேக் இருக்கு...",
-        "english_caption": "MAGIC HACK",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A clean wooden spoon resting across the top rim of a boiling pot, steam swirling gently around it, cinematic lighting, vertical 9:16."
+        "text": "Repeat pannuvaar — neenga learn pannuveega. Exact same logic thaan AI-kku.",
+        "english_caption": "SAME LOGIC",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute robot sitting at a school desk writing with a glowing pencil, Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 4,
-        "text": "அது வேற ஒன்னும் இல்ல, பாத்திரத்தோட வாய் பகுதிக்கு மேல ஒரு மர கரண்டியை இப்படி குறுக்க வச்சிடுங்க!",
-        "english_caption": "WOODEN SPOON HACK",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up shot of a hand placing a flat wooden spoon over the mouth of a stainless steel pot on a modern gas stove, vertical 9:16."
+        "text": "Lakhs of cat photos kaattuvaanga — \"ithhu cat\" nu solluvaanga.",
+        "english_caption": "CAT IMAGES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Grid of thousands of colorful cat photos displayed on digital screens, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 5,
-        "text": "எவ்வளவு வேகமா கொதிச்சாலும் பால் வெளிய பொங்கி வராது! ஏன்னா, மர கரண்டி ஒரு hydrophobic பொருள்,",
-        "english_caption": "HYDROPHOBIC",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Scientific animation showing water molecules bouncing off a dry wooden fiber surface, high detail 8K vertical 9:16."
+        "text": "AI wrong-a predict pannaa — correct pannivaanga.",
+        "english_caption": "CORRECTION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A red 'X' mark turning into a green checkmark on a robot monitor interface, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 6,
-        "text": "அதாவது இது ஈரப்பதத்தை விரட்டும் தன்மை கொண்டது. கொதிச்சு மேல வர்ற சூடான குமிழிகள்",
-        "english_caption": "BUBBLE BREAKER",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "High speed slow-motion macro shot of boiling water bubbles bursting as they make contact with a dry wooden surface, vertical 9:16."
+        "text": "Millions of times repeat — AI learn pannidum. Ithuku \"Training\" nu solluvaanga.",
+        "english_caption": "AI TRAINING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Data streams flowing rapidly into a glowing server CPU, Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 7,
-        "text": "இந்த மர கரண்டியை தொட்ட உடனே உடைஞ்சு போயிடும்...",
-        "english_caption": "NO SPILL",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A pot on a gas stove boiling vigorously, but the bubbles break perfectly under the wooden spoon, preventing any spill, vertical 9:16."
+        "text": "Oru shocking vishayam — ChatGPT-ku training-ku internet-la irukka almost ellaa text-um use pannaaanga —",
+        "english_caption": "BIG DATA",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A massive swirling library of digital glowing books and web pages, volumetric light, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 8,
-        "text": "இதனால அடுப்பு சுத்தமா இருக்கும், உங்க சமையலும் நிம்மதியா முடியும்...",
-        "english_caption": "CLEAN STOVE",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A clean, sparkling South Indian kitchen countertop with a smiling cook in the background, bright soft lighting, vertical 9:16."
+        "text": "books, articles, Reddit, everything.",
+        "english_caption": "ALL SOURCES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A digital globe showing network connections across various forums and sites, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 9,
-        "text": "அதனால சமைக்கும்போது பாத்திரத்துக்கு மேல ஒரு மர கரண்டியை வைக்க மறக்காதீங்க!",
-        "english_caption": "EASY KITCHEN",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A collection of beautiful clean wooden kitchen utensils in a ceramic pot, sunbeams shining through kitchen window, vertical 9:16."
+        "text": "Adhanaal thaan Tamil-a ketkeenga-nu romba wrong-a answer solludhu —",
+        "english_caption": "TAMIL WRONG",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A smartphone chat screen displaying weird broken Tamil words with error signs, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 10,
-        "text": "சமைக்கும்போது பால் அல்லது சுடுதண்ணி பொங்கி வழியுதா?",
-        "english_caption": "BOILING OVER AGAIN",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A close up of a boiling pot starting to overflow, dramatic steam, bright hot elements, vertical 9:16."
-      },
-      {
-        "chunk_id": 11,
-        "text": "நீங்க இந்த ஹேக்கை இதுவரைக்கும் ட்ரை பண்ணி இருக்கீங்களா? கமெண்ட் பண்ணுங்க!",
-        "english_caption": "COMMENT BELOW",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A hand holding a mobile phone showing a comment section with active replies, modern light themed app interface, vertical 9:16."
+        "text": "Tamil training data kuravu. Ithu pathi innum therinja comment pannunga!",
+        "english_caption": "DATA DEFICIT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A small cup of glowing liquid vs a giant bucket representing dataset differences, 3D Pixar style, vertical 9:16."
       }
-    ],
-    "original_news_headline": "Why a wooden spoon stops boiling over",
-    "original_news_url": "https://todayyoushouldknow.com/why-does-a-wooden-spoon-stop-water-from-boiling-over-in-a-pot/",
-    "keywords": ["Kitchen Hacks", "Home Tips", "Boiling Pot Hack", "Tamil Life Hacks"],
-    "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
-    "comment_hook": "நீங்க இந்த ஹேக் ட்ரை பண்ணி இருக்கீங்களா? கமெண்ட் பண்ணுங்க!"
+    ]
   },
   {
-    "title_options": ["Venus Mystery Day vs Year", "Space Facts in Tamil"],
-    "description": "வீனஸ் கிரகத்தில் ஒரு நாள் ஒரு வருடத்தை விட பெரியதா?! ஆச்சரியமான விண்வெளி குறிப்புகள்! #தெரியுமா #FactsInTamil #VJVideos",
-    "use_case_evidence_url": "https://www.rmg.co.uk/stories/topics/day-longer-than-year-venus",
-    "title": "Venus-ல ஒரு நாள் ஒரு வருஷத்தை விட பெருசு!",
-    "hook_script": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-    "problem_context": "பூமியில ஒரு நாளோட அளவு இருபத்தி நாலு மணி நேரம், ஆனா சூரிய குடும்பத்துல இருக்குற ஒரு கிரகத்துல ஒரு நாள்ங்கிறது ஒரு வருடத்தை விட ரொம்ப பெருசுன்னா உங்களால நம்ப முடியுதா...",
-    "solution_tech": "அதுதான் வீனஸ் அதாவது வெள்ளி கிரகம்! வீனஸ் தன்னைத்தானே தன் அச்சில் ஒரு முறை சுத்தி வர இருநூற்று நாற்பத்தி மூன்று பூமி நாட்கள் எடுத்துக்குது. ஆனா சூரியனை ஒரு முறை சுத்தி வர வெறும் இருநூற்று இருபத்தி ஐந்து பூமி நாட்கள் தான் ஆகுது! இதனால வீனஸ்ல ஒரு வருடம் முடிஞ்சா கூட அங்க ஒரு நாள் முடியாதாம்! சூரிய குடும்பத்திலேயே ரொம்ப மெதுவா சுழலும் கிரகம் இதுதான்...",
-    "retention_loop": "கேக்கவே ஆச்சரியமா இருக்குல? அதனாலதான் அங்க ஒரு வருடம் முன்னாடியே முடிஞ்சுடுது! நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-    "outro_cta": "வெள்ளி கிரகம் பத்தி உங்களுக்கு வேற என்ன சுவாரசியமான விஷயம் தெரியும்? கமெண்ட் பண்ணுங்க!",
-    "script": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு! பூமியில ஒரு நாளோட அளவு இருபத்தி நாலு மணி நேரம், ஆனா சூரிய குடும்பத்துல இருக்குற ஒரு கிரகத்துல ஒரு நாள்ங்கிறது ஒரு வருடத்தை விட ரொம்ப பெருசுன்னா உங்களால நம்ப முடியுதா... அதுதான் வீனஸ் அதாவது வெள்ளி கிரகம்! வீனஸ் தன்னைத்தானே தன் அச்சில் ஒரு முறை சுத்தி வர இருநூற்று நாற்பத்தி மூன்று பூமி நாட்கள் எடுத்துக்குது. ஆனா சூரியனை ஒரு முறை சுத்தி வர வெறும் இருநூற்று இருபத்தி ஐந்து பூமி நாட்கள் தான் ஆகுது! இதனால வீனஸ்ல ஒரு வருடம் முடிஞ்சா கூட அங்க ஒரு நாள் முடியாதாம்! சூரிய குடும்பத்திலேயே ரொம்ப மெதுவா சுழலும் கிரகம் இதுதான்... கேக்கவே ஆச்சரியமா இருக்குல? அதனாலதான் அங்க ஒரு வருடம் முன்னாடியே முடிஞ்சுடுது! நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு! வெள்ளி கிரகம் பத்தி உங்களுக்கு வேற என்ன சுவாரசியமான விஷயம் தெரியும்? கமெண்ட் பண்ணுங்க!",
-    "hook_text": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-    "relevant_links": ["https://www.rmg.co.uk/stories/topics/day-longer-than-year-venus"],
-    "phonetic_pronunciation_map": {"Venus": "Vee-nus"},
-    "hook": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-    "summary": "Venus has a rotation period longer than its orbital period, making its day longer than its year.",
-    "sub_category": "🧪 Science & Space",
-    "breaking_news_level": 8,
-    "retention_cues": [
-      {"timestamp": 2.0, "effect": "zoom_in", "reason": "hook_impact"}
+    "title": "AI genius-a? Illai - Ithellam AI-ku theriyaadhu! 🤯",
+    "description": "ChatGPT lies?! Learn what Hallucination is and why AI fails in local contexts. #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Oru vishayam theriyuma? ChatGPT-kitta \"Chennai-la best hospital ennadhu?\" ketkeenga-na — confident-a wrong hospital name solludum. Ithuku \"Hallucination\" nu solluvaanga — AI lie pannuvadhillai, aana guess pannudhu. Oru manushanukku \"innaiku saapda villai\" nu theriyum — feel aagum. AI-ku theriyaadhu — data illana, answer illai. Oru more thing — training data-la bias irundha, AI-um biased-a irukum. America data-la train aana AI, India-ku advice solludha-na — wrong-a irukum. Adhanaal AI-a tool-a use pannum-pothu, boss-a treat pannadheenga. Ithu pathi ungalukku AI wrong sollidha experience irukka? Comment-la sollunga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
     ],
+    "phonetic_pronunciation_map": {
+      "Hallucination": "Hal-oo-si-ney-shun",
+      "bias": "by-as"
+    },
+    "hook": "ChatGPT confidence-a poi sollum-nu theriyuma?",
+    "summary": "AI limitations explained: hallucination, training bias, and why it has no common sense.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "AI Hallucination",
+      "Bias in AI",
+      "ChatGPT Failure",
+      "Tamil AI Info"
+    ],
+    "hashtags": [
+      "#AIHallucination",
+      "#AITamil",
+      "#TechTamil"
+    ],
+    "comment_bait_question": "Ungalukku AI wrong answer panni irukka? Comment-la sollunga!",
     "subtitle_chunks": [
       {
         "chunk_id": 1,
-        "text": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-        "english_caption": "WEIRD PLANET",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Cinematic shot of planet Venus rotating slowly in deep dark space, yellow toxic atmosphere glowing under sunlight, high detail 8K vertical 9:16."
+        "text": "Oru vishayam theriyuma?",
+        "english_caption": "DID YOU KNOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close up of a South Indian guy looking with a raised eyebrow, warm golden background, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 2,
-        "text": "பூமியில ஒரு நாளோட அளவு இருபத்தி நாலு மணி நேரம்,",
-        "english_caption": "EARTH TIME",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A modern analog wall clock ticking forward, sunbeams coming from the window showing passing of day, clean design, vertical 9:16."
+        "text": "ChatGPT-kitta \"Chennai-la best hospital ennadhu?\" ketkeenga-na — confident-a wrong hospital name solludum.",
+        "english_caption": "CONFIDENT LIE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute robot smiling and proudly handing over a map pointing at a blank spot in Chennai, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 3,
-        "text": "ஆனா சூரிய குடும்பத்துல இருக்குற ஒரு கிரகத்துல ஒரு நாள்ங்கிறது",
-        "english_caption": "SPACE MYSTERY",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A wide shot of our solar system, planets revolving around a hot glowing Sun in deep space, vertical 9:16."
+        "text": "Ithuku \"Hallucination\" nu solluvaanga — AI lie pannuvadhillai, aana guess pannudhu.",
+        "english_caption": "HALLUCINATION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing letters forming the word 'HALLUCINATION' in smoke and mirages, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 4,
-        "text": "ஒரு வருடத்தை விட ரொம்ப பெருசுன்னா உங்களால நம்ப முடியுதா...",
-        "english_caption": "MIND BLOWING",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A young South Indian man pointing at a space diagram in astonishment, wide open eyes, cinematic lighting, vertical 9:16."
+        "text": "Oru manushanukku \"innaiku saapda villai\" nu theriyum — feel aagum.",
+        "english_caption": "HUMAN FEELINGS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A young South Indian man rubbing his stomach, feeling hungry with a sad cartoon expression, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 5,
-        "text": "அதுதான் வீனஸ் அதாவது வெள்ளி கிரகம்! வீனஸ் தன்னைத்தானே தன் அச்சில் ஒரு முறை சுத்தி வர",
-        "english_caption": "PLANET VENUS",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Close-up shot of planet Venus rotating slowly on its axis, stars shining in deep space background, realistic textures, vertical 9:16."
+        "text": "AI-ku theriyaadhu — data illana, answer illai.",
+        "english_caption": "NO DATA NO ANS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "An empty server cabinet with a blinking warning light, data missing, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 6,
-        "text": "இருநூற்று நாற்பத்தி மூன்று பூமி நாட்கள் எடுத்துக்குது.",
-        "english_caption": "SLOW ROTATION",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A split space diagram showing a watch spinning slowly alongside an orbital path of Venus, starry space backdrop, vertical 9:16."
+        "text": "Oru more thing — training data-la bias irundha, AI-um biased-a irukum.",
+        "english_caption": "DATA BIAS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A scale balance heavily tilted to one side in digital grid space, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 7,
-        "text": "ஆனா சூரியனை ஒரு முறை சுத்தி வர வெறும் இருநூற்று இருபத்தி ஐந்து பூமி நாட்கள் தான் ஆகுது!",
-        "english_caption": "FAST ORBIT",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A wider space tracking shot showing Venus orbiting quickly around the bright hot Sun, solar flares visible, cinematic vertical 9:16."
+        "text": "America data-la train aana AI, India-ku advice solludha-na — wrong-a irukum.",
+        "english_caption": "LOCAL CONTEXT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A mismatch comparison showing a snowy NY street vs a hot bustling street in Chennai, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 8,
-        "text": "இதனால வீனஸ்ல ஒரு வருடம் முடிஞ்சா கூட அங்க ஒரு நாள் முடியாதாம்!",
-        "english_caption": "DAY VS YEAR",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A symbolic design depicting a digital calendar flipping pages forward while a clock hand stays frozen, glowing futuristic look, vertical 9:16."
+        "text": "Adhanaal AI-a tool-a use pannum-pothu, boss-a treat pannadheenga.",
+        "english_caption": "IT IS A TOOL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A hand holding a hammer tool with a glowing digital overlay, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 9,
-        "text": "சூரிய குடும்பத்திலேயே ரொம்ப மெதுவா சுழலும் கிரகம் இதுதான்...",
-        "english_caption": "SLOWEST SPIN",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Planet Venus revolving extremely slowly compared to other fast spinning planets in a stylized space render, vertical 9:16."
+        "text": "Ithu pathi ungalukku AI wrong sollidha experience irukka? Comment-la sollunga!",
+        "english_caption": "YOUR STORY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Phone screen displaying comment notifications scrolling up fast, 3D Pixar style, vertical 9:16."
+      }
+    ]
+  },
+  {
+    "title": "Tamil Nadu-la AI enna panni irukku theriyuma? 🇮🇳",
+    "description": "UPI fraud detection, Tatkal bot blocks, and Keeladi research. Tamil Nadu specific AI! #AITamil #TechTamil #Keeladi",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Namba oorla AI enna panni irukku? UPI payment pannum pothu fraud detect panradhu — AI. IRCTC Tatkal booking-la bots block panradhu — AI. Govt hospitals-la X-ray scan paarthu TB detect panradhu — AI — doctor-a vida accurate-a. Oru interesting vishayam — IIT Madras oru AI build pannaaanga — Tamil literature-a analyze pannudhu — Sangam poetry patterns-a find pannudhu. Namma language-ku namma AI. Aana problem ennanaa — Tamil AI training data romba kuravaa irukku. Neenga Tamil-a type pannideenga-na, oru AI-ku help pannureenga. Seri, neenga daily life-la AI use panradhu — AI improve pannudhu — interesting illaya? Follow pannunga — innum concept paapom!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
+    ],
+    "phonetic_pronunciation_map": {
+      "UPI": "Yoo-pee-eye",
+      "IRCTC": "Eye-aar-see-tee-see",
+      "IIT": "Eye-eye-tee"
+    },
+    "hook": "Tamil Nadu-la IIT Madras pannuna secret AI vishayam theriyuma?",
+    "summary": "AI applications in India and Tamil Nadu specifically, like Keeladi, poetry, hospital scans.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "IIT Madras AI",
+      "UPI Fraud",
+      "IRCTC Tatkal",
+      "Sangam Poetry AI",
+      "Tamil Tech"
+    ],
+    "hashtags": [
+      "#IITMadras",
+      "#AITamil",
+      "#TechTamil"
+    ],
+    "comment_bait_question": "Neenga dynamic UPI scan use panreengala? Comment-la sollunga!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "Namba oorla AI enna panni irukku?",
+        "english_caption": "AI IN TAMIL NADU",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A stylized map of Tamil Nadu glowing with digital nodes and data connections, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "UPI payment pannum pothu fraud detect panradhu — AI.",
+        "english_caption": "UPI SAFETY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close-up of a hand scanning a QR code with a phone, green security shield overlay, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "IRCTC Tatkal booking-la bots block panradhu — AI.",
+        "english_caption": "IRCTC BOT BLOCK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A digital train gate blocking tiny red bug-like bots trying to slip through, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "Govt hospitals-la X-ray scan paarthu TB detect panradhu — AI — doctor-a vida accurate-a.",
+        "english_caption": "MEDICAL AI",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "An X-ray scan glowing under digital analysis pointing to TB spots with high accuracy, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "Oru interesting vishayam — IIT Madras oru AI build pannaaanga —",
+        "english_caption": "IIT MADRAS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "The iconic main gate of IIT Madras with a glowing hologram of a digital brain, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "Tamil literature-a analyze pannudhu — Sangam poetry patterns-a find pannudhu.",
+        "english_caption": "SANGAM POETRY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "An ancient Tamil palm-leaf manuscript with digital binary code scanning across it, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "Namma language-ku namma AI.",
+        "english_caption": "OUR NATIVE AI",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A warm golden shield displaying the Tamil letter 'அ' inside a digital circle, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "Aana problem ennanaa — Tamil AI training data romba kuravaa irukku.",
+        "english_caption": "DATA DEFICIT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A small sandbox with a single glowing particle vs a giant desert, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "Neenga Tamil-a type pannideenga-na, oru AI-ku help pannureenga.",
+        "english_caption": "TYPE TAMIL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A hand typing Tamil letters on a glowing virtual keyboard, light particles rising, 3D Pixar style, vertical 9:16."
       },
       {
         "chunk_id": 10,
-        "text": "கேக்கவே ஆச்சரியமா இருக்குல? அதனாலதான் அங்க ஒரு வருடம் முன்னாடியே முடிஞ்சுடுது!",
-        "english_caption": "SPACE TRUTH",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A young South Indian astronomer looking through a giant telescope in surprise, eyes wide open in amazement, starry sky, vertical 9:16."
-      },
-      {
-        "chunk_id": 11,
-        "text": "நம்ம சூரிய குடும்பத்துல ஒரு விசித்திரமான கிரகம் இருக்கு!",
-        "english_caption": "WEIRD PLANET AGAIN",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "A gorgeous cinematic graphic of planet Venus glowing amber against the deep dark canvas of cosmos, vertical 9:16."
-      },
-      {
-        "chunk_id": 12,
-        "text": "வெள்ளி கிரகம் பத்தி உங்களுக்கு வேற என்ன சுவாரசியமான விஷயம் தெரியும்? கமெண்ட் பண்ணுங்க!",
-        "english_caption": "COMMENT BELOW",
-        "start": 0.0, "end": 0.0,
-        "has_infographic": false, "infographic_type": "none", "infographic_data": {},
-        "nano_visual_prompt": "Fingers holding a phone and typing in a vibrant YouTube comments section interface, colorful soft focus background, vertical 9:16."
+        "text": "Seri, neenga daily life-la AI use panradhu — AI improve pannudhu — interesting illaya? Follow pannunga — innum concept paapom!",
+        "english_caption": "FOLLOW US",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A large glowing 'Follow' button floating in warm volumetric space, 3D Pixar style, vertical 9:16."
       }
+    ]
+  },
+  {
+    "title": "\"Neural Network\" - Brain mathiri work pannudha? Simple-a paapom! 🧠",
+    "description": "Neural Network-na ennadhu? Input, Hidden, output layers in Tanglish. Brain vs GPT-4 efficiency. #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "\"Neural Network\" - peru ketka scary-a irukku, illa? Simple-a solluven. Ungal brain-la billions of neurons irukku. Oru neuron activate aana, aduthadhukku signal anuppum. Ithellam connect aana — thought form aagum. Exact same structure — AI-la digital-a build pannaaanga. Input layer — neenga photo upload panreenga. Hidden layers — features detect pannudhu — edges, colours, shapes. Output layer — \"ithhu cat\" nu solludhu. Shocking vishayam — GPT-4-la 1.8 trillion parameters irukku. Ungal brain-la 100 billion neurons irukku. Yaaru powerful? Aana brain electricity consume pannuradhu — 20 watts. GPT run pannuradhu — oru city-ku power supply mathiri electricity. Efficiency-la namba brain thaan winner. Ithu pathi innum kekkanum-na comment pannunga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
     ],
-    "original_news_headline": "A day is longer than a year on Venus",
-    "original_news_url": "https://www.rmg.co.uk/stories/topics/day-longer-than-year-venus",
-    "keywords": ["Venus Facts", "Space Science", "Astronomy", "Tamil Space Facts"],
-    "hashtags": ["#தெரியுமா", "#TamilFacts", "#VJVideos"],
-    "comment_hook": "வெள்ளி கிரகம் பத்தி உங்களுக்கு வேற என்ன சுவாரசியமான விஷயம் தெரியும்? கமெண்ட் பண்ணுங்க!"
+    "phonetic_pronunciation_map": {
+      "Neural": "Nyu-ral",
+      "Network": "Net-work",
+      "parameters": "pa-ra-me-ters"
+    },
+    "hook": "\"Neural Network\" scary-a irukka? Very simple concept!",
+    "summary": "Neural networks explained: structure, parameters and energy efficiency comparison to human brain.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "Neural Networks",
+      "Brain vs AI",
+      "GPT-4 Parameters",
+      "Tamil AI Concept"
+    ],
+    "hashtags": [
+      "#NeuralNetwork",
+      "#AITamil",
+      "#TechTamil"
+    ],
+    "comment_bait_question": "Namba brain powerful-a illa GPT powerful-a? Comment-la sollunga!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "\"Neural Network\" - peru ketka scary-a irukku, illa? Simple-a solluven.",
+        "english_caption": "NEURAL NETWORK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing network cables and neural pathways flashing in cyber space, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "Ungal brain-la billions of neurons irukku. Oru neuron activate aana, aduthadhukku signal anuppum.",
+        "english_caption": "BRAIN CELLS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Neurons flashing like stars inside a friendly transparent brain model, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "Ithellam connect aana — thought form aagum. Exact same structure — AI-la digital-a build pannaaanga.",
+        "english_caption": "DIGITAL NEURONS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A web of digital neon nodes connecting to mimic biological synapses, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "Input layer — neenga photo upload panreenga.",
+        "english_caption": "INPUT LAYER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A hand uploading a photo of a cute puppy into a glowing digital portal, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "Hidden layers — features detect pannudhu — edges, colours, shapes.",
+        "english_caption": "HIDDEN LAYERS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A screen showing the puppy photo sliced into line edges, shapes and color maps, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "Output layer — \"ithhu cat\" nu solludhu.",
+        "english_caption": "OUTPUT LAYER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A large green label reading 'PUPPY DOG' popping up next to the photo on screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "Shocking vishayam — GPT-4-la 1.8 trillion parameters irukku.",
+        "english_caption": "1.8 TRILLION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A huge skyscraper scale model built out of infinite tiny glowing parameters, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "Ungal brain-la 100 billion neurons irukku. Yaaru powerful?",
+        "english_caption": "100 BILLION VS GPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cartoon comparison scale holding a tiny glowing brain vs a massive computer tower, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "Aana brain electricity consume pannuradhu — 20 watts. GPT run pannuradhu — oru city-ku power supply mathiri electricity.",
+        "english_caption": "20 WATTS VS CITY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A small lightbulb glowing warmly vs a giant bright city grid skyline at night, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 10,
+        "text": "Efficiency-la namba brain thaan winner. Ithu pathi innum kekkanum-na comment pannunga!",
+        "english_caption": "BRAIN WINS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cartoon brain lifting a trophy and smiling proudly, gold medals, 3D Pixar style, vertical 9:16."
+      }
+    ]
+  },
+  {
+    "title": "AI varudhu — Neenga enna pannanum? Unmai solren 🎯",
+    "description": "Will AI take jobs? The truth about future skills and photography example. #AITamil #TechTamil #VJVideos",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Week-la 6 days AI concept paathom. Last-a oru important vishayam. AI ungal job edukkuma? Maybe — aana exact-a solluven. \"AI use panra people\" — \"AI use pannaadha people\" job-a edukkum. Oru example — photographer job pochu-nu solluvaanga. Aana wedding photographers-ku demand increase aachu — because camera irundhalum, skill irundhalum — AI capture pannaadha moments-a capture pannuvaan. AI oru hammer mathiri — hammer irundha skill venum, plan venum, vision venum. Neenga AI tool-a use pannudhu learn pannunga — fear pannaadheenga. This week learn pannadhellam oru beginning — keep following-a irundha innum concept solren. Thank you for watching — comment pannunga — entha concept innum theriyanum nu!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
+    ],
+    "phonetic_pronunciation_map": {
+      "photographer": "fo-to-gra-fer",
+      "camera": "ka-me-ra"
+    },
+    "hook": "AI ungal job-a edukkuma? Real truth in Tamil!",
+    "summary": "Mindset shift for future career: how to see AI as a tool, not a threat.",
+    "sub_category": "🤖 AI Demystified & Future Tech",
+    "breaking_news_level": 8,
+    "keywords": [
+      "AI and Jobs",
+      "Future Skills",
+      "VJ Videos Career",
+      "Tamil Career Advice"
+    ],
+    "hashtags": [
+      "#FutureSkills",
+      "#AITamil",
+      "#TechTamil"
+    ],
+    "comment_bait_question": "Neenga future-la entha skill learn panna poreenga? Comment-la sollunga!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "Week-la 6 days AI concept paathom. Last-a oru important vishayam.",
+        "english_caption": "RECAP TIME",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A timeline of 6 screen slides turning from day 1 to day 6 with glowing icons, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "AI ungal job edukkuma? Maybe — aana exact-a solluven.",
+        "english_caption": "JOB AT RISK?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A nervous South Indian employee sitting at a desk, looking over shoulder at a shadow of a robot, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "\"AI use panra people\" — \"AI use pannaadha people\" job-a edukkum.",
+        "english_caption": "THE REAL THREAT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A modern employee using AI to finish tasks rapidly vs a manual worker struggling, split screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "Oru example — photographer job pochu-nu solluvaanga.",
+        "english_caption": "PHOTOGRAPHER JOB",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "An old vintage camera sitting unused on a table gathering dust in soft lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "Aana wedding photographers-ku demand increase aachu —",
+        "english_caption": "WEDDING PHOTOS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A happy South Indian bride and groom smiling at a wedding, photographer capturing the moment, bright lights, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "because camera irundhalum, skill irundhalum — AI capture pannaadha moments-a capture pannuvaan.",
+        "english_caption": "HUMAN TOUCH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A photographer zooming in on a tear of joy from a mother at a wedding, emotional focus, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "AI oru hammer mathiri — hammer irundha skill venum, plan venum, vision venum.",
+        "english_caption": "HAMMER ANALOGY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A hand holding a metallic hammer, with virtual blueprints of a house glowing in mid-air, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "Neenga AI tool-a use pannudhu learn pannunga — fear pannaadheenga.",
+        "english_caption": "LEARN AI TOOLS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A young South Indian woman smiling and using a laptop with neural network drawings on screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "This week learn pannadhellam oru beginning — keep following-a irundha innum concept solren.",
+        "english_caption": "JUST BEGINNING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A winding road going up towards a glowing golden sun on the horizon, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 10,
+        "text": "Thank you for watching — comment pannunga — entha concept innum theriyanum nu!",
+        "english_caption": "THANKS FOR WATCH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute cartoon robot showing a heart shape screen and waving, warm ambient glow, 3D Pixar style, vertical 9:16."
+      }
+    ]
   }
 ]
