@@ -588,9 +588,9 @@ def _install_mmlab():
                         mm_index = f"https://download.openmmlab.com/mmcv/dist/{trial_cuda}/torch{trial_v}/index.html"
                         print(f"   Checking: {mm_index}")
                         # Install mmcv (full with CUDA ops) version compatible with the torch build
-                        run_cmd(["pip", "install", "-q", "mmcv>=2.1.0", "-f", mm_index])
+                        run_cmd(["pip", "install", "-q", "mmcv==2.1.0", "-f", mm_index])
                         mmcv_installed = True
-                        print(f"   ✅ mmcv>=2.1.0 (via {trial_cuda}/torch{trial_v})")
+                        print(f"   ✅ mmcv==2.1.0 (via {trial_cuda}/torch{trial_v})")
                         break
                     except:
                         continue
