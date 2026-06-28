@@ -33,7 +33,14 @@ def _nuclear_delete_flash_attn():
     print("🧹 Physically locating and deleting any residual flash_attn files/libraries...")
     import sys, shutil
     
-    # 1. Check sys.path and site-packages
+    # Debug import check
+    try:
+        import flash_attn
+        print(f"   [Pre-cleanup] flash_attn imported from: {getattr(flash_attn, '__file__', 'unknown')}")
+    except Exception as e:
+        print(f"   [Pre-cleanup] flash_attn not imported or failed: {e}")
+        
+    # Search all sys.path and standard site directories
     search_paths = list(sys.path)
     import site
     try:
@@ -45,47 +52,72 @@ def _nuclear_delete_flash_attn():
     except:
         pass
         
-    for path in set(search_paths):
-        if not path or not os.path.isdir(path):
+    # Add other common search roots
+    search_roots = ['/usr/local/lib', '/usr/lib', '/opt', '/root/.local']
+    for r in search_roots:
+        if os.path.exists(r):
+            search_paths.append(r)
+            
+    search_paths = list(set([os.path.abspath(p) for p in search_paths if p and os.path.exists(p)]))
+    print(f"   Searching in paths: {search_paths}")
+    
+    found_targets = []
+    for path in search_paths:
+        if os.path.isfile(path):
+            if "flash_attn" in path.lower() or "flash-attn" in path.lower():
+                found_targets.append(path)
+        elif os.path.isdir(path):
+            for root, dirs, files in os.walk(path):
+                # Check directory name
+                for d in list(dirs):
+                    if "flash_attn" in d.lower() or "flash-attn" in d.lower():
+                        found_targets.append(os.path.join(root, d))
+                        # Remove from traversal to avoid walk errors
+                        dirs.remove(d)
+                # Check file names
+                for f in files:
+                    if "flash_attn" in f.lower() or "flash-attn" in f.lower():
+                        found_targets.append(os.path.join(root, f))
+                        
+    # Filter unique absolute paths
+    found_targets = list(set([os.path.abspath(t) for t in found_targets if os.path.exists(t)]))
+    print(f"   Found {len(found_targets)} flash_attn files/folders to delete/disable:")
+    for t in sorted(found_targets):
+        print(f"     - {t}")
+        
+    # Perform deletion
+    for target in found_targets:
+        if not os.path.exists(target):
             continue
         try:
-            for name in os.listdir(path):
-                if "flash_attn" in name.lower() or "flash-attn" in name.lower():
-                    target = os.path.join(path, name)
-                    print(f"   Removing residual flash_attn target: {target}")
-                    if os.path.isdir(target):
-                        shutil.rmtree(target, ignore_errors=True)
-                    else:
-                        try:
-                            os.remove(target)
-                        except FileNotFoundError:
-                            pass
+            if os.path.isdir(target):
+                shutil.rmtree(target, ignore_errors=True)
+                print(f"   ✅ Deleted folder: {target}")
+            else:
+                if target.endswith('.so'):
+                    try:
+                        os.rename(target, target + '.disabled')
+                        print(f"   ✅ Renamed SO to .disabled: {target}")
+                    except Exception:
+                        os.remove(target)
+                        print(f"   ✅ Deleted SO: {target}")
+                else:
+                    os.remove(target)
+                    print(f"   ✅ Deleted file: {target}")
         except Exception as e:
-            print(f"   ⚠️ Error scanning/deleting in {path}: {e}")
-
-    # 2. Find and neutralize any compiled flash_attn .so files in system library folders
+            print(f"   ⚠️ Failed to remove {target}: {e}")
+            
+    # Post-cleanup import verification
+    # Clear sys.modules cache
+    for k in list(sys.modules.keys()):
+        if "flash_attn" in k.lower():
+            sys.modules.pop(k, None)
+            
     try:
-        # Search /usr/local/lib, /usr/lib, /opt for any flash_attn shared objects recursively
-        for search_root in ['/usr/local/lib', '/usr/lib', '/opt']:
-            if not os.path.exists(search_root):
-                continue
-            print(f"   Scanning root: {search_root} for flash_attn SO files...")
-            for root, dirs, files in os.walk(search_root):
-                for file in files:
-                    if file.endswith('.so') and ('flash_attn' in file.lower() or 'flash_attn' in root.lower()):
-                        target = os.path.join(root, file)
-                        print(f"   🗑️ Renaming/neutralizing flash_attn SO file: {target}")
-                        try:
-                            os.rename(target, target + '.disabled')
-                        except Exception as err:
-                            print(f"   ⚠️ Failed to rename SO file {target}: {err}")
-                            try:
-                                os.remove(target)
-                                print(f"   Deleted fallback: {target}")
-                            except Exception as del_err:
-                                print(f"   ⚠️ Failed to delete fallback {target}: {del_err}")
+        import flash_attn
+        print(f"   [Post-cleanup] ⚠️ WARNING: flash_attn still imported from: {getattr(flash_attn, '__file__', 'unknown')}")
     except Exception as e:
-        print(f"   ⚠️ Error running flash_attn SO files lookup: {e}")
+        print(f"   [Post-cleanup] ✅ flash_attn is completely disabled/unimportable: {e}")
 
 
 def setup_sitecustomize():
