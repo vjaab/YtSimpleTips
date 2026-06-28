@@ -32,8 +32,10 @@ def run_cmd(cmd, cwd=None, quiet=False):
 
 
 def _nuclear_delete_flash_attn():
-    print("🧹 Physically locating and deleting any residual flash_attn files in sys.path...")
+    print("🧹 Physically locating and deleting any residual flash_attn files/libraries...")
     import sys, shutil
+    
+    # 1. Check sys.path and site-packages
     search_paths = list(sys.path)
     import site
     try:
@@ -56,9 +58,38 @@ def _nuclear_delete_flash_attn():
                     if os.path.isdir(target):
                         shutil.rmtree(target, ignore_errors=True)
                     else:
-                        os.remove(target)
+                        try:
+                            os.remove(target)
+                        except FileNotFoundError:
+                            pass
         except Exception as e:
             print(f"   ⚠️ Error scanning/deleting in {path}: {e}")
+
+    # 2. Find and neutralize any compiled flash_attn .so files in system library folders
+    try:
+        import subprocess
+        # Search /usr/local/lib, /usr/lib, /opt for any flash_attn shared objects
+        for search_root in ['/usr/local/lib', '/usr/lib', '/opt']:
+            if not os.path.exists(search_root):
+                continue
+            res = subprocess.run(
+                ['find', search_root, '-name', 'flash_attn*.so', '-o', '-name', '_flash_attn*.so', '-o', '-path', '*/flash_attn*/*.so'],
+                capture_output=True, text=True, timeout=30
+            )
+            for f in res.stdout.strip().split('\n'):
+                if f and os.path.exists(f):
+                    print(f"   🗑️ Renaming/neutralizing flash_attn SO file: {f}")
+                    try:
+                        os.rename(f, f + '.disabled')
+                    except Exception as err:
+                        print(f"   ⚠️ Failed to rename SO file {f}: {err}")
+                        try:
+                            os.remove(f)
+                            print(f"   Deleted fallback: {f}")
+                        except Exception as del_err:
+                            print(f"   ⚠️ Failed to delete fallback {f}: {del_err}")
+    except Exception as e:
+        print(f"   ⚠️ Error running flash_attn SO files lookup: {e}")
 
 
 def setup_sitecustomize():
