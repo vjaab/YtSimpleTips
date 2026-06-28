@@ -363,37 +363,6 @@ def setup_musetalk():
     else:
         print("✓ MuseTalk already set up.")
 
-    # 🛡️ Poison pill the MuseTalk subprocess entry script at the python source level
-    _patch_musetalk_inference_script()
-
-
-def _patch_musetalk_inference_script():
-    inference_path = "MuseTalk/scripts/inference.py"
-    if os.path.exists(inference_path):
-        print("🛠️ Patching MuseTalk/scripts/inference.py with flash_attn poison pill...")
-        try:
-            with open(inference_path, "r", encoding="utf-8") as f:
-                content = f.read()
-            if "Poison pill for flash_attn" not in content:
-                patch_code = """import sys
-import types
-import importlib.util
-# 🛡️ Poison pill for flash_attn to block imports in MuseTalk subprocess
-_flash_attn_stub = types.ModuleType('flash_attn')
-_flash_attn_stub.__spec__ = importlib.util.spec_from_loader('flash_attn', loader=None)
-_flash_attn_stub.__version__ = '0.0.0'
-_flash_attn_stub.flash_attn_varlen_func = None
-_flash_attn_stub.flash_attn_func = None
-sys.modules['flash_attn'] = _flash_attn_stub
-sys.modules['flash_attn.flash_attn_interface'] = _flash_attn_stub
-"""
-                with open(inference_path, "w", encoding="utf-8") as f:
-                    f.write(patch_code + content)
-                print("   ✅ MuseTalk/scripts/inference.py successfully patched.")
-            else:
-                print("   ✅ MuseTalk/scripts/inference.py already patched.")
-        except Exception as e:
-            print(f"   ⚠️ Failed to patch MuseTalk/scripts/inference.py: {e}")
 
 
 def _install_mmlab():
