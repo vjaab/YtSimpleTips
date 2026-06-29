@@ -33,11 +33,11 @@ def get_slot_info():
     
     evening_categories = {
         "Mon": "🤖 Simple AI Hacks for Everyone",
-        "Tue": "📱 Tech & Smart Device Hacks",
+        "Tue": "🤖 AI Demystified & Future Tech",
         "Wed": "🤖 Simple AI Hacks for Everyone",
-        "Thu": "📱 Tech & Smart Device Hacks",
+        "Thu": "🤖 Practical AI Tools & Jobs",
         "Fri": "🤖 Simple AI Hacks for Everyone",
-        "Sat": "📱 Tech & Smart Device Hacks",
+        "Sat": "🤖 Simple AI Hacks for Everyone",
         "Sun": "🤖 Simple AI Hacks for Everyone"
     }
     
@@ -86,6 +86,7 @@ def get_slot_info():
                     if mapped and mapped not in top_mapped:
                         top_mapped.append(mapped)
                         
+                top_mapped = [c for c in top_mapped if c.startswith("🤖")]
                 if top_mapped and category not in top_mapped:
                     boosted_cat = top_mapped[0]
                     print(f"📈 [ecosystem] Boosting category priority: Overriding '{category}' with top-performer '{boosted_cat}'")
