@@ -76,13 +76,13 @@ CORE CONCEPT: {core_concept}
 SCRIPT SUMMARY: {first_two_sentences_of_script}
 
 OUTPUT FORMAT (JSON only):
-{
+{{
   "title": "Tanglish title, max 60 chars, must include curiosity gap or number, avoid clickbait",
   "description": "3-4 sentences in Tanglish explaining what viewer will learn. End with 'Comment pannunga - innum theriyanum-na!'",
   "hashtags": ["#AITamil", "#TechTamil", 8 more relevant tags in English and Tamil],
   "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity)",
   "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
-}
+}}
 
 TITLE FORMULAS THAT WORK:
 - "Ungal [daily thing] ethana AI use pannudhu theriyuma?"
