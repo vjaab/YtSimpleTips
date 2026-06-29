@@ -27,7 +27,8 @@ from config import (
     ENABLE_FLASH_TRANSITIONS, ENABLE_EMOJI_OVERLAYS,
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
-    ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS
+    ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS,
+    AVATAR_SYNC_OFFSET
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 from entity_fetcher import fetch_all_entities
@@ -1142,6 +1143,12 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             print(f"Preparing Talking Head Avatar PiP from: {avatar_video_path}")
             try:
                 vid_clip = VideoFileClip(avatar_video_path).without_audio()
+                
+                # Apply A/V sync offset if configured (lag compensation for MuseTalk/lip-sync)
+                if AVATAR_SYNC_OFFSET > 0 and vid_clip.duration > AVATAR_SYNC_OFFSET:
+                    vid_clip = vid_clip.subclipped(AVATAR_SYNC_OFFSET)
+                    print(f"   ⏱️ Applied A/V sync offset of -{AVATAR_SYNC_OFFSET}s to avatar clip.")
+
                 if vid_clip.duration < audio_duration:
                     vid_clip = vid_clip.with_effects([vfx.Loop(duration=audio_duration)])
                 else:

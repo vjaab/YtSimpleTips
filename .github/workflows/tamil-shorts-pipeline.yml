@@ -61,6 +61,13 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
           
+      - name: Cache U2Net model
+        uses: actions/cache@v4
+        with:
+          path: ~/.u2net
+          key: u2net-model-v1
+
+          
       - name: Install System Dependencies
         run: |
           sudo apt-get update
