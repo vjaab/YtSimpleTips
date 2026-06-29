@@ -208,7 +208,7 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
 
     body = {
         "snippet": {
-            "title":                title[:40],
+            "title":                title[:100],
             "description":          description[:5000],
             "tags":                 tags[:15],
             "categoryId":           category_id,  # 28 = Science & Tech

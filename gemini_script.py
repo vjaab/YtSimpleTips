@@ -621,7 +621,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
     prompt_requirements = """Return ONLY this exact JSON (no markdown):
 {
-  "title": "Main punchy YouTube title (max 40 chars, include emoji)",
+  "title": "Main punchy YouTube title (max 80 chars, include emoji)",
   "hook": "The Hook (<1.5s): A shocking Result-First statement in Tanglish. Approx 6 words.",
   "narration": [
     "First sentence in Tanglish",
