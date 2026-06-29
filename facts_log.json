@@ -5,25 +5,29 @@
         "Phone Battery Secret Hack! 🔋",
         "Android Developer Options Battery Life",
         "Volume Button Secret Hack 📸",
-        "Volume Button Camera Shutter"
+        "Volume Button Camera Shutter",
+        "📚 AI Summarize Hack: Study Speed 2X!",
+        "Summarize Anything in Seconds with AI"
     ],
     "used_keywords": [
+        "Did You Know",
         "Tamil Facts",
         "Android Tips",
-        "Battery Hack",
         "Tamil Tech",
-        "Did You Know"
+        "Battery Hack"
     ],
     "used_categories": {
-        "📱 Tech & Smart Device Hacks": 3
+        "📱 Tech & Smart Device Hacks": 3,
+        "🤖 Simple AI Hacks for Everyone": 1
     },
     "last_7_days_stories": [
         "🔋 Phone Battery Hack! 2x Life",
         "Phone Battery Secret Hack! 🔋",
-        "Volume Button Secret Hack 📸"
+        "Volume Button Secret Hack 📸",
+        "📚 AI Summarize Hack: Study Speed 2X!"
     ],
-    "total_uploaded": 3,
-    "last_upload": "2026-06-28",
+    "total_uploaded": 4,
+    "last_upload": "2026-06-29",
     "history": [
         {
             "date": "2026-06-28",
@@ -67,6 +71,20 @@
             "youtube_url": "https://youtu.be/O6eceXItako",
             "source_url": "https://support.apple.com/guide/iphone/use-the-volume-buttons-to-take-photos-iph3a2a7d31/ios",
             "avatar_used": "assets/video/C_white.mp4"
+        },
+        {
+            "date": "2026-06-29",
+            "title": "📚 AI Summarize Hack: Study Speed 2X!",
+            "news_headline": "Summarize Anything in Seconds with AI",
+            "category": "🤖 Simple AI Hacks for Everyone",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/vxAxERsKaBQ",
+            "source_url": "https://www.paperpal.com/blog/best-ai-summarizer-tools",
+            "avatar_used": "assets/video/Firefly_video_final.mp4"
         }
     ]
 }
