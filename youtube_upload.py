@@ -192,7 +192,7 @@ def crosspost_to_instagram(cropped_video_path, caption):
         print(f"⚠️ Instagram cross-posting failed with exception: {e}")
         return False, str(e)
 
-def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None, comment_bait_question=None):
+def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None, comment_bait_question=None, is_longform=False):
     """Uploads the generated Shorts video to YouTube with Tamil metadata and Altered Content flag."""
     youtube = get_authenticated_service()
     if not youtube:
@@ -252,13 +252,16 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
             print(f"⚠️ Pinned comment failed (non-fatal): {e}")
 
         # 3. Instagram Reels Cross-Post
-        try:
-            cropped_video = crop_for_instagram(video_path)
-            crosspost_to_instagram(cropped_video, f"{title}\n\n{description[:100]}...")
-            if cropped_video and os.path.exists(cropped_video):
-                os.remove(cropped_video)
-        except Exception as ie:
-            print(f"⚠️ Instagram cross-posting failed (non-fatal): {ie}")
+        if not is_longform:
+            try:
+                cropped_video = crop_for_instagram(video_path)
+                crosspost_to_instagram(cropped_video, f"{title}\n\n{description[:100]}...")
+                if cropped_video and os.path.exists(cropped_video):
+                    os.remove(cropped_video)
+            except Exception as ie:
+                print(f"⚠️ Instagram cross-posting failed (non-fatal): {ie}")
+        else:
+            print("ℹ️ Widescreen longform video detected. Skipping Instagram Reels cross-posting.")
 
         return True, video_id
     except googleapiclient.errors.HttpError as e:

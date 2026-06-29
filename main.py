@@ -7,7 +7,7 @@ import random
 import traceback
 from datetime import datetime
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
 from gemini_script import pick_and_generate_script
@@ -364,7 +364,8 @@ def run_pipeline(forced_category=None, dry_run=False):
 
     # ── STEP 6: Resolve Background Visuals ──
     log_message("STEP 6: Resolving background visual clips...")
-    chunks = fetch_all_chunk_visuals(chunks, topic_context=fact_headline, script_data=script_data)
+    is_longform = ENABLE_LONGFORM and ("Slot C" in slot or "Slot L" in slot or script_data.get("is_longform", False))
+    chunks = fetch_all_chunk_visuals(chunks, topic_context=fact_headline, script_data=script_data, is_longform=is_longform)
 
     # ── STEP 7: Render Final Video ──
     log_message("STEP 7: Invoking video rendering engine...")
@@ -407,21 +408,25 @@ def run_pipeline(forced_category=None, dry_run=False):
     
     if dry_run:
         log_message("🚀 [DRY-RUN] Simulating YouTube Upload and Instagram Reels cross-posting...")
-        # Verify video crop logic by running ffmpeg crop
-        from youtube_upload import crop_for_instagram
-        try:
-            cropped_path = crop_for_instagram(video_path)
-            log_message(f"✅ [DRY-RUN] Verified Instagram video crop: {cropped_path}")
-            if os.path.exists(cropped_path):
-                os.remove(cropped_path)
-        except Exception as ce:
-            log_message(f"❌ [DRY-RUN] Instagram crop verification failed: {ce}")
+        if not is_longform:
+            # Verify video crop logic by running ffmpeg crop
+            from youtube_upload import crop_for_instagram
+            try:
+                cropped_path = crop_for_instagram(video_path)
+                log_message(f"✅ [DRY-RUN] Verified Instagram video crop: {cropped_path}")
+                if os.path.exists(cropped_path):
+                    os.remove(cropped_path)
+            except Exception as ce:
+                log_message(f"❌ [DRY-RUN] Instagram crop verification failed: {ce}")
+        else:
+            log_message("ℹ️ [DRY-RUN] Widescreen video. Skipping Instagram crop verification.")
         uploaded, result = True, "dry_run_video_id"
     else:
         uploaded, result = upload_video(
             video_path, selected_title, description, tags, 
             thumbnail_path=selected_thumbnail, comment_hook=script_data.get("comment_hook"),
-            comment_bait_question=script_data.get("comment_bait_question")
+            comment_bait_question=script_data.get("comment_bait_question"),
+            is_longform=is_longform
         )
     
     if not uploaded:

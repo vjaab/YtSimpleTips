@@ -130,7 +130,7 @@ AVATAR_SYNC_OFFSET = float(os.getenv("AVATAR_SYNC_OFFSET", "0.16"))
 TARGET_AUDIO_DURATION = (35, 55)
 
 # Global Feature Flags
-ENABLE_LONGFORM = False
+ENABLE_LONGFORM = True
 ENABLE_TRENDING_ENGINE = True    # Phase 1: YouTube/Reddit/GitHub trending aggregation
 
 # Engagement & Retention Pillars (Production Spec 2026)
