@@ -11,21 +11,27 @@
         "Deepfake Scams? 10 Secs To Spot! 🚨",
         "Deepfakes: The Blurring Line of Reality",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
-        "Moravec's Paradox"
+        "Moravec's Paradox",
+        "ChatGPT Secret Hack! 🚀",
+        "Why AI Confidently Lies: The Hallucination Effect"
     ],
     "used_keywords": [
-        "Android Tips",
+        "AI Hacks",
+        "Productivity",
         "Tamil Tech",
-        "Tamil Facts",
-        "Tech Tips",
         "Cyber Safety",
         "Battery Hack",
-        "Did You Know"
+        "Did You Know",
+        "Android Tips",
+        "Tamil Facts",
+        "ChatGPT Tips",
+        "Tech Tips",
+        "Study Hacks"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 1,
-        "🤖 AI Demystified & Future Tech": 2
+        "🤖 AI Demystified & Future Tech": 3
     },
     "last_7_days_stories": [
         "🔋 Phone Battery Hack! 2x Life",
@@ -33,9 +39,10 @@
         "Volume Button Secret Hack 📸",
         "📚 AI Summarize Hack: Study Speed 2X!",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
-        "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?"
+        "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
+        "ChatGPT Secret Hack! 🚀"
     ],
-    "total_uploaded": 6,
+    "total_uploaded": 7,
     "last_upload": "2026-06-30",
     "history": [
         {
@@ -124,6 +131,23 @@
             "youtube_url": "pending_upload",
             "source_url": "https://github.com/vjaab/YtSimpleTips",
             "avatar_used": "assets/video/ai_developer_white.mp4"
+        },
+        {
+            "date": "2026-06-30",
+            "title": "ChatGPT Secret Hack! 🚀",
+            "news_headline": "Why AI Confidently Lies: The Hallucination Effect",
+            "category": "🤖 AI Demystified & Future Tech",
+            "keywords": [
+                "Tamil Tech",
+                "ChatGPT Tips",
+                "AI Hacks",
+                "Productivity",
+                "Study Hacks"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/1p3aQJ7KOSQ",
+            "source_url": "https://en.wikipedia.org/wiki/Hallucination_(artificial_intelligence)",
+            "avatar_used": "assets/video/black_apple.mp4"
         }
     ]
 }
