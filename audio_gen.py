@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 import json
@@ -49,38 +50,36 @@ def _apply_stable_ts(audio_path, text):
                         "end": round(word.end, 3)
                     })
         if word_timestamps:
-            print(f"✅ stable-ts aligned {len(word_timestamps)} word timestamps.")
+            print(f"[audio_gen] stable-ts aligned {len(word_timestamps)} word timestamps.")
             return word_timestamps
     except Exception as e:
-        print(f"⚠️ stable-ts alignment skipped or failed: {e}")
+        print(f"[audio_gen] stable-ts alignment skipped or failed: {e}")
     return None
 
 def trim_audio_silence(path, word_timestamps):
     """
-    Trims silence from the start and end of the audio file,
-    and shifts all word timestamps so that the first word starts at 0.0s.
+    Trims only excessive silence from start/end, preserves natural breath pauses.
     """
     from pydub import AudioSegment
     from pydub.silence import detect_leading_silence
 
     audio = AudioSegment.from_file(path)
     
-    # Detect start silence (using aggressive -60dBFS threshold)
-    start_trim = detect_leading_silence(audio, silence_threshold=-60.0)
-    # Detect end silence
+    # Conservative trimming: -40dBFS instead of -60dBFS, keep more head/tail room
+    start_trim = detect_leading_silence(audio, silence_threshold=-40.0)
     reversed_audio = audio.reverse()
-    end_trim = detect_leading_silence(reversed_audio, silence_threshold=-50.0)
+    end_trim = detect_leading_silence(reversed_audio, silence_threshold=-40.0)
 
     duration = len(audio)
-    # Keep exactly 100ms of silence at the end for smooth loop transitions
-    # without cutting into the actual speech (loop optimization)
-    end_cut_ms = max(0, end_trim - 100)
-    if duration - start_trim - end_cut_ms > 100:
-        trimmed_audio = audio[start_trim:duration-end_cut_ms]
-    else:
-        trimmed_audio = audio[start_trim:duration-end_trim]
+    # Keep 200ms silence padding at start/end for natural breath room
+    start_trim = max(0, start_trim - 200)
+    end_trim = max(0, end_trim - 200)
     
-    # Save trimmed audio
+    if duration - start_trim - end_trim > 500:
+        trimmed_audio = audio[start_trim:duration-end_trim]
+    else:
+        trimmed_audio = audio[start_trim:duration-end_trim] if end_trim > 0 else audio[start_trim:]
+    
     ext = os.path.splitext(path)[1]
     trimmed_audio.export(path, format=ext[1:])
     
@@ -92,7 +91,6 @@ def trim_audio_silence(path, word_timestamps):
     for ws in word_timestamps:
         w_start = max(0.0, round(ws["start"] - shift_sec, 3))
         w_end = max(0.0, round(ws["end"] - shift_sec, 3))
-        # Keep word only if it starts before the new trimmed audio duration
         if w_start < new_dur:
             new_ts.append({
                 "word": ws["word"],
@@ -100,7 +98,7 @@ def trim_audio_silence(path, word_timestamps):
                 "end": min(w_end, new_dur)
             })
     
-    print(f"🔊 Audio trimmed: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
+    print(f"[audio_gen] Audio trimmed conservatively: -{shift_sec:.2f}s from start. New duration: {new_dur:.2f}s")
     return new_dur, new_ts
 
 def optimize_audio_gaps(audio_path, word_timestamps):
@@ -127,7 +125,7 @@ def get_audio_duration(path):
         audio = AudioSegment.from_file(path)
         return len(audio) / 1000.0
     except Exception as e:
-        print(f"⚠️ get_audio_duration fallback from pydub: {e}")
+        print(f"[audio_gen] get_audio_duration fallback from pydub: {e}")
         try:
             import soundfile as sf
             data, sr = sf.read(path)
@@ -240,14 +238,31 @@ def split_text_into_chunks(text: str) -> list[str]:
             
     chunks = []
     current_chunk = []
+    current_word_count = 0
+    MAX_WORDS_PER_CHUNK = 80  # Larger chunks = fewer cuts
+    
     for sent in sentence_list:
-        current_chunk.append(sent)
-        if len(current_chunk) == 2:  # Group 2 sentences per chunk
+        sent_words = len(sent.split())
+        if current_word_count + sent_words > MAX_WORDS_PER_CHUNK and current_chunk:
             chunks.append(" ".join(current_chunk))
-            current_chunk = []
+            current_chunk = [sent]
+            current_word_count = sent_words
+        else:
+            current_chunk.append(sent)
+            current_word_count += sent_words
+            
     if current_chunk:
         chunks.append(" ".join(current_chunk))
-    return chunks
+    
+    # Ensure no chunk is too small (merge tiny trailing chunks)
+    merged_chunks = []
+    for chunk in chunks:
+        if merged_chunks and len(chunk.split()) < 15:
+            merged_chunks[-1] += " " + chunk
+        else:
+            merged_chunks.append(chunk)
+    
+    return merged_chunks
 
 def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
     """Synthesizes a single text chunk via ElevenLabs API. Returns raw MP3 bytes."""
@@ -280,29 +295,24 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
     except Exception as e:
         print(f"   ✗ ElevenLabs chunk synthesis failed: {e}")
         return None
-def _concat_mp3_chunks(mp3_chunks, silence_ms=80):
-    """Concatenates a list of raw MP3 byte chunks into a single AudioSegment with inter-chunk silence."""
+def _concat_mp3_chunks(mp3_chunks, crossfade_ms=150):
+    """Concatenates MP3 chunks with crossfades (not silence) for seamless flow."""
     from pydub import AudioSegment
     import io
     
-    combined = None
-    silence_gap = AudioSegment.silent(duration=silence_ms, frame_rate=44100)
+    if not mp3_chunks:
+        return AudioSegment.empty()
     
-    for idx, mp3_bytes in enumerate(mp3_chunks):
+    combined = AudioSegment.from_file(io.BytesIO(mp3_chunks[0]), format="mp3")
+    
+    for mp3_bytes in mp3_chunks[1:]:
         seg = AudioSegment.from_file(io.BytesIO(mp3_bytes), format="mp3")
-        # Apply 50ms (0.05s) micro fade-in/fade-out to prevent popping at junctions
-        if len(seg) > 100:
-            seg = seg.fade_in(50).fade_out(50)
-        elif len(seg) > 10:
-            seg = seg.fade_in(5).fade_out(5)
-        if combined is None:
-            combined = seg
-        else:
-            combined = combined + silence_gap + seg
+        # Crossfade instead of silence gap - eliminates hard cuts
+        combined = combined.append(seg, crossfade=crossfade_ms)
     
     return combined
 def _generate_elevenlabs(text, output_path):
-    print("📡 [audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
+    print("[audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
     if not ELEVENLABS_API_KEY:
         print("   ✗ ElevenLabs API Key missing.")
         return None
@@ -322,19 +332,19 @@ def _generate_elevenlabs(text, output_path):
     mp3_chunks = []
     
     if len(words) > 50:
-        print(f"📝 Long script detected ({len(words)} words). Using chunked synthesis...")
+        print(f"[audio_gen] Long script detected ({len(words)} words). Using chunked synthesis...")
         chunks = split_text_into_chunks(text)
         print(f"👉 Split script into {len(chunks)} chunks.")
         
         for idx, chunk in enumerate(chunks):
-            print(f"🎙️ Synthesizing chunk {idx+1}/{len(chunks)}...")
+            print(f"[audio_gen] Synthesizing chunk {idx+1}/{len(chunks)}...")
             chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
             if not chunk_mp3:
                 print(f"   ✗ Failed to synthesize chunk {idx+1}")
                 return None
             mp3_chunks.append(chunk_mp3)
     else:
-        print("🎙️ Script is short. Synthesizing as a single ElevenLabs chunk...")
+        print("[audio_gen] Script is short. Synthesizing as a single ElevenLabs chunk...")
         single_mp3 = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
         if not single_mp3:
             return None
@@ -347,13 +357,13 @@ def _generate_elevenlabs(text, output_path):
             from pydub import AudioSegment
             audio_seg = AudioSegment.from_file(io.BytesIO(mp3_chunks[0]), format="mp3")
         else:
-            # Multiple chunks — concatenate with silence gaps
-            audio_seg = _concat_mp3_chunks(mp3_chunks, silence_ms=80)
+            # Multiple chunks — concatenate with crossfades
+            audio_seg = _concat_mp3_chunks(mp3_chunks, crossfade_ms=150)
         
         # Normalize to 44100Hz mono WAV for downstream processing
         audio_seg = audio_seg.set_frame_rate(44100).set_channels(1).set_sample_width(2)
         audio_seg.export(output_path, format="wav")
-        print(f"✅ [audio_gen] ElevenLabs synthesis complete: {output_path}")
+        print(f"[audio_gen] ElevenLabs synthesis complete: {output_path}")
         return output_path
     except Exception as e:
         print(f"   ✗ ElevenLabs output conversion failed: {e}")
@@ -367,7 +377,7 @@ async def _async_generate_edge_tts(text, output_path):
     await communicate.save(output_path)
 
 def _generate_edge_tts(text, output_path):
-    print("📡 [audio_gen] Synthesizing with Edge TTS (ta-IN-ValluvarNeural)...")
+    print("[audio_gen] Synthesizing with Edge TTS (ta-IN-ValluvarNeural)...")
     temp_mp3 = output_path + ".temp.mp3"
     try:
         # Edge TTS generates MP3. We save it as temp_mp3, then convert it to a WAV format matching the extension
@@ -391,16 +401,14 @@ def _generate_edge_tts(text, output_path):
 
 def detect_audio_breaks(audio_path: str) -> list[tuple]:
     """
-    Loads audio with librosa (sr=44100, mono=True)
-    Computes RMS energy in 10ms windows (441 samples at 44.1kHz)
-    Flags any contiguous silence where RMS < 0.005 and duration > 600ms as a "break".
-    Returns a list of (start_time_ms, end_time_ms).
+    Detects only EXCESSIVE silence gaps (>1.5s) that indicate TTS artifacts.
+    Natural breath pauses (200-800ms) are preserved.
     """
     import librosa
     try:
         y, sr = librosa.load(audio_path, sr=44100, mono=True)
     except Exception as e:
-        print(f"⚠️ [audio_gen] Failed to load audio in librosa: {e}")
+        print(f"[audio_gen] Failed to load audio in librosa: {e}")
         return []
         
     frame_length = 441
@@ -415,7 +423,7 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
     break_start_frame = None
     
     for i in range(num_frames):
-        is_silent = rms_values[i] < 0.005
+        is_silent = rms_values[i] < 0.003  # Slightly more sensitive
         if is_silent:
             if not in_break:
                 in_break = True
@@ -423,7 +431,8 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
         else:
             if in_break:
                 duration_ms = (i - break_start_frame) * 10.0
-                if duration_ms > 600.0:
+                # Only flag breaks > 1.5s (was 600ms) - preserves natural breaths
+                if duration_ms > 1500.0:
                     start_time = break_start_frame * 10.0
                     end_time = i * 10.0
                     breaks.append((start_time, end_time))
@@ -431,7 +440,7 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
                 
     if in_break:
         duration_ms = (num_frames - break_start_frame) * 10.0
-        if duration_ms > 600.0:
+        if duration_ms > 1500.0:
             start_time = break_start_frame * 10.0
             end_time = num_frames * 10.0
             breaks.append((start_time, end_time))
@@ -440,8 +449,8 @@ def detect_audio_breaks(audio_path: str) -> list[tuple]:
 
 def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     """
-    Shortens unusually long silences (>600ms) to a natural 200ms pause.
-    This prevents breathless delivery and avoids robotic crossfading hiccups.
+    Shortens ONLY excessive silences (>1.5s) to a natural 400ms pause.
+    Preserves natural breathing room in speech.
     """
     if not breaks:
         return audio_path
@@ -450,7 +459,7 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     try:
         audio = AudioSegment.from_file(audio_path)
     except Exception as e:
-        print(f"⚠️ [audio_gen] Failed to read audio with pydub: {e}")
+        print(f"[audio_gen] Failed to read audio with pydub: {e}")
         return audio_path
         
     # Process from end to start (reverse order) so timestamps remain valid
@@ -461,8 +470,8 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
         left_part = audio[:start_ms]
         right_part = audio[end_ms:]
         
-        # Replace the long break with a clean, natural 200ms pause
-        silence_gap = AudioSegment.silent(duration=200, frame_rate=audio.frame_rate)
+        # Replace long break with natural 400ms pause (was 200ms - too short)
+        silence_gap = AudioSegment.silent(duration=400, frame_rate=audio.frame_rate)
         silence_gap = silence_gap.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
         audio = left_part + silence_gap + right_part
         
@@ -508,14 +517,14 @@ def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
         temp_path
     ]
     try:
-        print(f"🎛️ [audio_gen] Applying FFmpeg mastering chain to {audio_path}...")
+        print(f"[audio_gen] Applying FFmpeg mastering chain to {audio_path}...")
         subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         if os.path.exists(temp_path):
             shutil.copy(temp_path, audio_path)
             os.remove(temp_path)
             print("✨ [audio_gen] FFmpeg mastering chain applied successfully.")
     except Exception as e:
-        print(f"⚠️ [audio_gen] FFmpeg mastering chain failed: {e}")
+        print(f"[audio_gen] FFmpeg mastering chain failed: {e}")
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
@@ -531,11 +540,11 @@ def upsample_audio_to_44100(audio_path: str) -> None:
         if sr != 44100:
             y_resampled = librosa.resample(y, orig_sr=sr, target_sr=44100, res_type='kaiser_best')
             sf.write(audio_path, y_resampled, 44100)
-            print(f"✅ [audio_gen] Upsampled from {sr} Hz to 44100 Hz.")
+            print(f"[audio_gen] Upsampled from {sr} Hz to 44100 Hz.")
         else:
             print(f"ℹ️ [audio_gen] Audio is already 44100 Hz.")
     except Exception as e:
-        print(f"⚠️ [audio_gen] Upsampling failed: {e}")
+        print(f"[audio_gen] Upsampling failed: {e}")
 
 # ── F5-TTS Config ─────────────────────────────────────────────────────────────
 VJ_REF_WAV = os.path.join(ASSETS_DIR, "vj.wav")
@@ -647,7 +656,7 @@ def _postprocess_voice_audio(wav_path):
         audio = audio.fade_in(5).fade_out(5)
         
         audio.export(wav_path, format="wav")
-        print(f"   🎙️ Audio enhanced: 120Hz HPF, 3-band presence EQ, dynamic compression, normalized to -1dB")
+        print(f"   [audio_gen] Audio enhanced: 120Hz HPF, 3-band presence EQ, dynamic compression, normalized to -1dB")
     except Exception as e:
         print(f"   ⚠ Audio post-processing skipped: {e}")
 
@@ -715,16 +724,16 @@ def speed_up_audio(audio_path, factor):
         temp_path
     ]
     try:
-        print(f"⚡ [audio_gen] Speeding up audio by {factor}x...")
+        print(f"[audio_gen] Speeding up audio by {factor}x...")
         import subprocess
         import shutil
         subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         if os.path.exists(temp_path):
             shutil.copy(temp_path, audio_path)
             os.remove(temp_path)
-            print("⚡ [audio_gen] Audio speedup applied successfully.")
+            print("[audio_gen] Audio speedup applied successfully.")
     except Exception as e:
-        print(f"⚠️ [audio_gen] Audio speedup failed: {e}")
+        print(f"[audio_gen] Audio speedup failed: {e}")
         if os.path.exists(temp_path):
             os.remove(temp_path)
     return audio_path
@@ -745,7 +754,7 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     
     path = _generate_elevenlabs(clean_text, wav_path)
     if not path:
-        raise RuntimeError("🚨 ElevenLabs voice generation failed! Fallbacks are disabled as requested.")
+        raise RuntimeError("[audio_gen] ElevenLabs voice generation failed! Fallbacks are disabled as requested.")
         
     # Speed up audio to match the energetic pacing of reference short
     if VOICE_SPEED != 1.0:
@@ -758,10 +767,10 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
         
     # Step 2: Run break detection and fixing before mastering
     breaks = detect_audio_breaks(path)
-    print(f"🔍 [audio_gen] Detected {len(breaks)} audio breaks.")
+    print(f"[audio_gen] Detected {len(breaks)} audio breaks.")
     if breaks:
         path = fix_audio_breaks(path, breaks)
-        print(f"🛠️ [audio_gen] Fixed {len(breaks)} audio breaks.")
+        print(f"[audio_gen] Fixed {len(breaks)} audio breaks.")
         
     # Step 3: Run stable-ts to get real word timestamps (or estimate)
     dur = get_audio_duration(path)
@@ -776,7 +785,7 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     dur, word_timestamps = trim_audio_silence(path, word_timestamps)
     dur, word_timestamps = optimize_audio_gaps(path, word_timestamps)
     
-    print(f"⭐ [audio_gen] Audio generation and processing complete. Path: {path}, Duration: {dur:.2f}s")
+    print(f"[audio_gen] Audio generation and processing complete. Path: {path}, Duration: {dur:.2f}s")
     return path, dur, word_timestamps
 
 def measure_loudness_and_peaks(audio_path: str) -> tuple[float, float, int]:
@@ -833,27 +842,27 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.test_audio:
-        print("🧪 Starting Dry-Run Audio Quality & Mastering Test...")
+        print("Starting Dry-Run Audio Quality & Mastering Test...")
         test_text = "Vanakkam, ithellam theriyuma? Simple Tips by VJ."
         test_wav = os.path.join(OUTPUT_DIR, "test_output.wav")
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         
-        print(f"📝 Test text: '{test_text}'")
+        print(f"Test text: '{test_text}'")
         
         # 1. Synthesize the text
         clean_text = preprocess_script_for_tts(test_text)
         path = _generate_elevenlabs(clean_text, test_wav)
         if not path:
-            print("⚠️ ElevenLabs failed or not configured, using Edge TTS for dry-run test.")
+            print("ElevenLabs failed or not configured, using Edge TTS for dry-run test.")
             path = _generate_edge_tts(clean_text, test_wav)
             
         if not path:
-            print("🚨 Test failed: Could not generate audio using ElevenLabs or Edge TTS fallback.")
+            print("Test failed: Could not generate audio using ElevenLabs or Edge TTS fallback.")
             sys.exit(1)
             
         # 2. Run break detection
         breaks = detect_audio_breaks(path)
-        print(f"🔍 [Test] Detected breaks count: {len(breaks)}")
+        print(f"[Test] Detected breaks count: {len(breaks)}")
         for idx, (start, end) in enumerate(breaks, 1):
             print(f"   Break {idx}: {start:.1f}ms to {end:.1f}ms (duration: {end - start:.1f}ms)")
             
@@ -868,16 +877,16 @@ if __name__ == "__main__":
         lufs, tp, sr = measure_loudness_and_peaks(path)
         duration = get_audio_duration(path)
         
-        print("\n📊 --- DRY-RUN AUDIO METRICS ---")
-        print(f"📂 Output File: {path}")
-        print(f"⏱️ Duration: {duration:.3f}s")
-        print(f"🔊 LUFS Level: {lufs} LUFS (Target: -14 LUFS)")
-        print(f"📈 True Peak: {tp} dBFS (Target: < -1.0 dBFS)")
-        print(f"Hz Sample Rate: {sr} Hz (Target: 44100 Hz)")
+        print("--- DRY-RUN AUDIO METRICS ---")
+        print(f"Output File: {path}")
+        print(f"Duration: {duration:.3f}s")
+        print(f"LUFS Level: {lufs} LUFS (Target: -14 LUFS)")
+        print(f"True Peak: {tp} dBFS (Target: < -1.0 dBFS)")
+        print(f"Sample Rate: {sr} Hz (Target: 44100 Hz)")
         print("---------------------------------\n")
         
         if lufs == -99.9 or tp == -99.9:
-            print("⚠️ Metrics extraction incomplete. Make sure FFmpeg is installed and accessible.")
+            print("Metrics extraction incomplete. Make sure FFmpeg is installed and accessible.")
         else:
-            print("✅ Dry-run test completed.")
+            print("Dry-run test completed.")
 

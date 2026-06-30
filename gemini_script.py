@@ -134,10 +134,11 @@ Constraint Checklist:
   3. SOLUTION (20–100 seconds / ~150-220 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
   4. ENGAGEMENT QUESTION (100–115 seconds / ~25-35 words): End with a simple, opinion-based question that anyone can answer, driving them to comment.
 - SCRIPT WORD COUNT: Strictly 260-350 words in Tanglish (to fit the 90-120 second total duration).
-- SCRIPT SENTENCES: Every sentence must be short and punchy (under 12 words) for fast-paced, enthusiastic creator delivery.
+- SCRIPT SENTENCES: Every sentence must be COMPLETE and end with proper punctuation (., !, ?). Under 12 words each for fast-paced delivery. NO sentence fragments or trailing incomplete thoughts.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "aana wait pannunga, ithula oru twist irukku!" (highly recommended to match VJ's style), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain interest.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
+- TTS COMPATIBILITY: Write complete sentences only. No bullet points, no sentence fragments, no "etc." endings. Each sentence must be grammatically complete in Tanglish.
 """
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
@@ -245,10 +246,11 @@ MANDATORY RULES:
    - PROBLEM (5-20s): Daily pain point.
    - SOLUTION (20-100s): Simple, clear tip/hack (single idea).
    - ENGAGEMENT QUESTION (100-115s): Simple opinion-based question to prompt comments.
-3. SCRIPT SENTENCES: Every sentence must be under 12 words.
+3. SCRIPT SENTENCES: Every sentence must be COMPLETE, grammatically correct, and end with proper punctuation (., !, ?). Under 12 words each. NO fragments.
 4. Ensure the script directly resonates with daily scenarios.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
 6. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds.
+7. TTS COMPATIBILITY: Every sentence must be a complete grammatical unit in Tanglish. No "etc.", no bullet-style fragments, no trailing incomplete thoughts.
 
 NARRATIVE DRAFT:
 {narrative_json}
@@ -291,8 +293,11 @@ CRITICAL RETENTION RULES (based on 2026 YouTube Shorts algorithm data):
 
 6. VOCAL VARIETY MARKERS: Add explicit markers for TTS energy:
    - "..." for dramatic pauses (1-2 per 15 seconds)
-   - Short sentences (< 12 words) after complex explanations
+   - Short COMPLETE sentences (< 12 words) after complex explanations
    - "!" for energy spikes at key reveals
+   - All sentences MUST end with proper punctuation (., !, ?)
+
+7. TTS COMPATIBILITY: Output must be complete, grammatically correct Tanglish sentences only. No fragments, no "etc.", no incomplete trailing phrases.
 
 SCRIPT TO ENHANCE:
 {optimized_script}
