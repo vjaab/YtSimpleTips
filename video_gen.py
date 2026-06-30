@@ -555,7 +555,8 @@ _TRANSITION_POOL = [
 # ── DUAL-LAYER CAPTION SYSTEM ───────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_subtitle_frame(word_status_list    line_h = int(95 * (FRAME_W / 1080.0))
+def render_subtitle_frame(word_status_list):
+    line_h = int(95 * (FRAME_W / 1080.0))
     if FRAME_H == 1080:
         y_pos = int(FRAME_H * 0.65) - (len(lines) * line_h // 2) + y_shift + y_jitter
     else:
@@ -610,40 +611,6 @@ def render_subtitle_frame(word_status_list    line_h = int(95 * (FRAME_W / 1080.
             
     return canvas_to_clip(img)
  
-def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
-    """Renders a high-impact whiteboard-style English keyword/phrase caption with category-colored highlighter."""
-    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    
-    text = text.upper().strip()
-    if not text:
-        return np.array(img)
-        
-    base_size = int(72 * (FRAME_W / 1080.0))
-    font = get_font_for_text(text, base_size, "extrabold")
-    
-    # Calculate bounds
-    bbox = font.getbbox(text)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    
-    cx = (FRAME_W - tw) // 2
-    if FRAME_H == 1080:
-        cy = int(FRAME_H * 0.78)
-    else:
-        cy = 1040, 90), font=font)
-                # Main active text is bold white
-                draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
-            else:
-                c_fill = (255, 255, 255, 255)
-                font = get_font_for_text(word_text, base_size, "bold")
-                draw.text((cur_x+2, line_y+2), word_text, fill=(0,0,0,180), font=font)
-                draw.text((cur_x, line_y), word_text, fill=c_fill, font=font)
-                
-            cur_x += word_widths[word_idx] + space_w
-            word_idx += 1
-            
-    return canvas_to_clip(img)
-
 def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     """Renders a high-impact whiteboard-style English keyword/phrase caption with category-colored highlighter."""
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
