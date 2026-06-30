@@ -52,7 +52,7 @@ SURPRISING FACT: {surprising_fact}
 TARGET AUDIENCE: {target_segment}
 
 SCRIPT RULES:
-1. DURATION: 50-65 words max (approx 40-45 seconds at normal pace)
+1. DURATION: 260-350 words max (approx 103-138 seconds at normal pace, ~90-120s at 1.15x speed)
 2. LANGUAGE: Natural Tanglish — Tamil sentences with English technical terms inline. NOT translated English. NOT pure Tamil.
    Good: "Ungal phone face unlock panna, oru neural network realtime-la ungal face-a 128 different points-la analyze pannum"
    Bad: "Your phone uses artificial intelligence to recognize your face using neural network technology"
@@ -129,11 +129,11 @@ Language Rules:
    - Dynamic motion/camera angles (e.g., "rapid macro zoom in", "high-speed tracking shot", "intense panning", "dramatic low-angle tilt", "camera spinning").
 Constraint Checklist:
 - SCRIPT STRUCTURE (MANDATORY 4-PART FORMAT):
-  1. HOOK (0–3 seconds / ~10 words): A shocking fact or bold statement to stop scrolling immediately. Do NOT use greetings (like "வணக்கம்" or "நமஸ்காரம்").
-  2. PROBLEM (3–15 seconds / ~30-40 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
-  3. SOLUTION (15–45 seconds / ~70-80 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
-  4. ENGAGEMENT QUESTION (45–55 seconds / ~20-30 words): End with a simple, opinion-based question that anyone can answer, driving them to comment.
-- SCRIPT WORD COUNT: Strictly 120-150 words in Tanglish (to fit the 55-second total duration).
+  1. HOOK (0–5 seconds / ~15 words): A shocking fact or bold statement to stop scrolling immediately. Do NOT use greetings (like "வணக்கம்" or "நமஸ்காரம்").
+  2. PROBLEM (5–20 seconds / ~50-70 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
+  3. SOLUTION (20–100 seconds / ~150-220 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
+  4. ENGAGEMENT QUESTION (100–115 seconds / ~25-35 words): End with a simple, opinion-based question that anyone can answer, driving them to comment.
+- SCRIPT WORD COUNT: Strictly 260-350 words in Tanglish (to fit the 90-120 second total duration).
 - SCRIPT SENTENCES: Every sentence must be short and punchy (under 12 words) for fast-paced, enthusiastic creator delivery.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "aana wait pannunga, ithula oru twist irukku!" (highly recommended to match VJ's style), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain interest.
@@ -239,12 +239,12 @@ Rewrite the narrative draft to maximize retention, remove ALL fluff, and structu
 The script must feel like a rapid-fire conversation, NOT a lecture.
 
 MANDATORY RULES:
-1. TOTAL WORD COUNT: Strictly 120-150 words.
+1. TOTAL WORD COUNT: Strictly 260-350 words.
 2. SCRIPT STRUCTURE (MANDATORY):
-   - HOOK (0-3s): Shocking fact/bold statement. No greeting.
-   - PROBLEM (3-15s): Daily pain point.
-   - SOLUTION (15-45s): Simple, clear tip/hack (single idea).
-   - ENGAGEMENT QUESTION (45-55s): Simple opinion-based question to prompt comments.
+   - HOOK (0-5s): Shocking fact/bold statement. No greeting.
+   - PROBLEM (5-20s): Daily pain point.
+   - SOLUTION (20-100s): Simple, clear tip/hack (single idea).
+   - ENGAGEMENT QUESTION (100-115s): Simple opinion-based question to prompt comments.
 3. SCRIPT SENTENCES: Every sentence must be under 12 words.
 4. Ensure the script directly resonates with daily scenarios.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
@@ -255,7 +255,7 @@ NARRATIVE DRAFT:
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 120-150 words.",
+  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 260-350 words.",
   "word_count": 0
 }}"""
 
@@ -302,16 +302,16 @@ Return ONLY a JSON object:
   "retention_enhanced_script": "The full rewritten Tanglish script with all retention patterns injected",
   "retention_map": {{
     "open_loops": [
-      {{"text": "The phrase that opens the loop", "planted_at_word": 15, "resolved_at_word": 45}}
+      {{"text": "The phrase that opens the loop", "planted_at_word": 30, "resolved_at_word": 90}}
     ],
     "pattern_interrupts": [
-      {{"type": "contradiction", "text": "Aana ithu thaan twist...", "at_word": 30}}
+      {{"type": "contradiction", "text": "Aana ithu thaan twist...", "at_word": 60}}
     ],
     "curiosity_gap_ratio": 0.65,
     "hook_word_count": 6,
-    "payoff_zone_start_word": 100,
+    "payoff_zone_start_word": 200,
     "retention_risk_zones": [
-      {{"at_word": 50, "risk": "explanation_fatigue", "mitigation": "Added rhetorical question"}}
+      {{"at_word": 100, "risk": "explanation_fatigue", "mitigation": "Added rhetorical question"}}
     ]
   }}
 }}"""
@@ -424,7 +424,7 @@ TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
 - Is the script easily understandable by Tamil speakers globally (clear pronunciation, standard vocabulary, no obscure slang)?
 - Are all sentences short and punchy (under 12 words)?
-- Does the script strictly follow the 4-part structure: HOOK (0-3s), PROBLEM (3-15s), SOLUTION (15-45s), and ENGAGEMENT QUESTION (45-55s)?
+- Does the script strictly follow the 4-part structure: HOOK (0-5s), PROBLEM (5-20s), SOLUTION (20-100s), and ENGAGEMENT QUESTION (100-115s)?
 - Does the script avoid generic phrases like "intha video-la"?
 - Is the CTA/Question natural, not forced?
 
@@ -521,11 +521,11 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     if session_length_cap:
         print(f"📉 [gemini_script] Applying session length cap of {session_length_cap} words.")
-        local_persona = local_persona.replace("120-150", f"50-{session_length_cap}")
-        local_optimizer = local_optimizer.replace("120-150", f"50-{session_length_cap}")
+        local_persona = local_persona.replace("260-350", f"50-{session_length_cap}")
+        local_optimizer = local_optimizer.replace("260-350", f"50-{session_length_cap}")
         word_count_limit_str = f"STRICT LIMIT: Total word count MUST be between 50-{session_length_cap} words."
     else:
-        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 120-150 words."
+        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 260-350 words."
 
     SYSTEM_PERSONA = local_persona
     RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
@@ -741,7 +741,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
 STORYBOARD AGENT TASK:
 Given the following AI education script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 9-12 storyboard scenes to align with the 50-65 words script length.
+You must produce exactly 30-45 storyboard scenes to align with the 260-350 words script length.
 
 SCRIPT:
 {script_text}
