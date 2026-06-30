@@ -9,30 +9,33 @@
         "📚 AI Summarize Hack: Study Speed 2X!",
         "Summarize Anything in Seconds with AI",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
-        "Deepfakes: The Blurring Line of Reality"
+        "Deepfakes: The Blurring Line of Reality",
+        "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
+        "Moravec's Paradox"
     ],
     "used_keywords": [
-        "Battery Hack",
-        "Tech Tips",
+        "Android Tips",
         "Tamil Tech",
         "Tamil Facts",
-        "Android Tips",
+        "Tech Tips",
         "Cyber Safety",
+        "Battery Hack",
         "Did You Know"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 1,
-        "🤖 AI Demystified & Future Tech": 1
+        "🤖 AI Demystified & Future Tech": 2
     },
     "last_7_days_stories": [
         "🔋 Phone Battery Hack! 2x Life",
         "Phone Battery Secret Hack! 🔋",
         "Volume Button Secret Hack 📸",
         "📚 AI Summarize Hack: Study Speed 2X!",
-        "Deepfake Scams? 10 Secs To Spot! 🚨"
+        "Deepfake Scams? 10 Secs To Spot! 🚨",
+        "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?"
     ],
-    "total_uploaded": 5,
+    "total_uploaded": 6,
     "last_upload": "2026-06-30",
     "history": [
         {
@@ -107,6 +110,20 @@
             "youtube_url": "pending_upload",
             "source_url": "https://mitsloan.mit.edu/ideas-made-to-matter/deepfakes-explained",
             "avatar_used": "assets/video/Full_stack_black.mp4"
+        },
+        {
+            "date": "2026-06-30",
+            "title": "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
+            "news_headline": "Moravec's Paradox",
+            "category": "🤖 AI Demystified & Future Tech",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://github.com/vjaab/YtSimpleTips",
+            "avatar_used": "assets/video/ai_developer_white.mp4"
         }
     ]
 }
