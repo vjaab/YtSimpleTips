@@ -239,6 +239,8 @@ def generate_nano_scene_visuals(chunks, headline, style_guide="photorealistic, 8
             path = _generate_pollinations_image(prompt, output_path, aspect_ratio=aspect_ratio)
             source_name = "Nano-Scene (Pollinations)"
             relevance = 9
+            # Always add delay after Pollinations call to respect rate limits
+            time.sleep(3)
         else:
             source_name = "Nano-Scene (Imagen)"
             relevance = 10

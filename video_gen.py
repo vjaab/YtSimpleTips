@@ -556,31 +556,71 @@ _TRANSITION_POOL = [
 # ══════════════════════════════════════════════════════════════════════════════
 
 def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0)):
+    if not word_status_list:
+        img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+        return canvas_to_clip(img)
+    
+    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    words = [wd["word"] for wd in word_status_list]
+    is_active_list = [wd["is_active"] for wd in word_status_list]
+    
+    base_size = int(80 * (FRAME_W / 1080.0))
+    font = get_font_for_text("test", base_size, "bold")
+    
+    space_w = font.getbbox(" ")[2]
+    
+    word_widths = []
+    for word in words:
+        bbox = font.getbbox(word)
+        word_widths.append(bbox[2] - bbox[0])
+    
+    max_line_width = int(FRAME_W * 0.85)
+    lines = []
+    current_line = []
+    current_line_width = 0
+    
+    for i, word in enumerate(words):
+        word_w = word_widths[i]
+        space_needed = space_w if current_line else 0
+        
+        if current_line_width + space_needed + word_w > max_line_width and current_line:
+            lines.append(current_line)
+            current_line = [word]
+            current_line_width = word_w
+        else:
+            current_line.append(word)
+            current_line_width += space_needed + word_w
+    
+    if current_line:
+        lines.append(current_line)
+    
     line_h = int(95 * (FRAME_W / 1080.0))
+    y_shift = 0
+    y_jitter = 0
+    
     if FRAME_H == 1080:
         y_pos = int(FRAME_H * 0.65) - (len(lines) * line_h // 2) + y_shift + y_jitter
     else:
         y_pos = 920 - (len(lines) * line_h // 2) + y_shift + y_jitter
     
-    # Obsidian back-plate coordinates calculation
     max_line_w = 0
     temp_idx = 0
     for line in lines:
         line_w = sum(word_widths[temp_idx:temp_idx+len(line)]) + space_w * (len(line)-1)
         max_line_w = max(max_line_w, line_w)
         temp_idx += len(line)
-        
+    
     pad_x, pad_y = 40, 20
     bx1 = (FRAME_W - max_line_w) // 2 - pad_x
     bx2 = (FRAME_W + max_line_w) // 2 + pad_x
     by1 = y_pos - pad_y
     by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
     
-    # Use accent color for the border glow
     border_r, border_g, border_b = accent_color
     draw.rounded_rectangle([bx1, by1, bx2, by2], radius=15, fill=(10, 10, 15, 230), outline=(border_r, border_g, border_b, 90), width=2)
     
-    # Draw word by word
     word_idx = 0
     for i, line in enumerate(lines):
         line_y = y_pos + i * line_h
@@ -588,27 +628,24 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0)):
         cur_x = (FRAME_W - line_w) // 2
         
         for word_text in line:
-            wd = word_status_list[word_idx]
-            is_active = wd["is_active"]
+            is_active = is_active_list[word_idx]
             
             if is_active:
                 font = get_font_for_text(word_text, int(base_size * 1.15), "extrabold")
-                # Cleaner 2px glow behind the active word (reduced from 3px for sharper look)
                 for dx in [-2, -1, 0, 1, 2]:
                     for dy in [-2, -1, 0, 1, 2]:
                         if abs(dx) + abs(dy) > 0:
                             draw.text((cur_x + dx, line_y - 4 + dy), word_text, fill=(0, 212, 255, 90), font=font)
-                # Main active text is bold white
                 draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
             else:
                 c_fill = (255, 255, 255, 255)
                 font = get_font_for_text(word_text, base_size, "bold")
                 draw.text((cur_x+2, line_y+2), word_text, fill=(0,0,0,180), font=font)
                 draw.text((cur_x, line_y), word_text, fill=c_fill, font=font)
-                
+            
             cur_x += word_widths[word_idx] + space_w
             word_idx += 1
-            
+    
     return canvas_to_clip(img)
  
 def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):

@@ -228,6 +228,8 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "photo"
                 source = "Pollinations AI"
+            # Always add delay after Pollinations call to respect rate limits
+            time.sleep(3)
 
         # ── PRIORITY 3: Pexels Stock Video ──
         if not visual_path:
