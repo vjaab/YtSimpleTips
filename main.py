@@ -179,6 +179,9 @@ def run_pipeline(forced_category=None, dry_run=False):
             time.sleep(5)
             continue
             
+        fact_headline = script_data.get("original_news_headline")
+        fact_url = script_data.get("original_news_url")
+        
         script_data["slot"] = slot
         scores = script_data.get("quality_scores")
         if scores:
@@ -230,8 +233,6 @@ def run_pipeline(forced_category=None, dry_run=False):
         
         log_message(f"📊 Script length check passed: {word_count} words → ~{estimated_duration:.1f}s estimated (min {MIN_DURATION_SEC}s)")
         
-        fact_headline = script_data.get("original_news_headline")
-        fact_url = script_data.get("original_news_url")
         log_message(f"Selected Fact: {fact_headline}")
         log_message(f"Source URL: {fact_url}")
 
