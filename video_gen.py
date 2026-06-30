@@ -329,8 +329,8 @@ def prepare_top_panel_screenshot_clip(screenshot_path, duration):
         
     return ImageClip(np.array(canvas)).with_duration(duration)
 def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255, 0), style_mode=0):
-    """Creates a persistent title/hook banner of size 1080x192 with various visual styles."""
-    width, height = 1080, 192
+    """Creates a persistent title/hook banner of size FRAME_Wx192 with various visual styles."""
+    width, height = FRAME_W, 192
     r, g, b = accent_color
     
     if style_mode == 1:
@@ -366,8 +366,8 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
     font_size = 48
     font = get_font_for_text(title_text, font_size, "extrabold")
     
-    # Adjust font size if text is too long to fit in 760px wide to leave room for countdown timer on the right
-    max_text_w = 760
+    # Adjust font size if text is too long to fit in max_text_w to leave room for countdown timer on the right
+    max_text_w = int(width * 0.8)
     for fs in range(48, 24, -2):
         font = get_font_for_text(title_text, fs, "extrabold")
         bbox = font.getbbox(title_text)
@@ -389,8 +389,10 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
     return ImageClip(np.array(img)).with_duration(duration)
 
 
-def build_ken_burns(img_path, duration, zoom_direction=None, target_size=(FRAME_W, FRAME_H)):
+def build_ken_burns(img_path, duration, zoom_direction=None, target_size=None):
     """Builds a smooth Ken Burns effect clip with randomized zoom direction."""
+    if target_size is None:
+        target_size = (FRAME_W, FRAME_H)
     clip = ImageClip(img_path).with_duration(duration)
     w, h = clip.size
     target_w_val, target_h_val = target_size
@@ -437,7 +439,8 @@ def _gradient_overlay(duration):
         draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=alpha)
         
     # Clear the top half of the vignette (y < 864) to keep top panel visual completely clean
-    draw.rectangle([0, 0, w, 864], fill=0)
+    if h == 1920:
+        draw.rectangle([0, 0, w, 864], fill=0)
     
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     vignette = Image.new("RGBA", (w, h), (10, 10, 15, 255))
@@ -552,46 +555,11 @@ _TRANSITION_POOL = [
 # ── DUAL-LAYER CAPTION SYSTEM ───────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=0, y_jitter=0):
-    """Renders high-impact kinetic subtitle frame with dynamic active-word popping."""
-    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
-    base_size = int(60 * (FRAME_W / 1080.0))
-
-    # Form layout and line-wrap words
-    words = [wd["word"] for wd in word_status_list]
-    word_widths = []
-
-    for i, wd in enumerate(word_status_list):
-        is_active = wd["is_active"]
-        weight = "extrabold" if is_active else "bold"
-        size = int(base_size * 1.15) if is_active else base_size
-        font = get_font_for_text(words[i], size, weight)
-        bbox = font.getbbox(words[i])
-        word_widths.append(bbox[2] - bbox[0])
-
-    max_w = int(FRAME_W * 0.85)
-
-    # Simple wrap
-    lines = []
-    current_line = []
-    current_w = 0
-    space_w = int(18 * (FRAME_W / 1080.0))
-
-    for word, w in zip(words, word_widths):
-        if not current_line or (current_w + w <= max_w):
-            current_line.append(word)
-            current_w += w + space_w
-        else:
-            lines.append(current_line)
-            current_line = [word]
-            current_w = w + space_w
-    if current_line:
-        lines.append(current_line)
-
-    line_h = int(95 * (FRAME_W / 1080.0))
-    y_pos = 920 - (len(lines) * line_h // 2) + y_shift + y_jitter
+def render_subtitle_frame(word_status_list    line_h = int(95 * (FRAME_W / 1080.0))
+    if FRAME_H == 1080:
+        y_pos = int(FRAME_H * 0.65) - (len(lines) * line_h // 2) + y_shift + y_jitter
+    else:
+        y_pos = 920 - (len(lines) * line_h // 2) + y_shift + y_jitter
     
     # Obsidian back-plate coordinates calculation
     max_line_w = 0
@@ -629,6 +597,40 @@ def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0), y_shift=
                     for dy in [-2, -1, 0, 1, 2]:
                         if abs(dx) + abs(dy) > 0:
                             draw.text((cur_x + dx, line_y - 4 + dy), word_text, fill=(0, 212, 255, 90), font=font)
+                # Main active text is bold white
+                draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
+            else:
+                c_fill = (255, 255, 255, 255)
+                font = get_font_for_text(word_text, base_size, "bold")
+                draw.text((cur_x+2, line_y+2), word_text, fill=(0,0,0,180), font=font)
+                draw.text((cur_x, line_y), word_text, fill=c_fill, font=font)
+                
+            cur_x += word_widths[word_idx] + space_w
+            word_idx += 1
+            
+    return canvas_to_clip(img)
+ 
+def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
+    """Renders a high-impact whiteboard-style English keyword/phrase caption with category-colored highlighter."""
+    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    text = text.upper().strip()
+    if not text:
+        return np.array(img)
+        
+    base_size = int(72 * (FRAME_W / 1080.0))
+    font = get_font_for_text(text, base_size, "extrabold")
+    
+    # Calculate bounds
+    bbox = font.getbbox(text)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    
+    cx = (FRAME_W - tw) // 2
+    if FRAME_H == 1080:
+        cy = int(FRAME_H * 0.78)
+    else:
+        cy = 1040, 90), font=font)
                 # Main active text is bold white
                 draw.text((cur_x, line_y - 4), word_text, fill=(255, 255, 255, 255), font=font)
             else:
