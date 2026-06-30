@@ -151,9 +151,11 @@ ENABLE_COUNTDOWN_TIMER = True
 ENABLE_SOUND_ON_INDICATOR = False    
 ENABLE_SEAMLESS_LOOP = False          
 ENABLE_WATERMARK = True               # Channel watermark overlay on video
+ENABLE_AI_DISCLOSURE_LABEL = True     # AI Human-in-the-loop production label (YPP compliance)
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
 ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video
 ENABLE_STOCK_FOOTAGE = False          # Control whether to include stock footage (Pexels)
+ENABLE_AI_DISCLOSURE_LABEL = True     # YouTube AI-generated content disclosure label
 
 # Retention Engine Settings
 VISUAL_CUT_TARGET_SECONDS = 2.0

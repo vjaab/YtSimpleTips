@@ -28,7 +28,7 @@ from config import (
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
     ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS,
-    AVATAR_SYNC_OFFSET
+    ENABLE_AI_DISCLOSURE_LABEL,
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 from entity_fetcher import fetch_all_entities
@@ -1387,6 +1387,36 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         header_draw.text((text_x, 220), "Simple Tips by VJ", fill=(255, 255, 255, 140), font=header_font)
         
         header_clip = ImageClip(np.array(header_img)).with_duration(audio_duration)
+
+    # Generate AI Disclosure Label (bottom-right, 70% opacity)
+    ai_disclosure_clip = None
+    if ENABLE_AI_DISCLOSURE_LABEL:
+        ai_img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+        ai_draw = ImageDraw.Draw(ai_img)
+        
+        ai_text = "AI HUMAN-IN-THE-LOOP PRODUCTION"
+        ai_font = get_font_for_text(ai_text, 22, "bold")
+        ai_bbox = ai_font.getbbox(ai_text)
+        ai_w = ai_bbox[2] - ai_bbox[0]
+        ai_h = ai_bbox[3] - ai_bbox[1]
+        
+        # Bottom-right position with padding
+        padding = 20
+        ai_x = FRAME_W - ai_w - padding
+        ai_y = FRAME_H - ai_h - padding
+        
+        # 70% opacity = alpha ~179 (0.7 * 255)
+        # Draw background pill for readability
+        pill_padding = 12
+        ai_draw.rounded_rectangle(
+            [ai_x - pill_padding, ai_y - pill_padding, ai_x + ai_w + pill_padding, ai_y + ai_h + pill_padding],
+            radius=8, fill=(0, 0, 0, 150)
+        )
+        # Draw text with drop shadow for readability
+        ai_draw.text((ai_x + 1, ai_y + 1), ai_text, fill=(0, 0, 0, 180), font=ai_font)
+        ai_draw.text((ai_x, ai_y), ai_text, fill=(255, 255, 255, 179), font=ai_font)  # 70% opacity
+        
+        ai_disclosure_clip = ImageClip(np.array(ai_img)).with_duration(audio_duration)
     
     # ── EMOJI OVERLAY CONFIG ──
     emoji_moments = []
@@ -1627,6 +1657,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     comp_clips = [final_video, vignette]
     if header_clip:
         comp_clips.append(header_clip)
+    if ai_disclosure_clip:
+        comp_clips.append(ai_disclosure_clip)
         
     main_composition = CompositeVideoClip(comp_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
     final_render = main_composition
