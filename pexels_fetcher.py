@@ -87,22 +87,27 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
     encoded_prompt = requests.utils.quote(prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
     
-    max_attempts = 2
+    max_attempts = 3
+    base_delay = 3  # seconds
     for attempt in range(1, max_attempts + 1):
         try:
-            print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})...")
-            resp = requests.get(url, timeout=8)
+            print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})....")
+            resp = requests.get(url, timeout=15)
             if resp.status_code == 200:
                 with open(output_path, "wb") as f:
                     f.write(resp.content)
                 return output_path
+            elif resp.status_code == 429:
+                print(f"  ⚠️ [pollinations] Attempt {attempt} rate limited (429). Backing off...")
             else:
                 print(f"  ⚠️ [pollinations] Attempt {attempt} returned status: {resp.status_code}")
         except Exception as e:
             print(f"  ⚠️ [pollinations] Attempt {attempt} failed: {e}")
         
         if attempt < max_attempts:
-            time.sleep(2)
+            delay = base_delay * (2 ** (attempt - 1))  # exponential backoff: 3s, 6s
+            print(f"     ⏳ Waiting {delay}s before retry...")
+            time.sleep(delay)
             
     return None
 
@@ -121,6 +126,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     # Circuit breakers to skip APIs if they consistently fail (e.g. rate limit quota reached)
     veo_consecutive_fails = 0
     imagen_consecutive_fails = 0
+    pollinations_consecutive_fails = 0
     
     # Extract keywords from topic context for generic search fallback
     generic_keywords = [w.lower() for w in topic_context.split() if len(w) > 3][:3]
@@ -216,7 +222,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                     print("     🚨 Imagen failed twice consecutively. Disabling Imagen for remaining chunks.")
                     
         # ── PRIORITY 2.5: Pollinations AI Image (Free AI fallback) ──
-        if not visual_path and prompt:
+        if not visual_path and prompt and pollinations_consecutive_fails < 2:
             output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
             enhanced_pollinations_prompt = prompt
             if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
@@ -228,6 +234,11 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             if visual_path:
                 visual_type = "photo"
                 source = "Pollinations AI"
+                pollinations_consecutive_fails = 0
+            else:
+                pollinations_consecutive_fails += 1
+                if pollinations_consecutive_fails >= 2:
+                    print("     🚨 Pollinations failed twice consecutively. Disabling Pollinations for remaining chunks.")
             # Always add delay after Pollinations call to respect rate limits
             time.sleep(3)
 

@@ -131,22 +131,27 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
     encoded_prompt = urllib.parse.quote(prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true&private=true"
     
-    max_attempts = 2
+    max_attempts = 3
+    base_delay = 3  # seconds
     for attempt in range(1, max_attempts + 1):
         try:
             print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})...")
-            resp = requests.get(url, timeout=12)
+            resp = requests.get(url, timeout=15)
             if resp.status_code == 200:
                 with open(output_path, "wb") as f:
                     f.write(resp.content)
                 return output_path
+            elif resp.status_code == 429:
+                print(f"  ⚠️ [pollinations] Attempt {attempt} rate limited (429). Backing off...")
             else:
                 print(f"  ⚠️ [pollinations] Attempt {attempt} returned status: {resp.status_code}")
         except Exception as e:
             print(f"  ⚠️ [pollinations] Attempt {attempt} failed: {e}")
         
         if attempt < max_attempts:
-            time.sleep(2)
+            delay = base_delay * (2 ** (attempt - 1))  # exponential backoff: 3s, 6s
+            print(f"     ⏳ Waiting {delay}s before retry...")
+            time.sleep(delay)
             
     return None
 
@@ -215,6 +220,7 @@ def generate_nano_scene_visuals(chunks, headline, style_guide="photorealistic, 8
     last_successful_path = None
     generated_count = 0
     reused_count = 0
+    pollinations_consecutive_fails = 0
 
     for i, chunk in enumerate(chunks):
         cid = chunk.get("chunk_id", i + 1)
@@ -234,13 +240,22 @@ def generate_nano_scene_visuals(chunks, headline, style_guide="photorealistic, 8
         path = _generate_imagen_image(prompt, output_path, aspect_ratio=aspect_ratio)
 
         if not path:
-            # Fallback to Pollinations AI
-            print(f"  [{i + 1}/{total}] Imagen failed, trying Pollinations AI fallback...")
-            path = _generate_pollinations_image(prompt, output_path, aspect_ratio=aspect_ratio)
-            source_name = "Nano-Scene (Pollinations)"
-            relevance = 9
-            # Always add delay after Pollinations call to respect rate limits
-            time.sleep(3)
+            # Circuit breaker: skip Pollinations if it's consistently failing (rate limited)
+            if pollinations_consecutive_fails >= 2:
+                print(f"  [{i + 1}/{total}] ⚠️ Pollinations rate limited (2+ consecutive failures). Skipping Pollinations fallback.")
+                path = None
+            else:
+                # Fallback to Pollinations AI
+                print(f"  [{i + 1}/{total}] Imagen failed, trying Pollinations AI fallback...")
+                path = _generate_pollinations_image(prompt, output_path, aspect_ratio=aspect_ratio)
+                if path:
+                    pollinations_consecutive_fails = 0
+                else:
+                    pollinations_consecutive_fails += 1
+                source_name = "Nano-Scene (Pollinations)"
+                relevance = 9
+                # Always add delay after Pollinations call to respect rate limits
+                time.sleep(3)
         else:
             source_name = "Nano-Scene (Imagen)"
             relevance = 10

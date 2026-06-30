@@ -210,6 +210,26 @@ def run_pipeline(forced_category=None, dry_run=False):
                 script = script_data.get("script", "")
         else:
             script = script_data.get("script", "")
+        
+        # ── LAYER 1: Pre-Kaggle script duration estimation ──
+        # Based on logs: 117 words → ~46s after 1.15x speedup = ~2.55 words/sec final pace
+        # So raw words need: 35s * 2.55 ≈ 90 words minimum before speedup
+        MIN_DURATION_SEC = 35
+        WORDS_PER_SEC_ESTIMATE = 2.55  # calibrated from 117 words / 45.97s
+        
+        word_count = len(script.split())
+        estimated_duration = word_count / WORDS_PER_SEC_ESTIMATE
+        
+        if estimated_duration < MIN_DURATION_SEC:
+            min_words = int(MIN_DURATION_SEC * WORDS_PER_SEC_ESTIMATE) + 10
+            log_message(f"⚠️ Script too short: ~{estimated_duration:.1f}s estimated ({word_count} words). Minimum is {MIN_DURATION_SEC}s ({min_words}+ words). Rejecting early.")
+            failed_topics.append(fact_headline)
+            script_data = None
+            attempts += 1
+            continue
+        
+        log_message(f"📊 Script length check passed: {word_count} words → ~{estimated_duration:.1f}s estimated (min {MIN_DURATION_SEC}s)")
+        
         fact_headline = script_data.get("original_news_headline")
         fact_url = script_data.get("original_news_url")
         log_message(f"Selected Fact: {fact_headline}")
@@ -281,10 +301,19 @@ def run_pipeline(forced_category=None, dry_run=False):
                 else:
                     log_message("❌ Kaggle job finished but critical audio output is missing.")
                     kaggle_failed = True
-            
-            if kaggle_failed:
-                log_message("🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.")
-                return False
+                
+                # ── LAYER 2: Post-Kaggle actual duration check with recalibration ──
+                if audio_received and duration is not None and duration < min_dur:
+                    actual_wps = word_count / duration
+                    log_message(f"⚠️ Kaggle returned {duration:.1f}s audio (< {min_dur}s). Pre-check estimate was {estimated_duration:.1f}s.")
+                    log_message(f"   Observed pace: {actual_wps:.2f} words/sec (vs estimate {WORDS_PER_SEC_ESTIMATE}). Recalibrating for next run.")
+                    # Update the estimate for future runs (could persist this)
+                    WORDS_PER_SEC_ESTIMATE = actual_wps
+                    kaggle_failed = True  # Treat as failure to trigger retry with longer script
+                
+                if kaggle_failed:
+                    log_message("🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.")
+                    return False
         else:
             # Fallback/Local execution only: no Kaggle credentials
             try:
@@ -312,6 +341,10 @@ def run_pipeline(forced_category=None, dry_run=False):
             continue
 
         if duration < min_dur:
+            actual_wps = word_count / duration
+            log_message(f"⚠️ Local TTS returned {duration:.1f}s audio (< {min_dur}s). Pre-check estimate was {estimated_duration:.1f}s.")
+            log_message(f"   Observed pace: {actual_wps:.2f} words/sec (vs estimate {WORDS_PER_SEC_ESTIMATE}). Recalibrating for next run.")
+            WORDS_PER_SEC_ESTIMATE = actual_wps
             log_message(f"⚠️ Generated audio too short ({duration:.1f}s < {min_dur}s). Retrying...")
             failed_topics.append(fact_headline)
             attempts += 1
