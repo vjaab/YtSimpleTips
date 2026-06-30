@@ -153,7 +153,7 @@ ENABLE_SEAMLESS_LOOP = False
 ENABLE_WATERMARK = True               # Channel watermark overlay on video
 ENABLE_AI_DISCLOSURE_LABEL = True     # AI Human-in-the-loop production label (YPP compliance)
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
-ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video
+ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video (DISABLED - caused clutter)
 ENABLE_STOCK_FOOTAGE = False          # Control whether to include stock footage (Pexels)
 ENABLE_AI_DISCLOSURE_LABEL = True     # YouTube AI-generated content disclosure label
 

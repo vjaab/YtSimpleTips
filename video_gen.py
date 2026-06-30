@@ -28,7 +28,7 @@ from config import (
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
     ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS,
-    ENABLE_AI_DISCLOSURE_LABEL,
+    ENABLE_AI_DISCLOSURE_LABEL, AVATAR_SYNC_OFFSET,
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 from entity_fetcher import fetch_all_entities
@@ -714,6 +714,214 @@ def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     
     return np.array(img)
 
+# ── NEW: Clean Single-Layer Caption System with Safe Zones ────────────────────
+def render_clean_caption(word_status_list, accent_color=(204, 255, 0), y_position="lower"):
+    """
+    Renders a single-layer karaoke caption with background pill for readability.
+    y_position: "lower" (70% - avoids avatar) or "middle" (50% - for no-avatar videos)
+    """
+    if not word_status_list:
+        img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+        return canvas_to_clip(img)
+    
+    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    words = [wd["word"] for wd in word_status_list]
+    is_active_list = [wd["is_active"] for wd in word_status_list]
+    
+    base_size = int(72 * (FRAME_W / 1080.0))
+    font = get_font_for_text("test", base_size, "bold")
+    
+    space_w = font.getbbox(" ")[2]
+    
+    word_widths = []
+    for word in words:
+        bbox = font.getbbox(word)
+        word_widths.append(bbox[2] - bbox[0])
+    
+    max_line_width = int(FRAME_W * 0.80)
+    lines = []
+    current_line = []
+    current_line_width = 0
+    
+    for i, word in enumerate(words):
+        word_w = word_widths[i]
+        space_needed = space_w if current_line else 0
+        
+        if current_line_width + space_needed + word_w > max_line_width and current_line:
+            lines.append(current_line)
+            current_line = [word]
+            current_line_width = word_w
+        else:
+            current_line.append(word)
+            current_line_width += space_needed + word_w
+    
+    if current_line:
+        lines.append(current_line)
+    
+    line_h = int(88 * (FRAME_W / 1080.0))
+    
+    # Position based on y_position parameter
+    if y_position == "lower":
+        # Lower third - avoids avatar on right, captions on left
+        y_pos = int(FRAME_H * 0.72) - (len(lines) * line_h // 2)
+    else:
+        # Middle - for videos without avatar
+        y_pos = int(FRAME_H * 0.50) - (len(lines) * line_h // 2)
+    
+    # Calculate max line width for background pill
+    max_line_w = 0
+    temp_idx = 0
+    for line in lines:
+        line_w = sum(word_widths[temp_idx:temp_idx+len(line)]) + space_w * (len(line)-1)
+        max_line_w = max(max_line_w, line_w)
+        temp_idx += len(line)
+    
+    pad_x, pad_y = 36, 18
+    bx1 = (FRAME_W - max_line_w) // 2 - pad_x
+    bx2 = (FRAME_W + max_line_w) // 2 + pad_x
+    by1 = y_pos - pad_y
+    by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
+    
+    # Semi-transparent dark background pill with subtle accent border
+    border_r, border_g, border_b = accent_color
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=16, fill=(8, 8, 12, 210), outline=(border_r, border_g, border_b, 100), width=2)
+    
+    word_idx = 0
+    for i, line in enumerate(lines):
+        line_y = y_pos + i * line_h
+        line_w = sum(word_widths[word_idx:word_idx+len(line)]) + space_w * (len(line)-1)
+        cur_x = (FRAME_W - line_w) // 2
+        
+        for word_text in line:
+            is_active = is_active_list[word_idx]
+            
+            if is_active:
+                # Active word: bright white, slightly larger, subtle glow
+                font = get_font_for_text(word_text, int(base_size * 1.12), "extrabold")
+                # Subtle glow
+                for dx in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        if abs(dx) + abs(dy) > 0:
+                            draw.text((cur_x + dx, line_y - 3 + dy), word_text, fill=(border_r, border_g, border_b, 60), font=font)
+                draw.text((cur_x, line_y - 3), word_text, fill=(255, 255, 255, 255), font=font)
+            else:
+                # Inactive word: dimmed white
+                font = get_font_for_text(word_text, base_size, "bold")
+                draw.text((cur_x+1, line_y+1), word_text, fill=(0, 0, 0, 160), font=font)
+                draw.text((cur_x, line_y), word_text, fill=(220, 220, 220, 255), font=font)
+            
+            cur_x += word_widths[word_idx] + space_w
+            word_idx += 1
+    
+    return canvas_to_clip(img)
+
+
+# ── NEW: Time-based Karaoke Caption (uses word timestamps) ───────────────────
+def render_karaoke_caption(chunk_words, current_time, accent_color=(204, 255, 0)):
+    """
+    Renders karaoke caption using word timestamps from chunk['words'].
+    Only shows if there are valid word timestamps.
+    """
+    if not chunk_words:
+        return None
+    
+    # Filter words that have valid timestamps
+    valid_words = [w for w in chunk_words if "start" in w and "end" in w and w["start"] < w["end"]]
+    if not valid_words:
+        return None
+    
+    img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    words = [w["word"] for w in valid_words]
+    starts = [w["start"] for w in valid_words]
+    ends = [w["end"] for w in valid_words]
+    
+    base_size = int(72 * (FRAME_W / 1080.0))
+    font = get_font_for_text("test", base_size, "bold")
+    
+    space_w = font.getbbox(" ")[2]
+    
+    word_widths = []
+    for word in words:
+        bbox = font.getbbox(word)
+        word_widths.append(bbox[2] - bbox[0])
+    
+    max_line_width = int(FRAME_W * 0.80)
+    lines = []
+    current_line = []
+    current_line_width = 0
+    line_word_indices = []  # Track which word indices belong to each line
+    
+    for i, word in enumerate(words):
+        word_w = word_widths[i]
+        space_needed = space_w if current_line else 0
+        
+        if current_line_width + space_needed + word_w > max_line_width and current_line:
+            lines.append(current_line)
+            line_word_indices.append(list(range(i - len(current_line), i)))
+            current_line = [word]
+            current_line_width = word_w
+        else:
+            current_line.append(word)
+            current_line_width += space_needed + word_w
+    
+    if current_line:
+        lines.append(current_line)
+        line_word_indices.append(list(range(len(words) - len(current_line), len(words))))
+    
+    line_h = int(88 * (FRAME_W / 1080.0))
+    
+    # Lower third position (72%)
+    y_pos = int(FRAME_H * 0.72) - (len(lines) * line_h // 2)
+    
+    max_line_w = 0
+    for li, line in enumerate(lines):
+        idxs = line_word_indices[li]
+        line_w = sum(word_widths[i] for i in idxs) + space_w * (len(idxs)-1)
+        max_line_w = max(max_line_w, line_w)
+    
+    pad_x, pad_y = 36, 18
+    bx1 = (FRAME_W - max_line_w) // 2 - pad_x
+    bx2 = (FRAME_W + max_line_w) // 2 + pad_x
+    by1 = y_pos - pad_y
+    by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
+    
+    border_r, border_g, border_b = accent_color
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=16, fill=(8, 8, 12, 210), outline=(border_r, border_g, border_b, 100), width=2)
+    
+    word_idx = 0
+    for li, line in enumerate(lines):
+        line_y = y_pos + li * line_h
+        idxs = line_word_indices[li]
+        line_w = sum(word_widths[i] for i in idxs) + space_w * (len(idxs)-1)
+        cur_x = (FRAME_W - line_w) // 2
+        
+        for local_idx, global_idx in enumerate(idxs):
+            word_text = words[global_idx]
+            is_active = starts[global_idx] <= current_time <= ends[global_idx]
+            
+            if is_active:
+                font = get_font_for_text(word_text, int(base_size * 1.12), "extrabold")
+                # Subtle glow
+                for dx in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        if abs(dx) + abs(dy) > 0:
+                            draw.text((cur_x + dx, line_y - 3 + dy), word_text, fill=(border_r, border_g, border_b, 60), font=font)
+                draw.text((cur_x, line_y - 3), word_text, fill=(255, 255, 255, 255), font=font)
+            else:
+                font = get_font_for_text(word_text, base_size, "bold")
+                draw.text((cur_x+1, line_y+1), word_text, fill=(0, 0, 0, 160), font=font)
+                draw.text((cur_x, line_y), word_text, fill=(220, 220, 220, 255), font=font)
+            
+            cur_x += word_widths[global_idx] + space_w
+            word_idx += 1
+    
+    return canvas_to_clip(img)
+
+
 def canvas_to_clip(pil_img):
     return np.array(pil_img.convert("RGBA"))
 
@@ -1133,10 +1341,11 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # ── BOTTOM PANEL & TITLE BANNER ──
     # Top Banner: Title Hook (at top of shorts, y=0)
     title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
-    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color, style_mode=banner_style_mode).with_start(0).with_position((0, 0))
-    background_clips.append(middle_clip)
+    # Remove the top title banner - it clutters the safe zone
+    # middle_clip = create_middle_title_banner_clip(...)
+    # background_clips.append(middle_clip)
 
-    # ── AVATAR VIDEO PIP OVERLAY ──
+    # ── AVATAR VIDEO PIP OVERLAY (Side-positioned, integrated) ──
     skip_avatar = script_json.get("skip_avatar", False)
     if not skip_avatar:
         lipsync_path = script_json.get("kaggle_lipsync_path")
@@ -1172,14 +1381,13 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     vid_clip = vid_clip.cropped(x1=0, y1=y1, x2=w_a, y2=y1+new_h)
                 w_a, h_a = vid_clip.size
                 
-                height_pip = int(FRAME_H * 0.40)
+                # Side PiP: 35% of frame height, positioned on RIGHT side (not center)
+                height_pip = int(FRAME_H * 0.35)
                 width_pip = int(height_pip * (w_a / h_a))
                 avatar_clip = vid_clip.resized((width_pip, height_pip))
                 
-                # AI Background Removal with rembg
+                # AI Background Removal with IMPROVED edge feathering
                 try:
-                    # Default to False to ensure clean deep-learning human segmentation (rembg)
-                    # even during local dry-run, unless fast chromakey is explicitly requested.
                     use_fast_chromakey = os.getenv("USE_FAST_CHROMAKEY", "false") == "true"
                     
                     if use_fast_chromakey:
@@ -1194,29 +1402,30 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                                 return mask_cache[frame_idx]
                             frame = unmasked_avatar.get_frame(t)
                             
-                            # Sample background color from top corners (average of 15x15 regions)
-                            bg_color = (frame[0:15, 0:15].mean(axis=(0, 1)) + frame[0:15, -15:].mean(axis=(0, 1))) / 2.0
-                            # Calculate distance from background color
+                            # Sample background color from multiple regions
+                            bg_color = (frame[0:15, 0:15].mean(axis=(0, 1)) + frame[0:15, -15:].mean(axis=(0, 1)) + frame[-15:, 0:15].mean(axis=(0, 1)) + frame[-15:, -15:].mean(axis=(0, 1))) / 4.0
                             diff = np.abs(frame.astype(np.float32) - bg_color)
-                            # Create binary mask where diff > 30 (tolerance) in any channel
-                            mask = np.any(diff > 30, axis=2).astype(np.uint8) * 255
+                            mask = np.any(diff > 25, axis=2).astype(np.uint8) * 255  # Lower tolerance
                             
-                            # Smooth with morphology
-                            kernel = np.ones((5, 5), np.uint8)
-                            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-                            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+                            # IMPROVED: Better morphology for edge cleaning
+                            kernel = np.ones((7, 7), np.uint8)
+                            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+                            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
+                            
+                            # EDGE FEATHERING: Gaussian blur for smooth edges
+                            mask = cv2.GaussianBlur(mask, (15, 15), 0)
                             mask = (mask / 255.0).astype(np.float32)
                             
-                            # Watermark erasure: zero out bottom 12%
+                            # Watermark erasure: zero out bottom 15%
                             h_mask, w_mask = mask.shape
-                            watermark_height = int(h_mask * 0.12)
+                            watermark_height = int(h_mask * 0.15)
                             mask[-watermark_height:, :] = 0.0
                             mask_cache[frame_idx] = mask
                             return mask
                             
                     else:
                         from rembg import remove, new_session
-                        print("👤 [video_gen] Initializing AI Background Removal (Dynamic u2net_human_seg)...")
+                        print("👤 [video_gen] Initializing AI Background Removal (u2net_human_seg) with edge refinement...")
                         rembg_session = new_session(model_name="u2net_human_seg")
                         unmasked_avatar = avatar_clip
                         mask_cache = {}
@@ -1231,52 +1440,75 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                                 frame,
                                 session=rembg_session,
                                 alpha_matting=True,
+                                alpha_matting_foreground_threshold=240,
+                                alpha_matting_background_threshold=10,
+                                alpha_matting_erode_size=5,
                                 post_process_mask=True
                             )
                             mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
-                            # Watermark erasure: zero out bottom 12%
+                            
+                            # POST-PROCESS: Additional edge feathering
+                            mask = cv2.GaussianBlur(mask, (11, 11), 0)
+                            
+                            # Watermark erasure: zero out bottom 15%
                             h_mask, w_mask = mask.shape
-                            watermark_height = int(h_mask * 0.12)
+                            watermark_height = int(h_mask * 0.15)
                             mask[-watermark_height:, :] = 0.0
                             mask_cache[frame_idx] = mask
                             return mask
                         
                     mclip = VideoClip(make_mask_frame, is_mask=True, duration=audio_duration)
                     avatar_clip = avatar_clip.with_mask(mclip)
-                    print("   ✅ Background removal applied frame-by-frame.")
+                    print("   ✅ Background removal with edge feathering applied.")
                 except Exception as re_err:
-                    print(f"⚠️ rembg failed: {re_err}. Falling back to Rounded Authority Card.")
-                    rad = int(min(width_pip, height_pip) * 0.15)
+                    print(f"⚠️ rembg failed: {re_err}. Falling back to Rounded Card with feathered edges.")
+                    rad = int(min(width_pip, height_pip) * 0.18)
                     mask = np.ones((height_pip, width_pip), dtype=np.float32)
                     Y, X = np.ogrid[:height_pip, :width_pip]
                     for y, x in [(rad, rad), (rad, width_pip-rad), (height_pip-rad, rad), (height_pip-rad, width_pip-rad)]:
                         dist = np.sqrt((Y-y)**2 + (X-x)**2)
                         corner_mask = (dist > rad) & ( ( (Y<rad) if y==rad else (Y>height_pip-rad) ) & ( (X<rad) if x==rad else (X>width_pip-rad) ) )
                         mask[corner_mask] = 0.0
+                    # Feather the fallback mask too
+                    mask = cv2.GaussianBlur(mask, (21, 21), 0)
                     mclip = VideoClip(lambda t: mask, is_mask=True, duration=audio_duration)
                     avatar_clip = avatar_clip.with_mask(mclip)
                 
-                # "Alive" motion (head-bob and breathing)
-                zoom_speed = 0.10 / max(audio_duration, 1.0)
+                # Subtle "alive" motion - reduced intensity
+                zoom_speed = 0.05 / max(audio_duration, 1.0)
                 avatar_clip = avatar_clip.with_effects([
-                    vfx.Resize(lambda t: 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)),
-                    vfx.Rotate(lambda t: 0.6 * math.sin(t * 1.4 + 0.5))
+                    vfx.Resize(lambda t: 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)),
+                    vfx.Rotate(lambda t: 0.3 * math.sin(t * 1.2 + 0.3))
                 ])
-
-                # Position avatar at bottom-center with layout profile offset
+                
+                # Position: RIGHT side, vertically centered in upper 60% of frame (avoid captions)
+                # This keeps avatar clear of bottom captions and top safe zone
                 avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
-
+                
                 def pip_position(t):
-                    current_scale = 1.0 + zoom_speed * t + 0.006 * math.sin(t * 1.8)
+                    current_scale = 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)
                     scaled_w = int(width_pip * current_scale)
                     scaled_h = int(height_pip * current_scale)
-                    base_x = (FRAME_W - scaled_w) // 2 + avatar_x_offset
-                    base_y = FRAME_H - scaled_h - 30
+                    # Right side with 40px margin from edge
+                    base_x = FRAME_W - scaled_w - 40 + avatar_x_offset
+                    # Vertically centered in upper portion (y=200 to y=900)
+                    base_y = 350
                     return (base_x, base_y)
-
+                
+                # Add subtle drop shadow for depth/integration
+                def add_shadow_frame(t):
+                    frame = avatar_clip.get_frame(t)
+                    if frame.shape[2] == 4:
+                        # Create shadow offset
+                        shadow = np.zeros_like(frame)
+                        shadow[:, :, :3] = 0
+                        shadow[:, :, 3] = frame[:, :, 3] * 0.3
+                        return shadow
+                    return frame
+                
                 avatar_pip = avatar_clip.with_position(pip_position).with_start(0)
                 background_clips.append(avatar_pip)
-                print("✅ [video_gen] Avatar PiP added successfully to composite background layers!")
+                print("✅ [video_gen] Avatar PiP added (side-positioned, feathered edges).")
             except Exception as av_err:
                 print(f"❌ [video_gen] Failed to process avatar video clip: {av_err}")
 
@@ -1546,7 +1778,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # ── ENTITY OVERLAYS ──
         _render_entity_overlays(p_draw, script_json, t, accent_color)
 
-        # ── DUAL-LAYER CAPTIONS ──
+        # ── SINGLE CLEAN CAPTION LAYER (Safe zone: bottom 40%, centered) ──
         active_chunk = None
         for chunk in chunks:
             if chunk["start"] <= t <= chunk["end"]:
@@ -1560,33 +1792,25 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             chunk_dur = max(0.1, active_chunk["end"] - active_chunk["start"])
             progress = (t - active_chunk["start"]) / chunk_dur
             
-            if ENABLE_DUAL_CAPTIONS:
-                # ── LAYER 1: Tanglish word-by-word karaoke subtitles (at ~58% Y) ──
-                chunk_words = active_chunk.get("words", [])
-                if chunk_words:
-                    word_status_list = []
-                    for wd in chunk_words:
-                        is_active = wd["start"] <= t <= wd["end"]
-                        word_status_list.append({"word": wd["word"], "is_active": is_active})
-                    
-                    sub_arr = render_subtitle_frame(word_status_list, accent_color=caption_highlight)
-                    pil_sub = Image.fromarray(sub_arr).convert("RGBA")
-                    pil_frame.alpha_composite(pil_sub)
-                
-                # ── LAYER 2: English keyword pill (at ~76% Y) ──
-                eng_caption = active_chunk.get("english_caption", "")
-                if eng_caption and eng_caption.strip():
-                    cap_arr = render_whiteboard_caption(eng_caption, progress, accent_color=accent_color)
-                    pil_cap = Image.fromarray(cap_arr).convert("RGBA")
-                    pil_frame.alpha_composite(pil_cap)
+            # Get the text - prefer english_caption for key terms, fallback to chunk text
+            caption_text = active_chunk.get("english_caption", "")
+            if not caption_text or not caption_text.strip():
+                caption_text = active_chunk.get("text", "")
             
-            elif ENABLE_KINETIC_CAPTIONS:
-                # Legacy single-layer caption mode
-                chunk_text = active_chunk.get("english_caption", active_chunk.get("text", ""))
-                if chunk_text:
-                    sub_arr = render_whiteboard_caption(chunk_text, progress, accent_color=accent_color)
-                    pil_sub = Image.fromarray(sub_arr).convert("RGBA")
-                    pil_frame.alpha_composite(pil_sub)
+            if caption_text and caption_text.strip():
+                # Render single clean caption with background pill for readability
+                cap_arr = render_clean_caption(caption_text, progress, accent_color=accent_color, is_active_word=False)
+                pil_cap = Image.fromarray(cap_arr).convert("RGBA")
+                pil_frame.alpha_composite(pil_cap)
+        
+        # Also render word-by-word karaoke if words available (clean version)
+        if active_chunk:
+            chunk_words = active_chunk.get("words", [])
+            if chunk_words:
+                karaoke_arr = render_karaoke_caption(chunk_words, t, accent_color=caption_highlight)
+                if karaoke_arr is not None:
+                    pil_karaoke = Image.fromarray(karaoke_arr).convert("RGBA")
+                    pil_frame.alpha_composite(pil_karaoke)
         
         # ── Emoji reaction overlays ──
         if ENABLE_EMOJI_OVERLAYS:
