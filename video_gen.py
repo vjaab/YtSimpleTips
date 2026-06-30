@@ -555,7 +555,7 @@ _TRANSITION_POOL = [
 # ── DUAL-LAYER CAPTION SYSTEM ───────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_subtitle_frame(word_status_list):
+def render_subtitle_frame(word_status_list, accent_color=(204, 255, 0)):
     line_h = int(95 * (FRAME_W / 1080.0))
     if FRAME_H == 1080:
         y_pos = int(FRAME_H * 0.65) - (len(lines) * line_h // 2) + y_shift + y_jitter
