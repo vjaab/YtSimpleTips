@@ -992,25 +992,44 @@ Return ONLY a JSON object matching the required schema:
             print(f"      - Transitions: {validation_result.get('transition_score', 0)}%")
             print(f"      - Subtitle Timing: {validation_result.get('subtitle_timing_score', 0)}%")
             
+            def _to_int(score):
+                if isinstance(score, int):
+                    return score
+                if isinstance(score, str):
+                    word_to_num = {
+                        'zero': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                        'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+                        'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15,
+                        'sixteen': 16, 'seventeen': 17, 'eighteen': 18, 'nineteen': 19, 'twenty': 20,
+                        'thirty': 30, 'forty': 40, 'fifty': 50, 'sixty': 60, 'seventy': 70,
+                        'eighty': 80, 'ninety': 90, 'hundred': 100
+                    }
+                    score_lower = score.lower().strip('%')
+                    if score_lower in word_to_num:
+                        return word_to_num[score_lower]
+                    digits = ''.join(filter(str.isdigit, score))
+                    return int(digits) if digits else 0
+                return 0
+
             # Check if all scores are >= 90%
             scores = [
-                validation_result.get('story_continuity_score', 0),
-                validation_result.get('visual_alignment_score', 0),
-                validation_result.get('engagement_score', 0),
-                validation_result.get('transition_score', 0),
-                validation_result.get('subtitle_timing_score', 0),
-                validation_result.get('comment_bait_score', 0)
+                _to_int(validation_result.get('story_continuity_score', 0)),
+                _to_int(validation_result.get('visual_alignment_score', 0)),
+                _to_int(validation_result.get('engagement_score', 0)),
+                _to_int(validation_result.get('transition_score', 0)),
+                _to_int(validation_result.get('subtitle_timing_score', 0)),
+                _to_int(validation_result.get('comment_bait_score', 0))
             ]
             
             if all(score >= 90 for score in scores) or validation_result.get('passes_validation') is True:
                 print("   ⭐ Storyboard passed all quality checks (>90% scores)!")
                 final_script["quality_scores"] = {
-                    "story_continuity": validation_result.get('story_continuity_score'),
-                    "visual_alignment": validation_result.get('visual_alignment_score'),
-                    "engagement": validation_result.get('engagement_score'),
-                    "transitions": validation_result.get('transition_score'),
-                    "subtitle_timing": validation_result.get('subtitle_timing_score'),
-                    "comment_bait": validation_result.get('comment_bait_score')
+                    "story_continuity": _to_int(validation_result.get('story_continuity_score')),
+                    "visual_alignment": _to_int(validation_result.get('visual_alignment_score')),
+                    "engagement": _to_int(validation_result.get('engagement_score')),
+                    "transitions": _to_int(validation_result.get('transition_score')),
+                    "subtitle_timing": _to_int(validation_result.get('subtitle_timing_score')),
+                    "comment_bait": _to_int(validation_result.get('comment_bait_score'))
                 }
                 break
             else:
