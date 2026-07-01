@@ -75,6 +75,30 @@ def get_gemini_client(refresh=False):
 CLOUDFLARE_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN", "")
 CLOUDFLARE_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID", "")
 
+# Other API Keys
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
+ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "8Oo4d9mNNwK369qOwl")
+KAGGLE_USERNAME = os.getenv("KAGGLE_USERNAME", "")
+KAGGLE_KEY = os.getenv("KAGGLE_KEY", "") or os.getenv("KAGGLE_API_TOKEN", "")
+YOUTUBE_CLIENT_SECRET_FILE = os.getenv("YOUTUBE_CLIENT_SECRET_FILE", "client_secret.json")
+VEO_MODEL_ID = "veo-3.1-generate-preview"
+
+# Trending Engine API Keys (Phase 1)
+YOUTUBE_DATA_API_KEY = os.getenv("YOUTUBE_DATA_API_KEY", "")
+REDDIT_CLIENT_ID = os.getenv("REDDIT_CLIENT_ID", "")
+REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET", "")
+VIDIQ_API_KEY = os.getenv("VIDIQ_API_KEY", "")
+
+# X.com (Twitter) API Credentials
+X_API_KEY = os.getenv("X_API_KEY", "")
+X_API_SECRET = os.getenv("X_API_SECRET", "")
+X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN", "")
+X_ACCESS_TOKEN_SECRET = os.getenv("X_ACCESS_TOKEN_SECRET", "")
+X_BEARER_TOKEN = os.getenv("X_BEARER_TOKEN", "")
+
 # Text Generation Models (LLMs)
 CLOUDFLARE_TEXT_MODELS = [
     # Latest flagship models
