@@ -1,0 +1,223 @@
+[07:35:18] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[07:35:18] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[07:35:18] STEP 1: Strategy Check -> Day: Wed, Slot: Slot B (Afternoon), Category: 🤖 Practical AI Tools & Jobs
+[07:35:18] STEP 2: Fetching facts using Search Grounding for '🤖 Practical AI Tools & Jobs'...
+[07:35:36] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[07:37:21] Aligning script text with subtitle chunks...
+[07:37:21] 📊 Script length check passed: 252 words → ~98.8s estimated (min 35s)
+[07:37:21] Selected Fact: The Listening Phone Myth
+[07:37:21] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:37:21] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:37:21] STEP 4: Generating Tamil cloned voiceover...
+[07:37:21] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:37:21] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:37:22] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:37:22] ❌ Audio generation failed. Retrying...
+[07:37:22] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[07:38:53] Aligning script text with subtitle chunks...
+[07:38:53] 📊 Script length check passed: 211 words → ~82.7s estimated (min 35s)
+[07:38:53] Selected Fact: Overfitting
+[07:38:53] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:38:53] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:38:53] STEP 4: Generating Tamil cloned voiceover...
+[07:38:53] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:38:53] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:38:54] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:38:54] ❌ Audio generation failed. Retrying...
+[07:38:54] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[07:41:28] Aligning script text with subtitle chunks...
+[07:41:28] 📊 Script length check passed: 190 words → ~74.5s estimated (min 35s)
+[07:41:28] Selected Fact: Anomaly Detection in Spam Filtering
+[07:41:28] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:41:28] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:41:28] STEP 4: Generating Tamil cloned voiceover...
+[07:41:28] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:41:28] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:41:29] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:41:29] ❌ Audio generation failed. Retrying...
+[07:41:29] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[07:44:10] Aligning script text with subtitle chunks...
+[07:44:10] 📊 Script length check passed: 261 words → ~102.4s estimated (min 35s)
+[07:44:10] Selected Fact: Face ID Mechanics
+[07:44:10] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:44:10] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:44:10] STEP 4: Generating Tamil cloned voiceover...
+[07:44:10] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:44:10] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:44:11] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:44:11] ❌ Audio generation failed. Retrying...
+[07:44:11] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[07:45:46] Aligning script text with subtitle chunks...
+[07:45:46] 📊 Script length check passed: 208 words → ~81.6s estimated (min 35s)
+[07:45:46] Selected Fact: Next-Token Prediction (Auto-complete)
+[07:45:46] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:45:46] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:45:46] STEP 4: Generating Tamil cloned voiceover...
+[07:45:46] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:45:46] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:45:47] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:45:47] ❌ Audio generation failed. Retrying...
+[07:45:47] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[07:47:26] Aligning script text with subtitle chunks...
+[07:47:26] 📊 Script length check passed: 210 words → ~82.4s estimated (min 35s)
+[07:47:26] Selected Fact: The Centaur Career Strategy
+[07:47:26] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:47:26] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:47:26] STEP 4: Generating Tamil cloned voiceover...
+[07:47:26] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:47:26] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:47:27] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:47:27] ❌ Audio generation failed. Retrying...
+[07:47:27] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[07:48:24] Aligning script text with subtitle chunks...
+[07:48:24] 📊 Script length check passed: 192 words → ~75.3s estimated (min 35s)
+[07:48:24] Selected Fact: How Food Delivery Apps Predict Your Cravings (Collaborative Filtering)
+[07:48:24] Source URL: https://github.com/vjaab/YtSimpleTips
+[07:48:24] STEP 3b: Evidence screenshots are disabled in config. Skipping.
+[07:48:24] STEP 4: Generating Tamil cloned voiceover...
+[07:48:24] Selected Lip-Sync Template: assets/video/black_coat.mp4 (from 42 options)
+[07:48:24] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[07:48:25] ❌ Kaggle Handover failed: push_failed - Failed to push Kaggle kernel: STDERR: Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/bin/kaggle", line 3, in <module>
+    from kaggle.cli import main
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/__init__.py", line 3, in <module>
+    from kaggle.api.kaggle_api_extended import KaggleApi
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kaggle/api/kaggle_api_extended.py", line 59, in <module>
+    from kagglesdk import get_access_token_from_env, KaggleClient, KaggleCredentials, KaggleEnv, KaggleOAuth  # type: ignore[attr-defined]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/__init__.py", line 3, in <module>
+    from kagglesdk.kaggle_client import KaggleClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/kaggle_client.py", line 7, in <module>
+    from kagglesdk.competitions.services.competition_api_service import CompetitionApiClient
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/services/competition_api_service.py", line 3, in <module>
+    from kagglesdk.competitions.types.competition_api_service import ApiCompetition, ApiCompetitionPage, ApiCreateCodeSubmissionRequest, ApiCreateCodeSubmissionResponse, ApiCreateCompetitionDataRequest, ApiCreateCompetitionDataResponse, ApiCreateCompetitionPageRequest, ApiCreateCompetitionRequest, ApiCreateCompetitionResponse, ApiCreateSubmissionRequest, ApiCreateSubmissionResponse, ApiDeleteCompetitionPageRequest, ApiDownloadDataFileRequest, ApiDownloadDataFilesRequest, ApiDownloadLeaderboardRequest, ApiGetCompetitionDataFilesSummaryRequest, ApiGetCompetitionRequest, ApiGetEpisodeAgentLogsRequest, ApiGetEpisodeReplayRequest, ApiGetLeaderboardRequest, ApiGetLeaderboardResponse, ApiGetSubmissionRequest, ApiLaunchCompetitionRequest, ApiListCompetitionPagesRequest, ApiListCompetitionPagesResponse, ApiListCompetitionsRequest, ApiListCompetitionsResponse, ApiListCompetitionTopicsRequest, ApiListCompetitionTopicsResponse, ApiListDataFilesRequest, ApiListDataFilesResponse, ApiListDataTreeFilesRequest, ApiListSubmissionEpisodesRequest, ApiListSubmissionEpisodesResponse, ApiListSubmissionsRequest, ApiListSubmissionsResponse, ApiListTeamPublicSubmissionsRequest, ApiListTeamPublicSubmissionsResponse, ApiListTopicMessagesRequest, ApiListTopicMessagesResponse, ApiStartSubmissionUploadRequest, ApiStartSubmissionUploadResponse, ApiSubmission, ApiUpdateCompetitionPageRequest, ApiUpdateCompetitionSettingsRequest
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/competition_api_service.py", line 6, in <module>
+    from kagglesdk.competitions.types.host_service import CompetitionSettings
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/kagglesdk/competitions/types/host_service.py", line 4, in <module>
+    from kagglesdk.competitions.legacy.types.legacy_competition_host_service import EvaluationMetricParameter
+ModuleNotFoundError: No module named 'kagglesdk.competitions.legacy'
+[07:48:25] ❌ Audio generation failed. Retrying...
+[07:48:25] STEP 3 (Attempt 8/10): Multi-Agent Tanglish Script Generation...
+[07:50:07] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[07:50:07]    - Story Continuity: 42%
+[07:50:07]    - Visual Alignment: 58%
+[07:50:07]    - Engagement: 45%
+[07:50:07]    - Transitions: 55%
+[07:50:07]    - Subtitle Timing: 78%
+[07:50:07] Aligning script text with subtitle chunks...
+[07:50:07] ⚠️ Script too short: ~34.9s estimated (89 words). Minimum is 35s (99+ words). Rejecting early.
+[07:50:07] STEP 3 (Attempt 9/10): Multi-Agent Tanglish Script Generation...
+[07:51:14] Aligning script text with subtitle chunks...
+[07:51:14] ⚠️ Script too short: ~18.0s estimated (46 words). Minimum is 35s (99+ words). Rejecting early.
+[07:51:14] STEP 3 (Attempt 10/10): Multi-Agent Tanglish Script Generation...
+[07:53:32] Aligning script text with subtitle chunks...
+[07:53:32] ⚠️ Script too short: ~3.5s estimated (9 words). Minimum is 35s (99+ words). Rejecting early.
+[07:53:32] 🚨 Pipeline failed to build core assets after multiple attempts.
