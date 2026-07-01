@@ -1242,23 +1242,37 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {cloudflare_token}",
             "Content-Type": "application/json"
         }
+        # gpt-oss models use Chat Completions format (choices[0].message.content)
+        # instead of legacy {response: "..."} format
+        gpt_oss_models = {"@cf/openai/gpt-oss-120b", "@cf/openai/gpt-oss-20b"}
         for model_name in CLOUDFLARE_MODELS:
             print(f"🔮 Falling back to Cloudflare ({model_name})...")
             try:
                 payload = {
                     "messages": [{"role": "user", "content": prompt}],
                     "response_format": {"type": "json_object"},
-                    "temperature": 0.7
+                    "temperature": 0.7,
+                    "max_tokens": 4096  # Prevent truncation for JSON output
                 }
                 r = requests.post(
                     f"https://api.cloudflare.com/client/v4/accounts/{cloudflare_account_id}/ai/run/{model_name}",
                     json=payload,
                     headers=headers,
-                    timeout=30
+                    timeout=60
                 )
                 if r.status_code == 200:
-                    content = r.json()["result"]["response"].strip()
-                    return clean_and_parse_json(content)
+                    result = r.json()["result"]
+                    # Handle different response formats
+                    if model_name in gpt_oss_models:
+                        # Chat Completions format: choices[0].message.content
+                        content = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                    else:
+                        # Legacy format: response
+                        content = result.get("response", "").strip()
+                    if content:
+                        return clean_and_parse_json(content)
+                    else:
+                        print(f"⚠️ Cloudflare ({model_name}) returned empty content")
                 else:
                     print(f"⚠️ Cloudflare ({model_name}) failed with code {r.status_code}: {r.text}")
             except Exception as e:
