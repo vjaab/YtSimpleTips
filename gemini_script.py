@@ -1218,7 +1218,7 @@ def get_offline_fallback_script(category, failed_topics=None):
 def call_fallback_model(prompt):
     """
     Attempts to call non-Gemini fallback APIs in sequence:
-    Groq (OpenAI Free Model -> Qwen -> Llama) -> OpenAI -> Anthropic (Claude) -> DeepSeek -> OpenRouter.
+    Cloudflare Workers AI -> Cerebras -> Groq -> OpenAI -> Anthropic (Claude) -> DeepSeek -> OpenRouter.
     Returns the parsed JSON response dict or None.
     """
     import os
@@ -1233,6 +1233,43 @@ def call_fallback_model(prompt):
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         return json.loads(raw.strip())
 
+    # 0. Cloudflare Workers AI (fast, free tier available)
+    cloudflare_token = os.getenv("CLOUDFLARE_API_TOKEN")
+    cloudflare_account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
+    if cloudflare_token and cloudflare_account_id:
+        headers = {
+            "Authorization": f"Bearer {cloudflare_token}",
+            "Content-Type": "application/json"
+        }
+        cf_models = [
+            "@cf/meta/llama-3.3-70b-instruct",
+            "@cf/meta/llama-3.1-8b-instruct",
+            "@cf/qwen/qwen2.5-72b-instruct",
+            "@cf/mistral/mistral-7b-instruct-v0.1",
+            "@cf/google/gemma-7b-it",
+        ]
+        for model_name in cf_models:
+            print(f"🔮 Falling back to Cloudflare ({model_name})...")
+            try:
+                payload = {
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.7
+                }
+                r = requests.post(
+                    f"https://api.cloudflare.com/client/v4/accounts/{cloudflare_account_id}/ai/run/{model_name}",
+                    json=payload,
+                    headers=headers,
+                    timeout=30
+                )
+                if r.status_code == 200:
+                    content = r.json()["result"]["response"].strip()
+                    return clean_and_parse_json(content)
+                else:
+                    print(f"⚠️ Cloudflare ({model_name}) failed with code {r.status_code}: {r.text}")
+            except Exception as e:
+                print(f"⚠️ Cloudflare ({model_name}) fallback failed: {e}")
+
     # 1. Cerebras (Llama 3.3 70B)
     cerebras_key = os.getenv("CEREBRAS_API_KEY")
     if cerebras_key:
@@ -1242,7 +1279,7 @@ def call_fallback_model(prompt):
         }
         cerebras_models = ["zai-glm-4.7", "gpt-oss-120b"]
         for model_name in cerebras_models:
-            print(f"🔮 Gemini failed. Falling back to Cerebras ({model_name})...")
+            print(f"🔮 Falling back to Cerebras ({model_name})...")
             try:
                 payload = {
                     "model": model_name,
@@ -1259,16 +1296,22 @@ def call_fallback_model(prompt):
             except Exception as e:
                 print(f"⚠️ Cerebras ({model_name}) fallback failed: {e}")
 
-    # 2. Groq (with model preference order: llama-3.3-70b-versatile -> mixtral-8x7b-32768)
+    # 2. Groq (with model preference order - only verified working models)
     groq_key = os.getenv("GROQ_API_KEY")
     if groq_key:
         headers = {
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json"
         }
-        groq_models = ["llama-3.3-70b-versatile", "llama-4-scout", "llama-3.1-8b-instant", "qwen/qwen3-32b", "openai/gpt-oss-120b"]
+        groq_models = [
+            "llama-3.3-70b-versatile",
+            "qwen/qwen3-32b",
+            "openai/gpt-oss-120b",
+            "gemma2-9b-it",
+            "llama-3.1-8b-instant"
+        ]
         for model_name in groq_models:
-            print(f"🔮 Gemini failed. Falling back to Groq ({model_name})...")
+            print(f"🔮 Falling back to Groq ({model_name})...")
             try:
                 payload = {
                     "model": model_name,
