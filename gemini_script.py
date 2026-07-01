@@ -1237,18 +1237,12 @@ def call_fallback_model(prompt):
     cloudflare_token = os.getenv("CLOUDFLARE_API_TOKEN")
     cloudflare_account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
     if cloudflare_token and cloudflare_account_id:
+        from config import CLOUDFLARE_MODELS
         headers = {
             "Authorization": f"Bearer {cloudflare_token}",
             "Content-Type": "application/json"
         }
-        cf_models = [
-            "@cf/meta/llama-3.3-70b-instruct",
-            "@cf/meta/llama-3.1-8b-instruct",
-            "@cf/qwen/qwen2.5-72b-instruct",
-            "@cf/mistral/mistral-7b-instruct-v0.1",
-            "@cf/google/gemma-7b-it",
-        ]
-        for model_name in cf_models:
+        for model_name in CLOUDFLARE_MODELS:
             print(f"🔮 Falling back to Cloudflare ({model_name})...")
             try:
                 payload = {
