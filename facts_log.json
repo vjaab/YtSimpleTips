@@ -13,37 +13,40 @@
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "Moravec's Paradox",
         "ChatGPT Secret Hack! 🚀",
-        "Why AI Confidently Lies: The Hallucination Effect"
+        "Why AI Confidently Lies: The Hallucination Effect",
+        "🚀 Phone Speed 2x Boost! Simple Android Hack",
+        "AI Revives Old Photos in Seconds"
     ],
     "used_keywords": [
+        "Did You Know",
+        "Study Hacks",
         "AI Hacks",
-        "Productivity",
         "Tamil Tech",
+        "Tamil Facts",
+        "Productivity",
+        "Android Tips",
         "Cyber Safety",
         "Battery Hack",
-        "Did You Know",
-        "Android Tips",
-        "Tamil Facts",
-        "ChatGPT Tips",
         "Tech Tips",
-        "Study Hacks"
+        "ChatGPT Tips"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 1,
-        "🤖 AI Demystified & Future Tech": 3
+        "🤖 AI Demystified & Future Tech": 3,
+        "🤖 Practical AI Tools & Jobs": 1
     },
     "last_7_days_stories": [
-        "🔋 Phone Battery Hack! 2x Life",
         "Phone Battery Secret Hack! 🔋",
         "Volume Button Secret Hack 📸",
         "📚 AI Summarize Hack: Study Speed 2X!",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
-        "ChatGPT Secret Hack! 🚀"
+        "ChatGPT Secret Hack! 🚀",
+        "🚀 Phone Speed 2x Boost! Simple Android Hack"
     ],
-    "total_uploaded": 7,
-    "last_upload": "2026-06-30",
+    "total_uploaded": 8,
+    "last_upload": "2026-07-02",
     "history": [
         {
             "date": "2026-06-28",
@@ -148,6 +151,20 @@
             "youtube_url": "https://youtu.be/1p3aQJ7KOSQ",
             "source_url": "https://en.wikipedia.org/wiki/Hallucination_(artificial_intelligence)",
             "avatar_used": "assets/video/black_apple.mp4"
+        },
+        {
+            "date": "2026-07-02",
+            "title": "🚀 Phone Speed 2x Boost! Simple Android Hack",
+            "news_headline": "AI Revives Old Photos in Seconds",
+            "category": "🤖 Practical AI Tools & Jobs",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://www.xenonstack.com/blog/ai-image-restoration",
+            "avatar_used": "assets/video/black_coat.mp4"
         }
     ]
 }
