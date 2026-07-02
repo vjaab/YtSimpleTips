@@ -15,37 +15,49 @@
         "ChatGPT Secret Hack! 🚀",
         "Why AI Confidently Lies: The Hallucination Effect",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
-        "AI Revives Old Photos in Seconds"
+        "AI Revives Old Photos in Seconds",
+        "Yen AI ku Dosa saapada mudiyala?",
+        "Moravec's Paradox & Future Careers"
     ],
     "used_keywords": [
-        "Did You Know",
-        "Study Hacks",
-        "AI Hacks",
-        "Tamil Tech",
-        "Tamil Facts",
+        "Common sense AI",
         "Productivity",
-        "Android Tips",
-        "Cyber Safety",
-        "Battery Hack",
+        "Tamil tech",
+        "Tamil Tech",
+        "AI Hacks",
+        "Tamil Facts",
+        "Future jobs",
+        "Tech facts",
         "Tech Tips",
-        "ChatGPT Tips"
+        "Battery Hack",
+        "Moravec's Paradox",
+        "Physical work AI",
+        "Did You Know",
+        "ChatGPT Tips",
+        "Study Hacks",
+        "AI limitations",
+        "AI proof jobs",
+        "Cyber Safety",
+        "AI explained",
+        "Android Tips",
+        "VJ videos"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 1,
         "🤖 AI Demystified & Future Tech": 3,
-        "🤖 Practical AI Tools & Jobs": 1
+        "🤖 Practical AI Tools & Jobs": 2
     },
     "last_7_days_stories": [
-        "Phone Battery Secret Hack! 🔋",
         "Volume Button Secret Hack 📸",
         "📚 AI Summarize Hack: Study Speed 2X!",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "ChatGPT Secret Hack! 🚀",
-        "🚀 Phone Speed 2x Boost! Simple Android Hack"
+        "🚀 Phone Speed 2x Boost! Simple Android Hack",
+        "Yen AI ku Dosa saapada mudiyala?"
     ],
-    "total_uploaded": 8,
+    "total_uploaded": 9,
     "last_upload": "2026-07-02",
     "history": [
         {
@@ -165,6 +177,28 @@
             "youtube_url": "pending_upload",
             "source_url": "https://www.xenonstack.com/blog/ai-image-restoration",
             "avatar_used": "assets/video/black_coat.mp4"
+        },
+        {
+            "date": "2026-07-02",
+            "title": "Yen AI ku Dosa saapada mudiyala?",
+            "news_headline": "Moravec's Paradox & Future Careers",
+            "category": "🤖 Practical AI Tools & Jobs",
+            "keywords": [
+                "Moravec's Paradox",
+                "AI limitations",
+                "Future jobs",
+                "AI proof jobs",
+                "Tamil tech",
+                "VJ videos",
+                "AI explained",
+                "Tech facts",
+                "Common sense AI",
+                "Physical work AI"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://github.com/vjaab/YtSimpleTips",
+            "avatar_used": "assets/video/black_grey_white_hoodie.mp4"
         }
     ]
 }
