@@ -19,48 +19,57 @@
         "Yen AI ku Dosa saapada mudiyala?",
         "Moravec's Paradox & Future Careers",
         "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
-        "AI Diagnoses Diseases More Accurately Than Doctors"
+        "AI Diagnoses Diseases More Accurately Than Doctors",
+        "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
+        "AI Job Replacement"
     ],
     "used_keywords": [
-        "Productivity",
-        "Android Tips",
-        "Tamil Tech",
-        "Tamil Facts",
-        "Common sense AI",
-        "Did You Know",
-        "Study Hacks",
-        "Moravec's Paradox",
-        "AI Hacks",
-        "AI limitations",
-        "ChatGPT Tips",
-        "VJ videos",
-        "AI proof jobs",
-        "AI explained",
-        "Tech facts",
-        "Tech Tips",
-        "Future jobs",
         "Battery Hack",
-        "Cyber Safety",
-        "AI Features",
+        "Android Tips",
+        "AI limitations",
         "Physical work AI",
-        "Tamil tech"
+        "Future of Work",
+        "AI proof jobs",
+        "AI Hacks",
+        "Tamil Tech",
+        "Tech Tips",
+        "AI explained",
+        "Moravec's Paradox",
+        "Tamil Facts",
+        "Productivity",
+        "Cyber Safety",
+        "Augmentation",
+        "VJ Tips",
+        "ChatGPT Tips",
+        "Study Hacks",
+        "VJ videos",
+        "Common sense AI",
+        "Tech facts",
+        "Tamil tech",
+        "AI in Tamil",
+        "AI Jobs",
+        "Tech Tips Tamil",
+        "Future jobs",
+        "Did You Know",
+        "Automation",
+        "AI Features"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
-        "🤖 Simple AI Hacks for Everyone": 1,
+        "🤖 Simple AI Hacks for Everyone": 2,
         "🤖 AI Demystified & Future Tech": 4,
         "🤖 Practical AI Tools & Jobs": 2
     },
     "last_7_days_stories": [
-        "📚 AI Summarize Hack: Study Speed 2X!",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "ChatGPT Secret Hack! 🚀",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
         "Yen AI ku Dosa saapada mudiyala?",
-        "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯"
+        "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
+        "AI job replace-a? Automation vs Augmentation - 30 sec-la!"
     ],
-    "total_uploaded": 10,
+    "total_uploaded": 11,
     "last_upload": "2026-07-03",
     "history": [
         {
@@ -217,6 +226,27 @@
             "youtube_url": "pending_upload",
             "source_url": "https://hms.harvard.edu/news/study-suggests-ai-good-enough-diagnosing-complex-medical-cases-warrant-clinical-testing",
             "avatar_used": "assets/video/black_terminal.mp4"
+        },
+        {
+            "date": "2026-07-03",
+            "title": "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
+            "news_headline": "AI Job Replacement",
+            "category": "🤖 Simple AI Hacks for Everyone",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "AI Jobs",
+                "Automation",
+                "Augmentation",
+                "Future of Work",
+                "Tech Tips Tamil",
+                "VJ Tips",
+                "AI in Tamil"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://github.com/vjaab/YtSimpleTips",
+            "avatar_used": "assets/video/black_vest.mp4"
         }
     ]
 }
