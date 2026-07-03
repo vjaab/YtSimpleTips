@@ -23,55 +23,57 @@
         "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
         "AI Job Replacement",
         "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
-        "One-Click AI Background Removal"
+        "One-Click AI Background Removal",
+        "100 Mark Eduthaalum Thappu Yen?",
+        "Overfitting (The Mugapadi Effect)"
     ],
     "used_keywords": [
-        "ChatGPT Tips",
-        "Future of Work",
-        "AI Jobs",
-        "Cyber Safety",
-        "AI Hacks",
-        "AI limitations",
-        "Productivity",
-        "Physical work AI",
-        "AI Features",
-        "Android Tips",
-        "Common sense AI",
-        "Tech Tips Tamil",
-        "VJ videos",
-        "Augmentation",
-        "VJ Tips",
-        "Battery Hack",
-        "Did You Know",
         "Future jobs",
-        "Automation",
-        "Tech Tips",
-        "AI in Tamil",
+        "Tech Tips Tamil",
+        "Augmentation",
+        "Common sense AI",
         "Moravec's Paradox",
+        "Future of Work",
+        "AI Features",
+        "AI limitations",
+        "Cyber Safety",
+        "Battery Hack",
+        "VJ videos",
+        "Tech Tips",
         "Study Hacks",
-        "Tech facts",
-        "Tamil tech",
         "AI explained",
+        "Automation",
+        "Android Tips",
+        "ChatGPT Tips",
+        "Did You Know",
+        "Productivity",
+        "AI in Tamil",
         "Tamil Tech",
+        "Tamil tech",
         "Tamil Facts",
-        "AI proof jobs"
+        "AI Hacks",
+        "VJ Tips",
+        "Physical work AI",
+        "AI proof jobs",
+        "AI Jobs",
+        "Tech facts"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 3,
         "🤖 AI Demystified & Future Tech": 4,
-        "🤖 Practical AI Tools & Jobs": 2
+        "🤖 Practical AI Tools & Jobs": 3
     },
     "last_7_days_stories": [
-        "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "ChatGPT Secret Hack! 🚀",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
         "Yen AI ku Dosa saapada mudiyala?",
         "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
         "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
-        "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀"
+        "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
+        "100 Mark Eduthaalum Thappu Yen?"
     ],
-    "total_uploaded": 12,
+    "total_uploaded": 13,
     "last_upload": "2026-07-03",
     "history": [
         {
@@ -263,6 +265,20 @@
             "youtube_url": "pending_upload",
             "source_url": "https://www.adobe.com/express/feature/image/remove-background",
             "avatar_used": "assets/video/blue_python.mp4"
+        },
+        {
+            "date": "2026-07-03",
+            "title": "100 Mark Eduthaalum Thappu Yen?",
+            "news_headline": "Overfitting (The Mugapadi Effect)",
+            "category": "🤖 Practical AI Tools & Jobs",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/c4ufP-4Bp7Y",
+            "source_url": "https://github.com/vjaab/YtSimpleTips",
+            "avatar_used": "assets/video/blue_yello_polo.mp4"
         }
     ]
 }
