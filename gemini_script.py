@@ -1273,10 +1273,14 @@ def call_fallback_model(prompt):
                     # Handle different response formats
                     if model_name in gpt_oss_models:
                         # Chat Completions format: choices[0].message.content
-                        content = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                        raw_content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
                     else:
                         # Legacy format: response
-                        content = result.get("response", "").strip()
+                        raw_content = result.get("response", "")
+                    # Some models return the response as a dict (already parsed JSON)
+                    if isinstance(raw_content, dict):
+                        return raw_content
+                    content = raw_content.strip() if isinstance(raw_content, str) else ""
                     if content:
                         return clean_and_parse_json(content)
                     else:

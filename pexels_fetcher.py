@@ -92,7 +92,7 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
     for attempt in range(1, max_attempts + 1):
         try:
             print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})....")
-            resp = requests.get(url, timeout=15)
+            resp = requests.get(url, timeout=30)
             if resp.status_code == 200:
                 with open(output_path, "wb") as f:
                     f.write(resp.content)
@@ -222,7 +222,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                     print("     🚨 Imagen failed twice consecutively. Disabling Imagen for remaining chunks.")
                     
         # ── PRIORITY 2.5: Pollinations AI Image (Free AI fallback) ──
-        if not visual_path and prompt and pollinations_consecutive_fails < 2:
+        if not visual_path and prompt and pollinations_consecutive_fails < 4:
             output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
             enhanced_pollinations_prompt = prompt
             if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
@@ -237,7 +237,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                 pollinations_consecutive_fails = 0
             else:
                 pollinations_consecutive_fails += 1
-                if pollinations_consecutive_fails >= 2:
+                if pollinations_consecutive_fails >= 4:
                     print("     🚨 Pollinations failed twice consecutively. Disabling Pollinations for remaining chunks.")
             # Always add delay after Pollinations call to respect rate limits
             time.sleep(3)

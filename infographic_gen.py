@@ -470,10 +470,13 @@ def _render_growth_card(data, accent_color, progress=1.0):
     _draw_card_bg(draw, cx, cy, cw, ch, accent_color)
     
     title = data.get("title", "GROWTH RATE")
-    percent = data.get("percent", "+0%")
+    percent = str(data.get("percent", "+0%"))
     subtext = data.get("subtext", "")
     
-    active_percent = f"+{int(progress * int(percent.replace('+', '').replace('%', '')))}%" if '%' in percent else percent
+    # Sanitize: extract only digits from percent to handle LLM placeholders like '+XX%', 'N/A'
+    raw_digits = re.sub(r'[^0-9]', '', percent)
+    base_val = int(raw_digits) if raw_digits else 0
+    active_percent = f"+{int(progress * base_val)}%" if '%' in percent else percent
     
     font_title = get_font_for_text(title, 45, "bold")
     font_pct = get_font_for_text(active_percent, 140, "extrabold")
@@ -560,53 +563,75 @@ def render_infographic(infographic_type, infographic_data, accent_color, progres
         return renderer(infographic_data, accent_color, progress)
 
 def build_infographic_clip(chunk, accent_color, is_longform=False):
-    """Builds a MoviePy clip for an infographic card with dynamic animations."""
-    info = chunk.get("infographic_data", {})
-    info_type = chunk.get("infographic_type", "stat")
-    dur = chunk.get("duration", 2.0)
-    start = chunk.get("start", 0.0)
+    """Builds a MoviePy clip for an infographic card with dynamic animations.
+    Returns (card_clip, overlay_clip) or (None, None) on error — never crashes the pipeline."""
+    try:
+        info = chunk.get("infographic_data", {})
+        info_type = chunk.get("infographic_type", "stat")
+        dur = chunk.get("duration", 2.0)
+        start = chunk.get("start", 0.0)
 
-    if dur < 0.2:
+        if dur < 0.2:
+            return None, None
+
+        # Sanitize infographic_data if it's a dict — clean common LLM placeholder patterns
+        if isinstance(info, dict):
+            info = _sanitize_infographic_data(info)
+
+        fw, fh, fcy = get_dimensions(is_longform)
+        fade_in = 0.3
+        fade_out = 0.2
+        count_dur = min(1.5, dur * 0.6)
+
+        def make_frame(t):
+            progress = min(1.0, t / count_dur) if count_dur > 0 else 1.0
+            img = render_infographic(info_type, info, accent_color, progress, is_longform=is_longform)
+            return np.array(img.convert("RGB"))
+
+        def make_mask(t):
+            progress = min(1.0, t / count_dur) if count_dur > 0 else 1.0
+            img = render_infographic(info_type, info, accent_color, progress, is_longform=is_longform)
+            mask_arr = np.array(img.split()[3]).astype(float) / 255.0
+
+            if t < fade_in:
+                mask_arr *= t / fade_in
+            if dur - t < fade_out:
+                mask_arr *= max(0, (dur - t) / fade_out)
+
+            return mask_arr
+
+        card_clip = VideoClip(make_frame, duration=dur)
+        card_mask = VideoClip(make_mask, is_mask=True, duration=dur)
+        card_clip = card_clip.with_mask(card_mask).with_start(start)
+
+        overlay_arr = np.zeros((fh, fw, 3), dtype=np.uint8)
+
+        def overlay_mask(t):
+            base = 0.75
+            if t < fade_in:
+                return np.full((fh, fw), base * (t / fade_in))
+            if dur - t < fade_out:
+                return np.full((fh, fw), base * max(0, (dur - t) / fade_out))
+            return np.full((fh, fw), base)
+
+        overlay_clip = VideoClip(lambda t: overlay_arr, duration=dur)
+        overlay_mask_clip = VideoClip(overlay_mask, is_mask=True, duration=dur)
+        overlay_clip = overlay_clip.with_mask(overlay_mask_clip).with_start(start)
+
+        return card_clip, overlay_clip
+    except Exception as e:
+        print(f"⚠️ [infographic_gen] build_infographic_clip failed safely: {e}. Skipping card.")
         return None, None
 
-    fw, fh, fcy = get_dimensions(is_longform)
-    fade_in = 0.3
-    fade_out = 0.2
-    count_dur = min(1.5, dur * 0.6)
 
-    def make_frame(t):
-        progress = min(1.0, t / count_dur) if count_dur > 0 else 1.0
-        img = render_infographic(info_type, info, accent_color, progress, is_longform=is_longform)
-        return np.array(img.convert("RGB"))
-
-    def make_mask(t):
-        progress = min(1.0, t / count_dur) if count_dur > 0 else 1.0
-        img = render_infographic(info_type, info, accent_color, progress, is_longform=is_longform)
-        mask_arr = np.array(img.split()[3]).astype(float) / 255.0
-
-        if t < fade_in:
-            mask_arr *= t / fade_in
-        if dur - t < fade_out:
-            mask_arr *= max(0, (dur - t) / fade_out)
-
-        return mask_arr
-
-    card_clip = VideoClip(make_frame, duration=dur)
-    card_mask = VideoClip(make_mask, is_mask=True, duration=dur)
-    card_clip = card_clip.with_mask(card_mask).with_start(start)
-
-    overlay_arr = np.zeros((fh, fw, 3), dtype=np.uint8)
-
-    def overlay_mask(t):
-        base = 0.75
-        if t < fade_in:
-            return np.full((fh, fw), base * (t / fade_in))
-        if dur - t < fade_out:
-            return np.full((fh, fw), base * max(0, (dur - t) / fade_out))
-        return np.full((fh, fw), base)
-
-    overlay_clip = VideoClip(lambda t: overlay_arr, duration=dur)
-    overlay_mask_clip = VideoClip(overlay_mask, is_mask=True, duration=dur)
-    overlay_clip = overlay_clip.with_mask(overlay_mask_clip).with_start(start)
-
-    return card_clip, overlay_clip
+def _sanitize_infographic_data(data):
+    """Clean common LLM placeholder patterns in infographic data fields.
+    Handles values like '+XX%', 'N/A', 'TBD', empty strings in numeric fields."""
+    cleaned = dict(data)
+    # Sanitize percent field (used by growth cards)
+    if "percent" in cleaned:
+        pct = str(cleaned["percent"])
+        digits = re.sub(r'[^0-9]', '', pct)
+        if not digits:  # No digits found — placeholder like 'XX', 'N/A', 'TBD'
+            cleaned["percent"] = "+0%"
+    return cleaned

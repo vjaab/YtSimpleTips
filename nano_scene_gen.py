@@ -244,7 +244,7 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
     for attempt in range(1, max_attempts + 1):
         try:
             print(f"     → Attempting Pollinations AI fallback (attempt {attempt}/{max_attempts})...")
-            resp = requests.get(url, timeout=15)
+            resp = requests.get(url, timeout=30)
             if resp.status_code == 200:
                 with open(output_path, "wb") as f:
                     f.write(resp.content)
@@ -351,7 +351,7 @@ def generate_nano_scene_visuals(chunks, headline, style_guide=AI_VISUAL_STYLE, a
 
         if not path:
             # Circuit breaker: skip Pollinations if it's consistently failing (rate limited)
-            if pollinations_consecutive_fails >= 2:
+            if pollinations_consecutive_fails >= 4:
                 print(f"  [{i + 1}/{total}] ⚠️ Pollinations rate limited (2+ consecutive failures). Skipping Pollinations fallback.")
                 path = None
             else:
