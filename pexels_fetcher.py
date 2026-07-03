@@ -4,6 +4,10 @@ import random
 import time
 from config import PEXELS_API_KEY, OUTPUT_DIR, ENABLE_VEO_VIDEO, ENABLE_STOCK_FOOTAGE, ENABLE_EVIDENCE_SCREENSHOTS
 from nano_scene_gen import _generate_imagen_image
+from config import (
+    GEMINI_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID,
+    DEEPSEEK_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY
+)
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
 
@@ -114,7 +118,7 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
 def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longform=False):
     """
     Orchestrates the retrieval of visuals for all chunks.
-    Priority chain: Veo 3.1 → Imagen → Pollinations AI → Pexels Video → Pexels Photo → Reuse.
+    Priority chain (per-chunk, independent): Veo 3.1 → Imagen → Cloudflare FLUX → Pollinations → DeepAI → Pexels Video → Pexels Photo → Reuse.
     """
     print(f"\n🎬 VISUAL RESOLVER ENGINE: Processing {len(chunks)} chunks...")
     
@@ -122,11 +126,6 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     
     last_successful_path = None
     last_successful_type = "photo"
-    
-    # Circuit breakers to skip APIs if they consistently fail (e.g. rate limit quota reached)
-    veo_consecutive_fails = 0
-    imagen_consecutive_fails = 0
-    pollinations_consecutive_fails = 0
     
     # Extract keywords from topic context for generic search fallback
     generic_keywords = [w.lower() for w in topic_context.split() if len(w) > 3][:3]
@@ -140,8 +139,16 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             veo_generate = generate_veo_clip
             print("  🎬 Veo 3.1 enabled as primary video source.")
         except ImportError:
-            print("  ⚠️ Veo module not found. Falling back to Imagen/Pexels.")
+            print("  ⚠️ Veo module not found. Falling back to other providers.")
     
+    # Check which providers are configured
+    has_gemini = bool(GEMINI_API_KEY and GEMINI_API_KEY.strip() and "XXX" not in GEMINI_API_KEY)
+    has_cloudflare = bool(CLOUDFLARE_API_TOKEN and CLOUDFLARE_API_TOKEN.strip())
+    has_deepseek = bool(DEEPSEEK_API_KEY and DEEPSEEK_API_KEY.strip() and "XXX" not in DEEPSEEK_API_KEY)
+    has_pexels = bool(PEXELS_API_KEY and PEXELS_API_KEY.strip() and "XXX" not in PEXELS_API_KEY)
+    
+    print(f"  🔑 Provider availability: Gemini={has_gemini} Cloudflare={has_cloudflare} DeepSeek={has_deepseek} Pexels={has_pexels}")
+
     for i, chunk in enumerate(chunks):
         cid = chunk.get("chunk_id", i + 1)
         text = chunk.get("text", "")
@@ -179,100 +186,65 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             visual_type = "photo"
             source = "Evidence Screenshot"
 
-        # ── PRIORITY 1: Veo 3.1 AI Video (if enabled) ──
-        if veo_generate and prompt and veo_consecutive_fails < 2:
-            print("     → Attempting Veo 3.1 video generation...")
-            enhanced_prompt = (
-                f"{prompt}. Art style: 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting. "
-                f"Color grading: Vibrant colors, depth of field, warm volume lighting, no dialogue or text overlays, "
-                f"no watermarks, stylized 3D cartoon style character, smooth camera movement, "
-                f"9:16 aspect ratio, vertical video format, highly dynamic."
-            )
-            output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{TODAY}.mp4")
-            visual_path = veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "video"
-                source = "Veo 3.1 AI"
-                veo_consecutive_fails = 0
-                time.sleep(10)  # rate limit cooling
-            else:
-                veo_consecutive_fails += 1
-                if veo_consecutive_fails >= 2:
-                    print("     🚨 Veo 3.1 failed twice consecutively. Disabling Veo for remaining chunks.")
-
-        # ── PRIORITY 2: Imagen AI Image (if Veo failed/unavailable) ──
-        if not visual_path and prompt and imagen_consecutive_fails < 2:
-            print("     → Generating Imagen image...")
-            output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
-            enhanced_imagen_prompt = prompt
-            if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
-                enhanced_imagen_prompt = (
-                    f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
-                    f"depth of field, vibrant colors, high contrast."
-                )
-            visual_path = _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "photo"
-                source = "Imagen AI"
-                imagen_consecutive_fails = 0
-                time.sleep(5)  # rate limit cooling
-            else:
-                imagen_consecutive_fails += 1
-                if imagen_consecutive_fails >= 2:
-                    print("     🚨 Imagen failed twice consecutively. Disabling Imagen for remaining chunks.")
-                    
-        # ── PRIORITY 2.5: Pollinations AI Image (Free AI fallback) ──
-        if not visual_path and prompt and pollinations_consecutive_fails < 4:
-            output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{TODAY}.jpg")
-            enhanced_pollinations_prompt = prompt
-            if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
-                enhanced_pollinations_prompt = (
-                    f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
-                    f"depth of field, vibrant colors, high contrast."
-                )
-            visual_path = _generate_pollinations_image(enhanced_pollinations_prompt, output_jpg, aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "photo"
-                source = "Pollinations AI"
-                pollinations_consecutive_fails = 0
-            else:
-                pollinations_consecutive_fails += 1
-                if pollinations_consecutive_fails >= 4:
-                    print("     🚨 Pollinations failed twice consecutively. Disabling Pollinations for remaining chunks.")
-            # Always add delay after Pollinations call to respect rate limits
-            time.sleep(3)
-
-        # ── PRIORITY 3: Pexels Stock Video ──
-        if not visual_path:
-            visual_path = fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "video"
-                source = "Pexels Video"
-                
-        # ── PRIORITY 4: Pexels Stock Photo ──
-        if not visual_path:
-            visual_path = fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)
-            if visual_path:
-                visual_type = "photo"
-                source = "Pexels Photo"
-                
-        # ── PRIORITY 4.5: Fallback to Screenshot ──
+        # Build provider list for this chunk (each provider is tried independently per chunk)
+        providers = []
+        
+        # Priority 1: Veo 3.1 AI Video
+        if veo_generate and prompt:
+            providers.append(("Veo 3.1 AI", lambda: _try_veo(veo_generate, prompt, cid, aspect_ratio)))
+        
+        # Priority 2: Imagen AI Image
+        if has_gemini and prompt:
+            providers.append(("Imagen AI", lambda: _try_imagen(prompt, cid, aspect_ratio)))
+        
+        # Priority 3: Cloudflare Workers AI (FLUX.1 Schnell)
+        if has_cloudflare and prompt:
+            providers.append(("Cloudflare FLUX", lambda: _try_cloudflare_flux(prompt, cid, aspect_ratio)))
+        
+        # Priority 4: Pollinations AI (Free, no key required)
+        if prompt:
+            providers.append(("Pollinations AI", lambda: _try_pollinations(prompt, cid, aspect_ratio)))
+        
+        # Priority 5: DeepAI (Free tier, optional)
+        if has_deepseek and prompt:
+            providers.append(("DeepAI", lambda: _try_deepai(prompt, cid, aspect_ratio)))
+        
+        # Priority 6: Pexels Stock Video
+        if has_pexels:
+            providers.append(("Pexels Video", lambda: fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)))
+        
+        # Priority 7: Pexels Stock Photo
+        if has_pexels:
+            providers.append(("Pexels Photo", lambda: fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)))
+        
+        # Priority 8: Fallback to Screenshot
         if ENABLE_EVIDENCE_SCREENSHOTS and not visual_path and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
-            print("     → Visual resolved: Falling back to evidence screenshot.")
-            visual_path = script_data["screenshot_path"]
-            visual_type = "photo"
-            source = "Fallback Screenshot"
-                
-        # ── PRIORITY 5: Graceful degradation — reuse last visual ──
+            providers.append(("Fallback Screenshot", lambda: script_data["screenshot_path"]))
+        
+        # Priority 9: Reuse last successful visual
+        providers.append(("Reused Visual", lambda: last_successful_path if last_successful_path else None))
+
+        # Try each provider in order, stop at first success
+        for provider_name, provider_fn in providers:
+            if visual_path:
+                break
+            print(f"     → Attempting {provider_name}...")
+            try:
+                result = provider_fn()
+                if result:
+                    visual_path = result
+                    visual_type = "video" if provider_name in ["Veo 3.1 AI", "Pexels Video"] else "photo"
+                    source = provider_name
+                    print(f"     ✅ Visual resolved: {source}")
+                    break
+                else:
+                    print(f"     ⚠️ {provider_name} returned no result")
+            except Exception as e:
+                print(f"     ❌ {provider_name} failed: {e}")
+        
         if not visual_path:
-            if last_successful_path:
-                print(f"     → Visual resolved: Reusing predecessor asset.")
-                visual_path = last_successful_path
-                visual_type = last_successful_type
-                source = "Reused Visual"
-            else:
-                print("     🚨 Critical visual fetch failure. No visual assigned.")
-                
+            print(f"     🚨 Critical visual fetch failure. No visual assigned.")
+
         if visual_path:
             chunk["visual_path"] = visual_path
             chunk["visual_type"] = visual_type
@@ -284,6 +256,102 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     _fill_visual_gaps(chunks)
     
     return chunks
+
+
+def _try_veo(veo_generate, prompt, cid, aspect_ratio):
+    """Try Veo 3.1 video generation."""
+    enhanced_prompt = (
+        f"{prompt}. Art style: 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting. "
+        f"Color grading: Vibrant colors, depth of field, warm volume lighting, no dialogue or text overlays, "
+        f"no watermarks, stylized 3D cartoon style character, smooth camera movement, "
+        f"9:16 aspect ratio, vertical video format, highly dynamic."
+    )
+    output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.mp4")
+    return veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
+
+
+def _try_imagen(prompt, cid, aspect_ratio):
+    """Try Imagen AI image generation."""
+    output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+    enhanced_imagen_prompt = prompt
+    if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
+        enhanced_imagen_prompt = (
+            f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
+            f"depth of field, vibrant colors, high contrast."
+        )
+    return _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
+
+
+def _try_cloudflare_flux(prompt, cid, aspect_ratio):
+    """Try Cloudflare Workers AI FLUX.1 Schnell image generation."""
+    if not CLOUDFLARE_API_TOKEN or not CLOUDFLARE_ACCOUNT_ID:
+        return None
+    
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell"
+    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "Content-Type": "application/json"}
+    payload = {"prompt": prompt, "width": width, "height": height, "num_inference_steps": 4}
+    
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get("result") and data["result"].get("image"):
+                import base64
+                image_data = base64.b64decode(data["result"]["image"])
+                output_jpg = os.path.join(OUTPUT_DIR, f"cf_flux_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+                with open(output_jpg, "wb") as f:
+                    f.write(image_data)
+                return output_jpg
+    except Exception:
+        pass
+    return None
+
+
+def _try_pollinations(prompt, cid, aspect_ratio):
+    """Try Pollinations AI image generation."""
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    encoded_prompt = requests.utils.quote(prompt)
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+    
+    try:
+        resp = requests.get(url, timeout=30)
+        if resp.status_code == 200:
+            output_jpg = os.path.join(OUTPUT_DIR, f"pollinations_scene_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+            with open(output_jpg, "wb") as f:
+                f.write(resp.content)
+            return output_jpg
+    except Exception:
+        pass
+    return None
+
+
+def _try_deepai(prompt, cid, aspect_ratio):
+    """Try DeepAI image generation."""
+    # DeepAI requires an API key, using DEEPSEEK_API_KEY as placeholder
+    api_key = DEEPSEEK_API_KEY or os.getenv("DEEP_AI_API_KEY", "")
+    if not api_key or "XXX" in api_key:
+        return None
+    
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    url = "https://api.deepai.org/api/text2img"
+    headers = {"api-key": api_key}
+    data = {"text": prompt, "width": width, "height": height}
+    
+    try:
+        resp = requests.post(url, headers=headers, data=data, timeout=60)
+        if resp.status_code == 200:
+            result = resp.json()
+            if result.get("output_url"):
+                img_resp = requests.get(result["output_url"], timeout=30)
+                if img_resp.status_code == 200:
+                    output_jpg = os.path.join(OUTPUT_DIR, f"deepai_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+                    with open(output_jpg, "wb") as f:
+                        f.write(img_resp.content)
+                    return output_jpg
+    except Exception:
+        pass
+    return None
 
 def _fill_visual_gaps(chunks):
     # 1. Forward-fill

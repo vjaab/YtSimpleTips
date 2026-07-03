@@ -317,10 +317,12 @@ def _generate_imagen_image(prompt, output_path, aspect_ratio="9:16"):
 def generate_nano_scene_visuals(chunks, headline, style_guide=AI_VISUAL_STYLE, aspect_ratio="9:16"):
     """
     Main entry point: generates one Imagen background image per chunk.
-    Uses scene-based visual continuity.
+    Uses scene-based visual continuity with provider loop (Imagen → Cloudflare FLUX → Pollinations → Reuse).
     """
     if not chunks:
         return chunks
+
+    from config import GEMINI_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, DEEPSEEK_API_KEY
 
     total = len(chunks)
     print(f"\n🎬 NANO-SCENE ENGINE: Generating {total} per-sentence backgrounds with scene continuity...")
@@ -330,7 +332,12 @@ def generate_nano_scene_visuals(chunks, headline, style_guide=AI_VISUAL_STYLE, a
     last_successful_path = None
     generated_count = 0
     reused_count = 0
-    pollinations_consecutive_fails = 0
+
+    # Check which providers are configured
+    has_gemini = bool(GEMINI_API_KEY and GEMINI_API_KEY.strip() and "XXX" not in GEMINI_API_KEY)
+    has_cloudflare = bool(CLOUDFLARE_API_TOKEN and CLOUDFLARE_API_TOKEN.strip())
+    has_deepseek = bool(DEEPSEEK_API_KEY and DEEPSEEK_API_KEY.strip() and "XXX" not in DEEPSEEK_API_KEY)
+    print(f"  🔑 Provider availability: Gemini={has_gemini} Cloudflare={has_cloudflare} DeepAI={has_deepseek}")
 
     for i, chunk in enumerate(chunks):
         cid = chunk.get("chunk_id", i + 1)
@@ -341,34 +348,43 @@ def generate_nano_scene_visuals(chunks, headline, style_guide=AI_VISUAL_STYLE, a
                 chunk["visual_path"] = last_successful_path
                 chunk["visual_type"] = "photo"
                 chunk["source"] = "Nano-Scene (reused)"
+                chunk["relevance_score"] = 7
                 reused_count += 1
             continue
 
         output_path = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{TODAY}.jpg")
         print(f"  [{i + 1}/{total}] Generating: {prompt[:70]}...")
 
-        path = _generate_imagen_image(prompt, output_path, aspect_ratio=aspect_ratio)
+        path = None
+        source_name = "Failed"
+        relevance = 0
 
-        if not path:
-            # Circuit breaker: skip Pollinations if it's consistently failing (rate limited)
-            if pollinations_consecutive_fails >= 4:
-                print(f"  [{i + 1}/{total}] ⚠️ Pollinations rate limited (2+ consecutive failures). Skipping Pollinations fallback.")
-                path = None
-            else:
-                # Fallback to Pollinations AI
-                print(f"  [{i + 1}/{total}] Imagen failed, trying Pollinations AI fallback...")
-                path = _generate_pollinations_image(prompt, output_path, aspect_ratio=aspect_ratio)
-                if path:
-                    pollinations_consecutive_fails = 0
+        # Build provider list for this chunk
+        providers = []
+        if has_gemini:
+            providers.append(("Imagen AI", lambda: _generate_imagen_image(prompt, output_path, aspect_ratio=aspect_ratio)))
+        if has_cloudflare:
+            providers.append(("Cloudflare FLUX", lambda: _try_cloudflare_flux(prompt, cid, aspect_ratio)))
+        # Pollinations is free, no key required
+        providers.append(("Pollinations AI", lambda: _generate_pollinations_image(prompt, output_path, aspect_ratio=aspect_ratio)))
+        if has_deepseek:
+            providers.append(("DeepAI", lambda: _try_deepai(prompt, cid, aspect_ratio)))
+
+        # Try each provider in order, stop at first success
+        for provider_name, provider_fn in providers:
+            print(f"     → Attempting {provider_name}...")
+            try:
+                result = provider_fn()
+                if result:
+                    path = result
+                    source_name = f"Nano-Scene ({provider_name})"
+                    relevance = 10 if provider_name == "Imagen AI" else 9
+                    print(f"     ✅ Visual resolved: {source_name}")
+                    break
                 else:
-                    pollinations_consecutive_fails += 1
-                source_name = "Nano-Scene (Pollinations)"
-                relevance = 9
-                # Always add delay after Pollinations call to respect rate limits
-                time.sleep(3)
-        else:
-            source_name = "Nano-Scene (Imagen)"
-            relevance = 10
+                    print(f"     ⚠️ {provider_name} returned no result")
+            except Exception as e:
+                print(f"     ❌ {provider_name} failed: {e}")
 
         if path:
             chunk["visual_path"] = path
@@ -411,3 +427,60 @@ def _fill_visual_gaps(chunks):
             c["visual_path"] = last_path
             c["visual_type"] = last_type
             c["source"] = c.get("source", "Nano-Scene (gap-filled)")
+
+
+def _try_cloudflare_flux(prompt, cid, aspect_ratio):
+    """Try Cloudflare Workers AI FLUX.1 Schnell image generation."""
+    from config import CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+    if not CLOUDFLARE_API_TOKEN or not CLOUDFLARE_ACCOUNT_ID:
+        return None
+
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell"
+    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "Content-Type": "application/json"}
+    payload = {"prompt": prompt, "width": width, "height": height, "num_inference_steps": 4}
+
+    try:
+        import requests
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get("result") and data["result"].get("image"):
+                import base64
+                image_data = base64.b64decode(data["result"]["image"])
+                output_jpg = os.path.join(OUTPUT_DIR, f"cf_flux_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+                with open(output_jpg, "wb") as f:
+                    f.write(image_data)
+                return output_jpg
+    except Exception:
+        pass
+    return None
+
+
+def _try_deepai(prompt, cid, aspect_ratio):
+    """Try DeepAI image generation."""
+    from config import DEEPSEEK_API_KEY
+    api_key = DEEPSEEK_API_KEY or os.getenv("DEEP_AI_API_KEY", "")
+    if not api_key or "XXX" in api_key:
+        return None
+
+    width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
+    url = "https://api.deepai.org/api/text2img"
+    headers = {"api-key": api_key}
+    data = {"text": prompt, "width": width, "height": height}
+
+    try:
+        import requests
+        resp = requests.post(url, headers=headers, data=data, timeout=60)
+        if resp.status_code == 200:
+            result = resp.json()
+            if result.get("output_url"):
+                img_resp = requests.get(result["output_url"], timeout=30)
+                if img_resp.status_code == 200:
+                    output_jpg = os.path.join(OUTPUT_DIR, f"deepai_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
+                    with open(output_jpg, "wb") as f:
+                        f.write(img_resp.content)
+                    return output_jpg
+    except Exception:
+        pass
+    return None
