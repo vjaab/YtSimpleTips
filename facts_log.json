@@ -21,55 +21,57 @@
         "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
         "AI Diagnoses Diseases More Accurately Than Doctors",
         "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
-        "AI Job Replacement"
+        "AI Job Replacement",
+        "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
+        "One-Click AI Background Removal"
     ],
     "used_keywords": [
-        "Battery Hack",
-        "Android Tips",
-        "AI limitations",
-        "Physical work AI",
+        "ChatGPT Tips",
         "Future of Work",
-        "AI proof jobs",
-        "AI Hacks",
-        "Tamil Tech",
-        "Tech Tips",
-        "AI explained",
-        "Moravec's Paradox",
-        "Tamil Facts",
-        "Productivity",
+        "AI Jobs",
         "Cyber Safety",
+        "AI Hacks",
+        "AI limitations",
+        "Productivity",
+        "Physical work AI",
+        "AI Features",
+        "Android Tips",
+        "Common sense AI",
+        "Tech Tips Tamil",
+        "VJ videos",
         "Augmentation",
         "VJ Tips",
-        "ChatGPT Tips",
+        "Battery Hack",
+        "Did You Know",
+        "Future jobs",
+        "Automation",
+        "Tech Tips",
+        "AI in Tamil",
+        "Moravec's Paradox",
         "Study Hacks",
-        "VJ videos",
-        "Common sense AI",
         "Tech facts",
         "Tamil tech",
-        "AI in Tamil",
-        "AI Jobs",
-        "Tech Tips Tamil",
-        "Future jobs",
-        "Did You Know",
-        "Automation",
-        "AI Features"
+        "AI explained",
+        "Tamil Tech",
+        "Tamil Facts",
+        "AI proof jobs"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
-        "🤖 Simple AI Hacks for Everyone": 2,
+        "🤖 Simple AI Hacks for Everyone": 3,
         "🤖 AI Demystified & Future Tech": 4,
         "🤖 Practical AI Tools & Jobs": 2
     },
     "last_7_days_stories": [
-        "Deepfake Scams? 10 Secs To Spot! 🚨",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "ChatGPT Secret Hack! 🚀",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
         "Yen AI ku Dosa saapada mudiyala?",
         "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
-        "AI job replace-a? Automation vs Augmentation - 30 sec-la!"
+        "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
+        "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀"
     ],
-    "total_uploaded": 11,
+    "total_uploaded": 12,
     "last_upload": "2026-07-03",
     "history": [
         {
@@ -247,6 +249,20 @@
             "youtube_url": "pending_upload",
             "source_url": "https://github.com/vjaab/YtSimpleTips",
             "avatar_used": "assets/video/black_vest.mp4"
+        },
+        {
+            "date": "2026-07-03",
+            "title": "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
+            "news_headline": "One-Click AI Background Removal",
+            "category": "🤖 Simple AI Hacks for Everyone",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://www.adobe.com/express/feature/image/remove-background",
+            "avatar_used": "assets/video/blue_python.mp4"
         }
     ]
 }
