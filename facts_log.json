@@ -17,48 +17,51 @@
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
         "AI Revives Old Photos in Seconds",
         "Yen AI ku Dosa saapada mudiyala?",
-        "Moravec's Paradox & Future Careers"
+        "Moravec's Paradox & Future Careers",
+        "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
+        "AI Diagnoses Diseases More Accurately Than Doctors"
     ],
     "used_keywords": [
-        "Common sense AI",
         "Productivity",
-        "Tamil tech",
+        "Android Tips",
         "Tamil Tech",
-        "AI Hacks",
         "Tamil Facts",
-        "Future jobs",
+        "Common sense AI",
+        "Did You Know",
+        "Study Hacks",
+        "Moravec's Paradox",
+        "AI Hacks",
+        "AI limitations",
+        "ChatGPT Tips",
+        "VJ videos",
+        "AI proof jobs",
+        "AI explained",
         "Tech facts",
         "Tech Tips",
+        "Future jobs",
         "Battery Hack",
-        "Moravec's Paradox",
-        "Physical work AI",
-        "Did You Know",
-        "ChatGPT Tips",
-        "Study Hacks",
-        "AI limitations",
-        "AI proof jobs",
         "Cyber Safety",
-        "AI explained",
-        "Android Tips",
-        "VJ videos"
+        "AI Features",
+        "Physical work AI",
+        "Tamil tech"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
         "🤖 Simple AI Hacks for Everyone": 1,
-        "🤖 AI Demystified & Future Tech": 3,
+        "🤖 AI Demystified & Future Tech": 4,
         "🤖 Practical AI Tools & Jobs": 2
     },
     "last_7_days_stories": [
-        "Volume Button Secret Hack 📸",
         "📚 AI Summarize Hack: Study Speed 2X!",
         "Deepfake Scams? 10 Secs To Spot! 🚨",
         "AI Chess Vilaiyaada Koodiyum, Laundary Panna Koodiya?",
         "ChatGPT Secret Hack! 🚀",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
-        "Yen AI ku Dosa saapada mudiyala?"
+        "Yen AI ku Dosa saapada mudiyala?",
+        "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯"
     ],
-    "total_uploaded": 9,
-    "last_upload": "2026-07-02",
+    "total_uploaded": 10,
+    "last_upload": "2026-07-03",
     "history": [
         {
             "date": "2026-06-28",
@@ -199,6 +202,21 @@
             "youtube_url": "pending_upload",
             "source_url": "https://github.com/vjaab/YtSimpleTips",
             "avatar_used": "assets/video/black_grey_white_hoodie.mp4"
+        },
+        {
+            "date": "2026-07-03",
+            "title": "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
+            "news_headline": "AI Diagnoses Diseases More Accurately Than Doctors",
+            "category": "🤖 AI Demystified & Future Tech",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know",
+                "AI Features"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "pending_upload",
+            "source_url": "https://hms.harvard.edu/news/study-suggests-ai-good-enough-diagnosing-complex-medical-cases-warrant-clinical-testing",
+            "avatar_used": "assets/video/black_terminal.mp4"
         }
     ]
 }
