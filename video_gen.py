@@ -715,20 +715,27 @@ def render_whiteboard_caption(text, progress=1.0, accent_color=(204, 255, 0)):
     return np.array(img)
 
 # ── NEW: Clean Single-Layer Caption System with Safe Zones ────────────────────
-def render_clean_caption(word_status_list, accent_color=(204, 255, 0), y_position="lower"):
+def render_clean_caption(text_or_words, progress=1.0, accent_color=(204, 255, 0), y_position="lower"):
     """
-    Renders a single-layer karaoke caption with background pill for readability.
+    Renders a single-layer caption with background pill for readability.
+    Accepts either a string (renders all words) or a list of word status dicts.
     y_position: "lower" (70% - avoids avatar) or "middle" (50% - for no-avatar videos)
     """
-    if not word_status_list:
-        img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-        return canvas_to_clip(img)
-    
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
-    words = [wd["word"] for wd in word_status_list]
-    is_active_list = [wd["is_active"] for wd in word_status_list]
+    # Handle both string input and word_status_list input
+    if isinstance(text_or_words, str):
+        words = text_or_words.split()
+        # All words active based on progress (simple progress-based reveal)
+        num_active = int(len(words) * progress)
+        is_active_list = [i < num_active for i in range(len(words))]
+    else:
+        words = [wd["word"] for wd in text_or_words]
+        is_active_list = [wd["is_active"] for wd in text_or_words]
+    
+    if not words:
+        return canvas_to_clip(img)
     
     base_size = int(72 * (FRAME_W / 1080.0))
     font = get_font_for_text("test", base_size, "bold")
@@ -1798,7 +1805,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             
             if caption_text and caption_text.strip():
                 # Render single clean caption with background pill for readability
-                cap_arr = render_clean_caption(caption_text, progress, accent_color=accent_color, is_active_word=False)
+                cap_arr = render_clean_caption(caption_text, progress, accent_color=accent_color)
                 pil_cap = Image.fromarray(cap_arr).convert("RGBA")
                 pil_frame.alpha_composite(pil_cap)
         
