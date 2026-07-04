@@ -22,13 +22,9 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
         return []
 
     search_queries = {
-        "🧠 Amazing Science & Space": ["space facts", "astronomy discoveries", "cosmos mysteries", "black hole science"],
-        "🧬 Biology & Human Body": ["human body secrets", "brain psychology facts", "biology trivia", "animal anomalies"],
-        "⚡ Everyday Science Facts": ["everyday science physics", "chemistry hacks", "science experiments magic", "how things work"],
-        "🏺 Mysteries & Unknown History": ["unsolved mysteries history", "Bermuda triangle secrets", "Keeladi history facts", "ancient civilizations"],
-        "💡 Life Hacks & Smart Tips": ["life hacks daily tips", "kitchen hacks tricks", "household hacks shortcuts", "study hacks"],
-        "📱 Tech & Smart Device Hacks": ["phone hidden settings", "WhatsApp secret features", "UPI security tips", "mobile shortcuts"],
-        "💰 Money & Wealth Secrets": ["money saving hacks", "wealth building tips", "smart financial tips", "passive saving rules"],
+        "🤖 AI Demystified & Future Tech": ["AI explained simple", "how AI works daily life", "AI future technology 2026", "deepfake detection tips"],
+        "🤖 Practical AI Tools & Jobs": ["free AI tools for students", "AI tools for office work", "ChatGPT tricks beginners", "AI job skills 2026"],
+        "🤖 Simple AI Hacks for Everyone": ["WhatsApp AI features", "Google Lens AI tricks", "phone AI hidden settings", "AI apps for parents"],
     }
 
     queries = search_queries.get(category, ["tech tips hidden features", "finance hacks"])

@@ -49,7 +49,7 @@ def get_slot_info():
         category = afternoon_categories.get(day_name, "🤖 Practical AI Tools & Jobs")
     else:
         slot = "Slot C (Evening)"
-        category = evening_categories.get(day_name, "📱 Tech & Smart Device Hacks")
+        category = evening_categories.get(day_name, "🤖 Simple AI Hacks for Everyone")
         
     # Load performance insights for dynamic strategy boosting
     import os
@@ -63,13 +63,6 @@ def get_slot_info():
                 top_categories_raw = insights.get("top_categories", [])
                 
                 category_mapping = {
-                    "science": "🧠 Amazing Science & Space",
-                    "biology": "🧬 Biology & Human Body",
-                    "everyday": "⚡ Everyday Science Facts",
-                    "mysteries": "🏺 Mysteries & Unknown History",
-                    "life": "💡 Life Hacks & Smart Tips",
-                    "tech": "📱 Tech & Smart Device Hacks",
-                    "money": "💰 Money & Wealth Secrets",
                     "simple_ai": "🤖 Simple AI Hacks for Everyone",
                     "practical_ai": "🤖 Practical AI Tools & Jobs",
                     "future_ai": "🤖 AI Demystified & Future Tech"
@@ -123,66 +116,27 @@ def get_category_prompt_enhancement(category, slot):
         "🤖 AI Demystified & Future Tech": f"""
             {base_instructions}
             CATEGORY: AI Demystified & Future Tech
-            GOAL: Demystify an AI concept (how neural nets work, how LLMs think, how deepfakes are made) or share a future tech update. Make it extremely simple for everyday Tamil people of all ages to understand. Keep it fascinating and highly visual to drive maximum views. Include tips on AI safety (e.g. avoiding audio/video deepfake scams).
+            GOAL: Demystify an AI concept (how neural nets work, how LLMs think, how deepfakes are made) or share a future tech update. Make it extremely simple for everyday Tamil people of all ages to understand. Keep it fascinating and highly visual to drive maximum views. Include tips on AI safety (e.g. avoiding audio/video deepfake scams). Connect the concept to something they already use daily (phone, Google, YouTube, ATM).
+            VIRAL HOOK FOR COMMON PEOPLE: "Ungal phone camera-la irukura AI brain — ithu enna pannum theriyuma?"
             HOOK TEMPLATE (Tamil): "விஞ்ஞான உலகத்துல அடுத்ததா வரப்போற இந்த ஒரு மிரட்டலான AI விஷயம் பத்தி தெரியுமா?"
         """,
         "🤖 Practical AI Tools & Jobs": f"""
             {base_instructions}
             CATEGORY: Practical AI Tools & Jobs
-            GOAL: Show students, job seekers, and office workers how to use free AI tools (ChatGPT, Claude, Gamma, slides AI) to write, learn, automate tasks, or prepare for interviews. Pacing must be extremely practical and step-by-step.
+            GOAL: Show students, job seekers, homemakers, and office workers how to use free AI tools (ChatGPT, Claude, Gamma, Google Gemini) to study, learn, automate tasks, earn money, or prepare for interviews. Focus on tools that even a non-tech person can use immediately. Pacing must be extremely practical and step-by-step.
+            VIRAL HOOK FOR COMMON PEOPLE: "Intha free AI tool use panna, ungal kid homework 5 minutes-la mudiyum!"
             HOOK TEMPLATE (Tamil): "உங்க study அல்லது office work-ஐ 10 மடங்கு வேகமாக்க இந்த ஒரு free AI tool-ஐ உடனே use பண்ணுங்க..."
         """,
         "🤖 Simple AI Hacks for Everyone": f"""
             {base_instructions}
             CATEGORY: Simple AI Hacks for Everyone
-            GOAL: Share simple AI features built into everyday tools like WhatsApp, Google search, keyboard apps, or phone settings (e.g. Google Lens, Live Translate) that kids, parents, and grandmas can easily use to make daily life simpler. Avoid all jargon.
+            GOAL: Share simple AI features built into everyday tools like WhatsApp, Google search, keyboard apps, or phone settings (e.g. Google Lens, Live Translate, spam detection) that kids, parents, shopkeepers, and grandmas can easily use to make daily life simpler. Avoid ALL jargon. Explain like you're telling your neighborhood uncle.
+            VIRAL HOOK FOR COMMON PEOPLE: "Ungal WhatsApp-la AI already irukku — ithu enna pannum theriyuma?"
             HOOK TEMPLATE (Tamil): "உங்க phone-ல WhatsApp-ல இருக்குற இந்த ஒரு ரகசிய AI feature பத்தி தெரியுமா?"
-        """,
-        "🧠 Amazing Science & Space": f"""
-            {base_instructions}
-            CATEGORY: Amazing Science & Space
-            GOAL: Share a mind-blowing, true scientific discovery, cosmic secret, or space fact. Keep it highly intriguing and generic.
-            HOOK TEMPLATE (Tamil): "விண்வெளியில இருக்குற இந்த ஒரு விசித்திரமான ரகசியம் பத்தி உங்களுக்கு தெரியுமா?"
-        """,
-        "🧬 Biology & Human Body": f"""
-            {base_instructions}
-            CATEGORY: Biology & Human Body
-            GOAL: Share an unbelievable biological mystery, human body function trivia, brain quirk, or psychology fact.
-            HOOK TEMPLATE (Tamil): "நம்ம உடம்புல நடக்குற இந்த ஒரு விசித்திரமான விஷயம் பத்தி உங்களுக்கு தெரியுமா?"
-        """,
-        "⚡ Everyday Science Facts": f"""
-            {base_instructions}
-            CATEGORY: Everyday Science Facts
-            GOAL: Explain the chemistry or physics behind a simple daily occurrence or DIY magic-style trick.
-            HOOK TEMPLATE (Tamil): "நம்ம தினசரி வாழ்க்கையில நடக்குற இந்த விஷயத்துக்கு பின்னாடி இருக்கிற அறிவியல் தெரியுமா?"
-        """,
-        "🏺 Mysteries & Unknown History": f"""
-            {base_instructions}
-            CATEGORY: Mysteries & Unknown History
-            GOAL: Expose an unsolved mystery, historical anomaly, or archeological discovery (e.g. Bermuda, Keeladi).
-            HOOK TEMPLATE (Tamil): "வரலாற்றுல இதுவரைக்கும் யாராலும் தீர்க்க முடியாத இந்த ஒரு மர்மம் பத்தி தெரியுமா?"
-        """,
-        "💡 Life Hacks & Smart Tips": f"""
-            {base_instructions}
-            CATEGORY: Life Hacks & Smart Tips
-            GOAL: Provide quick, life-simplifying tips (e.g., kitchen hacks, study hacks, daily life optimizations).
-            HOOK TEMPLATE (Tamil): "உங்க தினசரி வேலையை 10 மடங்கு சுலபமாக்க இந்த ஒரு simple life hack-ஐ use பண்ணுங்க..."
-        """,
-        "📱 Tech & Smart Device Hacks": f"""
-            {base_instructions}
-            CATEGORY: Tech & Smart Device Hacks
-            GOAL: Unveil hidden device settings, safety configurations, UPI tips, or useful app shortcuts.
-            HOOK TEMPLATE (Tamil): "உங்க phone-ல இருக்கிற இந்த ஒரு secret setting-ஐ உடனே மாத்துங்க..."
-        """,
-        "💰 Money & Wealth Secrets": f"""
-            {base_instructions}
-            CATEGORY: Money & Wealth Secrets
-            GOAL: Share smart wealth concepts, passive saving rules, or financial tricks (e.g., compound interest, roundups).
-            HOOK TEMPLATE (Tamil): "உங்க பணத்தை சேமிக்க இந்த ஒரு simple money-saving hack-ஐ follow பண்ணுங்க..."
         """
     }
     
-    return enhancements.get(category, enhancements.get("🧠 Amazing Science & Space"))
+    return enhancements.get(category, enhancements.get("🤖 AI Demystified & Future Tech"))
 
 # Curated Category Color Palette System
 _CATEGORY_PALETTES = {
@@ -213,73 +167,10 @@ _CATEGORY_PALETTES = {
         "thumbnail_accent": (255, 170, 0),
         "emoji": "🤖",
     },
-    "🧠 Amazing Science & Space": {
-        "name": "Warm Gold",
-        "primary": (255, 184, 0),
-        "secondary": (26, 16, 0),
-        "caption_highlight": (255, 200, 40),
-        "progress_bar": (255, 184, 0),
-        "thumbnail_accent": (255, 184, 0),
-        "emoji": "🧠",
-    },
-    "🧬 Biology & Human Body": {
-        "name": "Hot Pink",
-        "primary": (255, 0, 128),
-        "secondary": (30, 10, 20),
-        "caption_highlight": (255, 60, 160),
-        "progress_bar": (255, 0, 128),
-        "thumbnail_accent": (255, 0, 128),
-        "emoji": "🧬",
-    },
-    "⚡ Everyday Science Facts": {
-        "name": "Electric Cyan",
-        "primary": (0, 212, 255),
-        "secondary": (10, 22, 40),
-        "caption_highlight": (0, 230, 255),
-        "progress_bar": (0, 212, 255),
-        "thumbnail_accent": (0, 200, 255),
-        "emoji": "⚡",
-    },
-    "🏺 Mysteries & Unknown History": {
-        "name": "Cosmic Purple",
-        "primary": (179, 136, 255),
-        "secondary": (13, 10, 26),
-        "caption_highlight": (200, 160, 255),
-        "progress_bar": (179, 136, 255),
-        "thumbnail_accent": (179, 136, 255),
-        "emoji": "🏺",
-    },
-    "💡 Life Hacks & Smart Tips": {
-        "name": "Electric Lime",
-        "primary": (204, 255, 0),
-        "secondary": (15, 15, 10),
-        "caption_highlight": (204, 255, 0),
-        "progress_bar": (204, 255, 0),
-        "thumbnail_accent": (204, 255, 0),
-        "emoji": "💡",
-    },
-    "📱 Tech & Smart Device Hacks": {
-        "name": "Ocean Blue",
-        "primary": (0, 150, 255),
-        "secondary": (10, 18, 35),
-        "caption_highlight": (60, 180, 255),
-        "progress_bar": (0, 150, 255),
-        "thumbnail_accent": (0, 150, 255),
-        "emoji": "📱",
-    },
-    "💰 Money & Wealth Secrets": {
-        "name": "Emerald Green",
-        "primary": (0, 230, 115),
-        "secondary": (10, 25, 15),
-        "caption_highlight": (0, 255, 128),
-        "progress_bar": (0, 230, 115),
-        "thumbnail_accent": (0, 230, 115),
-        "emoji": "💰",
-    }
 }
 
 # Default palette
-_DEFAULT_PALETTE = _CATEGORY_PALETTES["🧠 Amazing Science & Space"]
+_DEFAULT_PALETTE = _CATEGORY_PALETTES["🤖 AI Demystified & Future Tech"]
 
 def get_category_color_palette(category):
     """

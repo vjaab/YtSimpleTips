@@ -25,24 +25,30 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
     
     prompt = f"""
-    Generate 5 highly viral, generic, and fact-oriented topics, science trivia, life hacks, or settings/shortcuts related to the category: "{category}".
-    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences (similar to channels like 'Science Facts in Tamil' or 'Dummy Scientist').
-    They must be surprising, scientifically accurate, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    Generate 5 highly viral AI-related topics that common people (not tech experts) would find fascinating and share with friends.
+    These topics MUST be about Artificial Intelligence and how it affects daily life.
+    Category focus: "{category}"
+    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
+    They must be surprising, accurate, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
-    DEMOGRAPHIC & TRENDING CRITERIA:
-    1. The topic must be highly generic with universal appeal across all ages (young, middle-aged, parents).
-    2. Focus on a high "curiosity gap" (e.g. unknown space/science wonders, biological/anatomy facts, everyday physics/chemistry anomalies, historical mysteries, or highly shared tech settings and life hacks).
+    AI TOPIC + COMMON PEOPLE CRITERIA:
+    1. Every topic MUST be about AI or artificial intelligence. Do NOT generate non-AI topics like biology facts, space trivia, general science, life hacks, or financial tips.
+    2. The topic must be something a non-technical person (homemaker, shopkeeper, student, auto driver, parent, elder) would find immediately interesting and share with friends.
+    3. Connect every AI topic to something the viewer already uses daily (WhatsApp, Google, YouTube, Swiggy, UPI, phone camera, ATM, hospital, Aadhaar).
+    4. Focus on high "curiosity gap" hooks: "How does [daily app] know [surprising behavior]?", "AI is secretly doing [scary/amazing thing] on your phone", "This free AI tool can [solve daily problem]"
+    5. AVOID: Technical jargon (neural networks, transformers, embeddings), "Top 5 AI tools" lists, ChatGPT tutorial-style content.
+    6. USE angles that go viral with common people: FEAR (AI scams, deepfakes, privacy), UTILITY (free AI tools), WONDER (how apps work), MONEY (AI jobs, earning), HEALTH (AI in hospitals), PARENTING (kids and AI safety).
     
     {avoid_instruction}
     
-    CRITICAL REQUIREMENT: For each fact/hack, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each topic, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
     Return ONLY a JSON object containing a "tips" array matching this schema:
     {{
       "tips": [
         {{
-          "title": "Short descriptive English title of the fact (e.g. Quantum Entanglement Mystery)",
-          "description": "A rich, detailed 2-3 sentence explanation of the fact/hack in English...",
+          "title": "Short descriptive English title of the AI topic (e.g. How Swiggy AI Predicts Delivery Time)",
+          "description": "A rich, detailed 2-3 sentence explanation of the AI topic in English, explaining how it affects common people's daily life...",
           "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
           "source_name": "Name of the source",
           "keywords": ["keyword1", "keyword2", "keyword3"],
@@ -157,12 +163,6 @@ def fetch_facts_for_category(category):
     try:
         # Map category to a clean category for VidIQ
         vidiq_category = "AI"
-        if "Science" in category or "Biology" in category:
-            vidiq_category = "Science"
-        elif "Money" in category or "Wealth" in category:
-            vidiq_category = "Finance"
-        elif "Tech" in category or "Hacks" in category or "Tips" in category or "Mysteries" in category:
-            vidiq_category = "Technology"
             
         from vidiq_trending import get_pipeline_topics
         vidiq_raw = get_pipeline_topics(category=vidiq_category)
@@ -206,25 +206,29 @@ def fetch_facts_for_category(category):
             print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
 
     prompt = f"""
-    Search the web for 5 highly viral, generic, and fact-oriented topics, science trivia, life hacks, or settings/shortcuts related to the category: "{category}".
-    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences (similar to channels like 'Science Facts in Tamil' or 'Dummy Scientist').
-    They must be surprising, scientifically accurate, and optimized for a 30-40 second infotainment YouTube Short titled "Simple Tips by VJ".
+    Search the web for 5 highly viral AI-related topics that common people (not tech experts) would find fascinating, related to the category: "{category}".
+    These topics MUST be about Artificial Intelligence and how it affects daily life.
+    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
+    They must be surprising, accurate, and optimized for a 30-40 second infotainment YouTube Short titled "Simple Tips by VJ".
     
-    DEMOGRAPHIC & TRENDING CRITERIA:
-    1. The topic must be highly generic with universal appeal across all ages (young, middle-aged, parents).
-    2. Focus on a high "curiosity gap" (e.g. unknown space/science wonders, biological/anatomy facts, everyday physics/chemistry anomalies, historical mysteries, or highly shared tech settings and life hacks).
-    3. Focus on facts that are surprising or counter-intuitive (make viewers say "I didn't know that!").
+    AI TOPIC + COMMON PEOPLE CRITERIA:
+    1. Every topic MUST be about AI or artificial intelligence. Do NOT generate non-AI topics like biology facts, space trivia, general science, life hacks, or financial tips.
+    2. The topic must be something a non-technical person (homemaker, shopkeeper, student, auto driver, parent, elder) would find immediately interesting and share with friends.
+    3. Connect every AI topic to something the viewer already uses daily (WhatsApp, Google, YouTube, Swiggy, UPI, phone camera, ATM, hospital, Aadhaar).
+    4. Focus on high "curiosity gap" hooks: "How does [daily app] know [surprising behavior]?", "AI is secretly doing [scary/amazing thing] on your phone", "This free AI tool can [solve daily problem]"
+    5. AVOID: Technical jargon, "Top 5 AI tools" lists, ChatGPT tutorial-style content.
+    6. USE angles that go viral with common people: FEAR (AI scams, deepfakes, privacy), UTILITY (free AI tools), WONDER (how apps work), MONEY (AI jobs, earning), HEALTH (AI in hospitals), PARENTING (kids and AI safety).
     {trending_context}
     
-    CRITICAL REQUIREMENT: For each fact/hack, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, scientific study, or official guide) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each topic, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, scientific study, or official guide) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
     
     Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the fact (e.g. Quantum Entanglement Mystery)",
-        "description": "A rich, detailed 2-3 sentence explanation of the fact/hack in English, explaining exactly what it is, how it works, and why it is surprising or useful.",
-        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific fact",
-        "source_name": "Name of the source (e.g. Wikipedia, NASA, Healthline)",
+        "title": "Short descriptive English title of the AI topic (e.g. How Google Maps AI Predicts Traffic)",
+        "description": "A rich, detailed 2-3 sentence explanation of the AI topic in English, explaining how it affects common people's daily life.",
+        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific AI feature or concept",
+        "source_name": "Name of the source (e.g. Wikipedia, Google AI Blog, MIT Technology Review)",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "category": "{category}"
       }}
@@ -349,12 +353,12 @@ def get_historical_fallback(category):
             print(f"⚠️ Failed to load fallback from tracker: {e}")
             
     # Absolute minimum fallback to ensure pipeline never crashes
-    print("🚨 Absolute fallback: Generating generic fact...")
+    print("🚨 Absolute fallback: Generating AI fact for common people...")
     return [{
-        "title": "Quantum Entanglement",
-        "description": "Quantum entanglement is a phenomenon where two particles remain connected, meaning actions performed on one affect the other immediately, regardless of distance. Albert Einstein called this 'spooky action at a distance'.",
-        "source_url": "https://en.wikipedia.org/wiki/Quantum_entanglement",
+        "title": "How WhatsApp AI Reads Your Chat Patterns",
+        "description": "WhatsApp uses AI to detect spam messages, suggest quick replies, and even predict which contacts you're most likely to message. The AI analyzes your messaging patterns without reading your actual messages, thanks to end-to-end encryption combined with on-device machine learning.",
+        "source_url": "https://en.wikipedia.org/wiki/WhatsApp#Features",
         "source_name": "Wikipedia",
-        "keywords": ["quantum", "physics", "einstein"],
+        "keywords": ["WhatsApp", "AI", "privacy", "messaging"],
         "category": category
     }]
