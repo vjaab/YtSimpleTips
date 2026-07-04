@@ -25,56 +25,58 @@
         "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
         "One-Click AI Background Removal",
         "100 Mark Eduthaalum Thappu Yen?",
-        "Overfitting (The Mugapadi Effect)"
+        "Overfitting (The Mugapadi Effect)",
+        "🚀 Phone Speed Boost Hack! 📱✨",
+        "AI-Powered Smart Search"
     ],
     "used_keywords": [
-        "Future jobs",
-        "Tech Tips Tamil",
-        "Augmentation",
-        "Common sense AI",
-        "Moravec's Paradox",
         "Future of Work",
-        "AI Features",
-        "AI limitations",
-        "Cyber Safety",
-        "Battery Hack",
-        "VJ videos",
-        "Tech Tips",
-        "Study Hacks",
-        "AI explained",
-        "Automation",
-        "Android Tips",
-        "ChatGPT Tips",
-        "Did You Know",
-        "Productivity",
-        "AI in Tamil",
-        "Tamil Tech",
         "Tamil tech",
-        "Tamil Facts",
-        "AI Hacks",
+        "Cyber Safety",
+        "Tamil Tech",
+        "Battery Hack",
         "VJ Tips",
+        "Productivity",
         "Physical work AI",
-        "AI proof jobs",
+        "Common sense AI",
         "AI Jobs",
-        "Tech facts"
+        "AI Features",
+        "Future jobs",
+        "AI Hacks",
+        "AI limitations",
+        "Study Hacks",
+        "Automation",
+        "Tech Tips Tamil",
+        "Moravec's Paradox",
+        "Tamil Facts",
+        "Augmentation",
+        "AI in Tamil",
+        "ChatGPT Tips",
+        "VJ videos",
+        "AI explained",
+        "AI proof jobs",
+        "Android Tips",
+        "Tech facts",
+        "Tech Tips",
+        "Did You Know"
     ],
     "used_categories": {
         "📱 Tech & Smart Device Hacks": 3,
-        "🤖 Simple AI Hacks for Everyone": 3,
+        "🤖 Simple AI Hacks for Everyone": 4,
         "🤖 AI Demystified & Future Tech": 4,
         "🤖 Practical AI Tools & Jobs": 3
     },
     "last_7_days_stories": [
-        "ChatGPT Secret Hack! 🚀",
         "🚀 Phone Speed 2x Boost! Simple Android Hack",
         "Yen AI ku Dosa saapada mudiyala?",
         "📱 உங்க போன் உங்களை காப்பாத்துமா? 🤯",
         "AI job replace-a? Automation vs Augmentation - 30 sec-la!",
         "📱 Phone-ல AI Background Remover 10x வேகம்! 🚀",
-        "100 Mark Eduthaalum Thappu Yen?"
+        "100 Mark Eduthaalum Thappu Yen?",
+        "🚀 Phone Speed Boost Hack! 📱✨"
     ],
-    "total_uploaded": 13,
-    "last_upload": "2026-07-03",
+    "total_uploaded": 14,
+    "last_upload": "2026-07-04",
     "history": [
         {
             "date": "2026-06-28",
@@ -279,6 +281,20 @@
             "youtube_url": "https://youtu.be/c4ufP-4Bp7Y",
             "source_url": "https://github.com/vjaab/YtSimpleTips",
             "avatar_used": "assets/video/blue_yello_polo.mp4"
+        },
+        {
+            "date": "2026-07-04",
+            "title": "🚀 Phone Speed Boost Hack! 📱✨",
+            "news_headline": "AI-Powered Smart Search",
+            "category": "🤖 Simple AI Hacks for Everyone",
+            "keywords": [
+                "Tamil Facts",
+                "Did You Know"
+            ],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/7_15t_6AhFM",
+            "source_url": "https://www.ibm.com/topics/ai-search-engine",
+            "avatar_used": "assets/video/claude.mp4"
         }
     ]
 }
