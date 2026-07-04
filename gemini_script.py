@@ -67,14 +67,15 @@ SCRIPT RULES:
 2. LANGUAGE: Natural Tanglish — Tamil sentences with English technical terms inline. NOT translated English. NOT pure Tamil.
    Good: "Ungal phone face unlock panna, oru neural network realtime-la ungal face-a 128 different points-la analyze pannum"
    Bad: "Your phone uses artificial intelligence to recognize your face using neural network technology"
-3. STRUCTURE (strict):
+3. TECHNICAL SPELLINGS: Write key technical terms and product names (such as "Gboard", "AI", "Auto-correct", "Shortcuts", "Typing Speed", "Productivity", "Themes", "Settings") in standard, correct English script. Do NOT write them in Tamil script or spell them phonetically, so they render correctly and cleanly in the captions.
+4. STRUCTURE (strict):
    - Hook (0-5 sec): Surprising question or statement. Start with "Oru vishayam theriyuma?" or similar
    - Concept body (5-35 sec): Explain using the real world example. Use simple analogy.
    - Wow moment (35-45 sec): The surprising fact that reframes everything
    - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or similar
-4. TONE: Like an excited friend explaining something cool, not a teacher lecturing
-5. NO: Statistics, percentages, named researchers, paper citations
-6. YES: Specific product names (Swiggy, GPT, Google Maps), relatable situations, conversational fillers (aama, illaya, paarunga)
+5. TONE: Like an excited friend explaining something cool, not a teacher lecturing
+6. NO: Statistics, percentages, named researchers, paper citations
+7. YES: Specific product names (Swiggy, GPT, Google Maps), relatable situations, conversational fillers (aama, illaya, paarunga)
 
 OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
 

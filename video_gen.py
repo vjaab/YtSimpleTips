@@ -825,108 +825,135 @@ def render_clean_caption(text_or_words, progress=1.0, accent_color=(204, 255, 0)
     return canvas_to_clip(img)
 
 
-# ── NEW: Time-based Karaoke Caption (uses word timestamps) ───────────────────
-def render_karaoke_caption(chunk_words, current_time, accent_color=(204, 255, 0)):
+# Clean-up map for technical terms in captions
+CLEAN_MAP = {
+    "gboard": "Gboard",
+    "ai": "AI",
+    "hack": "Hack",
+    "auto-correct": "Auto-correct",
+    "autocorrect": "Auto-correct",
+    "shortcuts": "Shortcuts",
+    "shortcut": "Shortcut",
+    "productivity": "Productivity",
+    "speed": "Speed",
+    "glide": "Glide",
+    "typing": "Typing",
+    "dark": "Dark",
+    "mode": "Mode",
+}
+
+def clean_technical_word(w):
+    import re
+    # strip punctuation for lookup
+    stripped = re.sub(r'[^a-zA-Z0-9]', '', w).lower()
+    if stripped in CLEAN_MAP:
+        pattern = re.compile(re.escape(stripped), re.IGNORECASE)
+        return pattern.sub(CLEAN_MAP[stripped], w)
+    return w
+
+# ── NEW: Dynamic word-by-word/phrase-by-phrase caption layer (safe-zone centered) ──
+def render_dynamic_word_caption(chunk_words, current_time, accent_color=(255, 255, 255), highlight_color=(204, 255, 0)):
     """
-    Renders karaoke caption using word timestamps from chunk['words'].
-    Only shows if there are valid word timestamps.
+    Renders dynamic word captions, showing only 1 to 3 words at a time.
+    Centered in the middle third of the vertical screen space (y=960).
+    Spoken word has scale-up pop and highlight.
     """
     if not chunk_words:
         return None
+        
+    # Group words into pages of 3 words max
+    words_per_page = 3
+    pages = [chunk_words[i:i+words_per_page] for i in range(0, len(chunk_words), words_per_page)]
     
-    # Filter words that have valid timestamps
-    valid_words = [w for w in chunk_words if "start" in w and "end" in w and w["start"] < w["end"]]
-    if not valid_words:
-        return None
-    
+    # Find active page
+    active_page = None
+    for page in pages:
+        p_start = page[0]["start"]
+        p_end = page[-1]["end"]
+        if p_start <= current_time <= p_end:
+            active_page = page
+            break
+            
+    if not active_page:
+        # Fallback to page closest to current_time
+        for idx, page in enumerate(pages):
+            if current_time < page[0]["start"]:
+                active_page = pages[max(0, idx - 1)]
+                break
+        if not active_page:
+            active_page = pages[-1]
+            
     img = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
-    words = [w["word"] for w in valid_words]
-    starts = [w["start"] for w in valid_words]
-    ends = [w["end"] for w in valid_words]
+    # Typography settings
+    base_size = int(82 * (FRAME_W / 1080.0))
+    font_bold = get_font_for_text("test", base_size, "bold")
+    space_w = font_bold.getbbox(" ")[2]
     
-    base_size = int(72 * (FRAME_W / 1080.0))
-    font = get_font_for_text("test", base_size, "bold")
+    # Calculate word scaling and widths
+    words_to_draw = []
+    total_w = 0
     
-    space_w = font.getbbox(" ")[2]
-    
-    word_widths = []
-    for word in words:
-        bbox = font.getbbox(word)
-        word_widths.append(bbox[2] - bbox[0])
-    
-    max_line_width = int(FRAME_W * 0.80)
-    lines = []
-    current_line = []
-    current_line_width = 0
-    line_word_indices = []  # Track which word indices belong to each line
-    
-    for i, word in enumerate(words):
-        word_w = word_widths[i]
-        space_needed = space_w if current_line else 0
+    for w_data in active_page:
+        w_text = w_data["word"]
+        # Clean-up technical words
+        w_text = clean_technical_word(w_text)
         
-        if current_line_width + space_needed + word_w > max_line_width and current_line:
-            lines.append(current_line)
-            line_word_indices.append(list(range(i - len(current_line), i)))
-            current_line = [word]
-            current_line_width = word_w
-        else:
-            current_line.append(word)
-            current_line_width += space_needed + word_w
-    
-    if current_line:
-        lines.append(current_line)
-        line_word_indices.append(list(range(len(words) - len(current_line), len(words))))
-    
-    line_h = int(88 * (FRAME_W / 1080.0))
-    
-    # Lower third position (72%)
-    y_pos = int(FRAME_H * 0.72) - (len(lines) * line_h // 2)
-    
-    max_line_w = 0
-    for li, line in enumerate(lines):
-        idxs = line_word_indices[li]
-        line_w = sum(word_widths[i] for i in idxs) + space_w * (len(idxs)-1)
-        max_line_w = max(max_line_w, line_w)
-    
-    pad_x, pad_y = 36, 18
-    bx1 = (FRAME_W - max_line_w) // 2 - pad_x
-    bx2 = (FRAME_W + max_line_w) // 2 + pad_x
-    by1 = y_pos - pad_y
-    by2 = y_pos + len(lines) * line_h - (line_h - base_size) + pad_y
-    
-    border_r, border_g, border_b = accent_color
-    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=16, fill=(8, 8, 12, 210), outline=(border_r, border_g, border_b, 100), width=2)
-    
-    word_idx = 0
-    for li, line in enumerate(lines):
-        line_y = y_pos + li * line_h
-        idxs = line_word_indices[li]
-        line_w = sum(word_widths[i] for i in idxs) + space_w * (len(idxs)-1)
-        cur_x = (FRAME_W - line_w) // 2
+        w_start = w_data.get("start", 0.0)
+        w_end = w_data.get("end", 0.0)
+        is_active = w_start <= current_time <= w_end
         
-        for local_idx, global_idx in enumerate(idxs):
-            word_text = words[global_idx]
-            is_active = starts[global_idx] <= current_time <= ends[global_idx]
-            
-            if is_active:
-                font = get_font_for_text(word_text, int(base_size * 1.12), "extrabold")
-                # Subtle glow
-                for dx in [-1, 0, 1]:
-                    for dy in [-1, 0, 1]:
-                        if abs(dx) + abs(dy) > 0:
-                            draw.text((cur_x + dx, line_y - 3 + dy), word_text, fill=(border_r, border_g, border_b, 60), font=font)
-                draw.text((cur_x, line_y - 3), word_text, fill=(255, 255, 255, 255), font=font)
+        scale = 1.0
+        if is_active:
+            dt = current_time - w_start
+            if 0 <= dt < 0.10:
+                scale = 1.0 + 0.25 * (dt / 0.10)
+            elif 0.10 <= dt < 0.20:
+                scale = 1.25 - 0.10 * ((dt - 0.10) / 0.10)
             else:
-                font = get_font_for_text(word_text, base_size, "bold")
-                draw.text((cur_x+1, line_y+1), word_text, fill=(0, 0, 0, 160), font=font)
-                draw.text((cur_x, line_y), word_text, fill=(220, 220, 220, 255), font=font)
-            
-            cur_x += word_widths[global_idx] + space_w
-            word_idx += 1
+                scale = 1.15
+                
+        font_weight = "extrabold" if is_active else "bold"
+        w_font = get_font_for_text(w_text, int(base_size * scale), font_weight)
+        bbox = w_font.getbbox(w_text)
+        w_w = bbox[2] - bbox[0]
+        w_h = bbox[3] - bbox[1]
+        
+        words_to_draw.append({
+            "text": w_text,
+            "font": w_font,
+            "width": w_w,
+            "height": w_h,
+            "is_active": is_active,
+            "color": highlight_color if is_active else accent_color
+        })
+        
+    total_w = sum(w["width"] for w in words_to_draw) + space_w * (len(words_to_draw) - 1)
     
-    return canvas_to_clip(img)
+    # Layout and draw
+    cur_x = (FRAME_W - total_w) // 2
+    y_center = int(FRAME_H * 0.50)  # Middle vertical third centered (y=960)
+    
+    for w in words_to_draw:
+        w_text = w["text"]
+        w_font = w["font"]
+        w_h = w["height"]
+        
+        # Draw high-contrast outline for maximum readability
+        stroke_color = (0, 0, 0, 255)
+        stroke_width = 3 if w["is_active"] else 2
+        for dx in range(-stroke_width, stroke_width + 1):
+            for dy in range(-stroke_width, stroke_width + 1):
+                if abs(dx) + abs(dy) > 0:
+                    draw.text((cur_x + dx, y_center - (w_h // 2) + dy), w_text, fill=stroke_color, font=w_font)
+                    
+        # Draw main text
+        draw.text((cur_x, y_center - (w_h // 2)), w_text, fill=w["color"], font=w_font)
+        
+        cur_x += w["width"] + space_w
+        
+    return np.array(img)
 
 
 def canvas_to_clip(pil_img):
@@ -1387,10 +1414,10 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     vid_clip = vid_clip.cropped(x1=0, y1=y1, x2=w_a, y2=y1+new_h)
                 w_a, h_a = vid_clip.size
                 
-                # Side PiP: 35% of frame height, positioned on RIGHT side (not center)
-                height_pip = int(FRAME_H * 0.35)
-                width_pip = int(height_pip * (w_a / h_a))
-                avatar_clip = vid_clip.resized((width_pip, height_pip))
+                # Sizing for optimized processing
+                width_pip, height_pip = 360, 640
+                avatar_mod_w, avatar_mod_h = 360, 640
+                avatar_clip = vid_clip.resized((avatar_mod_w, avatar_mod_h))
                 
                 # AI Background Removal with IMPROVED edge feathering
                 try:
@@ -1480,41 +1507,107 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                     mclip = VideoClip(lambda t: mask, is_mask=True, duration=audio_duration)
                     avatar_clip = avatar_clip.with_mask(mclip)
                 
-                # Subtle "alive" motion - reduced intensity
+                # Subtle "alive" motion parameters
                 zoom_speed = 0.05 / max(audio_duration, 1.0)
-                avatar_clip = avatar_clip.with_effects([
-                    vfx.Resize(lambda t: 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)),
-                    vfx.Rotate(lambda t: 0.3 * math.sin(t * 1.2 + 0.3))
-                ])
-                
-                # Position: RIGHT side, vertically centered in upper 60% of frame (avoid captions)
-                # This keeps avatar clear of bottom captions and top safe zone
                 avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
                 
-                def pip_position(t):
-                    current_scale = 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)
-                    scaled_w = int(width_pip * current_scale)
-                    scaled_h = int(height_pip * current_scale)
-                    # Right side with 40px margin from edge
-                    base_x = FRAME_W - scaled_w - 40 + avatar_x_offset
-                    # Vertically centered in upper portion (y=200 to y=900)
-                    base_y = 350
-                    return (base_x, base_y)
+                # Retrieve timing for hook and CTA
+                hook_end = chunks[0]["end"] if chunks else 3.0
+                cta_start = chunks[-1]["start"] if chunks else audio_duration - 4.0
                 
-                # Add subtle drop shadow for depth/integration
-                def add_shadow_frame(t):
-                    frame = avatar_clip.get_frame(t)
-                    if frame.shape[2] == 4:
-                        # Create shadow offset
-                        shadow = np.zeros_like(frame)
-                        shadow[:, :, :3] = 0
-                        shadow[:, :, 3] = frame[:, :, 3] * 0.3
-                        return shadow
-                    return frame
+                # Shared cache to speed up rendering (MoviePy queries frame and mask independently)
+                frame_cache = {}
                 
-                avatar_pip = avatar_clip.with_position(pip_position).with_start(0)
+                def render_avatar_frame_and_mask(t):
+                    t_round = round(t, 2)
+                    if t_round in frame_cache:
+                        return frame_cache[t_round]
+                        
+                    # Get small RGB frame and mask frame (360x640)
+                    rgb_small = avatar_clip.get_frame(t)
+                    mask_small = avatar_clip.mask.get_frame(t)
+                    
+                    # Construct small RGBA frame
+                    rgba_small = np.zeros((avatar_mod_h, avatar_mod_w, 4), dtype=np.uint8)
+                    rgba_small[:, :, :3] = rgb_small
+                    rgba_small[:, :, 3] = (mask_small * 255).astype(np.uint8)
+                    
+                    pil_small = Image.fromarray(rgba_small, "RGBA")
+                    
+                    # Apply subtle rotation/scaling for alive effect
+                    alive_scale = 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)
+                    alive_angle = 0.3 * math.sin(t * 1.2 + 0.3)
+                    
+                    # Rotate small image
+                    pil_small = pil_small.rotate(alive_angle, resample=Image.Resampling.BICUBIC, expand=False)
+                    
+                    if t <= hook_end or t >= cta_start:
+                        # Full Screen: Scale up 360x640 to 1080x1920
+                        full_w = int(FRAME_W * alive_scale)
+                        full_h = int(FRAME_H * alive_scale)
+                        pil_full = pil_small.resize((full_w, full_h), Image.Resampling.LANCZOS)
+                        
+                        # Crop/center to FRAME_W, FRAME_H
+                        canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0,0,0,0))
+                        cx = full_w // 2
+                        cy = full_h // 2
+                        x1 = cx - FRAME_W // 2
+                        y1 = cy - FRAME_H // 2
+                        canvas.paste(pil_full, (-x1, -y1))
+                        
+                        arr = np.array(canvas)
+                        rgb = arr[:, :, :3]
+                        mask = arr[:, :, 3] / 255.0
+                    else:
+                        # Circular PiP bubble in top-right
+                        canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+                        
+                        # Crop face square from small frame
+                        # Face is centered at (180, 180) in the 360x640 image
+                        cx, cy = 180, 180
+                        face_size = int(180 * alive_scale)
+                        x1 = max(0, cx - face_size // 2)
+                        y1 = max(0, cy - face_size // 2)
+                        x2 = min(avatar_mod_w, cx + face_size // 2)
+                        y2 = min(avatar_mod_h, cy + face_size // 2)
+                        
+                        face_crop = pil_small.crop((x1, y1, x2, y2))
+                        
+                        # Resize face crop to circular bubble size
+                        bubble_dia = int(220 * (FRAME_W / 1080.0))
+                        face_resized = face_crop.resize((bubble_dia, bubble_dia), Image.Resampling.LANCZOS)
+                        
+                        # Create circle mask
+                        mask_im = Image.new("L", (bubble_dia, bubble_dia), 0)
+                        mask_draw = ImageDraw.Draw(mask_im)
+                        mask_draw.ellipse([0, 0, bubble_dia, bubble_dia], fill=255)
+                        
+                        # Position: top-right corner with offset
+                        bx = FRAME_W - bubble_dia - 50 + avatar_x_offset
+                        by = 250
+                        
+                        canvas.paste(face_resized, (bx, by), mask_im)
+                        
+                        # Draw white border outline
+                        draw = ImageDraw.Draw(canvas)
+                        draw.ellipse([bx, by, bx + bubble_dia, by + bubble_dia], outline=(255, 255, 255, 255), width=4)
+                        
+                        arr = np.array(canvas)
+                        rgb = arr[:, :, :3]
+                        mask = arr[:, :, 3] / 255.0
+                        
+                    # Maintain cache bounds
+                    if len(frame_cache) > 40:
+                        frame_cache.clear()
+                    frame_cache[t_round] = (rgb, mask)
+                    return rgb, mask
+
+                avatar_pip = VideoClip(lambda t: render_avatar_frame_and_mask(t)[0], has_constant_size=True).with_duration(audio_duration).with_start(0)
+                avatar_mask = VideoClip(lambda t: render_avatar_frame_and_mask(t)[1], is_mask=True, duration=audio_duration).with_start(0)
+                avatar_pip = avatar_pip.with_mask(avatar_mask)
+                
                 background_clips.append(avatar_pip)
-                print("✅ [video_gen] Avatar PiP added (side-positioned, feathered edges).")
+                print("✅ [video_gen] Optimized Avatar Dynamic PiP added (circular during tutorial, full-screen in hook/cta).")
             except Exception as av_err:
                 print(f"❌ [video_gen] Failed to process avatar video clip: {av_err}")
 
@@ -1784,7 +1877,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # ── ENTITY OVERLAYS ──
         _render_entity_overlays(p_draw, script_json, t, accent_color)
 
-        # ── SINGLE CLEAN CAPTION LAYER (Safe zone: bottom 40%, centered) ──
+        # ── SINGLE PREMIUM DYNAMIC CAPTION LAYER (Centered in middle third) ──
         active_chunk = None
         for chunk in chunks:
             if chunk["start"] <= t <= chunk["end"]:
@@ -1795,28 +1888,12 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             active_chunk = chunks[-1]
             
         if active_chunk:
-            chunk_dur = max(0.1, active_chunk["end"] - active_chunk["start"])
-            progress = (t - active_chunk["start"]) / chunk_dur
-            
-            # Get the text - prefer english_caption for key terms, fallback to chunk text
-            caption_text = active_chunk.get("english_caption", "")
-            if not caption_text or not caption_text.strip():
-                caption_text = active_chunk.get("text", "")
-            
-            if caption_text and caption_text.strip():
-                # Render single clean caption with background pill for readability
-                cap_arr = render_clean_caption(caption_text, progress, accent_color=accent_color)
-                pil_cap = Image.fromarray(cap_arr).convert("RGBA")
-                pil_frame.alpha_composite(pil_cap)
-        
-        # Also render word-by-word karaoke if words available (clean version)
-        if active_chunk:
             chunk_words = active_chunk.get("words", [])
             if chunk_words:
-                karaoke_arr = render_karaoke_caption(chunk_words, t, accent_color=caption_highlight)
-                if karaoke_arr is not None:
-                    pil_karaoke = Image.fromarray(karaoke_arr).convert("RGBA")
-                    pil_frame.alpha_composite(pil_karaoke)
+                cap_arr = render_dynamic_word_caption(chunk_words, t, accent_color=(255, 255, 255), highlight_color=caption_highlight)
+                if cap_arr is not None:
+                    pil_cap = Image.fromarray(cap_arr).convert("RGBA")
+                    pil_frame.alpha_composite(pil_cap)
         
         # ── Emoji reaction overlays ──
         if ENABLE_EMOJI_OVERLAYS:

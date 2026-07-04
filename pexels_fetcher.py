@@ -186,6 +186,26 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             visual_type = "photo"
             source = "Evidence Screenshot"
 
+        # ── PRIORITY 0.5: Programmatic settings UI simulation ──
+        if not visual_path:
+            settings_keywords = ["gboard", "keyboard", "settings", "correct", "glide", "shortcut", "dictionary", "preferences", "theme", "tap on", "turn on", "click on", "toggle"]
+            is_settings_tutorial = any(kw in text.lower() or (prompt and kw in prompt.lower()) for kw in settings_keywords)
+            if is_settings_tutorial:
+                print("     → Settings tutorial detected! Attempting to generate Programmatic UI simulation...")
+                try:
+                    import settings_ui_gen
+                    out_name = f"settings_sim_chunk_{cid}_{TODAY}.mp4"
+                    out_path = os.path.join(OUTPUT_DIR, out_name)
+                    chunk_dur = chunk.get("duration", 3.0)
+                    sim_path = settings_ui_gen.generate_settings_clip(text, chunk_dur, out_path)
+                    if sim_path and os.path.exists(sim_path):
+                        visual_path = sim_path
+                        visual_type = "video"
+                        source = "Settings UI Simulator"
+                        print(f"     ✅ Settings UI Simulation generated successfully!")
+                except Exception as sim_err:
+                    print(f"     ❌ Settings UI Simulation generation failed: {sim_err}")
+
         # Build provider list for this chunk (each provider is tried independently per chunk)
         providers = []
         
