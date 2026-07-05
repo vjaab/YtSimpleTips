@@ -6,6 +6,7 @@ import glob
 import random
 import traceback
 from datetime import datetime
+import re
 
 from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM
 from fetch_topics import fetch_facts_for_category
@@ -221,7 +222,10 @@ def run_pipeline(forced_category=None, dry_run=False):
         WORDS_PER_SEC_ESTIMATE = 2.55  # calibrated from 117 words / 45.97s
         
         word_count = len(script.split())
-        estimated_duration = word_count / WORDS_PER_SEC_ESTIMATE
+        sentence_count = len(re.findall(r'[.!?]+', script))
+        comma_count = len(re.findall(r',', script))
+        added_pauses = sentence_count * 0.3 + comma_count * 0.15
+        estimated_duration = (word_count / WORDS_PER_SEC_ESTIMATE) + added_pauses
         
         if estimated_duration < MIN_DURATION_SEC:
             min_words = int(MIN_DURATION_SEC * WORDS_PER_SEC_ESTIMATE) + 10

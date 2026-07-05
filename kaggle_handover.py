@@ -54,6 +54,13 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
     scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts")
     os.makedirs(scripts_dir, exist_ok=True)
     
+    # Copy audio_gen.py to scripts/audio_gen.py so it gets uploaded to Kaggle
+    try:
+        shutil.copy(os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio_gen.py"), os.path.join(scripts_dir, "audio_gen.py"))
+        print("📦 Staged local audio_gen.py for Kaggle upload.")
+    except Exception as copy_err:
+        print(f"⚠️ Warning: Could not stage audio_gen.py for Kaggle upload: {copy_err}")
+        
     # 1. Inject Job Data directly into the script
     from config import ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID
     job_payload = {

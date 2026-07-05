@@ -14,6 +14,7 @@ import numpy as np
 import random
 import math
 import hashlib
+import re
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from moviepy import (
@@ -1054,7 +1055,7 @@ def _render_sound_on_indicator(draw, t, accent_color):
 # ── AUDIO MASTERING ──────────────────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
+def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path, sfx_events=None):
     """Mixes voiceover with background music using dynamic ducking for premium sound."""
     print("🎵 [audio_mastering] Mixing and mastering soundtrack...")
     try:
@@ -1075,9 +1076,9 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
             bgm_base_db = 20 * math.log10(BGM_VOLUME) if BGM_VOLUME > 0 else -60.0
             
             # Target volumes
-            # During voice activity: BGM ducked by an extra 11 dB relative to base (e.g., -33 dB)
+            # During voice activity: BGM ducked by an extra 15 dB relative to base (e.g., -37 dB)
             # During silence: BGM rises to base + 2 dB (e.g., -20 dB) to fill the gaps
-            ducked_db = bgm_base_db - 11
+            ducked_db = bgm_base_db - 15
             unducked_db = bgm_base_db + 2
             
             chunk_ms = 100
@@ -1110,11 +1111,53 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path):
             ducked_bgm = ducked_bgm.fade_in(300).fade_out(500)
             
             mastered = ducked_bgm.overlay(voice)
+            
+            # Apply Sound Design (SFX Placement)
+            if sfx_events:
+                print(f"🔊 [audio_mastering] Overlaying {len(sfx_events)} sound design effects...")
+                for event in sfx_events:
+                    time_ms = int(event["time_ms"])
+                    sfx_type = event["type"]
+                    sfx_file = os.path.join(ASSETS_DIR, "sfx", f"{sfx_type}.wav")
+                    if os.path.exists(sfx_file):
+                        try:
+                            sfx_segment = AudioSegment.from_file(sfx_file).set_frame_rate(44100).set_channels(2).set_sample_width(2)
+                            if sfx_type == "woosh":
+                                sfx_segment = sfx_segment - 12
+                            elif sfx_type == "pop":
+                                sfx_segment = sfx_segment - 8
+                            elif sfx_type == "glitch":
+                                sfx_segment = sfx_segment - 14
+                            mastered = mastered.overlay(sfx_segment, position=time_ms)
+                        except Exception as sfx_err:
+                            print(f"⚠️ Failed to overlay SFX '{sfx_type}': {sfx_err}")
+                    else:
+                        print(f"⚠️ SFX file not found: {sfx_file}")
+            
             mastered.export(output_path, format="wav")
             print("✅ [audio_mastering] Soundtrack mixed with smooth EMA-ducked BGM!")
         else:
             print(f"⚠️ [audio_mastering] BGM file not found at '{bgm_path}'. Proceeding with raw voiceover.")
-            voice.export(output_path, format="wav")
+            mastered = voice
+            if sfx_events:
+                print(f"🔊 [audio_mastering] Overlaying {len(sfx_events)} sound design effects on raw voice...")
+                for event in sfx_events:
+                    time_ms = int(event["time_ms"])
+                    sfx_type = event["type"]
+                    sfx_file = os.path.join(ASSETS_DIR, "sfx", f"{sfx_type}.wav")
+                    if os.path.exists(sfx_file):
+                        try:
+                            sfx_segment = AudioSegment.from_file(sfx_file).set_frame_rate(44100).set_channels(2).set_sample_width(2)
+                            if sfx_type == "woosh":
+                                sfx_segment = sfx_segment - 12
+                            elif sfx_type == "pop":
+                                sfx_segment = sfx_segment - 8
+                            elif sfx_type == "glitch":
+                                sfx_segment = sfx_segment - 14
+                            mastered = mastered.overlay(sfx_segment, position=time_ms)
+                        except Exception as sfx_err:
+                            print(f"⚠️ Failed to overlay SFX on raw voice: {sfx_err}")
+            mastered.export(output_path, format="wav")
     except Exception as e:
         print(f"⚠️ [audio_mastering] Audio mixing failed: {e}. Copying raw voice.")
         shutil.copy(voice_path, output_path)
@@ -1235,6 +1278,79 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         except Exception:
             fact_number = 0
     
+    # ── COMPILE SOUND DESIGN (SFX EVENTS) ──
+    sfx_events = []
+    chunk_boundaries = []
+    boundary_transitions = {}
+    
+    retention_cues = script_json.get("retention_cues", [])
+    cue_effects = {}
+    for cue in retention_cues:
+        if isinstance(cue, dict):
+            cue_effects[round(cue.get("timestamp", -1), 1)] = cue.get("effect", "default")
+            
+    # Pre-calculate chunk boundaries and transition mappings
+    for i, chunk in enumerate(chunks):
+        c_start = chunk["start"]
+        vpath = chunk.get("visual_path")
+        has_info = chunk.get("has_infographic", False)
+        if i > 0 and vpath:
+            prev_vpath = chunks[i-1].get("visual_path")
+            if vpath != prev_vpath or has_info != chunks[i-1].get("has_infographic", False):
+                chunk_boundaries.append(c_start)
+                matched_effect = None
+                for cue_t, effect in cue_effects.items():
+                    if abs(cue_t - c_start) < 2.0:
+                        matched_effect = effect
+                        break
+                if matched_effect and matched_effect in TRANSITION_MAP:
+                    boundary_transitions[c_start] = TRANSITION_MAP[matched_effect]
+                else:
+                    boundary_transitions[c_start] = random.choice(_TRANSITION_POOL)
+
+    # Compile transition SFX with 3.0s cooldown
+    last_transition_sfx_time = -9.0
+    for boundary_t in chunk_boundaries:
+        transition_fn = boundary_transitions.get(boundary_t)
+        
+        # Decide SFX type based on transition function
+        if transition_fn == _apply_rgb_glitch:
+            sfx_type = "glitch"
+        elif transition_fn in (_apply_cartoon_flash_cut, _apply_zoom_burst):
+            sfx_type = "woosh"
+        elif transition_fn == _apply_shake:
+            sfx_type = "pop"
+        else:
+            continue
+            
+        if boundary_t - last_transition_sfx_time >= 3.0:
+            sfx_events.append({
+                "time_ms": int(boundary_t * 1000),
+                "type": sfx_type
+            })
+            last_transition_sfx_time = boundary_t
+            
+    # Compile Alert/Keyword SFX with 2.0s cooldown
+    last_alert_sfx_time = -9.0
+    alert_keywords = {
+        "fraud", "scam", "cheat", "danger", "alert", "warn", "virus", "security", 
+        "safe", "hack", "hacking", "otp", "password", "vpn", "threat", "leak", 
+        "hacked", "lock", "protect", "spy", "spying", "privacy", "block"
+    }
+    
+    for chunk in chunks:
+        words = chunk.get("words", [])
+        for w in words:
+            word_text = re.sub(r'[^a-zA-Z]', '', w.get("word", "")).lower()
+            if word_text in alert_keywords:
+                w_start = w.get("start", 0.0)
+                if w_start - last_alert_sfx_time >= 2.0:
+                    sfx_events.append({
+                        "time_ms": int(w_start * 1000),
+                        "type": "pop"
+                    })
+                    last_alert_sfx_time = w_start
+
     # ── SOUNDTRACK MIXING ──
     # YPP COMPLIANCE: BGM must be from YouTube Audio Library or equivalent royalty-free source.
     # Using copyrighted music will trigger Content ID claims and reduce Shorts ad revenue.
@@ -1259,7 +1375,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             print(f"   BGM path: {bgm_path}")
                 
     mastered_wav = os.path.join(OUTPUT_DIR, f"master_soundtrack_{today}.wav")
-    _mix_and_master_audio(audio_path, bgm_path, audio_duration, mastered_wav)
+    _mix_and_master_audio(audio_path, bgm_path, audio_duration, mastered_wav, sfx_events=sfx_events)
     final_audio = AudioFileClip(mastered_wav)
     
     # ── VISUAL BACKGROUND LAYER ASSEMBLE ──
@@ -1300,22 +1416,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         if i == 0 and vpath:
             first_chunk_visual_path = vpath
             first_chunk_visual_type = chunk.get("visual_type", "photo")
-        
-        # Track boundary for transition (skip first chunk)
-        if i > 0 and vpath:
-            prev_vpath = chunks[i-1].get("visual_path")
-            if vpath != prev_vpath or has_info != chunks[i-1].get("has_infographic", False):
-                chunk_boundaries.append(c_start)
-                # Find matching retention cue or pick random transition
-                matched_effect = None
-                for cue_t, effect in cue_effects.items():
-                    if abs(cue_t - c_start) < 2.0:
-                        matched_effect = effect
-                        break
-                if matched_effect and matched_effect in TRANSITION_MAP:
-                    boundary_transitions[c_start] = TRANSITION_MAP[matched_effect]
-                else:
-                    boundary_transitions[c_start] = random.choice(_TRANSITION_POOL)
         
         # 1. Overlay infographic card if flagged
         if has_info:

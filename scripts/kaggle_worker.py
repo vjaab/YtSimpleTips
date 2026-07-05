@@ -867,6 +867,12 @@ def setup_project():
     if os.path.isdir("YtSimpleTips"):
         os.chdir("YtSimpleTips")
         print(f"🏠 Switched to project directory: {os.getcwd()}")
+        if os.path.exists("../audio_gen.py"):
+            try:
+                shutil.copy("../audio_gen.py", "audio_gen.py")
+                print("✅ Overwrote cloned audio_gen.py with staged local version.")
+            except Exception as copy_err:
+                print(f"⚠️ Warning: Could not overwrite cloned audio_gen.py: {copy_err}")
     else:
         print("⚠️ Warning: Could not find project directory 'YtSimpleTips' after clone.")
 

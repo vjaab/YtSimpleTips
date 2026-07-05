@@ -33,8 +33,9 @@ def _apply_stable_ts(audio_path, text):
         print("⏳ Running stable-ts locally to extract real word timestamps...")
         model = stable_whisper.load_model('tiny')
         
-        # Strip meta instructions
+        # Strip meta instructions and break tags
         clean_text = re.sub(r'\[[^\]]*\]|\([^)]*\)', '', text)
+        clean_text = re.sub(r'<[^>]+>', '', clean_text)
         clean_text = re.sub(r'\s+', ' ', clean_text).strip()
         
         result = model.align(audio_path, clean_text, language='ta')
@@ -110,6 +111,8 @@ def optimize_audio_gaps(audio_path, word_timestamps):
     return duration, word_timestamps
 
 def _estimate_timestamps(text, duration):
+    # Strip break tags from estimate logic so they aren't counted as words
+    text = re.sub(r'<[^>]+>', '', text)
     words = text.split()
     if not words:
         return []
@@ -264,18 +267,34 @@ def split_text_into_chunks(text: str) -> list[str]:
     
     return merged_chunks
 
+def inject_break_tags(text: str) -> str:
+    """
+    Injects SSML-style break tags into preprocessed TTS text for ElevenLabs Multilingual v2.
+    - 0.3s pause at sentence-ending punctuation (. ! ?)
+    - 0.15s pause at clause/comma punctuation (,)
+    """
+    # 1. Inject 0.3s break tags at sentence boundaries (. ! ?) followed by space or end of string
+    text = re.sub(r'([.!?]+)(?:\s+|$)', r'\1 <break time="0.3s"/> ', text)
+    # 2. Inject 0.15s break tags at clause boundaries (commas) followed by space or end of string
+    text = re.sub(r'(,)(?:\s+|$)', r'\1 <break time="0.15s"/> ', text)
+    # Clean up double spaces
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
 def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
     """Synthesizes a single text chunk via ElevenLabs API. Returns raw MP3 bytes."""
     cleaned_text = preprocess_script_for_tts(text)
+    # Inject break tags for ElevenLabs Multilingual v2 pacing control
+    cleaned_text = inject_break_tags(cleaned_text)
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
     
     data = {
         "text": cleaned_text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            "stability": 0.50,
-            "similarity_boost": 0.95,
-            "style": 0.15,
+            "stability": 0.45,
+            "similarity_boost": 0.85,
+            "style": 0.35,
             "use_speaker_boost": True
         }
     }
@@ -493,7 +512,8 @@ def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
         # and preserve 100% of the original voice match.
         filter_str = (
             "highpass=f=80,"  # removes low-frequency rumble below 80Hz
-            "acompressor=threshold=0.08:ratio=2:attack=10:release=100:makeup=1,"  # gentle dynamics normalization
+            "equalizer=f=4000:t=h:w=1000:g=+2.5,"  # presence boost 3kHz-5kHz for vocal clarity
+            "acompressor=threshold=-18dB:ratio=3:attack=5:release=50,"  # subtle dynamics compression
             "loudnorm=I=-14:TP=-1.5:LRA=7,"  # standard Shorts loudness target
             "aresample=44100"  # keep consistent sample rate
         )
@@ -503,9 +523,9 @@ def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
             "lowpass=f=11000,"  # removes harsh air/TTS artifacts above 11kHz (was 12kHz)
             "afftdn=nf=-25,"  # noise floor reduction at -25dB (gentler than current)
             "equalizer=f=200:t=h:w=200:g=-3,"  # cut muddy low-mids
-            "equalizer=f=2500:t=h:w=800:g=+4,"  # boost vocal presence (clarity range)
-            "equalizer=f=8000:t=h:w=2000:g=+1,"  # subtle air/brightness (reduced from +2 to prevent TTS artifact amplification)
-            "acompressor=threshold=0.05:ratio=3:attack=10:release=100:makeup=1,"  # gentler compression to prevent pumping/ringing artifacts
+            "equalizer=f=3500:t=h:w=1000:g=+3,"  # boost vocal presence (clarity range 3kHz-5kHz)
+            "equalizer=f=8000:t=h:w=2000:g=+1,"  # subtle air/brightness
+            "acompressor=threshold=-18dB:ratio=3:attack=5:release=50,"  # subtle dynamics compression
             "loudnorm=I=-14:TP=-1.5:LRA=7,"  # normalize to YouTube Shorts standard (-14 LUFS)
             "aresample=44100"  # ensure sample rate is exactly 44100 Hz
         )
