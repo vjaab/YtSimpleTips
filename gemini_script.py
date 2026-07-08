@@ -443,6 +443,7 @@ Evaluate the following storyboard JSON against these strict criteria (rate each 
 4. transition_score: Do transitions feel connected (match cuts, zoom transitions, morphs, object/story continuity) instead of hard-cuts?
 5. subtitle_timing_score: Are narration segments short and punchy (3-5 words) for fast-paced subtitles?
 6. comment_bait_score: Rate the quality of the 'comment_bait_question'. It must be a highly polarizing, debate-inducing question in Tanglish/Tamil that naturally drives engagement. Generic CTAs like "Comment below" or "Save this video" must be scored 0.
+7. hook_strength_score: Does the hook (the first 3-5 seconds of narration) use a strong negative/problem-oriented hook (e.g., 'இன்னும் manual-ஆ இதெல்லாம் பண்றீங்களா? ❌') or a bold direct question (e.g., 'உங்க போன்லயே இது பண்ணலாம்னு தெரியுமா?')? It must strictly avoid introductions/greetings like 'இன்னைக்கு நாம பாக்க போற...' or 'வணக்கம்'. Introductory fluff receives a score of 0. Direct negative hooks or highly engaging questions score 90-100.
 
 TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
@@ -463,6 +464,7 @@ Return ONLY a JSON object:
   "transition_score": 0-100,
   "subtitle_timing_score": 0-100,
   "comment_bait_score": 0-100,
+  "hook_strength_score": 0-100,
   "passes_validation": true|false,
   "feedback": "Detailed feedback on what is wrong and which scenes need improvement/regeneration."
 }}"""
@@ -522,6 +524,35 @@ def get_hottest_tech_topic(client, avoid_list=""):
     
     print("⚠️ Google Trends exhausted after retries. Proceeding without trending signal.")
     return None
+
+def apply_cta_rotation(final_script):
+    """
+    Loads CTA magnets from cta_magnets.json and randomly selects one to rotate.
+    Sets 'cta' and 'comment_bait_question' fields.
+    """
+    if not final_script:
+        return final_script
+    cta_list = [
+        "Intha project-oda full code & template bio link-la free-a code editor-la share panni irukken!",
+        "Ithoda complete step-by-step PDF resource bundle link bio layout-la irukku, download pannunga!",
+        "Part 2 video advanced setup-oda naalaiku varuthu. Miss pannama follow or subscribe pannunga!",
+        "Naalaiku innum oru powerful AI workflow trick solren. VJ Videos-uku follow/subscribe pannunga!"
+    ]
+    cta_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cta_magnets.json")
+    try:
+        if os.path.exists(cta_path):
+            with open(cta_path, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                if isinstance(loaded, list) and loaded:
+                    cta_list = loaded
+    except Exception as e:
+        print(f"⚠️ Failed to load cta_magnets.json: {e}. Using fallback CTAs.")
+        
+    selected_cta = random.choice(cta_list)
+    final_script["cta"] = selected_cta
+    final_script["comment_bait_question"] = selected_cta
+    print(f"🔄 CTA Rotation: Assigned selected CTA: '{selected_cta}'")
+    return final_script
 
 def pick_and_generate_script(articles=None, extra_instruction="", forced_article=None, topic_type="research", failed_topics=[]):
     """
@@ -831,6 +862,7 @@ Return ONLY a JSON object matching the required schema:
                         "Don't Miss This! 🚨"
                     ]
                     
+                    final_script = apply_cta_rotation(final_script)
                     print("🎉 [AI Education Path] Script and storyboard generated successfully!")
                     return final_script
                     
@@ -1007,6 +1039,8 @@ Return ONLY a JSON object matching the required schema:
             print(f"      - Engagement: {validation_result.get('engagement_score', 0)}%")
             print(f"      - Transitions: {validation_result.get('transition_score', 0)}%")
             print(f"      - Subtitle Timing: {validation_result.get('subtitle_timing_score', 0)}%")
+            print(f"      - Comment Bait: {validation_result.get('comment_bait_score', 0)}%")
+            print(f"      - Hook Strength: {validation_result.get('hook_strength_score', 0)}%")
             
             def _to_int(score):
                 if isinstance(score, int):
@@ -1034,7 +1068,8 @@ Return ONLY a JSON object matching the required schema:
                 _to_int(validation_result.get('engagement_score', 0)),
                 _to_int(validation_result.get('transition_score', 0)),
                 _to_int(validation_result.get('subtitle_timing_score', 0)),
-                _to_int(validation_result.get('comment_bait_score', 0))
+                _to_int(validation_result.get('comment_bait_score', 0)),
+                _to_int(validation_result.get('hook_strength_score', 0))
             ]
             
             if all(score >= 90 for score in scores) or validation_result.get('passes_validation') is True:
@@ -1045,7 +1080,8 @@ Return ONLY a JSON object matching the required schema:
                     "engagement": _to_int(validation_result.get('engagement_score')),
                     "transitions": _to_int(validation_result.get('transition_score')),
                     "subtitle_timing": _to_int(validation_result.get('subtitle_timing_score')),
-                    "comment_bait": _to_int(validation_result.get('comment_bait_score'))
+                    "comment_bait": _to_int(validation_result.get('comment_bait_score')),
+                    "hook_strength": _to_int(validation_result.get('hook_strength_score', 0))
                 }
                 break
             else:
@@ -1155,6 +1191,8 @@ Return ONLY a JSON object matching the required schema:
             final_script["retention_map"] = retention_map
         if hot_topic_str:
             final_script["trending_topic"] = hot_topic_str
+            
+        final_script = apply_cta_rotation(final_script)
         
         # Save output in logs for debug
         os.makedirs(LOGS_DIR, exist_ok=True)

@@ -115,6 +115,84 @@ def _generate_pollinations_image(prompt, output_path, aspect_ratio="9:16"):
             
     return None
 
+TECH_KEYWORDS = [
+    "langgraph", "langchain", "pytorch", "tensorflow", "fastapi", "flask", 
+    "django", "react", "nextjs", "vue", "angular", "git", "github", 
+    "docker", "kubernetes", "sql", "sqlite", "mongodb", "postgresql", 
+    "mysql", "redis", "pandas", "numpy", "scikit-learn", "keras", 
+    "opencv", "huggingface", "transformers", "gemini", "openai", 
+    "claude", "llama", "deepseek", "qwen", "groq", "api", "vector database", 
+    "chromadb", "pinecone", "weaviate", "milvus", "qdrant", "faiss", 
+    "rag", "llm", "neural network", "python", "javascript", "typescript", 
+    "html", "css", "agent", "agents"
+]
+
+def get_custom_tech_visual(keyword, text):
+    """
+    Returns (infographic_type, infographic_data) for a matched tech keyword.
+    """
+    keyword_lower = keyword.lower()
+    
+    # ── CODE BLOCK CASES ──
+    if keyword_lower in ["python", "pandas", "numpy", "scikit-learn"]:
+        return "code_block", {
+            "filename": "process_data.py",
+            "code": "import pandas as pd\nimport numpy as np\n\n# Load and clean dataset\ndf = pd.read_csv('data.csv')\nclean_df = df.dropna()\n\n# Calculate core metrics\nresult = clean_df.mean()\nprint(f'Average: {result}')"
+        }
+    elif keyword_lower in ["langgraph", "langchain", "agents", "agent"]:
+        return "code_block", {
+            "filename": "ai_agent.py",
+            "code": "from langgraph import StateGraph\n\n# Create agent workflow graph\nbuilder = StateGraph(State)\nbuilder.add_node('model', call_model)\nbuilder.add_node('tools', call_tool)\n\n# Compile and invoke agent\nagent = builder.compile()\nagent.invoke({'input': 'hello'})"
+        }
+    elif keyword_lower in ["fastapi", "flask", "django", "api"]:
+        return "code_block", {
+            "filename": "main.py",
+            "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/api/v1/resource')\ndef read_root():\n    return {\n        'status': 'success',\n        'data': 'Hello from FastAPI!'\n    }"
+        }
+    elif keyword_lower in ["react", "nextjs", "vue", "angular", "html", "javascript", "typescript", "css"]:
+        return "code_block", {
+            "filename": "Component.jsx",
+            "code": "import React, { useState } from 'react';\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Clicked {count} times\n    </button>\n  );\n}"
+        }
+    elif keyword_lower in ["git", "github"]:
+        return "code_block", {
+            "filename": "git_workflow.sh",
+            "code": "# Save your current progress\ngit add .\ngit commit -m 'feat: add ai agent'\n\n# Push code to remote repository\ngit push origin main\ngit status"
+        }
+    elif keyword_lower in ["docker", "kubernetes"]:
+        return "code_block", {
+            "filename": "Dockerfile",
+            "code": "FROM python:3.10-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\nCOPY . .\nCMD ['python', 'main.py']"
+        }
+    
+    # ── DIAGRAM CASES ──
+    elif keyword_lower in ["vector database", "chromadb", "pinecone", "weaviate", "milvus", "qdrant", "faiss", "rag"]:
+        return "diagram", {
+            "title": "VECTOR DB / RAG FLOW",
+            "nodes": ["Document", "Embedding Model", "Vector Database", "Context Injection"]
+        }
+    elif keyword_lower in ["llm", "gemini", "openai", "claude", "llama", "deepseek", "qwen", "groq"]:
+        return "diagram", {
+            "title": "LLM INFERENCE PIPELINE",
+            "nodes": ["User Prompt", "LLM Processing", "Response Generation"]
+        }
+    elif keyword_lower in ["neural network", "deep learning", "machine learning"]:
+        return "diagram", {
+            "title": "NEURAL NETWORK ARCHITECTURE",
+            "nodes": ["Input Layer", "Hidden Layers (AI Brain)", "Output Prediction"]
+        }
+    elif keyword_lower in ["database", "sql", "sqlite", "mongodb", "postgresql", "mysql", "redis"]:
+        return "diagram", {
+            "title": "DATABASE REPLICA FLOW",
+            "nodes": ["Write Query", "Primary DB", "Secondary DBs (Replica)"]
+        }
+    
+    # Default diagram fallback
+    return "diagram", {
+        "title": f"{keyword.upper()} SYSTEM DESIGN",
+        "nodes": ["User Input", f"Core {keyword.upper()}", "Output Result"]
+    }
+
 def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longform=False):
     """
     Orchestrates the retrieval of visuals for all chunks.
@@ -205,6 +283,22 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                         print(f"     ✅ Settings UI Simulation generated successfully!")
                 except Exception as sim_err:
                     print(f"     ❌ Settings UI Simulation generation failed: {sim_err}")
+
+        # ── PRIORITY 0.7: Custom Tech Infographic match ──
+        if not visual_path:
+            text_lower = text.lower()
+            sorted_keywords = sorted(TECH_KEYWORDS, key=len, reverse=True)
+            for kw in sorted_keywords:
+                if kw in text_lower:
+                    info_type, info_data = get_custom_tech_visual(kw, text)
+                    chunk["has_infographic"] = True
+                    chunk["infographic_type"] = info_type
+                    chunk["infographic_data"] = info_data
+                    visual_path = os.path.join(OUTPUT_DIR, f"tech_visual_{kw}_{cid}_{TODAY}.png")
+                    visual_type = "photo"
+                    source = "Tech Visual Agent"
+                    print(f"     ✅ Tech Visual Agent: Mentions '{kw}'. Assigned {info_type} infographic.")
+                    break
 
         # Build provider list for this chunk (each provider is tried independently per chunk)
         providers = []

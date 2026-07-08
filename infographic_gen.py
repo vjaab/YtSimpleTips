@@ -521,6 +521,138 @@ def _render_slide_card(data, accent_color, progress=1.0, is_longform=False):
 def _render_process_card(data, accent_color, progress=1.0, is_longform=False):
     return _render_slide_card(data, accent_color, progress, is_longform)
 
+# ── 9. Code Block Card ──
+def _render_code_block_card(data, accent_color, progress=1.0, is_longform=False):
+    fw, fh, fcy = get_dimensions(is_longform)
+    img = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    cw, ch = (1400, 650) if is_longform else (900, 650)
+    cx = (fw - cw) // 2
+    cy = fcy - ch // 2
+    
+    # Header of window: dark grey, body: darker grey/black
+    _draw_card_bg(draw, cx, cy, cw, ch, accent_color, fill=(20, 20, 20, 245))
+    
+    # Render 3 colored window control dots
+    draw.ellipse([cx + 25, cy + 25, cx + 41, cy + 41], fill=(255, 95, 87, 255)) # Red
+    draw.ellipse([cx + 55, cy + 25, cx + 71, cy + 41], fill=(255, 189, 46, 255)) # Yellow
+    draw.ellipse([cx + 85, cy + 25, cx + 101, cy + 41], fill=(39, 201, 63, 255)) # Green
+    
+    # Title / Filename in the middle of header bar
+    filename = data.get("filename", "code.py")
+    font_title = get_font_for_text(filename, 30, "bold")
+    _center_text(draw, filename, font_title, cy + 18, (200, 200, 200, 255), cx, cw)
+    
+    # Draw line separation
+    draw.line([cx, cy + 60, cx + cw, cy + 60], fill=(60, 60, 60, 255), width=2)
+    
+    code = data.get("code", "")
+    if not code:
+        code = "import langgraph\n\n# Initialize AI Agent\nagent = langgraph.compile()\nresponse = agent.invoke('hello')"
+        
+    lines = code.split("\n")
+    font_code = get_font_for_text("code", 28, "regular")
+    
+    # Animate lines based on progress
+    active_count = math.ceil(progress * len(lines))
+    
+    start_y = cy + 90
+    for idx, line in enumerate(lines[:10]):
+        if idx >= active_count:
+            break
+        clean_line = line.replace("\t", "    ")
+        # basic syntax styling
+        if clean_line.strip().startswith("#"):
+            color = (106, 153, 85, 255)
+        elif any(clean_line.strip().startswith(kw) for kw in ["import ", "from ", "def ", "class ", "return ", "if ", "else:"]):
+            color = (86, 156, 214, 255)
+        else:
+            color = (220, 220, 220, 255)
+            
+        draw.text((cx + 50, start_y), clean_line, font=font_code, fill=color)
+        start_y += 45
+        
+    return img
+
+# ── 10. Diagram Card ──
+def _render_diagram_card(data, accent_color, progress=1.0, is_longform=False):
+    fw, fh, fcy = get_dimensions(is_longform)
+    img = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    cw, ch = (1400, 650) if is_longform else (900, 650)
+    cx = (fw - cw) // 2
+    cy = fcy - ch // 2
+    
+    _draw_card_bg(draw, cx, cy, cw, ch, accent_color)
+    
+    title = data.get("title", "SYSTEM FLOW")
+    font_title = get_font_for_text(title, 40, "bold")
+    _center_text(draw, title, font_title, cy + 40, (*accent_color, 255), cx, cw)
+    
+    nodes = data.get("nodes", ["User", "API / Agent", "Vector DB"])
+    if isinstance(nodes, str):
+        nodes = [n.strip() for n in nodes.split("->")]
+        
+    font_node = get_font_for_text("node", 32, "bold")
+    
+    # Animate active nodes count based on progress
+    active_count = math.ceil(progress * len(nodes))
+    
+    if len(nodes) <= 3:
+        num_nodes = len(nodes)
+        node_w = 200
+        node_h = 100
+        total_w = num_nodes * node_w + (num_nodes - 1) * 80
+        start_x = cx + (cw - total_w) // 2
+        node_y = cy + (ch - node_h) // 2 + 30
+        
+        for idx, node in enumerate(nodes):
+            if idx >= active_count:
+                break
+            nx = start_x + idx * (node_w + 80)
+            draw.rounded_rectangle([nx, node_y, nx + node_w, node_y + node_h], radius=16, fill=(10, 25, 60, 255), outline=(240, 240, 240, 255), width=2)
+            _center_text(draw, node, font_node, node_y + (node_h - 40) // 2, (255, 255, 255, 255), nx, node_w)
+            
+            if idx < num_nodes - 1 and (idx + 1) < active_count:
+                arrow_start_x = nx + node_w
+                arrow_end_x = arrow_start_x + 80
+                arrow_y = node_y + node_h // 2
+                draw.line([arrow_start_x + 10, arrow_y, arrow_end_x - 10, arrow_y], fill=(*accent_color, 255), width=4)
+                draw.polygon([
+                    arrow_end_x - 10, arrow_y,
+                    arrow_end_x - 22, arrow_y - 12,
+                    arrow_end_x - 22, arrow_y + 12
+                ], fill=(*accent_color, 255))
+    else:
+        num_nodes = len(nodes)
+        node_w = 400
+        node_h = 80
+        total_h = num_nodes * node_h + (num_nodes - 1) * 30
+        start_y = cy + 120 + (ch - 120 - total_h) // 2
+        node_x = cx + (cw - node_w) // 2
+        
+        for idx, node in enumerate(nodes):
+            if idx >= active_count:
+                break
+            ny = start_y + idx * (node_h + 30)
+            draw.rounded_rectangle([node_x, ny, node_x + node_w, ny + node_h], radius=12, fill=(10, 25, 60, 255), outline=(240, 240, 240, 255), width=2)
+            _center_text(draw, node, font_node, ny + (node_h - 40) // 2, (255, 255, 255, 255), node_x, node_w)
+            
+            if idx < num_nodes - 1 and (idx + 1) < active_count:
+                arrow_start_y = ny + node_h
+                arrow_end_y = arrow_start_y + 30
+                arrow_x = node_x + node_w // 2
+                draw.line([arrow_x, arrow_start_y + 5, arrow_x, arrow_end_y - 5], fill=(*accent_color, 255), width=4)
+                draw.polygon([
+                    arrow_x, arrow_end_y - 5,
+                    arrow_x - 12, arrow_end_y - 17,
+                    arrow_x + 12, arrow_end_y - 17
+                ], fill=(*accent_color, 255))
+                
+    return img
+
 _TYPE_MAP = {
     "stat": _render_stat_card,
     "comparison": _render_comparison_card,
@@ -530,6 +662,8 @@ _TYPE_MAP = {
     "growth": _render_growth_card,
     "slide": _render_slide_card,
     "process": _render_process_card,
+    "code_block": _render_code_block_card,
+    "diagram": _render_diagram_card,
 }
 
 def render_infographic(infographic_type, infographic_data, accent_color, progress=1.0, is_longform=False):
