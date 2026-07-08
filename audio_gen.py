@@ -292,9 +292,10 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
         "text": cleaned_text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            "stability": 0.45,
+            # Tunable settings: Lower stability increases dynamic variation; higher style enhances emotion
+            "stability": 0.40,
             "similarity_boost": 0.85,
-            "style": 0.35,
+            "style": 0.45,
             "use_speaker_boost": True
         }
     }

@@ -8,7 +8,7 @@ import traceback
 from datetime import datetime
 import re
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
 from gemini_script import pick_and_generate_script
@@ -216,10 +216,10 @@ def run_pipeline(forced_category=None, dry_run=False):
         else:
             script = script_data.get("script", "")
         
-        # ── LAYER 1: Pre-Kaggle script duration estimation ──
-        # Based on logs: 117 words → ~46s after 1.15x speedup = ~2.55 words/sec final pace
-        # So raw words need: 35s * 2.55 ≈ 90 words minimum before speedup
-        WORDS_PER_SEC_ESTIMATE = 2.55  # calibrated from 117 words / 45.97s
+        # Dynamically scaled based on VOICE_SPEED configuration (baseline of 2.55 wps at 1.05 speed)
+        base_wps = 2.55
+        WORDS_PER_SEC_ESTIMATE = base_wps * (VOICE_SPEED / 1.05)
+        log_message(f"ℹ️ Calibrated pacing gate: {WORDS_PER_SEC_ESTIMATE:.2f} words/sec (VOICE_SPEED={VOICE_SPEED})")
         
         word_count = len(script.split())
         sentence_count = len(re.findall(r'[.!?]+', script))

@@ -936,6 +936,17 @@ def render_dynamic_word_caption(chunk_words, current_time, accent_color=(255, 25
     cur_x = (FRAME_W - total_w) // 2
     y_center = int(FRAME_H * 0.50)  # Middle vertical third centered (y=960)
     
+    # Draw a premium semi-transparent dark pill background for readability
+    max_h = max(w["height"] for w in words_to_draw)
+    px = 35  # horizontal padding
+    py = 18  # vertical padding
+    rx1 = cur_x - px
+    rx2 = cur_x + total_w + px
+    ry1 = y_center - (max_h // 2) - py
+    ry2 = y_center + (max_h // 2) + py
+    hr, hg, hb = highlight_color
+    draw.rounded_rectangle([rx1, ry1, rx2, ry2], radius=15, fill=(15, 15, 20, 180), outline=(hr, hg, hb, 255), width=2)
+    
     for w in words_to_draw:
         w_text = w["text"]
         w_font = w["font"]
@@ -1659,38 +1670,23 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                         rgb = arr[:, :, :3]
                         mask = arr[:, :, 3] / 255.0
                     else:
-                        # Circular PiP bubble in top-right
+                        # Bottom-Centered Presenter Cutout (Skills Maker / VJ style)
                         canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
                         
-                        # Crop face square from small frame
-                        # Face is centered at (180, 180) in the 360x640 image
-                        cx, cy = 180, 180
-                        face_size = int(180 * alive_scale)
-                        x1 = max(0, cx - face_size // 2)
-                        y1 = max(0, cy - face_size // 2)
-                        x2 = min(avatar_mod_w, cx + face_size // 2)
-                        y2 = min(avatar_mod_h, cy + face_size // 2)
+                        # Scale the avatar to be prominent at the bottom center
+                        avatar_width = int(800 * (FRAME_W / 1080.0))
+                        scale_factor = avatar_width / avatar_mod_w
+                        avatar_height = int(avatar_mod_h * scale_factor * alive_scale)
+                        avatar_width = int(avatar_width * alive_scale)
                         
-                        face_crop = pil_small.crop((x1, y1, x2, y2))
+                        face_resized = pil_small.resize((avatar_width, avatar_height), Image.Resampling.LANCZOS)
                         
-                        # Resize face crop to circular bubble size
-                        bubble_dia = int(220 * (FRAME_W / 1080.0))
-                        face_resized = face_crop.resize((bubble_dia, bubble_dia), Image.Resampling.LANCZOS)
+                        # Center horizontally, align to the bottom edge of the frame
+                        bx = (FRAME_W - avatar_width) // 2 + avatar_x_offset
+                        by = FRAME_H - avatar_height
                         
-                        # Create circle mask
-                        mask_im = Image.new("L", (bubble_dia, bubble_dia), 0)
-                        mask_draw = ImageDraw.Draw(mask_im)
-                        mask_draw.ellipse([0, 0, bubble_dia, bubble_dia], fill=255)
-                        
-                        # Position: top-right corner with offset
-                        bx = FRAME_W - bubble_dia - 50 + avatar_x_offset
-                        by = 250
-                        
-                        canvas.paste(face_resized, (bx, by), mask_im)
-                        
-                        # Draw white border outline
-                        draw = ImageDraw.Draw(canvas)
-                        draw.ellipse([bx, by, bx + bubble_dia, by + bubble_dia], outline=(255, 255, 255, 255), width=4)
+                        # Composite onto canvas using alpha channel as mask
+                        canvas.paste(face_resized, (bx, by), face_resized)
                         
                         arr = np.array(canvas)
                         rgb = arr[:, :, :3]
@@ -1715,72 +1711,81 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # ── ENTITY OVERLAY RENDERERS ─────────────────────────────────────────────────
     # ══════════════════════════════════════════════════════════════════════════════════
 
-    def _render_entity_overlays(draw: ImageDraw.Draw, script_json: dict, t: float, accent_color: tuple):
+    def _render_entity_overlays(draw: ImageDraw.Draw, pil_img: Image.Image, script_json: dict, t: float, accent_color: tuple):
         """
-        Render company logos and person photos as overlays on the video.
-        Entities are shown at specific timestamps based on script mentions.
+        Render company logos and tech tools as premium upper-left badge cards.
         """
-        # Check for company logos
+        # Find active entity or company to show
+        active_entity = None
+        
+        # Check companies
         for company in script_json.get("companies", []):
-            if isinstance(company, dict) and company.get("local_logo_path"):
-                logo_path = company.get("local_logo_path")
-                if os.path.exists(logo_path):
-                    try:
-                        logo_img = Image.open(logo_path).convert("RGBA")
-                        # Resize logo to reasonable size (max 150px)
-                        logo_img.thumbnail((150, 150), Image.LANCZOS)
-                        # Position: top-right corner with some padding
-                        x = FRAME_W - logo_img.width - 30
-                        y = 30
-                        # Fade in/out animation
-                        fade_duration = 1.0
-                        alpha = 255
-                        # Add subtle pulse
-                        pulse = 1.0 + 0.05 * math.sin(t * 2)
-                        new_w = int(logo_img.width * pulse)
-                        new_h = int(logo_img.height * pulse)
-                        logo_img = logo_img.resize((new_w, new_h), Image.LANCZOS)
-                        draw.bitmap((x, y), logo_img, fill=(255, 255, 255, alpha))
-                    except Exception as e:
-                        print(f"⚠️ Failed to render company logo: {e}")
+            if isinstance(company, dict) and company.get("local_logo_path") and os.path.exists(company["local_logo_path"]):
+                active_entity = {
+                    "name": company.get("name", "Tech"),
+                    "logo_path": company["local_logo_path"]
+                }
+                break
+                
+        # Check key_entities if no company found
+        if not active_entity:
+            for entity in script_json.get("key_entities", []):
+                if isinstance(entity, dict) and entity.get("local_logo_path") and os.path.exists(entity["local_logo_path"]):
+                    active_entity = {
+                        "name": entity.get("name", "Tool"),
+                        "logo_path": entity["local_logo_path"]
+                    }
+                    break
 
-        # Check for person photos
-        for person in script_json.get("people", []):
-            if isinstance(person, dict) and person.get("local_image_path"):
-                photo_path = person.get("local_image_path")
-                if os.path.exists(photo_path):
-                    try:
-                        photo_img = Image.open(photo_path).convert("RGBA")
-                        # Resize photo to reasonable size (max 200px)
-                        photo_img.thumbnail((200, 200), Image.LANCZOS)
-                        # Position: top-left corner
-                        x = 30
-                        y = 30
-                        fade_duration = 1.0
-                        alpha = 255
-                        pulse = 1.0 + 0.05 * math.sin(t * 2)
-                        new_w = int(photo_img.width * pulse)
-                        new_h = int(photo_img.height * pulse)
-                        photo_img = photo_img.resize((new_w, new_h), Image.LANCZOS)
-                        draw.bitmap((x, y), photo_img, fill=(255, 255, 255, alpha))
-                    except Exception as e:
-                        print(f"⚠️ Failed to render person photo: {e}")
-
-        # Check for key entities
-        for entity in script_json.get("key_entities", []):
-            if isinstance(entity, dict) and entity.get("local_logo_path"):
-                logo_path = entity.get("local_logo_path")
-                if os.path.exists(logo_path):
-                    try:
-                        logo_img = Image.open(logo_path).convert("RGBA")
-                        logo_img.thumbnail((150, 150), Image.LANCZOS)
-                        # Position: center-top
-                        x = (FRAME_W - logo_img.width) // 2
-                        y = 30
-                        alpha = 255
-                        draw.bitmap((x, y), logo_img, fill=(255, 255, 255, alpha))
-                    except Exception as e:
-                        print(f"⚠️ Failed to render key entity logo: {e}")
+        if active_entity:
+            try:
+                logo_path = active_entity["logo_path"]
+                entity_name = active_entity["name"].upper()
+                
+                # Load and resize logo
+                logo_img = Image.open(logo_path).convert("RGBA")
+                logo_img.thumbnail((60, 60), Image.LANCZOS)
+                
+                # Set up font
+                font = get_font_for_text(entity_name, 28, "bold")
+                bbox = font.getbbox(entity_name)
+                tw = bbox[2] - bbox[0]
+                th = bbox[3] - bbox[1]
+                
+                # Calculate card dimensions
+                card_h = 90
+                card_w = 15 + logo_img.width + 15 + tw + 20
+                
+                card_x = 40
+                card_y = 230
+                
+                # Draw rounded card background on temporary transparent canvas for alpha compositing
+                card_im = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
+                card_draw = ImageDraw.Draw(card_im)
+                
+                r, g, b = accent_color
+                card_draw.rounded_rectangle(
+                    [card_x, card_y, card_x + card_w, card_y + card_h],
+                    radius=15,
+                    fill=(15, 15, 20, 220),
+                    outline=(r, g, b, 255),
+                    width=2
+                )
+                
+                # Paste logo into card canvas
+                ly = card_y + (card_h - logo_img.height) // 2
+                card_im.paste(logo_img, (card_x + 15, ly), logo_img)
+                
+                # Draw text into card canvas
+                tx = card_x + 15 + logo_img.width + 15
+                ty = card_y + (card_h - th) // 2 - bbox[1]
+                card_draw.text((tx, ty), entity_name, fill=(255, 255, 255, 255), font=font)
+                
+                # Composite card onto the main frame
+                pil_img.alpha_composite(card_im)
+                
+            except Exception as e:
+                print(f"⚠️ Failed to render premium tech entity badge card: {e}")
 
     # Compile the base composited backgrounds
     base_comp = CompositeVideoClip(background_clips, size=(FRAME_W, FRAME_H)).with_duration(audio_duration)
@@ -1975,7 +1980,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # (Previously rendered an orange badge on the video visible to viewers)
 
         # ── ENTITY OVERLAYS ──
-        _render_entity_overlays(p_draw, script_json, t, accent_color)
+        _render_entity_overlays(p_draw, pil_frame, script_json, t, accent_color)
 
         # ── SINGLE PREMIUM DYNAMIC CAPTION LAYER (Centered in middle third) ──
         active_chunk = None
