@@ -72,7 +72,7 @@ SCRIPT RULES:
 
 OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
 
-TITLE_TAGS_PROMPT = """You are a Tamil YouTube SEO expert specializing in AI education content.
+TITLE_TAGS_PROMPT = """You are an expert YouTube SEO optimizer specializing in regional South Indian tech content (similar to Skills Maker TV).
 
 Generate metadata for this Tamil AI education Short:
 
@@ -84,10 +84,23 @@ OUTPUT FORMAT (JSON only):
 {{
   "title": "Tanglish title, max 60 chars, must include curiosity gap or number, avoid clickbait",
   "description": "3-4 sentences in Tanglish explaining what viewer will learn. End with 'Comment pannunga - innum theriyanum-na!'",
-  "hashtags": ["#AITamil", "#TechTamil", 8 more relevant tags in English and Tamil],
+  "hashtags": [
+    "#Shorts",
+    "#TamilTech",
+    "Tag 3 (Core Tech Concept): Must be exactly 1 tag representing the primary technical subject (e.g. #AIVoice, #AiVideoEditing, #PhoneSetting, #WhatsAppSettings) using CamelCase, no punctuation.",
+    "Tag 4 (Action/Trend Context): Must be exactly 1 tag representing the primary value proposition or action context (e.g. #TechTips, #FreeAI, #YouTubeGrowth, #SafetyTips, #MoneyTips) using CamelCase, no punctuation."
+  ],
   "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity)",
   "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
 }}
+
+HASHTAG GENERATION RULES:
+You must output exactly 4 relevant hashtags inside the "hashtags" array:
+1. Tag 1: Must be exactly "#Shorts"
+2. Tag 2: Must be exactly "#TamilTech"
+3. Tag 3 (Core Tech Concept): Extract the primary technical subject from the script text (e.g., #AIVoice, #AiVideoEditing, #PhoneSetting, #WhatsAppSettings).
+4. Tag 4 (Action/Trend Context): Extract the primary value proposition (e.g., #TechTips, #FreeAI, #YouTubeGrowth, #SafetyTips, #MoneyTips).
+No other tags are allowed. All tags must use CamelCase with no internal punctuation.
 
 TITLE FORMULAS THAT WORK:
 - "Ungal [daily thing] ethana AI use pannudhu theriyuma?"
