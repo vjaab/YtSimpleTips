@@ -25,33 +25,29 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
     
     prompt = f"""
-    Generate 5 highly viral AI-related topics that common people (not tech experts) would find fascinating and share with friends.
-    These topics MUST be about Artificial Intelligence and how it affects daily life.
+    Generate 5 highly viral, trending or popular GitHub repositories that common people or developers would find fascinating, related to coding, AI, tools, utility scripts, or software hacks.
+    These topics MUST be actual popular GitHub repositories.
     Category focus: "{category}"
     These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
     They must be surprising, accurate, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
-    AI TOPIC + COMMON PEOPLE CRITERIA:
-    1. Every topic MUST be about AI or artificial intelligence. Do NOT generate non-AI topics like biology facts, space trivia, general science, life hacks, or financial tips.
-    2. The topic must be something a non-technical person (homemaker, shopkeeper, student, auto driver, parent, elder) would find immediately interesting and share with friends.
-    3. Connect every AI topic to something the viewer already uses daily (WhatsApp, Google, YouTube, Swiggy, UPI, phone camera, ATM, hospital, Aadhaar).
-    4. Focus on high "curiosity gap" hooks: "How does [daily app] know [surprising behavior]?", "AI is secretly doing [scary/amazing thing] on your phone", "This free AI tool can [solve daily problem]"
-    5. AVOID: Technical jargon (neural networks, transformers, embeddings), "Top 5 AI tools" lists, ChatGPT tutorial-style content.
-    6. USE angles that go viral with common people: FEAR (AI scams, deepfakes, privacy), UTILITY (free AI tools), WONDER (how apps work), MONEY (AI jobs, earning), HEALTH (AI in hospitals), PARENTING (kids and AI safety).
+    GITHUB TRENDING CRITERIA:
+    1. Every topic MUST be a popular or trending GitHub repository (e.g., vxcontrol/pentagi, lowlighter/metrics).
+    2. Focus on high "curiosity gap" or "utility" hooks: "This free GitHub tool can do X", "This insane GitHub repository changes how you write code", "Why everyone is talking about this GitHub project".
     
     {avoid_instruction}
     
-    CRITICAL REQUIREMENT: For each topic, you MUST provide a real, active source URL (like Wikipedia, official guide, or reputable publication) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each topic, you MUST provide its real, active GitHub URL (e.g., https://github.com/username/repository) as the source_url. This URL must be active and correct!
     
     Return ONLY a JSON object containing a "tips" array matching this schema:
     {{
       "tips": [
         {{
-          "title": "Short descriptive English title of the AI topic (e.g. How Swiggy AI Predicts Delivery Time)",
-          "description": "A rich, detailed 2-3 sentence explanation of the AI topic in English, explaining how it affects common people's daily life...",
-          "source_url": "Direct URL to Wikipedia, official guide, or reputable source",
-          "source_name": "Name of the source",
-          "keywords": ["keyword1", "keyword2", "keyword3"],
+          "title": "Short descriptive English title of the GitHub topic (e.g. lowlighter/metrics - Generate Infographics for GitHub Profile)",
+          "description": "A rich, detailed 2-3 sentence explanation of the GitHub repository in English, explaining what it does and why it is useful or trending.",
+          "source_url": "Direct GitHub URL of the repository (e.g. https://github.com/lowlighter/metrics)",
+          "source_name": "GitHub",
+          "keywords": ["GitHub", "repository", "open-source"],
           "category": "{category}"
         }}
       ]
@@ -206,30 +202,26 @@ def fetch_facts_for_category(category):
             print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
 
     prompt = f"""
-    Search the web for 5 highly viral AI-related topics that common people (not tech experts) would find fascinating, related to the category: "{category}".
-    These topics MUST be about Artificial Intelligence and how it affects daily life.
+    Search the web for 5 highly viral, top trending GitHub repositories that common people or developers would find fascinating, related to coding, AI, tools, utility scripts, or software hacks.
+    These topics MUST be actual popular GitHub repositories.
     These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
     They must be surprising, accurate, and optimized for a 30-40 second infotainment YouTube Short titled "Simple Tips by VJ".
     
-    AI TOPIC + COMMON PEOPLE CRITERIA:
-    1. Every topic MUST be about AI or artificial intelligence. Do NOT generate non-AI topics like biology facts, space trivia, general science, life hacks, or financial tips.
-    2. The topic must be something a non-technical person (homemaker, shopkeeper, student, auto driver, parent, elder) would find immediately interesting and share with friends.
-    3. Connect every AI topic to something the viewer already uses daily (WhatsApp, Google, YouTube, Swiggy, UPI, phone camera, ATM, hospital, Aadhaar).
-    4. Focus on high "curiosity gap" hooks: "How does [daily app] know [surprising behavior]?", "AI is secretly doing [scary/amazing thing] on your phone", "This free AI tool can [solve daily problem]"
-    5. AVOID: Technical jargon, "Top 5 AI tools" lists, ChatGPT tutorial-style content.
-    6. USE angles that go viral with common people: FEAR (AI scams, deepfakes, privacy), UTILITY (free AI tools), WONDER (how apps work), MONEY (AI jobs, earning), HEALTH (AI in hospitals), PARENTING (kids and AI safety).
+    GITHUB TRENDING CRITERIA:
+    1. Every topic MUST be a popular or trending GitHub repository (e.g., vxcontrol/pentagi, lowlighter/metrics).
+    2. Focus on high "curiosity gap" or "utility" hooks: "This free GitHub tool can do X", "This insane GitHub repository changes how you write code", "Why everyone is talking about this GitHub project".
     {trending_context}
     
-    CRITICAL REQUIREMENT: For each topic, you MUST search for and provide a real, active source URL (like a reputable news article, Wikipedia page, scientific study, or official guide) that supports this fact. We will capture a live screenshot of this website for the video, so the URL MUST be active and precise!
+    CRITICAL REQUIREMENT: For each topic, you MUST search for and provide its real, active GitHub URL (e.g., https://github.com/username/repository) as the source_url. This URL must be active and correct!
     
     Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the AI topic (e.g. How Google Maps AI Predicts Traffic)",
-        "description": "A rich, detailed 2-3 sentence explanation of the AI topic in English, explaining how it affects common people's daily life.",
-        "source_url": "Direct URL to Wikipedia, a reputable article, or official source documenting this specific AI feature or concept",
-        "source_name": "Name of the source (e.g. Wikipedia, Google AI Blog, MIT Technology Review)",
-        "keywords": ["keyword1", "keyword2", "keyword3"],
+        "title": "Short descriptive English title of the GitHub topic (e.g. lowlighter/metrics - Generate Infographics for GitHub Profile)",
+        "description": "A rich, detailed 2-3 sentence explanation of the GitHub repository in English, explaining what it does and why it is useful or trending.",
+        "source_url": "Direct GitHub URL of the repository (e.g. https://github.com/lowlighter/metrics)",
+        "source_name": "GitHub",
+        "keywords": ["GitHub", "repository", "open-source"],
         "category": "{category}"
       }}
     ]
@@ -269,6 +261,8 @@ def fetch_facts_for_category(category):
                 else:
                     print(f"⏭️ Skipping non-unique fact: {title}. Reason: {reason}")
                     
+            # Keep ONLY github topics
+            unique_facts = [f for f in unique_facts if "github.com" in f.get("source_url", "").lower()]
             if unique_facts:
                 # Apply trending boost scoring if available
                 if _TRENDING_AVAILABLE:
@@ -276,7 +270,7 @@ def fetch_facts_for_category(category):
                         unique_facts = boost_articles_with_trending(unique_facts, category)
                     except Exception as e:
                         print(f"  ⚠️ [fetch_topics] Trending boost failed (non-fatal): {e}")
-                return unique_facts + vidiq_topics
+                return unique_facts
             else:
                 print("⚠️ All fetched facts were duplicates. Retrying fetch...")
                 attempts += 1
@@ -316,11 +310,16 @@ def fetch_facts_for_category(category):
     # Fallback if search grounding completely fails or returns only duplicates
     print("🚨 [fetch_topics] All search grounding attempts failed or returned duplicates. Attempting LLM fallback...")
     unique_fallback_facts = fetch_facts_from_llm_fallback(category, avoid_titles)
+    unique_fallback_facts = [f for f in unique_fallback_facts if "github.com" in f.get("source_url", "").lower()]
     if unique_fallback_facts:
-        return unique_fallback_facts + vidiq_topics
+        return unique_fallback_facts
         
     print("🚨 [fetch_topics] LLM fallback failed. Loading historical backup as absolute last resort...")
-    return get_historical_fallback(category) + vidiq_topics
+    hist_fallback = get_historical_fallback(category)
+    hist_fallback = [f for f in hist_fallback if "github.com" in f.get("source_url", "").lower()]
+    if hist_fallback:
+        return hist_fallback
+    return get_historical_fallback(category)
 
 
 def get_historical_fallback(category):
@@ -353,12 +352,12 @@ def get_historical_fallback(category):
             print(f"⚠️ Failed to load fallback from tracker: {e}")
             
     # Absolute minimum fallback to ensure pipeline never crashes
-    print("🚨 Absolute fallback: Generating AI fact for common people...")
+    print("🚨 Absolute fallback: Generating GitHub repository fallback...")
     return [{
-        "title": "How WhatsApp AI Reads Your Chat Patterns",
-        "description": "WhatsApp uses AI to detect spam messages, suggest quick replies, and even predict which contacts you're most likely to message. The AI analyzes your messaging patterns without reading your actual messages, thanks to end-to-end encryption combined with on-device machine learning.",
-        "source_url": "https://en.wikipedia.org/wiki/WhatsApp#Features",
-        "source_name": "Wikipedia",
-        "keywords": ["WhatsApp", "AI", "privacy", "messaging"],
+        "title": "lowlighter/metrics - Generate Infographics for GitHub Profile",
+        "description": "A popular GitHub repository that generates gorgeous infographics, anime characters, coding habits, and music playlist metrics directly onto your GitHub profile page using simple markdown integrations.",
+        "source_url": "https://github.com/lowlighter/metrics",
+        "source_name": "GitHub",
+        "keywords": ["GitHub", "metrics", "infographics", "profile"],
         "category": category
     }]
