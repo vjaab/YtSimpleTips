@@ -1,5 +1,725 @@
 [
   {
+    "title": "GitHub-ல ஒரு Trending AI Hack! PentAGI Security! 🛡️",
+    "description": "GitHub Trending page-la innaikku top trending list-la irukku PentAGI. How this autonomous AI hacking agent works explained in Tanglish by VJ. #AITamil #GitHubTrending #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://github.com/trending",
+    "script": "Chrome matrum WhatsApp-ai vida 10 madangu powerful AI Hack... GitHub-la innaikku enna trending theriyuma? Athu thaan PentAGI. GitHub-la top trending-la irukku intha tool. Ithu oru fully autonomous AI hacking team mathiri work pannum! Metasploit, Nmap, sqlmap mathiri 20 plus top security tools-a ithu automatic-a chain panni absolute security testing pannidum. PostgreSQL knowledge graphs vachu unga code safety pattern-a analyze pannum. Professional security researchers kooda bug find panna intha tool-a thaan top-la use panranga. Intha advanced tech news ungalukku useful-a irundha like pannittu, 'Simple Tips by VJ' channel-a subscribe pannunga!",
+    "relevant_links": [
+      "https://github.com/trending"
+    ],
+    "phonetic_pronunciation_map": {
+      "GPay": "jee-pay",
+      "PhonePe": "phone-pay",
+      "Invisible": "in-vis-i-bl",
+      "Guard": "gard",
+      "Artificial": "ar-ti-fi-shal",
+      "Intelligence": "in-tel-i-gens",
+      "AI": "ay-eye",
+      "transactions": "tran-sac-shuns",
+      "spending": "spen-ding",
+      "habits": "ha-bits",
+      "alert": "a-lert",
+      "block": "blok",
+      "PentAGI": "pent-ay-jee",
+      "Nmap": "en-map",
+      "PostgreSQL": "post-gres-cue-el",
+      "Metasploit": "meta-sploit",
+      "sqlmap": "sequel-map"
+    },
+    "hook": "GitHub-la innaikku enna trending theriyuma? 🛡️",
+    "summary": "How PentAGI autonomous AI hacking agent works and why it is trending on GitHub.",
+    "sub_category": "ai_safety_and_scams",
+    "breaking_news_level": 9,
+    "keywords": [
+      "GitHub Trending",
+      "PentAGI",
+      "AI Hacking Agent",
+      "Simple Tips by VJ",
+      "Tamil Tech Tips"
+    ],
+    "hashtags": [
+      "#AITamil",
+      "#TechTamil",
+      "#GitHub",
+      "#PentAGI",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "Neenga autonomous AI security tools use panni irukingala? Comment-la sollunga!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "Chrome matrum WhatsApp-ai vida",
+        "english_caption": "POWERFUL APPS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing grid of modern app icons including WhatsApp and Chrome, digital interfaces, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "10 madangu powerful AI Hack...",
+        "english_caption": "10X POWER HACK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing battery icon with green electrical lightning sparks showing 10X power boost, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "GitHub-la innaikku enna trending",
+        "english_caption": "GITHUB TRENDING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close-up of a glowing digital smartphone showing the GitHub logo and trending stars graph, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "theriyuma? Athu thaan PentAGI.",
+        "english_caption": "PENTAGI REVEALED",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A sleek glowing computer setup displaying cybersecurity agents and matrix code, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "GitHub-la top trending-la",
+        "english_caption": "NUMBER ONE TREND",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing golden trophy floating above data flow graphs, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "irukku intha tool.",
+        "english_caption": "POPULAR TOOL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital terminal dashboard with stats and stars rising, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "Ithu oru fully autonomous AI",
+        "english_caption": "AUTONOMOUS AGENT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A friendly cute robotic agent typing code on a holographic laptop, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "hacking team mathiri work pannum!",
+        "english_caption": "HACKING TEAM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A team of small cute helper robots wearing hacker hoodies working together, glowing screens, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "Metasploit, Nmap, sqlmap mathiri",
+        "english_caption": "SECURITY TOOLS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A security toolbox filled with glowing digital tools and lock symbols, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 10,
+        "text": "20 plus top security tools-a",
+        "english_caption": "20+ POWERFUL TOOLS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A grid of 20 glowing metallic lock and shield symbols, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ithu automatic-a chain panni",
+        "english_caption": "AUTOMATED CHAINING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing golden digital chains linking together cyber processes, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 12,
+        "text": "absolute security testing pannidum.",
+        "english_caption": "SECURED SYSTEM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A giant glowing green digital lock appearing over a secure server room, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 13,
+        "text": "PostgreSQL knowledge graphs vachu",
+        "english_caption": "KNOWLEDGE GRAPH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing network of databases connected by light pathways, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 14,
+        "text": "unga code safety pattern-a",
+        "english_caption": "CODE PATTERNS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing green lines of source code scanned by a searchlight, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 15,
+        "text": "analyze pannum. Professional security",
+        "english_caption": "AI ANALYSIS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute robot analyst pointing at security charts on a screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 16,
+        "text": "researchers kooda bug find panna",
+        "english_caption": "BUG HUNTING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A magnifying glass highlighting a small glowing bug on a digital leaf made of chips, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 17,
+        "text": "intha tool-a thaan top-la use panranga.",
+        "english_caption": "TOP CHOICE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A shiny crown placed on top of a holographic server rack, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 18,
+        "text": "Intha advanced tech news ungalukku",
+        "english_caption": "USEFUL TECH HACKS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sparkling news article screen popping out of a phone, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 19,
+        "text": "useful-a irundha like pannittu,",
+        "english_caption": "LIKE THE VIDEO",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing 'Like' thumbs-up button floating in a warm volumetric background, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 20,
+        "text": "'Simple Tips by VJ' channel-a",
+        "english_caption": "VJ VIDEOS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Channel profile banner with glowing letters, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 21,
+        "text": "subscribe pannunga!",
+        "english_caption": "SUBSCRIBE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A large shining red 'Subscribe' button floating with sparkles, 3D Pixar style, vertical 9:16."
+      }
+    ]
+  },
+  {
+    "title": "உங்க GPay பணத்தை திருட முடியாது! AI Security Hack! 🛡️",
+    "description": "Ungalukke theriyaama, unga GPay matrum PhonePe panathai 24 mani neramum oru 'Invisible Guard' paadhugaathuttu irukkunnu theriyuma? How AI is protecting your UPI money explained in Tanglish by VJ. #AITamil #GPayTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "Ungalukke theriyaama, unga GPay matrum PhonePe panathai 24 mani neramum oru 'Invisible Guard' paadhugaathuttu irukkunnu theriyuma? Adhuthaan Artificial Intelligence (AI). Neenga dhinamum panra transactions vachu intha AI unga spending habits-a padichutte irukkum. Udhaaranathukku, dhinamum tea kadaila 20 roobai anuppura neenga, dhideernu night 2 manikki yaaro oru unknown person-ukku 50000 roobai anuppa try pannaa, AI udane alert aagi andha transaction-a block pannidum! Unga bank manager-a vida intha AI-ku ungala nalla theriyum! Intha information pudhusa irundha like pannittu, 'Simple Tips by VJ' channel-a subscribe pannunga!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
+    ],
+    "phonetic_pronunciation_map": {
+      "GPay": "jee-pay",
+      "PhonePe": "phone-pay",
+      "Invisible": "in-vis-i-bl",
+      "Guard": "gard",
+      "Artificial": "ar-ti-fi-shal",
+      "Intelligence": "in-tel-i-gens",
+      "AI": "ay-eye",
+      "transactions": "tran-sac-shuns",
+      "spending": "spen-ding",
+      "habits": "ha-bits",
+      "alert": "a-lert",
+      "block": "blok"
+    },
+    "hook": "உங்க GPay பணத்தை திருட முடியாது! Why? 🛡️",
+    "summary": "How AI protects GPay and PhonePe 24/7 with invisible security and habit learning.",
+    "sub_category": "ai_safety_and_scams",
+    "breaking_news_level": 9,
+    "keywords": [
+      "GPay AI",
+      "PhonePe Security",
+      "UPI Fraud AI",
+      "Simple Tips by VJ",
+      "Tamil Tech Tips"
+    ],
+    "hashtags": [
+      "#AITamil",
+      "#TechTamil",
+      "#GPay",
+      "#PhonePe",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "Unga GPay/PhonePe-la ennikkaavadhu unknown transaction block aagi irukka? Comment-la sollunga!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "Ungalukke theriyaama, unga GPay",
+        "english_caption": "INVISIBLE SHIELD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close-up of a glowing digital smartphone showing GPay and PhonePe app icons, surrounded by a semi-transparent glowing golden security shield, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "matrum PhonePe panathai",
+        "english_caption": "UPI SECURITY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital data streams forming a secure barrier, glowing holographic lock symbol, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "24 mani neramum oru 'Invisible Guard'",
+        "english_caption": "24/7 GUARD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A friendly cute robotic security guard holding a small glowing shield, smiling, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "paadhugaathuttu irukkunnu theriyuma?",
+        "english_caption": "DID YOU KNOW?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A South Indian young man scrolling phone looking surprised, phone screen glowing on face, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "Adhuthaan Artificial Intelligence (AI).",
+        "english_caption": "ARTIFICIAL INTELLIGENCE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute cartoon representation of a glowing digital brain, pulsing with warm soft blue and purple lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "Neenga dhinamum panra",
+        "english_caption": "DAILY BASIS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A smartphone interface displaying glowing digital icons of shopping, food, and bills, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "transactions vachu intha AI",
+        "english_caption": "TRANSACTIONS MONITOR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute 3D cartoon style smartphone screen showing small transaction history logs popping up, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "unga spending habits-a",
+        "english_caption": "SPENDING HABITS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A digital chart/graph highlighting regular payment blocks, warm volumetric lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "padichutte irukkum.",
+        "english_caption": "AI LEARNING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A robotic brain studying a chart/graph of daily habits with a magnifying glass, looking focused, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 10,
+        "text": "Udhaaranathukku, dhinamum",
+        "english_caption": "FOR EXAMPLE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A friendly South Indian cartoon tea stall owner pouring hot milk tea, warm sun rays, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 11,
+        "text": "tea kadaila 20 roobai",
+        "english_caption": "TEA SHOP ₹20",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A charming traditional South Indian tea shop with steam rising from hot tea glass, bright warm volumetric light, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 12,
+        "text": "anuppura neenga,",
+        "english_caption": "REGULAR PAYMENT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Hand holding phone scanning a QR code at a street stall, glowing energy line, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 13,
+        "text": "dhideernu night 2 manikki",
+        "english_caption": "NIGHT 2:00 AM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A phone displaying a clock face reading 2:00 AM in a dark room, glowing blue light, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 14,
+        "text": "yaaro oru unknown person-ukku",
+        "english_caption": "UNKNOWN PERSON",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A mysterious dark hacker silhouette with a hood, looking at a glowing matrix code screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 15,
+        "text": "50000 roobai anuppa try pannaa,",
+        "english_caption": "SENDING ₹50,000",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A phone in the dark displaying an outgoing transfer screen of ₹50,000 at 2:00 AM, glowing text, dark dramatic lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 16,
+        "text": "AI udane alert aagi",
+        "english_caption": "AI ALERTS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A bright red warning alert sign flashing on a mobile screen, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 17,
+        "text": "andha transaction-a block pannidum!",
+        "english_caption": "TRANSACTION BLOCKED!",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A digital shield blocking a red hacking attempt, secure lock icon, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 18,
+        "text": "Unga bank manager-a vida",
+        "english_caption": "BANK MANAGER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A funny scene of a shocked bank manager wearing glasses behind a desk, looking surprised, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 19,
+        "text": "intha AI-ku ungala nalla theriyum!",
+        "english_caption": "AI KNOWS YOU BETTER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing smart assistant avatar smiling from a phone screen, warm volumetric background, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 20,
+        "text": "Intha information pudhusa irundha like pannittu,",
+        "english_caption": "LIKE THE VIDEO",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing 'Like' thumbs-up button floating in a warm volumetric background, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 21,
+        "text": "'Simple Tips by VJ' channel-a subscribe pannunga!",
+        "english_caption": "SUBSCRIBE TO VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A large shining red 'Subscribe' button floating with sparkles, 3D Pixar style, vertical 9:16."
+      }
+    ]
+  },
+  {
+    "title": "GPay, PhonePe பணத்தை திருட முடியாது! AI Security Hack! 🛡️",
+    "description": "உங்களுக்கே தெரியாம, உங்க GPay மற்றும் PhonePe பணத்தை 24 மணி நேரமும் ஒரு 'Invisible Guard' பாதுகாத்துட்டு இருக்கு! How AI is protecting your UPI money explained in Tamil by VJ. #AITamil #GPayTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",
+    "script": "உங்களுக்கே தெரியாம, உங்க GPay மற்றும் PhonePe பணத்தை 24 மணி நேரமும் ஒரு 'Invisible Guard' பாதுகாத்துட்டு இருக்குன்னு தெரியுமா? அதுதான் Artificial Intelligence (AI). நீங்க தினமும் பண்ற டிரான்சாக்ஷன்ஸ் வச்சு இந்த AI உங்க ஸ்பெண்டிங் ஹாபிட்ஸ படிச்சுட்டே இருக்கும். உதாரணத்துக்கு, தினமும் டீ கடைல ₹20 அனுப்பற நீங்க, திடீர்னு நைட் 2 மணிக்கு யாரோ ஒரு அன்நோன் பெர்சனுக்கு ₹50,000 அனுப்ப ட்ரை பண்ணா, AI உடனே அலர்ட் ஆகி அந்த டிரான்சாக்ஷனை பிளாக் பண்ணிடும்! உங்க பேங்க் மேனேஜரை விட இந்த AI-க்கு உங்கள நல்லா தெரியும்! இந்த இன்பர்மேஷன் புதுசா இருந்தா லைக் பண்ணிட்டு, 'Simple Tips by VJ' சேனலை சப்ஸ்கிரைப் பண்ணுங்க!",
+    "relevant_links": [
+      "https://github.com/vjaab/YtSimpleTips"
+    ],
+    "phonetic_pronunciation_map": {
+      "GPay": "jee-pay",
+      "PhonePe": "phone-pay",
+      "Invisible": "in-vis-i-bl",
+      "Guard": "gard",
+      "Artificial": "ar-ti-fi-shal",
+      "Intelligence": "in-tel-i-gens",
+      "AI": "ay-eye",
+      "transactions": "tran-sac-shuns",
+      "spending": "spen-ding",
+      "habits": "ha-bits",
+      "alert": "a-lert",
+      "block": "blok"
+    },
+    "hook": "உங்க GPay பணத்தை திருட முடியாது! Why? 🛡️",
+    "summary": "How AI protects GPay and PhonePe 24/7 with invisible security and habit learning.",
+    "sub_category": "ai_safety_and_scams",
+    "breaking_news_level": 9,
+    "keywords": [
+      "GPay AI",
+      "PhonePe Security",
+      "UPI Fraud AI",
+      "Simple Tips by VJ",
+      "Tamil Tech Tips"
+    ],
+    "hashtags": [
+      "#AITamil",
+      "#TechTamil",
+      "#GPay",
+      "#PhonePe",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "உங்க GPay/PhonePe-ல என்னைக்கு ஆவது அன்நோன் ட்ரான்சாக்ஷன் பிளாக் ஆகி இருக்கா? கமெண்ட்ல சொல்லுங்க!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "உங்களுக்கே தெரியாம, உங்க GPay மற்றும் PhonePe பணத்தை",
+        "english_caption": "INVISIBLE SHIELD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A close-up of a glowing digital smartphone showing GPay and PhonePe app icons, surrounded by a semi-transparent glowing golden security shield, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 2,
+        "text": "24 மணி நேரமும் ஒரு 'Invisible Guard' பாதுகாத்துட்டு இருக்குன்னு தெரியுமா?",
+        "english_caption": "24/7 GUARD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A friendly cute robotic security guard holding a small glowing shield, smiling, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 3,
+        "text": "அதுதான் Artificial Intelligence (AI).",
+        "english_caption": "ARTIFICIAL INTELLIGENCE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute cartoon representation of a glowing digital brain, pulsing with warm soft blue and purple lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 4,
+        "text": "நீங்க தினமும் பண்ற டிரான்சாக்ஷன்ஸ் வச்சு",
+        "english_caption": "DAILY TRANSACTIONS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A cute 3D cartoon style smartphone screen showing small transaction history logs popping up, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 5,
+        "text": "இந்த AI உங்க ஸ்பெண்டிங் ஹாபிட்ஸ படிச்சுட்டே இருக்கும்.",
+        "english_caption": "LEARNING HABITS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A robotic brain studying a chart/graph of daily habits with a magnifying glass, looking focused, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 6,
+        "text": "உதாரணத்துக்கு, தினமும் டீ கடைல ₹20 அனுப்பற நீங்க,",
+        "english_caption": "TEA SHOP ₹20",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A charming traditional South Indian tea shop with steam rising from hot tea glass, bright warm volumetric light, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 7,
+        "text": "திடீர்னு நைட் 2 மணிக்கு யாரோ ஒரு அன்நோன் பெர்சனுக்கு ₹50,000 அனுப்ப ட்ரை பண்ணா,",
+        "english_caption": "NIGHT TRANSACTION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A phone in the dark displaying an outgoing transfer screen of ₹50,000 at 2:00 AM, glowing text, dark dramatic lighting, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 8,
+        "text": "AI உடனே அலர்ட் ஆகி அந்த டிரான்சாக்ஷனை பிளாக் பண்ணிடும்!",
+        "english_caption": "BLOCKED!",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A bright red warning alert sign flashing on a mobile screen, with a shield blocking a hacking attempt, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 9,
+        "text": "உங்க பேங்க் மேனேஜரை விட இந்த AI-க்கு உங்கள நல்லா தெரியும்!",
+        "english_caption": "AI KNOWS YOU BETTER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A funny scene of a shocked bank manager wearing glasses behind a desk, looking surprised, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 10,
+        "text": "இந்த இன்பர்மேஷன் புதுசா இருந்தா லைக் பண்ணிட்டு,",
+        "english_caption": "LIKE THE VIDEO",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A glowing 'Like' thumbs-up button floating in a warm volumetric background, 3D Pixar style, vertical 9:16."
+      },
+      {
+        "chunk_id": 11,
+        "text": "'Simple Tips by VJ' சேனலை சப்ஸ்கிரைப் பண்ணுங்க!",
+        "english_caption": "SUBSCRIBE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A large shining red 'Subscribe' button floating with sparkles, 3D Pixar style, vertical 9:16."
+      }
+    ]
+  },
+  {
     "title": "AI-nu enna? Robot-a? Illa... 🤔",
     "description": "Artificial Intelligence-nu solluvaanga — aana ithukku intelligence-ae illa. Reality check in Tanglish! #AITamil #TechTamil #VJVideos",
     "use_case_evidence_url": "https://github.com/vjaab/YtSimpleTips",

@@ -393,7 +393,15 @@ Return ONLY a JSON object:
 HUMANIZER_AGENT_TEMPLATE = """{persona}
 
 HUMANIZER AGENT TASK:
-This is the final step. Fix any robotic phrasing or overly formal/literary Tamil words. Ensure the speech is in highly colloquial, day-to-day spoken Tamil (Tanglish) with a natural mix of English words (natural, friendly, high-energy).
+This is the final step. Rewrite the script and storyboard content to sound 100% human-like, natural, and speech-optimized. Ensure the speech is in highly colloquial, day-to-day spoken Tamil (Tanglish) with a natural mix of English technical terms (natural, friendly, high-energy). 
+
+AUDIO & SPEECH HUMANIZATION RULES (inspired by advanced AI Humanizer pipelines for realistic TTS):
+1. PACING & SPEECH DENSITY: Do not use long, monotonous sentences. Alternate between medium sentences and short, punchy phrases (<6 words).
+2. CONVERSATIONAL FILLERS: Inject natural spoken Tamil/Tanglish fillers to make the voiceover flow seamlessly (e.g. "actually...", "seriously...", "think panni paarunga...", "wait...").
+3. TTS DYNAMICS: Use exclamation marks (!) at peak revelations to trigger energy spikes in synthesis. Use commas (,) and ellipses (...) to introduce natural breathing spaces and conversational pauses.
+4. NO BOT PATTERNS: Eliminate repetitive sentence structures (e.g., repeating "Ithu...", "Ithanaala..." at the start of consecutive sentences). Vary sentence openers.
+5. NO TEXTBOOK SLOP: Ban formal/literary Tamil words (e.g. use 'பண்ணுங்க' instead of 'செய்யுங்கள்', 'பார்க்கலாம்' instead of 'காணலாம்'). Use exact colloquial terms VJ would speak in person.
+
 Format the output EXACTLY matching the required schema below.
 
 OPTIMIZED SCRIPT:

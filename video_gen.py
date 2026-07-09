@@ -1674,7 +1674,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                         canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
                         
                         # Scale the avatar to be prominent at the bottom center
-                        avatar_width = int(800 * (FRAME_W / 1080.0))
+                        avatar_width = int(400 * (FRAME_W / 1080.0))
                         scale_factor = avatar_width / avatar_mod_w
                         avatar_height = int(avatar_mod_h * scale_factor * alive_scale)
                         avatar_width = int(avatar_width * alive_scale)
