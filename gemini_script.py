@@ -56,7 +56,7 @@ SURPRISING FACT: {surprising_fact}
 TARGET AUDIENCE: {target_segment}
 
 SCRIPT RULES:
-1. DURATION: 260-350 words max (approx 103-138 seconds at normal pace, ~90-120s at 1.15x speed)
+1. DURATION: 150-190 words max (approx 60-80 seconds total duration)
 2. LANGUAGE: Natural Tanglish — Tamil sentences with English technical terms inline. NOT translated English. NOT pure Tamil.
    Good: "Ungal phone face unlock panna, oru neural network realtime-la ungal face-a 128 different points-la analyze pannum"
    Bad: "Your phone uses artificial intelligence to recognize your face using neural network technology"
@@ -154,10 +154,10 @@ Language Rules:
 Constraint Checklist:
 - SCRIPT STRUCTURE (MANDATORY 4-PART FORMAT):
   1. HOOK (0–5 seconds / ~15 words): A shocking fact or bold statement to stop scrolling immediately. Do NOT use greetings (like "வணக்கம்" or "நமஸ்காரம்").
-  2. PROBLEM (5–20 seconds / ~50-70 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
-  3. SOLUTION (20–100 seconds / ~150-220 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
-  4. ENGAGEMENT QUESTION (100–115 seconds / ~25-35 words): End with a simple, opinion-based question that anyone can answer, driving them to comment, and sign-off politely with "நன்றி!".
-- SCRIPT WORD COUNT: Strictly 260-350 words in Tanglish (to fit the 90-120 second total duration).
+  2. PROBLEM (5–20 seconds / ~35-45 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
+  3. SOLUTION (20–65 seconds / ~90-110 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
+  4. ENGAGEMENT QUESTION (65–75 seconds / ~15-20 words): End with a simple, opinion-based question that anyone can answer, driving them to comment, and sign-off politely with "நன்றி!".
+- SCRIPT WORD COUNT: Strictly 150-190 words in Tanglish (to fit the 60-80 second total duration).
 - SCRIPT SENTENCES: Every sentence must be COMPLETE and end with proper punctuation (., !, ?). Keep sentences short and punchy (strictly between 8 to 12 words each) to model the natural pausing cadence of Skills Maker TV. NO sentence fragments or trailing incomplete thoughts.
 - EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "aana wait pannunga, ithula oru twist irukku!" (highly recommended to match VJ's style), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain interest.
@@ -264,12 +264,12 @@ Rewrite the narrative draft to maximize retention, remove ALL fluff, and structu
 The script must feel like a rapid-fire conversation, NOT a lecture.
 
 MANDATORY RULES:
-1. TOTAL WORD COUNT: Strictly 260-350 words.
+1. TOTAL WORD COUNT: Strictly 150-190 words.
 2. SCRIPT STRUCTURE (MANDATORY):
    - HOOK (0-5s): Shocking fact/bold statement. No greeting.
    - PROBLEM (5-20s): Daily pain point.
-   - SOLUTION (20-100s): Simple, clear tip/hack (single idea).
-   - ENGAGEMENT QUESTION (100-115s): Simple opinion-based question to prompt comments.
+   - SOLUTION (20-65s): Simple, clear tip/hack (single idea).
+   - ENGAGEMENT QUESTION (65-75s): Simple opinion-based question to prompt comments.
 3. SCRIPT SENTENCES: Every sentence must be COMPLETE, grammatically correct, and end with proper punctuation (., !, ?). Under 12 words each. NO fragments.
 4. Ensure the script directly resonates with daily scenarios.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
@@ -281,7 +281,7 @@ NARRATIVE DRAFT:
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 260-350 words.",
+  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 150-190 words.",
   "word_count": 0
 }}"""
 
@@ -581,11 +581,11 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     if session_length_cap:
         print(f"📉 [gemini_script] Applying session length cap of {session_length_cap} words.")
-        local_persona = local_persona.replace("260-350", f"50-{session_length_cap}")
-        local_optimizer = local_optimizer.replace("260-350", f"50-{session_length_cap}")
+        local_persona = local_persona.replace("150-190", f"50-{session_length_cap}")
+        local_optimizer = local_optimizer.replace("150-190", f"50-{session_length_cap}")
         word_count_limit_str = f"STRICT LIMIT: Total word count MUST be between 50-{session_length_cap} words."
     else:
-        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 260-350 words."
+        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 150-190 words."
 
     SYSTEM_PERSONA = local_persona
     RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
@@ -801,7 +801,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
 
 STORYBOARD AGENT TASK:
 Given the following AI education script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 30-45 storyboard scenes to align with the 260-350 words script length.
+You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
 
 SCRIPT:
 {script_text}

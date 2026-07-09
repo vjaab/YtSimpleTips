@@ -165,7 +165,8 @@ def run_pipeline(forced_category=None, dry_run=False):
     duration    = 0
     failed_topics = []
     min_dur, max_dur = TARGET_AUDIO_DURATION
-    MIN_DURATION_SEC = 35  # absolute minimum; TARGET_AUDIO_DURATION is (90, 120) ideal range
+    MIN_DURATION_SEC = 35  # absolute minimum allowed
+    MAX_DURATION_SEC = max_dur  # absolute maximum allowed (do not allow any shorts more than max_dur)
 
     while attempts < MAX_RETRY_ATTEMPTS:
         log_message(f"STEP 3 (Attempt {attempts+1}/{MAX_RETRY_ATTEMPTS}): Multi-Agent Tanglish Script Generation...")
@@ -227,15 +228,19 @@ def run_pipeline(forced_category=None, dry_run=False):
         added_pauses = sentence_count * 0.3 + comma_count * 0.15
         estimated_duration = (word_count / WORDS_PER_SEC_ESTIMATE) + added_pauses
         
-        if estimated_duration < MIN_DURATION_SEC:
-            min_words = int(MIN_DURATION_SEC * WORDS_PER_SEC_ESTIMATE) + 10
-            log_message(f"⚠️ Script too short: ~{estimated_duration:.1f}s estimated ({word_count} words). Minimum is {MIN_DURATION_SEC}s ({min_words}+ words). Rejecting early.")
+        if estimated_duration < MIN_DURATION_SEC or estimated_duration > MAX_DURATION_SEC:
+            if estimated_duration < MIN_DURATION_SEC:
+                min_words = int(MIN_DURATION_SEC * WORDS_PER_SEC_ESTIMATE) + 10
+                log_message(f"⚠️ Script too short: ~{estimated_duration:.1f}s estimated ({word_count} words). Minimum is {MIN_DURATION_SEC}s ({min_words}+ words). Rejecting early.")
+            else:
+                max_words = int(MAX_DURATION_SEC * WORDS_PER_SEC_ESTIMATE) - 10
+                log_message(f"⚠️ Script too long: ~{estimated_duration:.1f}s estimated ({word_count} words). Maximum is {MAX_DURATION_SEC}s ({max_words} words). Rejecting early.")
             failed_topics.append(fact_headline)
             script_data = None
             attempts += 1
             continue
         
-        log_message(f"📊 Script length check passed: {word_count} words → ~{estimated_duration:.1f}s estimated (min {MIN_DURATION_SEC}s)")
+        log_message(f"📊 Script length check passed: {word_count} words → ~{estimated_duration:.1f}s estimated (bounds [{MIN_DURATION_SEC}s - {MAX_DURATION_SEC}s])")
         
         log_message(f"Selected Fact: {fact_headline}")
         log_message(f"Source URL: {fact_url}")
@@ -308,13 +313,13 @@ def run_pipeline(forced_category=None, dry_run=False):
                     kaggle_failed = True
                 
                 # ── LAYER 2: Post-Kaggle actual duration check with recalibration ──
-                if audio_received and duration is not None and duration < MIN_DURATION_SEC:
+                if audio_received and duration is not None and (duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC):
                     actual_wps = word_count / duration
-                    log_message(f"⚠️ Kaggle returned {duration:.1f}s audio (< {MIN_DURATION_SEC}s). Pre-check estimate was {estimated_duration:.1f}s.")
+                    log_message(f"⚠️ Kaggle returned {duration:.1f}s audio. Pre-check estimate was {estimated_duration:.1f}s.")
                     log_message(f"   Observed pace: {actual_wps:.2f} words/sec (vs estimate {WORDS_PER_SEC_ESTIMATE}). Recalibrating for next run.")
                     # Update the estimate for future runs (could persist this)
                     WORDS_PER_SEC_ESTIMATE = actual_wps
-                    kaggle_failed = True  # Treat as failure to trigger retry with longer script
+                    kaggle_failed = True  # Treat as failure to trigger retry with adjusted script length
                 
                 if kaggle_failed:
                     log_message("🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.")
@@ -345,19 +350,19 @@ def run_pipeline(forced_category=None, dry_run=False):
             attempts += 1
             continue
 
-        if duration < MIN_DURATION_SEC:
+        if duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC:
             actual_wps = word_count / duration
-            log_message(f"⚠️ Local TTS returned {duration:.1f}s audio (< {MIN_DURATION_SEC}s). Pre-check estimate was {estimated_duration:.1f}s.")
+            log_message(f"⚠️ Local TTS returned {duration:.1f}s audio. Pre-check estimate was {estimated_duration:.1f}s.")
             log_message(f"   Observed pace: {actual_wps:.2f} words/sec (vs estimate {WORDS_PER_SEC_ESTIMATE}). Recalibrating for next run.")
             WORDS_PER_SEC_ESTIMATE = actual_wps
-            log_message(f"⚠️ Generated audio too short ({duration:.1f}s < {MIN_DURATION_SEC}s). Retrying...")
+            log_message(f"⚠️ Generated audio duration ({duration:.1f}s) is out of bounds [{MIN_DURATION_SEC}s - {MAX_DURATION_SEC}s]. Retrying...")
             failed_topics.append(fact_headline)
             attempts += 1
             continue
             
         break  # Success
 
-    if not audio_path or not script_data or duration < MIN_DURATION_SEC:
+    if not audio_path or not script_data or duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC:
         log_message("🚨 Pipeline failed to build core assets after multiple attempts.")
         return False
 
