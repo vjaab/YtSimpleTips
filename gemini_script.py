@@ -761,15 +761,38 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
             selected_headline = topic_data_res.get("topic")
             selected_url = "https://github.com/vjaab/YtSimpleTips"
             
-            # Step 2: Generate script using SCRIPT_GENERATION_PROMPT
-            script_writer_prompt = PIPELINE_PROMPTS["script_writer"].format(
-                topic=topic_data_res.get("topic"),
-                hook_question=topic_data_res.get("hook_question"),
-                core_concept=topic_data_res.get("core_concept"),
-                real_world_example=topic_data_res.get("real_world_example"),
-                surprising_fact=topic_data_res.get("surprising_fact"),
-                target_segment=topic_data_res.get("target_segment", "all")
-            )
+            # Step 2: Generate script using GITHUB_SCRIPT_GENERATION_PROMPT or SCRIPT_GENERATION_PROMPT
+            is_github = "github" in selected_headline.lower() or "github" in selected_url.lower()
+            if is_github:
+                print("💡 [GitHub Trend Agent] GitHub topic detected. Enforcing GITHUB_SCRIPT_GENERATION_PROMPT...")
+                script_writer_prompt = f"""You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
+
+Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this GitHub repository:
+
+TOPIC: {topic_data_res.get("topic")}
+CORE CONCEPT: {topic_data_res.get("core_concept")}
+REAL WORLD EXAMPLE: {topic_data_res.get("real_world_example")}
+SURPRISING FACT: {topic_data_res.get("surprising_fact")}
+
+SCRIPT RULES:
+1. DURATION: 110-130 words maximum (approx 45 seconds total duration)
+2. LANGUAGE: Natural spoken Tanglish peer voice. Never use textbook Tamil.
+3. STRUCTURE (strict 4-part sequential timeline blocks):
+   - Hook (0-5 sec): High-energy curiosity question or statement.
+   - Repo What & Why (5-20 sec): Explain what it does using a simple real-world analogy.
+   - Live Demo Proof (20-35 sec): Walk through the most mind-blowing feature.
+   - Algorithm Loop & CTA (35-45 sec): Create an abrupt loop-friendly ending + subscription CTA.
+
+OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
+            else:
+                script_writer_prompt = PIPELINE_PROMPTS["script_writer"].format(
+                    topic=topic_data_res.get("topic"),
+                    hook_question=topic_data_res.get("hook_question"),
+                    core_concept=topic_data_res.get("core_concept"),
+                    real_world_example=topic_data_res.get("real_world_example"),
+                    surprising_fact=topic_data_res.get("surprising_fact"),
+                    target_segment=topic_data_res.get("target_segment", "all")
+                )
             print("📝 [AGENT 1] Script Writer Agent: Generating script...")
             script_text = None
             try:
@@ -805,7 +828,27 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 refined_requirements = refined_requirements.replace('"original_news_url": "Direct source url"', f'"original_news_url": "{selected_url}"')
                 refined_requirements = refined_requirements.replace('"use_case_evidence_url": "Direct source url of the fact to take a screenshot of."', f'"use_case_evidence_url": "{selected_url}"')
                 
-                storyboard_prompt = f"""{SYSTEM_PERSONA}
+                if is_github:
+                    storyboard_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
+                    
+STORYBOARD AGENT TASK:
+Given the following GitHub trending script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
+You must produce exactly 15-20 storyboard scenes to align with the 110-130 words script length.
+
+MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
+- Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
+- Scene 4-10 (Repo What & Why, approx 5-20s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
+- Scene 11-16 (Live Demo Proof, approx 20-35s): Visual must describe terminal running code or the website UI in action.
+- Scene 17-20 (Loop & CTA, approx 35-45s): Visual must point down to the channel name, loop back to the hook.
+
+SCRIPT:
+{script_text}
+
+Return ONLY a JSON object matching the required schema:
+{refined_requirements}
+"""
+                else:
+                    storyboard_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
 Given the following AI education script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
@@ -968,13 +1011,40 @@ Return ONLY a JSON object matching the required schema:
     print(f"🎯 Selected Hook: {best_hook.get('text')}")
 
     # ── AGENT 3: NARRATIVE ──
+    is_github = "github" in selected_headline.lower() or "github" in selected_url.lower()
     print("📖 [AGENT 3] Narrative Agent: Creating script draft...")
-    narrative_prompt = NARRATIVE_AGENT_TEMPLATE.format(
-        persona=SYSTEM_PERSONA,
-        research_json=json.dumps(research),
-        selected_hook=best_hook.get("text"),
-        selection_instruction=selection_instruction
-    )
+    if is_github:
+        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Narrative guidelines...")
+        narrative_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
+
+NARRATIVE AGENT TASK:
+Create a step-by-step tutorial or tip flow for the trending GitHub repository: {selected_headline}.
+Ensure it follows the 4-part sequential structure:
+1. HOOK (0-5s): Opening curiosity question or statement.
+2. REPO WHAT & WHY (5-20s): Simple explanation of the project.
+3. LIVE DEMO PROOF (20-35s): Showing it in action.
+4. ALGORITHM LOOP & CTA (35-45s): Abrupt loop-friendly ending.
+
+RESEARCH:
+{json.dumps(research)}
+
+SELECTED HOOK:
+{best_hook.get("text")}
+
+Return ONLY a JSON object representing the narrative draft:
+{{
+  "hook": "...",
+  "problem": "...",
+  "solution": "...",
+  "engagement_question": "..."
+}}"""
+    else:
+        narrative_prompt = NARRATIVE_AGENT_TEMPLATE.format(
+            persona=SYSTEM_PERSONA,
+            research_json=json.dumps(research),
+            selected_hook=best_hook.get("text"),
+            selection_instruction=selection_instruction
+        )
     narrative = call_gemini_api(client, narrative_prompt)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not narrative:
@@ -983,10 +1053,32 @@ Return ONLY a JSON object matching the required schema:
 
     # ── AGENT 4: RETENTION OPTIMIZER ──
     print("⚡ [AGENT 4] Pacing Optimizer: Shortening sentences...")
-    retention_prompt = RETENTION_OPTIMIZER_TEMPLATE.format(
-        persona=SYSTEM_PERSONA,
-        narrative_json=json.dumps(narrative)
-    )
+    if is_github:
+        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Retention/Pacing rules...")
+        retention_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
+
+RETENTION OPTIMIZER TASK:
+Rewrite the narrative draft to maximize retention and structure it strictly into the 4-part script format.
+The script must feel like a rapid-fire peer conversation.
+
+RULES:
+1. TOTAL WORD COUNT: Strictly 110-130 words.
+2. SCRIPT STRUCTURE (MANDATORY):
+   - HOOK (0-5s): Hook selection trigger.
+   - PROBLEM (5-20s): Repo What & Why.
+   - SOLUTION (20-35s): Live Demo Proof.
+   - ENGAGEMENT QUESTION (35-45s): Loop-friendly ending + subscription CTA.
+3. SCRIPT SENTENCES: Short and punchy (strictly between 8 to 12 words each).
+4. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
+
+DRAFT:
+{json.dumps(narrative)}
+"""
+    else:
+        retention_prompt = RETENTION_OPTIMIZER_TEMPLATE.format(
+            persona=SYSTEM_PERSONA,
+            narrative_json=json.dumps(narrative)
+        )
     optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not optimized:
@@ -1021,11 +1113,37 @@ Return ONLY a JSON object matching the required schema:
     refined_requirements = refined_requirements.replace('"original_news_url": "Direct source url"', f'"original_news_url": "{selected_url}"')
     refined_requirements = refined_requirements.replace('"use_case_evidence_url": "Direct source url of the fact to take a screenshot of."', f'"use_case_evidence_url": "{selected_url}"')
 
-    humanizer_prompt = HUMANIZER_AGENT_TEMPLATE.format(
-        persona=SYSTEM_PERSONA,
-        optimized_script=optimized.get("optimized_script", ""),
-        schema_requirements=refined_requirements
-    )
+    if is_github:
+        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Storyboard structure in Humanizer...")
+        github_humanizer_template = """{persona}
+
+HUMANIZER AGENT TASK:
+Convert the optimized script into the final JSON output.
+You must produce exactly 15-20 storyboard scenes to align with the 110-130 words script length.
+
+MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
+- Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
+- Scene 4-10 (Repo What & Why, approx 5-20s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
+- Scene 11-16 (Live Demo Proof, approx 20-35s): Visual must describe terminal running code or the website UI in action.
+- Scene 17-20 (Loop & CTA, approx 35-45s): Visual must point down to the channel name, loop back to the hook.
+
+SCRIPT:
+{optimized_script}
+
+Return ONLY a JSON object matching the required schema:
+{schema_requirements}"""
+        
+        humanizer_prompt = github_humanizer_template.format(
+            persona=SYSTEM_PERSONA,
+            optimized_script=optimized.get("optimized_script", ""),
+            schema_requirements=refined_requirements
+        )
+    else:
+        humanizer_prompt = HUMANIZER_AGENT_TEMPLATE.format(
+            persona=SYSTEM_PERSONA,
+            optimized_script=optimized.get("optimized_script", ""),
+            schema_requirements=refined_requirements
+        )
     
     final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
     
