@@ -1,0 +1,82 @@
+[06:34:35] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[06:34:35] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[06:34:35] STEP 1: Strategy Check -> Day: Wed, Slot: Slot B (Afternoon), Category: 🤖 Practical AI Tools & Jobs
+[06:34:35] STEP 2: Fetching facts using Search Grounding for '🤖 Practical AI Tools & Jobs'...
+[06:34:49] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[06:37:09] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[06:37:09]    - Story Continuity: 90%
+[06:37:09]    - Visual Alignment: 95%
+[06:37:09]    - Engagement: 92%
+[06:37:09]    - Transitions: 88%
+[06:37:09]    - Subtitle Timing: 85%
+[06:37:09] Aligning script text with subtitle chunks...
+[06:37:09] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[06:37:09] 📊 Script length check passed: 93 words → ~36.2s estimated (bounds [35s - 80s])
+[06:37:09] Selected Fact: Reactive Resume - Free, Open-Source AI Resume Builder
+[06:37:09] Source URL: https://github.com/AmruthPillai/Reactive-Resume
+[06:37:09] STEP 3b: Capturing evidence screenshot (before audio for fast fail)...
+[06:37:21] ✅ Screenshot captured: /home/runner/work/YtSimpleTips/YtSimpleTips/assets/screenshots/screenshot_20260722_063709.png
+[06:37:21] STEP 4: Generating Tamil cloned voiceover...
+[06:37:21] Selected Lip-Sync Template: assets/video/white_hoodie.mp4 (from 42 options)
+[06:37:21] 🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...
+[06:48:04] ❌ Kaggle Handover failed: job_error - Kaggle job 'vijayakumarj/ytsimpletips-gpu-worker' reported an error after 10.6 min.
+[06:48:04] ❌ Audio generation failed. Retrying...
+[06:48:04] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[06:49:42] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[06:49:42]    - Story Continuity: 90%
+[06:49:42]    - Visual Alignment: 95%
+[06:49:42]    - Engagement: 92%
+[06:49:42]    - Transitions: 88%
+[06:49:42]    - Subtitle Timing: 85%
+[06:49:42] Aligning script text with subtitle chunks...
+[06:49:42] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[06:49:42] ⚠️ Script too short: ~20.6s estimated (51 words). Minimum is 35s (103+ words). Rejecting early.
+[06:49:42] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[06:51:40] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[06:51:40]    - Story Continuity: 92%
+[06:51:40]    - Visual Alignment: 95%
+[06:51:40]    - Engagement: 90%
+[06:51:40]    - Transitions: 88%
+[06:51:40]    - Subtitle Timing: 85%
+[06:51:40] Aligning script text with subtitle chunks...
+[06:51:40] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[06:51:40] ⚠️ Script too short: ~26.3s estimated (69 words). Minimum is 35s (103+ words). Rejecting early.
+[06:51:40] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[06:53:01] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[06:53:01] ⚠️ Script too short: ~0.0s estimated (0 words). Minimum is 35s (103+ words). Rejecting early.
+[06:53:01] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[06:55:20] Aligning script text with subtitle chunks...
+[06:55:20] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[06:55:20] ⚠️ Script too short: ~27.0s estimated (71 words). Minimum is 35s (103+ words). Rejecting early.
+[06:55:20] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[07:14:26] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[07:14:26]    - Story Continuity: 90%
+[07:14:26]    - Visual Alignment: 95%
+[07:14:26]    - Engagement: 92%
+[07:14:26]    - Transitions: 88%
+[07:14:26]    - Subtitle Timing: 90%
+[07:14:26] Aligning script text with subtitle chunks...
+[07:14:26] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[07:14:26] ⚠️ Script too short: ~27.9s estimated (71 words). Minimum is 35s (103+ words). Rejecting early.
+[07:14:26] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[07:17:20] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[07:17:20]    - Story Continuity: 90%
+[07:17:20]    - Visual Alignment: 95%
+[07:17:20]    - Engagement: 92%
+[07:17:20]    - Transitions: 88%
+[07:17:20]    - Subtitle Timing: 85%
+[07:17:20] Aligning script text with subtitle chunks...
+[07:17:20] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[07:17:20] ⚠️ Script too short: ~24.9s estimated (63 words). Minimum is 35s (103+ words). Rejecting early.
+[07:17:20] STEP 3 (Attempt 8/10): Multi-Agent Tanglish Script Generation...
+[07:19:57] Aligning script text with subtitle chunks...
+[07:19:57] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[07:19:57] ⚠️ Script too short: ~11.2s estimated (30 words). Minimum is 35s (103+ words). Rejecting early.
+[07:19:57] STEP 3 (Attempt 9/10): Multi-Agent Tanglish Script Generation...
+[07:22:07] Aligning script text with subtitle chunks...
+[07:22:07] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[07:22:07] ⚠️ Script too short: ~28.2s estimated (75 words). Minimum is 35s (103+ words). Rejecting early.
+[07:22:07] STEP 3 (Attempt 10/10): Multi-Agent Tanglish Script Generation...
+[07:23:38] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[07:23:38] ⚠️ Script too short: ~0.0s estimated (0 words). Minimum is 35s (103+ words). Rejecting early.
+[07:23:38] 🚨 Pipeline failed to build core assets after multiple attempts.
