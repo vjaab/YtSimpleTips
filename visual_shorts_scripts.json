@@ -1,0 +1,330 @@
+[
+  {
+    "id": "brain_facts_1",
+    "topic": "human_body",
+    "title": "மூளையின் விசித்திர உண்மைகள் - 3 Mind-Blowing Brain Facts",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "உங்கள் மூளை [60%] சமையல் எண்ணெய்! 🧠🛢️",
+        "visual_prompt": "Cinematic 4K macro shot of human brain with glowing neural networks, half submerged in golden viscous oil-like substance, hyper-realistic, dramatic studio lighting, 9:16 vertical",
+        "sfx": "Deep bass thump + Liquid pour sound"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "நீங்க பேசும் போது மூளை [20% மின்சாரம்] உற்பத்தி செய்கிறது! ⚡",
+        "visual_prompt": "Electric arcs jumping between glowing neurons inside brain, lightning particles forming speech waveforms, vibrant blue-purple neon colors, cyberpunk aesthetic, 4K vertical",
+        "sfx": "Electric crackle + Neural zap + Whoosh"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "தூங்கும் போது மூளை [குப்பை] தூக்குகிறது! 🗑️😴",
+        "visual_prompt": "Glymphatic system visualized as glowing golden fluid washing through brain folds at night, toxic proteins (dark blobs) being flushed out like a cleanup crew, cinematic medical visualization, 4K",
+        "sfx": "Water rush + Soft magical chime + Gentle pop"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "மேலும் அறிய Follow பண்ணுங்கள்! 🧠🚀",
+        "visual_prompt": "3D glowing brain icon morphing into follow button with particle trail, sleek dark gradient background, smooth motion blur, modern UI style, 9:16",
+        "sfx": "Ding bell + Subtle whoosh + Bass hit"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "space_facts_1",
+    "topic": "space",
+    "title": "விண்வெளியின் ரகசியங்கள் - Space Facts That Will Blow Your Mind",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "விண்வெளியில் [சத்தமே இல்லை]! 🤫🌌",
+        "visual_prompt": "Astronaut floating in absolute silence, sound waves visualization dissolving into vacuum, Earth glow in background, hyper-realistic 4K 9:16",
+        "sfx": "Deep space drone + Sudden silence pop"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "நீண்ட காலம் உயிர் வarrassாத [Water Bears]! 🐛☄️",
+        "visual_prompt": "Microscopic tardigrade surviving extreme space conditions - radiation, vacuum, -270°C, animated extreme closeup, glowing resilience aura, 4K vertical",
+        "sfx": "Tiny heroic chime + Cosmic sparkle"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "நேசப்டூன்-ல் ஒரு ஆண்டு = [165 பூமி ஆண்டுகள்]! 🪐",
+        "visual_prompt": "Neptune orbiting sun in slow motion, time dilation visualization with Earth years counter spinning wildly, deep blue planet with diamond rain, cinematic 4K",
+        "sfx": "Time warp whoosh + Deep bell toll"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "மேலும் விண்வெளி டிப்ஸ் Follow பண்ணுங்கள்! 🚀",
+        "visual_prompt": "Rocket launching into starfield forming follow icon, particle trail, sleek modern UI, 9:16 vertical",
+        "sfx": "Rocket whoosh + Ding + Bass hit"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "animals_facts_1",
+    "topic": "animals",
+    "title": "மிருகங்களின் அதிசய உண்மைகள் - Animal Facts You Wont Believe",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "ஒکٹோபசினு [3 இதயங்கள்] + நீல இரத்தம்! 🐙💙",
+        "visual_prompt": "Glowing transparent octopus showing 3 beating hearts, blue copper-based blood flowing, bioluminescent tentacles, deep ocean cinematic lighting, 4K 9:16",
+        "sfx": "Heartbeat x3 rhythm + Bubble pop + Deep ocean drone"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "காஞ்சனா [கண்ணாடி காட்சிகள்] மட்டுமில்லை - UV காணும்! 🦞👁️",
+        "visual_prompt": "Mantis shrimp eye closeup showing 16 color receptors vs human 3, UV spectrum visualization, psychedelic color explosion, macro 4K vertical",
+        "sfx": "Prism shatter + Electric zap + Color whoosh"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "கூவிகள் [தலையை 270°] திருப்பலாம்! 🦉🔄",
+        "visual_prompt": "Owl head rotating smoothly 270 degrees, vertebra visualization glowing, night forest background, moonlight, silent flight feathers detail, 4K cinematic",
+        "sfx": "Bone crack (soft) + Whoosh + Night owl hoot"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "மேலும் வைல்ட்லைஃப் Follow பண்ணுங்கள்! 🐾",
+        "visual_prompt": "Animal paw print morphing into follow button, particle burst, nature gradient bg, 9:16",
+        "sfx": "Paw step + Ding + Nature ambience"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "technology_facts_1",
+    "topic": "technology",
+    "title": "தொழில்நுட்பின் மாயை - Tech Facts That Sound Fake But Are Real",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "உங்கள் நரம்பு [CPU-க்கு 100x வேகம்]! 📱⚡",
+        "visual_prompt": "Smartphone screen showing nerve impulse vs CPU speed race visualization, neural pathway glowing vs silicon circuit, split screen comparison, cyberpunk 4K 9:16",
+        "sfx": "Digital race whoosh + Neural zap + CPU beep"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "First 1GB drive = [500kg] + $40,000! 💾💰",
+        "visual_prompt": "1980s room-sized hard drive (IBM 3380) next to modern microSD, size comparison animation, money burning visual, retro-futuristic aesthetic, 4K",
+        "sfx": "Heavy thud + Cash register + Shrink whoosh"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "AI இப்போது [தமிழ் கவிதை] எழுதும்! 🤖📜",
+        "visual_prompt": "AI neural network generating Tamil poetry, characters forming from digital particles, traditional palm leaf manuscript morphing into hologram, fusion of ancient/modern, 4K vertical",
+        "sfx": "Keyboard typing + Magical chime + Digital rain"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "தொழில்நுட்ப டிப்ஸ் Follow பண்ணுங்கள்! 💡",
+        "visual_prompt": "Circuit board traces forming follow icon, electricity flow, neon cyberpunk style, 9:16",
+        "sfx": "Circuit connect + Ding + Synth hit"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "psychology_facts_1",
+    "topic": "psychology",
+    "title": "மனதின் மாயைகள் - Psychology Facts That Explain YOU",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "நீங்கள் [95%] சிந்திக்கும் விஷயங்கள் மட்டுமே நடக்காது! 🧠💭",
+        "visual_prompt": "Brain with worry bubbles popping like soap bubbles, 95% fading away, 5% glowing reality remaining, surreal dreamscape, 4K 9:16 vertical",
+        "sfx": "Bubble pop x5 + Calm resolve chime"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "[21 நாட்கள்] பழக்கம் = Automatic behavior! 🔁",
+        "visual_prompt": "Neural pathway forming from dirt track to superhighway over 21 days timelapse, habit loop visualization, glowing stronger each day, scientific 4K",
+        "sfx": "Path building sounds + Level up chime + Smooth whoosh"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "உங்கள் வேடிக்கை [நேரடி] மாதிரி பரவுகிறது! 😂🦠",
+        "visual_prompt": "Laughter contagion simulation - one person laughing, ripple effect through crowd, brain mirror neurons firing, warm golden colors, social network visualization, 4K",
+        "sfx": "Contagious laughter + Neuron fire pops + Warm swell"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "மனதை கைப்பற்ற Follow பண்ணுங்கள்! 🧩",
+        "visual_prompt": "Puzzle pieces clicking into place forming follow button, brain silhouette, satisfying ASMR style, 9:16",
+        "sfx": "Satisfying click + ASMR pop + Gentle chime"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "ocean_facts_1",
+    "topic": "ocean",
+    "title": "கடலின் மறைந்த புலமைகள் - Ocean Mysteries Deeper Than Space",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "கடல் ஆழம் [மேலும் காணப்படாது] - 80% unexplored! 🌊❓",
+        "visual_prompt": "Ocean depth scale visualization - sunlight zone to hadal zone, mysterious creatures silhouettes in dark, Mariana Trench abyss, National Geographic style 4K 9:16",
+        "sfx": "Deep pressure drone + Bubble descent + Mysterious ping"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "உடர்ப்புக்குள் [கடல் உப்பு] = parfait ratio! 🩸🌊",
+        "visual_prompt": "Human blood cells alongside seawater, ionic composition matching visualization, evolutionary connection glowing, microscopic cinematic 4K vertical",
+        "sfx": "Cellular pulse + Ocean wave + Connection chime"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "ஒரு கேட் [மேதையை ஊக்குகிறது] - Seaweed = Oxygen! 🌿💨",
+        "visual_prompt": "Kelp forest photosynthesizing, oxygen bubbles rising to atmosphere, 70% Earth oxygen label, sunlight rays through water, vibrant green/blue, 4K",
+        "sfx": "Bubble stream + Photosynthesis sparkle + Fresh air whoosh"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "கடல் ரகசியங்கள் Follow என்று சொல்லு! 🐋",
+        "visual_prompt": "Whale tail forming follow icon, bioluminescent trail, deep blue gradient, majestic 9:16",
+        "sfx": "Whale call + Water splash + Deep bell"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "history_facts_1",
+    "topic": "history",
+    "title": "வரலாற்று ஷாக்கர்கள் - History Facts That Change Everything",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "கிளியோபட்ரா [iPhone-க்கு போதும் நெறுக்கம்]! 👑📱",
+        "visual_prompt": "Cleopatra timeline vs iPhone timeline vs Pyramids - visual distance comparison, pyramids built 2500BC, Cleopatra 30BC, iPhone 2007AD, animated timeline, 4K 9:16",
+        "sfx": "Timeline whoosh + Pyramid thud + iPhone unlock sound"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "ரோமன்ஸ் [மூத்திரம்] பயன்படுத்தி தவிட்டு போட்டனர்! 🏛️🧴",
+        "visual_prompt": "Ancient Roman laundry - fullers using urine ammonia to clean togas, chemical reaction visualization, ammonia molecules breaking dirt, historical reenactment cinematic 4K",
+        "sfx": "Chemical fizz + Cleaning scrub + Roman trumpet"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "உலக ammonium போர் = [Sandwich] காரணம்! 🥪⚔️",
+        "visual_prompt": "Earl of Sandwich gambling, meat between bread invention moment, cards and chips flying, sandwich glowing as revolutionary food, period drama lighting 4K vertical",
+        "sfx": "Card shuffle + Eureka chime + Bite crunch"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "வரலாறு பிடிக்குமோ? Follow பண்ணுங்கள்! 📜",
+        "visual_prompt": "Ancient scroll unrolling into follow button, wax seal breaking, parchment texture, cinematic 9:16",
+        "sfx": "Scroll unroll + Wax seal crack + Ding"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  },
+  {
+    "id": "human_body_facts_1",
+    "topic": "human_body",
+    "title": "உடலின் விசித்திரம் - Body Facts That Sound Like Sci-Fi",
+    "format": "visual_only_shorts",
+    "language": "tamil",
+    "has_voiceover": false,
+    "scenes": [
+      {
+        "scene": 1,
+        "duration_sec": 3,
+        "text_tamil": "உங்கள் வயிறு [Second Brain] - 100M neurons! 🧠🍽️",
+        "visual_prompt": "Enteric nervous system glowing in gut, 100 million neurons firing, gut-brain axis highway visualization, serotonin production 95% in gut, medical cinematic 4K 9:16",
+        "sfx": "Neural network pulse + Gut rumble (clean) + Highway whoosh"
+      },
+      {
+        "scene": 2,
+        "duration_sec": 4,
+        "text_tamil": "நீங்கள் ஆண்டில் [35kg விழுந்த துடுப்பு] பூசுகிறீர்கள்! 🦴🦷",
+        "visual_prompt": "Skin cells shedding visualization - dust particles glowing, 35kg annual accumulation pile growing, microscopic skin cell detail, surreal but scientific 4K vertical",
+        "sfx": "Dust sparkle + Weight thud + Build whoosh"
+      },
+      {
+        "scene": 3,
+        "duration_sec": 4,
+        "text_tamil": "உங்கள் [நாக்கு] விறப்புணர்வு unique! 👅🔐",
+        "visual_prompt": "Tongue print biometric scan, unique ridges and patterns glowing, compared to fingerprint, forensic sci-fi style, blue/red scan lines, 4K",
+        "sfx": "Scanner beep + Unique pattern lock + Futuristic chime"
+      },
+      {
+        "scene": 4,
+        "duration_sec": 3,
+        "text_tamil": "உங்கள் உடல் ஒரு கோடி! Follow செய்யுங்கள்! 🫀",
+        "visual_prompt": "Heart beating forming follow icon, blood cells as particles, life force visualization, warm red/gold, 9:16",
+        "sfx": "Heartbeat lub-dub + Particle flow + Warm swell"
+      }
+    ],
+    "total_duration_sec": 14,
+    "aspect_ratio": "9:16",
+    "target_platform": "youtube_shorts"
+  }
+]
