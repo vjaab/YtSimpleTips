@@ -1227,32 +1227,37 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
     print(f"🎬 [video_gen] Initiating video compilation to: {output_path}")
     
-    # ── RANDOMIZED TYPOGRAPHY THEME (typography diversity) ──
-    title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
-    import hashlib
-    import infographic_gen
-    
-    font_options = [
-        ("Montserrat-ExtraBold.ttf", "Montserrat-Bold.ttf", "Roboto-Regular.ttf"),
-        ("Roboto-Bold.ttf", "Roboto-Bold.ttf", "Roboto-Regular.ttf"),
-        ("Montserrat-Black.ttf", "Montserrat-Bold.ttf", "Montserrat-Italic.ttf")
-    ]
-    font_seed = int(hashlib.md5(title_text.encode()).hexdigest(), 16)
-    selected_fonts = font_options[font_seed % len(font_options)]
-    
-    infographic_gen._FONT_EXTRA_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[0])
-    infographic_gen._FONT_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[1])
-    infographic_gen._FONT_REGULAR = os.path.join(ASSETS_DIR, "fonts", selected_fonts[2])
-    print(f"🔤 [video_gen] Dynamically selected font theme: {selected_fonts[0]} for typography diversity.")
-    
-    banner_style_mode = font_seed % 3  # Support Style 0, 1, 2
-    
-    if not os.path.exists(audio_path) or os.path.getsize(audio_path) == 0:
-        print(f"🚨 Audio file empty: {audio_path}")
-        return None
+    # ── VISUAL-ONLY MODE (no voiceover) ──
+    visual_only = script_json.get("visual_only", False)
+    if visual_only:
+        # Use total_duration_sec from script, or sum of scene durations
+        audio_duration = script_json.get("total_duration_sec", 0)
+        if audio_duration <= 0:
+            # Sum up scene durations
+            scenes = script_json.get("visual_shorts_scenes", [])
+            if scenes:
+                audio_duration = sum(s.get("duration_sec", 0) for s in scenes)
+            else:
+                # Fallback to chunks
+                chunks = script_json.get("subtitle_chunks", [])
+                audio_duration = sum(c.get("duration_sec", 0) for c in chunks)
+        if audio_duration <= 0:
+            audio_duration = 15  # Default fallback
         
-    audio = AudioFileClip(audio_path)
-    audio_duration = audio.duration
+        # Create silent audio clip for MoviePy
+        from moviepy.audio.AudioClip import AudioClip
+        import numpy as np
+        def make_silence(t):
+            return np.zeros((2,), dtype=np.float32)
+        audio = AudioClip(make_silence, duration=audio_duration, fps=44100)
+        print(f"🔇 [video_gen] Visual-only mode: using {audio_duration}s silent audio track")
+    else:
+        if not os.path.exists(audio_path) or os.path.getsize(audio_path) == 0:
+            print(f"🚨 Audio file empty: {audio_path}")
+            return None
+            
+        audio = AudioFileClip(audio_path)
+        audio_duration = audio.duration
     
     # ── RESOLVE CATEGORY COLOR PALETTE ──
     palette = dict(_DEFAULT_PALETTE)

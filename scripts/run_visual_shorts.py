@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import random
+from datetime import datetime
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_dir)
@@ -78,17 +79,26 @@ def run_visual_short(script_id=None):
         }
         script_json["subtitle_chunks"].append(chunk)
     
-    # Generate video - video_gen will need to handle visual_only mode
-    # For now, we output the script_json for manual testing
-    output_path = os.path.join(root_dir, "output", f"visual_short_{script_data['id']}.json")
+    # Generate video
+    today = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_path = os.path.join(root_dir, "output", f"visual_short_{script_data['id']}_{today}.mp4")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(script_json, f, ensure_ascii=False, indent=2)
     
-    print(f"✅ Script JSON saved to: {output_path}")
-    print(f"📝 To generate video, run: python -c \"from video_gen import create_video; create_video('{output_path}')\"")
-    
-    return True
+    print(f"🎬 Generating video to: {output_path}")
+    try:
+        # Pass dummy audio_path since visual_only mode creates silent audio internally
+        result = create_video("dummy_audio.wav", script_json, script_json["subtitle_chunks"], output_path)
+        if result:
+            print(f"✅ Video generated successfully: {output_path}")
+            return True
+        else:
+            print(f"❌ Video generation failed")
+            return False
+    except Exception as e:
+        print(f"❌ Error generating video: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 
 def list_scripts():
