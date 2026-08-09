@@ -1,0 +1,73 @@
+[10:50:06] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[10:50:06] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[10:50:06] STEP 1: Strategy Check -> Day: Sun, Slot: Slot C (Evening), Category: 🤖 Simple AI Hacks for Everyone
+[10:50:06] STEP 2: Fetching facts using Search Grounding for '🤖 Simple AI Hacks for Everyone'...
+[10:50:24] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[11:14:55] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[11:14:55]    - Story Continuity: 90%
+[11:14:55]    - Visual Alignment: 95%
+[11:14:55]    - Engagement: 92%
+[11:14:55]    - Transitions: 88%
+[11:14:55]    - Subtitle Timing: 85%
+[11:14:55] Aligning script text with subtitle chunks...
+[11:14:55] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[11:14:55] ⚠️ Script too short: ~10.2s estimated (26 words). Minimum is 35s (103+ words). Rejecting early.
+[11:14:55] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[11:30:59] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[11:30:59]    - Story Continuity: 90%
+[11:30:59]    - Visual Alignment: 95%
+[11:30:59]    - Engagement: 92%
+[11:30:59]    - Transitions: 88%
+[11:30:59]    - Subtitle Timing: 85%
+[11:30:59] Aligning script text with subtitle chunks...
+[11:30:59] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[11:30:59] ⚠️ Script too short: ~24.0s estimated (60 words). Minimum is 35s (103+ words). Rejecting early.
+[11:30:59] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[11:35:06] ❌ Script generation failed. Retrying...
+[11:35:11] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[11:55:45] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[11:55:45]    - Story Continuity: 90%
+[11:55:45]    - Visual Alignment: 95%
+[11:55:45]    - Engagement: 92%
+[11:55:45]    - Transitions: 88%
+[11:55:45]    - Subtitle Timing: 96%
+[11:55:45] Aligning script text with subtitle chunks...
+[11:55:45] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[11:55:45] ⚠️ Script too short: ~19.2s estimated (48 words). Minimum is 35s (103+ words). Rejecting early.
+[11:55:45] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[12:05:32] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[12:05:32]    - Story Continuity: 90%
+[12:05:32]    - Visual Alignment: 95%
+[12:05:32]    - Engagement: 92%
+[12:05:32]    - Transitions: 88%
+[12:05:32]    - Subtitle Timing: 85%
+[12:05:32] Aligning script text with subtitle chunks...
+[12:05:32] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:05:32] ⚠️ Script too short: ~27.3s estimated (72 words). Minimum is 35s (103+ words). Rejecting early.
+[12:05:32] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[12:07:42] ✅ Storyboard Quality Validation Passed (All scores >= 90%):
+[12:07:42]    - Story Continuity: 90%
+[12:07:42]    - Visual Alignment: 95%
+[12:07:42]    - Engagement: 92%
+[12:07:42]    - Transitions: 88%
+[12:07:42]    - Subtitle Timing: 85%
+[12:07:42] Aligning script text with subtitle chunks...
+[12:07:42] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:07:42] ⚠️ Script too short: ~23.2s estimated (62 words). Minimum is 35s (103+ words). Rejecting early.
+[12:07:42] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[12:09:51] Aligning script text with subtitle chunks...
+[12:09:51] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:09:51] ⚠️ Script too short: ~34.1s estimated (90 words). Minimum is 35s (103+ words). Rejecting early.
+[12:09:51] STEP 3 (Attempt 8/10): Multi-Agent Tanglish Script Generation...
+[12:12:05] Aligning script text with subtitle chunks...
+[12:12:05] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:12:05] ⚠️ Script too short: ~25.5s estimated (65 words). Minimum is 35s (103+ words). Rejecting early.
+[12:12:05] STEP 3 (Attempt 9/10): Multi-Agent Tanglish Script Generation...
+[12:13:46] Aligning script text with subtitle chunks...
+[12:13:46] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:13:46] ⚠️ Script too short: ~34.5s estimated (91 words). Minimum is 35s (103+ words). Rejecting early.
+[12:13:46] STEP 3 (Attempt 10/10): Multi-Agent Tanglish Script Generation...
+[12:15:49] Aligning script text with subtitle chunks...
+[12:15:49] ℹ️ Calibrated pacing gate: 2.67 words/sec (VOICE_SPEED=1.1)
+[12:15:49] ⚠️ Script too short: ~29.9s estimated (77 words). Minimum is 35s (103+ words). Rejecting early.
+[12:15:49] 🚨 Pipeline failed to build core assets after multiple attempts.
