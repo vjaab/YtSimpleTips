@@ -338,6 +338,7 @@ TARGET_AUDIO_DURATION = (60, 80)
 # Global Feature Flags
 ENABLE_LONGFORM = False
 ENABLE_TRENDING_ENGINE = True    # Phase 1: YouTube/Reddit/GitHub trending aggregation
+ENABLE_AVATAR = os.getenv("ENABLE_AVATAR", "false").lower() == "true"  # Disable talking-head avatar overlay in generated shorts
 
 # Engagement & Retention Pillars (Production Spec 2026)
 ENABLE_KINETIC_CAPTIONS = True

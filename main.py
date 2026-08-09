@@ -8,7 +8,7 @@ import traceback
 from datetime import datetime
 import re
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ENABLE_AVATAR
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
 from gemini_script import pick_and_generate_script
@@ -270,13 +270,17 @@ def run_pipeline(forced_category=None, dry_run=False):
         # ── STEP 4: Generate Cloned Voice Audio ──
         log_message("STEP 4: Generating Tamil cloned voiceover...")
         
-        # Select Intro Video for Lip-Sync (Rotation)
-        intro_videos = glob.glob("assets/video/*.mp4")
-        if not intro_videos:
-            intro_videos = ["assets/video/Firefly_video_final.mp4"]
-        selected_avatar = get_next_avatar(intro_videos)
-        script_data["lipsync_face_path"] = selected_avatar
-        log_message(f"Selected Lip-Sync Template: {selected_avatar} (from {len(intro_videos)} options)")
+        # Select Intro Video for Lip-Sync (Rotation) - only if avatar is enabled
+        if ENABLE_AVATAR:
+            intro_videos = glob.glob("assets/video/*.mp4")
+            if not intro_videos:
+                intro_videos = ["assets/video/Firefly_video_final.mp4"]
+            selected_avatar = get_next_avatar(intro_videos)
+            script_data["lipsync_face_path"] = selected_avatar
+            log_message(f"Selected Lip-Sync Template: {selected_avatar} (from {len(intro_videos)} options)")
+        else:
+            script_data["lipsync_face_path"] = None
+            log_message("ℹ️ Avatar disabled by config (ENABLE_AVATAR=False). Skipping avatar selection.")
         
         has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
         use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
@@ -334,11 +338,14 @@ def run_pipeline(forced_category=None, dry_run=False):
                 log_message(f"❌ Voiceover failed: {e}")
                 audio_path = None
             script_data["kaggle_lipsync_path"] = None
-            if dry_run:
+            # Avatar display controlled by ENABLE_AVATAR config flag
+            if ENABLE_AVATAR:
                 script_data["skip_avatar"] = False
-                log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
+                if dry_run:
+                    log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
             else:
                 script_data["skip_avatar"] = True
+                log_message("ℹ️ Avatar disabled by config (ENABLE_AVATAR=False).")
             
         # Propagate Voice Fallback Status
         import audio_gen
