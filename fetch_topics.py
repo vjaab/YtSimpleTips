@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import check_story_uniqueness
+from gemini_script import _OFFLINE_MODE_ACTIVE
 
 # Best-effort trending signal integration
 try:
@@ -18,6 +19,11 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     Generates 5 fresh, unique facts for a category using standard Gemini without Search Grounding,
     explicitly avoiding a list of already used titles.
     """
+    # Check offline mode first
+    if _OFFLINE_MODE_ACTIVE:
+        print("🔴 [OFFLINE MODE] Skipping LLM fallback generation. Returning empty.")
+        return []
+    
     print(f"🔮 [fetch_topics] Attempting LLM generation fallback (without search grounding) for category '{category}'...")
     client = get_gemini_client()
     
@@ -139,6 +145,11 @@ def fetch_facts_for_category(category):
     for the selected category.
     Returns a list of structured tip articles.
     """
+    # Check offline mode first
+    if _OFFLINE_MODE_ACTIVE:
+        print("🔴 [OFFLINE MODE] Skipping search grounding. Returning historical fallback only.")
+        return get_historical_fallback(category)
+    
     # Load avoid titles early to support early fallback routing
     from topic_tracker import load_tracker
     tracker = load_tracker()

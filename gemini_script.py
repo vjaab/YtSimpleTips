@@ -572,6 +572,19 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     Orchestrates the multi-agent pipeline to generate a high-retention Tanglish fact script.
     """
     from config import is_gemini_disabled
+    
+    # ── OFFLINE MODE CHECK ──
+    # If all LLM providers are exhausted, immediately use offline fallback
+    if _OFFLINE_MODE_ACTIVE:
+        print("🔴 [OFFLINE MODE] All LLM providers exhausted. Using offline fallback script immediately.")
+        return get_offline_fallback_script(category, failed_topics)
+    
+    # Check if all providers are exhausted at config level (no API keys)
+    check_all_providers_exhausted()
+    if _OFFLINE_MODE_ACTIVE:
+        print("🔴 [OFFLINE MODE] No LLM API keys configured. Using offline fallback script immediately.")
+        return get_offline_fallback_script(category, failed_topics)
+    
     client = get_gemini_client()
     if not client and not is_gemini_disabled():
         print("⚠️ Gemini API Client missing! Cannot run multi-agent script generation.")
@@ -775,13 +788,13 @@ REAL WORLD EXAMPLE: {topic_data_res.get("real_world_example")}
 SURPRISING FACT: {topic_data_res.get("surprising_fact")}
 
 SCRIPT RULES:
-1. DURATION: 110-130 words maximum (approx 45 seconds total duration)
+1. DURATION: 150-190 words maximum (approx 60-75 seconds total duration)
 2. LANGUAGE: Natural spoken Tanglish peer voice. Never use textbook Tamil.
 3. STRUCTURE (strict 4-part sequential timeline blocks):
    - Hook (0-5 sec): High-energy curiosity question or statement.
-   - Repo What & Why (5-20 sec): Explain what it does using a simple real-world analogy.
-   - Live Demo Proof (20-35 sec): Walk through the most mind-blowing feature.
-   - Algorithm Loop & CTA (35-45 sec): Create an abrupt loop-friendly ending + subscription CTA.
+   - Repo What & Why (5-25 sec): Explain what it does using a simple real-world analogy.
+   - Live Demo Proof (25-55 sec): Walk through the most mind-blowing feature.
+   - Algorithm Loop & CTA (55-65 sec): Create an abrupt loop-friendly ending + subscription CTA.
 
 OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
             else:
@@ -833,13 +846,13 @@ OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
                     
 STORYBOARD AGENT TASK:
 Given the following GitHub trending script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 15-20 storyboard scenes to align with the 110-130 words script length.
+You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
 
 MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
 - Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
-- Scene 4-10 (Repo What & Why, approx 5-20s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
-- Scene 11-16 (Live Demo Proof, approx 20-35s): Visual must describe terminal running code or the website UI in action.
-- Scene 17-20 (Loop & CTA, approx 35-45s): Visual must point down to the channel name, loop back to the hook.
+- Scene 4-12 (Repo What & Why, approx 5-25s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
+- Scene 13-30 (Live Demo Proof, approx 25-55s): Visual must describe terminal running code or the website UI in action.
+- Scene 31-40 (Loop & CTA, approx 55-65s): Visual must point down to the channel name, loop back to the hook.
 
 SCRIPT:
 {script_text}
@@ -1119,13 +1132,13 @@ DRAFT:
 
 HUMANIZER AGENT TASK:
 Convert the optimized script into the final JSON output.
-You must produce exactly 15-20 storyboard scenes to align with the 110-130 words script length.
+You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
 
 MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
 - Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
-- Scene 4-10 (Repo What & Why, approx 5-20s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
-- Scene 11-16 (Live Demo Proof, approx 20-35s): Visual must describe terminal running code or the website UI in action.
-- Scene 17-20 (Loop & CTA, approx 35-45s): Visual must point down to the channel name, loop back to the hook.
+- Scene 4-12 (Repo What & Why, approx 5-25s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
+- Scene 13-30 (Live Demo Proof, approx 25-55s): Visual must describe terminal running code or the website UI in action.
+- Scene 31-40 (Loop & CTA, approx 55-65s): Visual must point down to the channel name, loop back to the hook.
 
 SCRIPT:
 {optimized_script}
@@ -1339,6 +1352,7 @@ def get_offline_fallback_script(category, failed_topics=None):
     """
     Loads a pre-packaged script from fallback_scripts.json matching the category.
     Avoids already used titles and previously failed topics if possible.
+    Ensures script meets minimum word count (103+ words for 35s at 2.67 wps).
     """
     if failed_topics is None:
         failed_topics = []
@@ -1355,12 +1369,32 @@ def get_offline_fallback_script(category, failed_topics=None):
         print(f"⚠️ [gemini_script] Failed to load fallback_scripts.json: {e}")
         return None
 
-    # Filter matching category
+    # Normalize category for matching (handle emoji prefixes and variations)
+    def normalize_cat(cat):
+        return cat.replace("🤖 ", "").replace("📱 ", "").strip().lower()
+    
+    norm_category = normalize_cat(category)
+    
+    # Filter matching category - try exact match first, then normalized match
     matching = [s for s in scripts if s.get("sub_category") == category]
     if not matching:
-        matching = scripts
+        matching = [s for s in scripts if normalize_cat(s.get("sub_category", "")) == norm_category]
+    if not matching:
+        # Broader match: check if category keywords are in sub_category
+        cat_keywords = norm_category.split()
+        matching = [s for s in scripts if any(kw in normalize_cat(s.get("sub_category", "")) for kw in cat_keywords)]
+    if not matching:
+        matching = scripts  # Fallback to all scripts
 
-    # Find scripts that pass full uniqueness check (not just title list)
+    # Calculate word count for each script
+    for s in matching:
+        script_text = s.get("script", "")
+        s["_word_count"] = len(script_text.split()) if script_text else 0
+
+    # Minimum word count for 35s at 2.67 wps = 93 + 10 buffer = 103 words
+    MIN_WORDS = 103
+    
+    # Find scripts that pass full uniqueness check AND meet minimum word count
     unused = []
     for s in matching:
         s_title = s.get("title", "")
@@ -1377,16 +1411,43 @@ def get_offline_fallback_script(category, failed_topics=None):
                     is_unique = False
                     break
                     
-        if is_unique:
+        # Check minimum word count
+        word_count = s.get("_word_count", 0)
+        if is_unique and word_count >= MIN_WORDS:
             unused.append(s)
+        elif is_unique and word_count < MIN_WORDS:
+            print(f"⚠️ [offline_fallback] Script '{s_title}' has only {word_count} words (min {MIN_WORDS}). Skipping.")
+    
+    # If no scripts meet word count, relax the requirement but warn
+    if not unused:
+        print(f"⚠️ [offline_fallback] No scripts meet minimum {MIN_WORDS} words. Relaxing requirement...")
+        for s in matching:
+            s_title = s.get("title", "")
+            s_news = s.get("original_news_headline", "")
+            is_unique, _ = check_story_uniqueness(
+                new_title=s_title,
+                new_url=s.get("original_news_url") or s.get("use_case_evidence_url", "")
+            )
+            
+            if is_unique and failed_topics:
+                for ft in failed_topics:
+                    if ft and (ft.lower() in s_title.lower() or ft.lower() in s_news.lower()):
+                        is_unique = False
+                        break
+                        
+            if is_unique:
+                unused.append(s)
     
     if not unused:
         print("🚨 [gemini_script] FATAL: All offline fallback scripts are duplicates or failed. Cannot proceed without repeating content. Failing pipeline.")
         return None
 
-    selected = random.choice(unused)
+    # Prefer scripts with higher word count
+    unused.sort(key=lambda s: s.get("_word_count", 0), reverse=True)
+    selected = random.choice(unused[:3])  # Pick from top 3 longest scripts
+    
     if selected:
-        print(f"✅ [gemini_script] Offline fallback script selected: '{selected.get('title')}'")
+        print(f"✅ [gemini_script] Offline fallback script selected: '{selected.get('title')}' ({selected.get('_word_count', 0)} words)")
         
         # Save output in logs for debug
         try:
@@ -1403,6 +1464,48 @@ def get_offline_fallback_script(category, failed_topics=None):
 # Module-level cache for failed Cloudflare models (permanent errors like 400/403/404)
 # This prevents retrying dead endpoints on every agent call in a single pipeline run
 _FAILED_CLOUDFLARE_MODELS = set()
+
+# Track if all LLM providers are exhausted to enable offline mode
+_ALL_LLM_PROVIDERS_EXHAUSTED = False
+_OFFLINE_MODE_ACTIVE = False
+
+
+def check_all_providers_exhausted():
+    """Check if all LLM providers are exhausted based on config state."""
+    global _ALL_LLM_PROVIDERS_EXHAUSTED, _OFFLINE_MODE_ACTIVE
+    from config import is_gemini_disabled, CEREBRAS_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+    
+    # Check if Gemini is disabled
+    gemini_disabled = is_gemini_disabled()
+    
+    # Check if other providers have keys configured (even if they might be rate limited)
+    # We consider providers "available" if they have API keys set
+    cerebras_available = bool(CEREBRAS_API_KEY)
+    groq_available = bool(GROQ_API_KEY)
+    openrouter_available = bool(OPENROUTER_API_KEY)
+    openai_available = bool(OPENAI_API_KEY)
+    anthropic_available = bool(ANTHROPIC_API_KEY)
+    deepseek_available = bool(DEEPSEEK_API_KEY)
+    cloudflare_available = bool(CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID)
+    
+    # If Gemini is disabled AND no other providers have keys, we're in offline mode
+    # If all providers have keys but are rate limited, that's detected at runtime
+    if gemini_disabled and not any([cerebras_available, groq_available, openrouter_available, openai_available, anthropic_available, deepseek_available, cloudflare_available]):
+        _ALL_LLM_PROVIDERS_EXHAUSTED = True
+        _OFFLINE_MODE_ACTIVE = True
+        print("🔴 [OFFLINE MODE] No LLM API keys configured. Switching to offline fallback scripts only.")
+        return True
+    
+    return _ALL_LLM_PROVIDERS_EXHAUSTED
+
+
+def set_providers_exhausted():
+    """Mark all providers as exhausted (called when runtime failures occur)."""
+    global _ALL_LLM_PROVIDERS_EXHAUSTED, _OFFLINE_MODE_ACTIVE
+    if not _ALL_LLM_PROVIDERS_EXHAUSTED:
+        _ALL_LLM_PROVIDERS_EXHAUSTED = True
+        _OFFLINE_MODE_ACTIVE = True
+        print("🔴 [OFFLINE MODE] All LLM providers exhausted at runtime. Switching to offline fallback scripts only.")
 
 def call_fallback_model(prompt):
     """
@@ -1644,6 +1747,9 @@ def call_fallback_model(prompt):
             except Exception as e:
                 print(f"⚠️ OpenRouter ({or_model}) fallback failed: {e}")
 
+    # All fallbacks exhausted
+    print("🚨 All fallback models exhausted. Setting offline mode.")
+    set_providers_exhausted()
     return None
 
 def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallback=False):
@@ -1653,6 +1759,12 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
     from rotation and we immediately proceed to the next fallback without waiting.
     """
     from config import is_gemini_disabled
+    
+    # Check if we're already in offline mode
+    if _OFFLINE_MODE_ACTIVE:
+        print("🔴 [OFFLINE MODE] Skipping all LLM API calls. Using offline fallback.")
+        return None
+    
     if is_gemini_disabled():
         print("🚨 Gemini is currently disabled due to rate limit/depletion. Proceeding directly to fallback models.")
         return call_fallback_model(prompt)
@@ -1745,6 +1857,7 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
     if fallback_res:
         return fallback_res
 
-    print("🚨 All fallback models failed or not configured.")
+    print("🚨 All fallback models failed or not configured. Setting offline mode.")
+    set_providers_exhausted()
     return None
 

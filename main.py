@@ -11,7 +11,7 @@ import re
 from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ENABLE_AVATAR
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
-from gemini_script import pick_and_generate_script
+from gemini_script import pick_and_generate_script, _OFFLINE_MODE_ACTIVE
 from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
 from audio_gen import generate_voiceover, clean_tts_text
@@ -165,11 +165,16 @@ def run_pipeline(forced_category=None, dry_run=False):
     duration    = 0
     failed_topics = []
     min_dur, max_dur = TARGET_AUDIO_DURATION
-    MIN_DURATION_SEC = 35  # absolute minimum allowed
+    MIN_DURATION_SEC = 25  # absolute minimum allowed (reduced to accommodate fallback scripts ~70-100 words)
     MAX_DURATION_SEC = max_dur  # absolute maximum allowed (do not allow any shorts more than max_dur)
+    
+    # In offline mode, we only need 1 attempt since we're using pre-generated scripts
+    max_attempts = 1 if _OFFLINE_MODE_ACTIVE else MAX_RETRY_ATTEMPTS
+    if _OFFLINE_MODE_ACTIVE:
+        log_message("🔴 [OFFLINE MODE] Using pre-generated fallback scripts. Single attempt only.")
 
-    while attempts < MAX_RETRY_ATTEMPTS:
-        log_message(f"STEP 3 (Attempt {attempts+1}/{MAX_RETRY_ATTEMPTS}): Multi-Agent Tanglish Script Generation...")
+    while attempts < max_attempts:
+        log_message(f"STEP 3 (Attempt {attempts+1}/{max_attempts}): Multi-Agent Tanglish Script Generation...")
         
         script_data = pick_and_generate_script(
             articles=facts, extra_instruction="", forced_article=None, topic_type="research", failed_topics=failed_topics
