@@ -168,13 +168,18 @@ def run_pipeline(forced_category=None, dry_run=False):
     MIN_DURATION_SEC = 25  # absolute minimum allowed (reduced to accommodate fallback scripts ~70-100 words)
     MAX_DURATION_SEC = max_dur  # absolute maximum allowed (do not allow any shorts more than max_dur)
     
-    # In offline mode, we only need 1 attempt since we're using pre-generated scripts
-    max_attempts = 1 if _OFFLINE_MODE_ACTIVE else MAX_RETRY_ATTEMPTS
-    if _OFFLINE_MODE_ACTIVE:
-        log_message("🔴 [OFFLINE MODE] Using pre-generated fallback scripts. Single attempt only.")
-
-    while attempts < max_attempts:
-        log_message(f"STEP 3 (Attempt {attempts+1}/{max_attempts}): Multi-Agent Tanglish Script Generation...")
+    while attempts < MAX_RETRY_ATTEMPTS:
+        # Recalculate max_attempts each iteration to respect offline mode changes
+        current_max_attempts = 1 if _OFFLINE_MODE_ACTIVE else MAX_RETRY_ATTEMPTS
+        if attempts >= current_max_attempts:
+            log_message(f"🔴 [OFFLINE MODE] Max attempts ({current_max_attempts}) reached. Stopping.")
+            break
+            
+        log_message(f"STEP 3 (Attempt {attempts+1}/{current_max_attempts}): Multi-Agent Tanglish Script Generation...")
+        
+        if _OFFLINE_MODE_ACTIVE and attempts > 0:
+            log_message("🔴 [OFFLINE MODE] Already used offline fallback. No more retries.")
+            break
         
         script_data = pick_and_generate_script(
             articles=facts, extra_instruction="", forced_article=None, topic_type="research", failed_topics=failed_topics
@@ -331,16 +336,22 @@ def run_pipeline(forced_category=None, dry_run=False):
                     kaggle_failed = True  # Treat as failure to trigger retry with adjusted script length
                 
                 if kaggle_failed:
-                    log_message("🚨 Aborting pipeline: Kaggle GPU execution failed and fallback is disabled.")
-                    return False
+                    log_message("⚠️ Kaggle GPU execution failed. Falling back to local audio generation...")
+                    # Don't return False, fall through to local generation below
+            else:
+                log_message("⚠️ Kaggle GPU handover failed. Falling back to local audio generation...")
         else:
-            # Fallback/Local execution only: no Kaggle credentials
+            log_message("ℹ️ Kaggle credentials not found or USE_LOCAL_ONLY=true. Using local audio generation.")
+            kaggle_failed = True  # Force local fallback
+        
+        # Local fallback generation (runs if Kaggle failed or not available)
+        if 'kaggle_failed' in locals() and kaggle_failed:
             try:
                 audio_path, duration, word_timestamps = generate_voiceover(
                     script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
                 )
             except Exception as e:
-                log_message(f"❌ Voiceover failed: {e}")
+                log_message(f"❌ Local voiceover failed: {e}")
                 audio_path = None
             script_data["kaggle_lipsync_path"] = None
             # Avatar display controlled by ENABLE_AVATAR config flag

@@ -1115,6 +1115,28 @@ def process_job():
             shutil.rmtree("MuseTalk", ignore_errors=True)
 
 if __name__ == "__main__":
+    import sys
+    import traceback
+    import json
+    
+    def save_error_result(error_msg, stage="unknown"):
+        """Save error result to results.json for debugging."""
+        try:
+            output_root = os.path.join(os.getcwd(), "..")
+            results = {
+                "error": error_msg,
+                "stage": stage,
+                "audio_path": None,
+                "duration": 0,
+                "word_timestamps": [],
+                "lipsync_path": None
+            }
+            with open(os.path.join(output_root, "results.json"), "w") as f:
+                json.dump(results, f)
+            print(f"💾 Saved error result to results.json: {error_msg}")
+        except Exception as save_err:
+            print(f"⚠️ Failed to save error result: {save_err}")
+    
     try:
         print("--- Kaggle Worker Initiated ---")
         # 🛡️ Initial run to hook PyTorch if already present or as packages install
@@ -1123,8 +1145,21 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"⚠️ sitecustomize initial setup warning: {e}")
             
-        setup_project()
-        setup_musetalk()
+        try:
+            setup_project()
+        except Exception as e:
+            print(f"❌ setup_project failed: {e}")
+            traceback.print_exc()
+            save_error_result(f"setup_project failed: {e}", "setup_project")
+            sys.exit(1)
+            
+        try:
+            setup_musetalk()
+        except Exception as e:
+            print(f"❌ setup_musetalk failed: {e}")
+            traceback.print_exc()
+            save_error_result(f"setup_musetalk failed: {e}", "setup_musetalk")
+            sys.exit(1)
         
         # 🔁 FINAL CRITICAL LOCK: Ensure both numba and numpy are standardized
         # This fixes corruption from mmengine/torch upgrades during MMLab setup
@@ -1144,6 +1179,8 @@ if __name__ == "__main__":
             print(f"   ✅ Final environment lock established: numpy {numpy.__version__} | numba {numba.__version__}")
         except Exception as e:
             print(f"   ⚠ Final environment lock failed: {e}")
+            save_error_result(f"environment lock failed: {e}", "environment_lock")
+            sys.exit(1)
 
         # 🛡️ sitecustomize setup again after potential environment changes
         try:
@@ -1157,13 +1194,31 @@ if __name__ == "__main__":
             subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "flash-attn", "flash_attn"], capture_output=True)
         except Exception as e:
             print(f"⚠️ Nuclear uninstallation warning: {e}")
-            
+
         _nuclear_delete_flash_attn()
-            
+        
+        # Health check before processing
+        print("🔍 Pre-flight health check...")
+        try:
+            import torch
+            print(f"   PyTorch: {torch.__version__} | CUDA: {torch.cuda.is_available()}")
+            if torch.cuda.is_available():
+                print(f"   GPU: {torch.cuda.get_device_name(0)} | Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+            import numpy as np
+            import numba
+            print(f"   NumPy: {np.__version__} | Numba: {numba.__version__}")
+            try:
+                import mmengine
+                print(f"   mmengine: {mmengine.__version__}")
+            except:
+                print("   mmengine: not available")
+        except Exception as e:
+            print(f"⚠️ Health check warning: {e}")
+        
         process_job()
     except Exception as e:
         print(f"❌ FATAL ERROR in Kaggle Worker: {e}")
-        import traceback
         traceback.print_exc()
+        save_error_result(f"Fatal error: {e}", "fatal")
         sys.exit(1)
     print("--- Job Finished ---")

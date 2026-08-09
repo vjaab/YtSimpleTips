@@ -2,6 +2,7 @@ from google import genai
 from google.genai import types
 import json
 import os
+import requests
 from datetime import datetime
 from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
 from topic_tracker import check_story_uniqueness
@@ -13,6 +14,20 @@ try:
     _TRENDING_AVAILABLE = True
 except ImportError:
     _TRENDING_AVAILABLE = False
+
+def validate_github_url(url, timeout=10):
+    """
+    Validate a GitHub URL by making a HEAD request.
+    Returns True if URL returns 200, False otherwise.
+    """
+    if not url or "github.com" not in url:
+        return False
+    try:
+        response = requests.head(url, timeout=timeout, allow_redirects=True)
+        return response.status_code == 200
+    except Exception as e:
+        print(f"⚠️ URL validation failed for {url}: {e}")
+        return False
 
 def fetch_facts_from_llm_fallback(category, avoid_titles):
     """
@@ -91,10 +106,22 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                     title = fact.get("title", "")
                     url = fact.get("source_url", "")
                     is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
-                    if is_unique:
-                        unique_facts.append(fact)
-                    else:
+                    if not is_unique:
                         print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
+                        continue
+                    
+                    # Validate GitHub URL
+                    if "github.com" in url.lower():
+                        print(f"🔍 Validating GitHub URL: {url}")
+                        if not validate_github_url(url):
+                            print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
+                            continue
+                        print(f"✅ GitHub URL validated: {url}")
+                    else:
+                        print(f"⏭️ [fetch_topics fallback] Skipping non-GitHub URL: {url}")
+                        continue
+                        
+                    unique_facts.append(fact)
                 
                 if unique_facts:
                     print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via LLM.")
@@ -126,10 +153,22 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                 title = fact.get("title", "")
                 url = fact.get("source_url", "")
                 is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
-                if is_unique:
-                    unique_facts.append(fact)
-                else:
+                if not is_unique:
                     print(f"⏭️ [fetch_topics fallback models] Skipping non-unique fact: {title}. Reason: {reason}")
+                    continue
+                
+                # Validate GitHub URL
+                if "github.com" in url.lower():
+                    print(f"🔍 Validating GitHub URL: {url}")
+                    if not validate_github_url(url):
+                        print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
+                        continue
+                    print(f"✅ GitHub URL validated: {url}")
+                else:
+                    print(f"⏭️ [fetch_topics fallback models] Skipping non-GitHub URL: {url}")
+                    continue
+                    
+                unique_facts.append(fact)
             
             if unique_facts:
                 print(f"✅ [fetch_topics fallback models] Successfully generated {len(unique_facts)} unique facts via fallback models.")
@@ -267,10 +306,22 @@ def fetch_facts_for_category(category):
                 url = fact.get("source_url", "")
                 
                 is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
-                if is_unique:
-                    unique_facts.append(fact)
-                else:
+                if not is_unique:
                     print(f"⏭️ Skipping non-unique fact: {title}. Reason: {reason}")
+                    continue
+                    
+                # Validate GitHub URL to prevent 404 errors later
+                if "github.com" in url.lower():
+                    print(f"🔍 Validating GitHub URL: {url}")
+                    if not validate_github_url(url):
+                        print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
+                        continue
+                    print(f"✅ GitHub URL validated: {url}")
+                else:
+                    print(f"⏭️ Skipping non-GitHub URL: {url}")
+                    continue
+                    
+                unique_facts.append(fact)
                     
             # Keep ONLY github topics
             unique_facts = [f for f in unique_facts if "github.com" in f.get("source_url", "").lower()]
@@ -351,14 +402,22 @@ def get_historical_fallback(category):
                 if backup:
                     selected = backup[-5:]  # Use last 5 as backup
                     print(f"✅ Loaded {len(selected)} historical backup facts.")
-                    return [{
-                        "title": s.get("title"),
-                        "description": s.get("news_headline", "Fascinating facts fallback."),
-                        "source_url": s.get("source_url", ""),
-                        "source_name": "Historical Backup",
-                        "keywords": s.get("keywords", []),
-                        "category": category
-                    } for s in selected]
+                    validated = []
+                    for s in selected:
+                        url = s.get("source_url", "")
+                        if "github.com" in url.lower() and validate_github_url(url):
+                            validated.append({
+                                "title": s.get("title"),
+                                "description": s.get("news_headline", "Fascinating facts fallback."),
+                                "source_url": url,
+                                "source_name": "Historical Backup",
+                                "keywords": s.get("keywords", []),
+                                "category": category
+                            })
+                        else:
+                            print(f"⚠️ Skipping historical fact with invalid URL: {url}")
+                    if validated:
+                        return validated
         except Exception as e:
             print(f"⚠️ Failed to load fallback from tracker: {e}")
             

@@ -203,7 +203,19 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
             if "error" in status_lower:
                 msg = f"Kaggle job '{kernel_id}' reported an error after {elapsed_mins:.1f} min."
                 print(f"❌ {msg}")
-                _notify_kaggle_failure(f"🚨 Kaggle GPU Job Error\n\n{msg}\n\nFallback to ElevenLabs will trigger.")
+                # Try to fetch kernel logs for debugging
+                try:
+                    print("📥 Attempting to fetch kernel logs for debugging...")
+                    subprocess.run([kaggle_cmd, "kernels", "output", kernel_id, "-p", "output"], check=False, timeout=60)
+                    log_file = os.path.join("output", "stderr.txt")
+                    if os.path.exists(log_file):
+                        with open(log_file, "r") as f:
+                            log_content = f.read()[-2000:]  # Last 2000 chars
+                        print(f"📋 Kernel error logs:\n{log_content}")
+                        msg += f"\n\nKernel logs:\n{log_content}"
+                except Exception as log_err:
+                    print(f"⚠️ Could not fetch kernel logs: {log_err}")
+                _notify_kaggle_failure(f"🚨 Kaggle GPU Job Error\n\n{msg}\n\nFallback to local generation will trigger.")
                 return {"error": "job_error", "message": msg}
             
             is_queued = "queued" in status_lower
