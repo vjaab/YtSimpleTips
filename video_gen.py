@@ -1227,6 +1227,28 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
     print(f"🎬 [video_gen] Initiating video compilation to: {output_path}")
     
+    # Title text needed for layout profile
+    title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
+    
+    # ── RANDOMIZED TYPOGRAPHY THEME (typography diversity) ──
+    import hashlib
+    import infographic_gen
+    
+    font_options = [
+        ("Montserrat-ExtraBold.ttf", "Montserrat-Bold.ttf", "Roboto-Regular.ttf"),
+        ("Roboto-Bold.ttf", "Roboto-Bold.ttf", "Roboto-Regular.ttf"),
+        ("Montserrat-Black.ttf", "Montserrat-Bold.ttf", "Montserrat-Italic.ttf")
+    ]
+    font_seed = int(hashlib.md5(title_text.encode()).hexdigest(), 16)
+    selected_fonts = font_options[font_seed % len(font_options)]
+    
+    infographic_gen._FONT_EXTRA_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[0])
+    infographic_gen._FONT_BOLD = os.path.join(ASSETS_DIR, "fonts", selected_fonts[1])
+    infographic_gen._FONT_REGULAR = os.path.join(ASSETS_DIR, "fonts", selected_fonts[2])
+    print(f"🔤 [video_gen] Dynamically selected font theme: {selected_fonts[0]} for typography diversity.")
+    
+    banner_style_mode = font_seed % 3  # Support Style 0, 1, 2
+    
     # ── VISUAL-ONLY MODE (no voiceover) ──
     visual_only = script_json.get("visual_only", False)
     if visual_only:
@@ -1390,9 +1412,15 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             print("   Ensure this track is from YouTube Audio Library or royalty-free source.")
             print(f"   BGM path: {bgm_path}")
                 
-    mastered_wav = os.path.join(OUTPUT_DIR, f"master_soundtrack_{today}.wav")
-    _mix_and_master_audio(audio_path, bgm_path, audio_duration, mastered_wav, sfx_events=sfx_events)
-    final_audio = AudioFileClip(mastered_wav)
+    if visual_only:
+        # In visual-only mode, use the silent audio directly (no mixing needed)
+        mastered_wav = None
+        final_audio = audio
+        print("🔇 [video_gen] Visual-only mode: skipping audio mixing/mastering")
+    else:
+        mastered_wav = os.path.join(OUTPUT_DIR, f"master_soundtrack_{today}.wav")
+        _mix_and_master_audio(audio_path, bgm_path, audio_duration, mastered_wav, sfx_events=sfx_events)
+        final_audio = AudioFileClip(mastered_wav)
     
     # ── VISUAL BACKGROUND LAYER ASSEMBLE ──
     print("🎬 Assembling fullscreen background clips...")
@@ -1420,7 +1448,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     
     for i, chunk in enumerate(chunks):
         c_start = chunk["start"]
-        c_dur = chunk["duration"]
+        c_dur = chunk.get("duration") or chunk.get("duration_sec", 0)
         vpath = chunk.get("visual_path")
         has_info = chunk.get("has_infographic", False)
         
@@ -1490,7 +1518,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
 
     # ── BOTTOM PANEL & TITLE BANNER ──
     # Top Banner: Title Hook (at top of shorts, y=0)
-    title_text = script_json.get("title") or script_json.get("original_news_headline") or "Amazing Fact!"
     middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color, style_mode=banner_style_mode).with_start(0).with_position((0, 0))
     background_clips.append(middle_clip)
 
