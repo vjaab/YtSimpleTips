@@ -1,13 +1,13 @@
 name: VJ Videos Tamil Shorts Pipeline
 
 on:
-  # schedule:
-  #   # ── 2 SHORTS PER DAY — ROTATING UPLOAD TIME ──
-  #   # Triggers daily at 02:30 UTC (08:00 IST) and 12:30 UTC (18:00 IST)
-  #   - cron: '30 2 * * *'
-  #   - cron: '30 12 * * *'
-  #   # Weekly Sunday Cron at 6 AM IST (00:30 UTC) for analytics feedback loop
-  #   - cron: '30 0 * * 0'
+  schedule:
+    # ── 2 SHORTS PER DAY — ROTATING UPLOAD TIME ──
+    # Triggers daily at 02:30 UTC (08:00 IST) and 12:30 UTC (18:00 IST)
+    - cron: '30 2 * * *'
+    - cron: '30 12 * * *'
+    # Weekly Sunday Cron at 6 AM IST (00:30 UTC) for analytics feedback loop
+    - cron: '30 0 * * 0'
   workflow_dispatch: # Allow manual triggers from GitHub Actions UI
 
 jobs:
