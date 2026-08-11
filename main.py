@@ -456,7 +456,7 @@ def run_pipeline(forced_category=None, dry_run=False):
     selected_thumbnail = thumbnail_variants[0] if thumbnail_variants else None
 
     # ── STEP 10: YouTube Upload & Instagram Reels Cross-post ──
-    log_message("STEP 10: Uploading video to VJ Videos YouTube Channel...")
+    log_message("STEP 10: Uploading video to Simple Tips by VJ YouTube Channel...")
     ai_desc = script_data.get("description", "")
     hashtags = script_data.get("hashtags", ["#தெரியுமா", "#VJVideos"])
     unique_angle = script_data.get("unique_angle", "")
@@ -503,7 +503,7 @@ def run_pipeline(forced_category=None, dry_run=False):
     youtube_url = f"https://youtu.be/{result}" if not dry_run else "https://youtu.be/dry_run_video_id"
     log_message(f"🎉 YouTube upload SUCCESS: {youtube_url}")
     if not dry_run:
-        notify_telegram(f"🚀 Video is now LIVE on VJ Videos!\n\n📌 <b>{selected_title}</b>\n🔗 {youtube_url}", "✅")
+        notify_telegram(f"🚀 Video is now LIVE on Simple Tips by VJ!\n\n📌 <b>{selected_title}</b>\n🔗 {youtube_url}", "✅")
         # YPP COMPLIANCE: Notify VJ that AI disclosure label has been set automatically
         notify_telegram(
             f"🤖 <b>AI Disclosure Label Automatically Set</b>\n\n"

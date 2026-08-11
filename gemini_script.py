@@ -547,7 +547,7 @@ def apply_cta_rotation(final_script):
         "Intha project-oda full code & template bio link-la free-a code editor-la share panni irukken!",
         "Ithoda complete step-by-step PDF resource bundle link bio layout-la irukku, download pannunga!",
         "Part 2 video advanced setup-oda naalaiku varuthu. Miss pannama follow or subscribe pannunga!",
-        "Naalaiku innum oru powerful AI workflow trick solren. VJ Videos-uku follow/subscribe pannunga!"
+        "Naalaiku innum oru powerful AI workflow trick solren. Simple Tips by VJ-ku follow/subscribe pannunga!"
     ]
     cta_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cta_magnets.json")
     try:

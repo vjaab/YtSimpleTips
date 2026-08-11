@@ -285,7 +285,7 @@ def send_upload_consent(thumbnail_paths, title_variants, duration_sec, voice_fal
         t_letter = ["A", "B", "C"][state["thumb_idx"]]
         
         status_text = (
-            f"🎬 <b>VJ Videos - Video Ready for Approval</b>\n\n"
+            f"🎬 <b>Simple Tips by VJ - Video Ready for Approval</b>\n\n"
             f"⏱ <b>Duration:</b> {dur_str}\n\n"
             f"📝 <b>Titles:</b>\n"
             f"1. {title_variants[0]}\n"

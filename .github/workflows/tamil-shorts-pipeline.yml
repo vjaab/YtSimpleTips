@@ -1,4 +1,4 @@
-name: VJ Videos Tamil Shorts Pipeline
+name: Simple Tips by VJ Tamil Shorts Pipeline
 
 on:
   schedule:
@@ -174,7 +174,7 @@ jobs:
           fi
           
           if ! git diff --cached --quiet; then
-            git commit -m "[Bot] Auto-update VJ Videos facts logs"
+            git commit -m "[Bot] Auto-update Simple Tips by VJ facts logs"
             
             for i in {1..5}; do
               echo "Push attempt $i..."
