@@ -389,6 +389,64 @@ def _generate_elevenlabs(text, output_path):
         print(f"   ✗ ElevenLabs output conversion failed: {e}")
         return None
 
+def _generate_elevenlabs_standard(text, output_path):
+    """Generate audio using ElevenLabs with a standard (non-cloned) multilingual voice."""
+    print("[audio_gen] Synthesizing with ElevenLabs (Standard Multilingual Voice)...")
+    if not ELEVENLABS_API_KEY:
+        print("   ✗ ElevenLabs API Key missing.")
+        return None
+        
+    # Use a standard multilingual voice (not cloned)
+    # 21m00Tcm4TlvDq8ikWAM = Rachel (multilingual v2)
+    # AZnzlk1XvdvUeBnXmlld = Domi (multilingual v2)
+    # EXAVITQu4vr4xnSDxMaL = Bella (multilingual v2)
+    voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel - standard multilingual voice
+    headers = {
+        "Content-Type": "application/json",
+        "xi-api-key": ELEVENLABS_API_KEY
+    }
+    params = {
+        "output_format": "mp3_44100_128"
+    }
+    
+    words = text.split()
+    mp3_chunks = []
+    
+    if len(words) > 50:
+        print(f"[audio_gen] Long script detected ({len(words)} words). Using chunked synthesis...")
+        chunks = split_text_into_chunks(text)
+        print(f"👉 Split script into {len(chunks)} chunks.")
+        
+        for idx, chunk in enumerate(chunks):
+            print(f"[audio_gen] Synthesizing chunk {idx+1}/{len(chunks)}...")
+            chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
+            if not chunk_mp3:
+                print(f"   ✗ Failed to synthesize chunk {idx+1}")
+                return None
+            mp3_chunks.append(chunk_mp3)
+    else:
+        print("[audio_gen] Script is short. Synthesizing as a single ElevenLabs chunk...")
+        single_mp3 = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
+        if not single_mp3:
+            return None
+        mp3_chunks.append(single_mp3)
+            
+    try:
+        if len(mp3_chunks) == 1:
+            import io
+            from pydub import AudioSegment
+            audio_seg = AudioSegment.from_file(io.BytesIO(mp3_chunks[0]), format="mp3")
+        else:
+            audio_seg = _concat_mp3_chunks(mp3_chunks, crossfade_ms=150)
+        
+        audio_seg = audio_seg.set_frame_rate(44100).set_channels(1).set_sample_width(2)
+        audio_seg.export(output_path, format="wav")
+        print(f"[audio_gen] ElevenLabs (standard voice) synthesis complete: {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"   ✗ ElevenLabs output conversion failed: {e}")
+        return None
+
 async def _async_generate_edge_tts(text, output_path):
     import edge_tts
     # Slower rate (+5% instead of +8%) for more natural pacing
@@ -761,9 +819,10 @@ def speed_up_audio(audio_path, factor):
 
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
-    Generates Tamil/Tanglish voiceover using ElevenLabs Multilingual (Cloud vj.wav Voice Clone).
-    Exclusively uses ElevenLabs and falls back to a hard error if it fails, as directed.
+    Generates Tamil/Tanglish voiceover using Edge TTS (free, no voice cloning needed).
+    Falls back to ElevenLabs with standard multilingual voice if Edge TTS fails.
     """
+    global VOICE_FALLBACK_USED
     if custom_phonetic_map:
         for word, phonetic in custom_phonetic_map.items():
             pattern = re.compile(r'\b' + re.escape(word) + r'\b', re.IGNORECASE)
@@ -773,9 +832,17 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
-    path = _generate_elevenlabs(clean_text, wav_path)
+    # Primary: Edge TTS (free, Tamil support, no cloning needed)
+    path = _generate_edge_tts(clean_text, wav_path)
     if not path:
-        raise RuntimeError("[audio_gen] ElevenLabs voice generation failed! Fallbacks are disabled as requested.")
+        print("⚠️ Edge TTS failed. Falling back to ElevenLabs (standard voice)...")
+        # Fallback: ElevenLabs with standard multilingual voice (not cloned)
+        path = _generate_elevenlabs_standard(clean_text, wav_path)
+        if not path:
+            raise RuntimeError("[audio_gen] Both Edge TTS and ElevenLabs voice generation failed!")
+        VOICE_FALLBACK_USED = True
+    else:
+        VOICE_FALLBACK_USED = False
         
     # Speed up audio to match the energetic pacing of reference short
     if VOICE_SPEED != 1.0:

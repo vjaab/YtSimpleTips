@@ -12,44 +12,44 @@ def get_slot_info():
     hour = ist_now.hour
     
     morning_categories = {
-        "Mon": "🤖 AI Demystified & Future Tech",
-        "Tue": "🤖 Practical AI Tools & Jobs",
-        "Wed": "🤖 AI Demystified & Future Tech",
-        "Thu": "🤖 Practical AI Tools & Jobs",
-        "Fri": "🤖 AI Demystified & Future Tech",
-        "Sat": "🤖 Practical AI Tools & Jobs",
-        "Sun": "🤖 AI Demystified & Future Tech"
+        "Mon": "🧠 Amazing Science Facts",
+        "Tue": "🌍 World & History Secrets",
+        "Wed": "🔬 Tech & Innovation Wonders",
+        "Thu": "🌌 Space & Universe Mysteries",
+        "Fri": "🧬 Human Body & Psychology",
+        "Sat": "🐾 Nature & Animal Oddities",
+        "Sun": "💡 Mind-Blowing Did You Know"
     }
     
     afternoon_categories = {
-        "Mon": "🤖 Practical AI Tools & Jobs",
-        "Tue": "🤖 Simple AI Hacks for Everyone",
-        "Wed": "🤖 Practical AI Tools & Jobs",
-        "Thu": "🤖 Simple AI Hacks for Everyone",
-        "Fri": "🤖 Practical AI Tools & Jobs",
-        "Sat": "🤖 Simple AI Hacks for Everyone",
-        "Sun": "🤖 Practical AI Tools & Jobs"
+        "Mon": "🌍 World & History Secrets",
+        "Tue": "🔬 Tech & Innovation Wonders",
+        "Wed": "🌌 Space & Universe Mysteries",
+        "Thu": "🧬 Human Body & Psychology",
+        "Fri": "🐾 Nature & Animal Oddities",
+        "Sat": "💡 Mind-Blowing Did You Know",
+        "Sun": "🧠 Amazing Science Facts"
     }
     
     evening_categories = {
-        "Mon": "🤖 Simple AI Hacks for Everyone",
-        "Tue": "🤖 AI Demystified & Future Tech",
-        "Wed": "🤖 Simple AI Hacks for Everyone",
-        "Thu": "🤖 Practical AI Tools & Jobs",
-        "Fri": "🤖 Simple AI Hacks for Everyone",
-        "Sat": "🤖 Simple AI Hacks for Everyone",
-        "Sun": "🤖 Simple AI Hacks for Everyone"
+        "Mon": "🔬 Tech & Innovation Wonders",
+        "Tue": "🌌 Space & Universe Mysteries",
+        "Wed": "🧬 Human Body & Psychology",
+        "Thu": "🐾 Nature & Animal Oddities",
+        "Fri": "💡 Mind-Blowing Did You Know",
+        "Sat": "🧠 Amazing Science Facts",
+        "Sun": "🌍 World & History Secrets"
     }
     
     if hour < 12:
         slot = "Slot A (Morning)"
-        category = morning_categories.get(day_name, "🤖 AI Demystified & Future Tech")
+        category = morning_categories.get(day_name, "🧠 Amazing Science Facts")
     elif hour < 16:
         slot = "Slot B (Afternoon)"
-        category = afternoon_categories.get(day_name, "🤖 Practical AI Tools & Jobs")
+        category = afternoon_categories.get(day_name, "🌍 World & History Secrets")
     else:
         slot = "Slot C (Evening)"
-        category = evening_categories.get(day_name, "🤖 Simple AI Hacks for Everyone")
+        category = evening_categories.get(day_name, "🔬 Tech & Innovation Wonders")
         
     # Load performance insights for dynamic strategy boosting
     import os

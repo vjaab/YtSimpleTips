@@ -208,7 +208,16 @@ def fetch_facts_for_category(category):
     vidiq_topics = []
     try:
         # Map category to a clean category for VidIQ
-        vidiq_category = "AI"
+        vidiq_category_map = {
+            "🧠 Amazing Science Facts": "Science",
+            "🌍 World & History Secrets": "History",
+            "🔬 Tech & Innovation Wonders": "Technology",
+            "🌌 Space & Universe Mysteries": "Space",
+            "🧬 Human Body & Psychology": "Health",
+            "🐾 Nature & Animal Oddities": "Nature",
+            "💡 Mind-Blowing Did You Know": "Education"
+        }
+        vidiq_category = vidiq_category_map.get(category, "Education")
             
         from vidiq_trending import get_pipeline_topics
         vidiq_raw = get_pipeline_topics(category=vidiq_category)
@@ -252,26 +261,26 @@ def fetch_facts_for_category(category):
             print(f"  ⚠️ [fetch_topics] Trending boost skipped: {e}")
 
     prompt = f"""
-    Search the web for 5 highly viral, top trending GitHub repositories that common people or developers would find fascinating, related to coding, AI, tools, utility scripts, or software hacks.
-    These topics MUST be actual popular GitHub repositories.
-    These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
-    They must be surprising, accurate, and optimized for a 30-40 second infotainment YouTube Short titled "Simple Tips by VJ".
+    Search the web for 5 highly viral, surprising "Did You Know" facts that Tamil audiences would find fascinating, related to {category}.
+    These topics MUST be verified, accurate facts from reliable sources (Wikipedia, scientific journals, reputable news, encyclopedias).
+    They must be surprising, counter-intuitive, or mind-blowing - optimized for a 45-60 second Tamil/Tanglish YouTube Short titled "Simple Tips by VJ".
     
-    GITHUB TRENDING CRITERIA:
-    1. Every topic MUST be a popular or trending GitHub repository (e.g., vxcontrol/pentagi, lowlighter/metrics).
-    2. Focus on high "curiosity gap" or "utility" hooks: "This free GitHub tool can do X", "This insane GitHub repository changes how you write code", "Why everyone is talking about this GitHub project".
+    FACT CRITERIA:
+    1. Every topic MUST be a verified fact with a credible source URL (Wikipedia, Britannica, Nature, Science journals, reputable news sites).
+    2. Focus on high "curiosity gap" hooks: "Did you know...", "Most people don't know...", "This will change how you see...".
+    3. Avoid common knowledge - pick facts that make people say "Wait, really?!".
     {trending_context}
     
-    CRITICAL REQUIREMENT: For each topic, you MUST search for and provide its real, active GitHub URL (e.g., https://github.com/username/repository) as the source_url. This URL must be active and correct!
+    CRITICAL REQUIREMENT: For each topic, you MUST search for and provide its real, verifiable source URL as the source_url. This URL must be active and correct!
     
     Return ONLY a JSON list of 5 tips matching this schema:
     [
       {{
-        "title": "Short descriptive English title of the GitHub topic (e.g. lowlighter/metrics - Generate Infographics for GitHub Profile)",
-        "description": "A rich, detailed 2-3 sentence explanation of the GitHub repository in English, explaining what it does and why it is useful or trending.",
-        "source_url": "Direct GitHub URL of the repository (e.g. https://github.com/lowlighter/metrics)",
-        "source_name": "GitHub",
-        "keywords": ["GitHub", "repository", "open-source"],
+        "title": "Short descriptive English title of the fact (e.g. Honey Never Spoils - 3000 Year Old Edible Honey Found)",
+        "description": "A rich, detailed 2-3 sentence explanation of the fact in English, explaining why it's surprising and the science/history behind it.",
+        "source_url": "Direct source URL (e.g. https://en.wikipedia.org/wiki/Honey#Preservation)",
+        "source_name": "Wikipedia / Scientific Journal / News Site",
+        "keywords": ["did you know", "fact", "science"],
         "category": "{category}"
       }}
     ]

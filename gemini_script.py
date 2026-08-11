@@ -14,39 +14,41 @@ from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
 # ── PROMPT TEMPLATES (TAMIL SHORTS AGENTIC LOOP) ──────────────────────────────────
 
-TOPIC_SELECTOR_PROMPT = """You are a Tamil AI/Tech education content strategist for YouTube Shorts, specializing in making AI and technology topics go VIRAL among common people (not tech enthusiasts).
+TOPIC_SELECTOR_PROMPT = """You are a Tamil "Did You Know" fact content strategist for YouTube Shorts, specializing in making mind-blowing verified facts go VIRAL among common Tamil people.
 
-Generate 1 viral-worthy AI or tech-tip topic for a 45-60 second Tamil/Tanglish Short targeting COMMON PEOPLE (students, working professionals, and elders).
+Generate 1 viral-worthy fact topic for a 45-60 second Tamil/Tanglish Short targeting COMMON PEOPLE (students, working professionals, homemakers, elders).
 
-HIGH-RETENTION CATEGORIES (STRICTLY CHOOSE ONE OF THESE ARCHETYPES):
-1. "Free tool/hack" reveals (framed around "இது தெரியுமா?" / Did you know this?): Reveal free AI tools, hidden phone settings, or secret WhatsApp tricks.
-2. Money-saving / earning angles: Framed around "Free-ஆ படிக்கலாம்" (free courses/study tools) for students, or "வீட்ல இருந்தே சம்பாதிக்கலாம்" (earn/save money from home) for working professionals.
-3. AI tool tutorials (narrow, single-feature): Focus on a single-feature hack rather than broad tutorials. (e.g. "ChatGPT-ல இந்த ஒரு setting மாத்தினா...")
-4. Phone/settings optimization for elders: Battery saving tips, increasing font sizes, blocking spam calls, and basic WhatsApp safety.
-5. "Mistake you're making" framing: Framed around "இந்த mistake பண்றீங்களா?" to create instant self-relevance for the hook.
+HIGH-RETENTION FACT CATEGORIES (STRICTLY CHOOSE ONE OF THESE ARCHETYPES):
+1. "Science that sounds fake but is real" (honey never spoils, octopus has 3 hearts, water bears survive space)
+2. "History secrets that change what you knew" (Cleopatra lived closer to iPhone than pyramids, ancient batteries, lost tech)
+3. "Space/Universe mind-benders" (diamond rain on Neptune, Venus day longer than year, neutron star density)
+4. "Human body/psychology surprises" (you glow in dark, stomach gets new lining, memory is reconstructed)
+5. "Nature/animal superpowers" (immortal jellyfish, pistol shrimp sonic blast, trees communicate)
+6. "Accidental inventions/tech marvels" (microwave, penicillin, post-it notes, velcro origins)
 
-TOPIC RULES & AVOIDANCES:
-- AVOID: Pure news, press releases, or announcements (low rewatch value, dates fast).
-- AVOID: Broad "Top 5/10 tools" lists (kills retention on Shorts; no room for depth in short format).
-- AVOID: Anything requiring the viewer to know a prior tech concept (must be 100% accessible to a beginner or elder).
-- MUST be explainable in 60 seconds using a simple real-world analogy.
-- MUST have a surprising or counterintuitive hook that makes a non-tech person say "what?! I didn't know that!"
+FACT RULES & AVOIDANCES:
+- AVOID: Common knowledge facts everyone knows (water boils at 100C, earth orbits sun)
+- AVOID: Dry statistics, academic citations, named researchers (low retention)
+- AVOID: Anything requiring prior science/history knowledge (must be 100% accessible)
+- MUST be verified by reliable sources (Wikipedia, journals, encyclopedias)
+- MUST be explainable in 60 seconds using a simple relatable analogy
+- MUST have a shocking/counterintuitive hook that makes anyone say "Wait, really?!"
 
 OUTPUT FORMAT (JSON only, no preamble):
 {
-  "topic": "short topic name in English",
-  "tamil_title": "YouTube title in Tanglish (max 60 chars, curiosity-driven, understandable by non-tech people)",
-  "hook_question": "opening question in Tanglish that makes a COMMON PERSON stop scrolling (not a tech person)",
-  "core_concept": "the actual AI concept being explained in simple terms (e.g. how phone learns your face, how Swiggy predicts delivery time)",
-  "real_world_example": "specific Tamil-relatable daily life example to explain it (mention specific apps, devices, or situations common people use)",
-  "surprising_fact": "one counterintuitive or wow fact about this concept that a non-tech person would find shocking",
+  "topic": "short fact name in English (e.g. Honey Never Spoils - 3000 Year Old Edible Honey)",
+  "tamil_title": "YouTube title in Tanglish (max 60 chars, curiosity-driven, understandable by all)",
+  "hook_question": "opening question in Tanglish that makes a COMMON PERSON stop scrolling",
+  "core_concept": "the actual fact explained in simple terms (e.g. honey's chemical composition prevents bacterial growth)",
+  "real_world_example": "specific relatable example (e.g. archaeologists found edible honey in Egyptian tombs)",
+  "surprising_fact": "one counterintuitive wow detail (e.g. 3000-year-old honey from King Tut's tomb is still edible)",
   "difficulty": "beginner",
   "target_segment": "students/professionals/elders/all"
 }"""
 
-SCRIPT_GENERATION_PROMPT = """You are a Tamil AI education YouTuber who makes complex AI concepts simple and fun.
+SCRIPT_GENERATION_PROMPT = """You are a viral Tamil YouTube Shorts creator for "Simple Tips by VJ" - making mind-blowing "Did You Know" facts simple and exciting in Tanglish.
 
-Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this topic:
+Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this fact:
 
 TOPIC: {topic}
 HOOK QUESTION: {hook_question}
@@ -57,24 +59,24 @@ TARGET AUDIENCE: {target_segment}
 
 SCRIPT RULES:
 1. DURATION: 150-190 words max (approx 60-80 seconds total duration)
-2. LANGUAGE: Natural Tanglish — Tamil sentences with English technical terms inline. NOT translated English. NOT pure Tamil.
-   Good: "Ungal phone face unlock panna, oru neural network realtime-la ungal face-a 128 different points-la analyze pannum"
-   Bad: "Your phone uses artificial intelligence to recognize your face using neural network technology"
-3. TECHNICAL SPELLINGS: Write key technical terms and product names (such as "Gboard", "AI", "Auto-correct", "Shortcuts", "Typing Speed", "Productivity", "Themes", "Settings") in standard, correct English script. Do NOT write them in Tamil script or spell them phonetically, so they render correctly and cleanly in the captions.
+2. LANGUAGE: Natural Tanglish — Tamil sentences with English terms inline. NOT translated English. NOT pure Tamil.
+   Good: "Honey ethavathu expiry date illa! 3000 varusham purana honey edible-a irukku"
+   Bad: "Honey does not have an expiry date and 3000 year old honey is still edible"
+3. TECHNICAL SPELLINGS: Write key terms/names (specific places, species, scientific terms) in standard English script.
 4. STRUCTURE (strict):
-   - Hook (0-5 sec): Surprising question or statement. Start with "Oru vishayam theriyuma?" or similar
-   - Concept body (5-35 sec): Explain using the real world example. Use simple analogy.
-   - Wow moment (35-45 sec): The surprising fact that reframes everything
-   - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or similar
-5. TONE: Like an excited friend explaining something cool, not a teacher lecturing
-6. NO: Statistics, percentages, named researchers, paper citations
-7. YES: Specific product names (Swiggy, GPT, Google Maps), relatable situations, conversational fillers (aama, illaya, paarunga)
+   - Hook (0-5 sec): Surprising question/statement. Start with "Oru vishayam theriyuma?" or "Nee yaarukkum theriyadhu..." or similar
+   - Fact Body (5-35 sec): Explain the fact using the real world example. Simple analogy.
+   - Wow Moment (35-45 sec): The surprising fact that reframes everything
+   - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or "Mela subscribe pannu - daily oru amazing fact!"
+5. TONE: Like an excited friend sharing a mind-blowing secret, not a teacher lecturing
+6. NO: Dry statistics, academic citations, named researchers, paper references
+7. YES: Specific names (places, animals, historical events), relatable comparisons, conversational fillers (aama, illaya, paarunga, wait...)
 
 OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
 
-TITLE_TAGS_PROMPT = """You are an expert YouTube SEO optimizer specializing in regional South Indian tech content (similar to Skills Maker TV).
+TITLE_TAGS_PROMPT = """You are an expert YouTube SEO optimizer specializing in regional South Indian fact/educational content (similar to "Simple Tips by VJ").
 
-Generate metadata for this Tamil AI education Short:
+Generate metadata for this Tamil "Did You Know" fact Short:
 
 TOPIC: {topic}
 CORE CONCEPT: {core_concept}
@@ -86,9 +88,9 @@ OUTPUT FORMAT (JSON only):
   "description": "3-4 sentences in Tanglish explaining what viewer will learn. End with 'Comment pannunga - innum theriyanum-na!'",
   "hashtags": [
     "#Shorts",
-    "#TamilTech",
-    "Tag 3 (Core Tech Concept): Must be exactly 1 tag representing the primary technical subject (e.g. #AIVoice, #AiVideoEditing, #PhoneSetting, #WhatsAppSettings) using CamelCase, no punctuation.",
-    "Tag 4 (Action/Trend Context): Must be exactly 1 tag representing the primary value proposition or action context (e.g. #TechTips, #FreeAI, #YouTubeGrowth, #SafetyTips, #MoneyTips) using CamelCase, no punctuation."
+    "#TamilFacts",
+    "Tag 3 (Core Fact Category): Must be exactly 1 tag representing the primary fact subject (e.g. #ScienceFacts, #HistoryFacts, #SpaceFacts, #BodyFacts, #NatureFacts, #TechFacts) using CamelCase, no punctuation.",
+    "Tag 4 (Value Context): Must be exactly 1 tag representing the primary value (e.g. #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts) using CamelCase, no punctuation."
   ],
   "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity)",
   "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
@@ -97,16 +99,16 @@ OUTPUT FORMAT (JSON only):
 HASHTAG GENERATION RULES:
 You must output exactly 4 relevant hashtags inside the "hashtags" array:
 1. Tag 1: Must be exactly "#Shorts"
-2. Tag 2: Must be exactly "#TamilTech"
-3. Tag 3 (Core Tech Concept): Extract the primary technical subject from the script text (e.g., #AIVoice, #AiVideoEditing, #PhoneSetting, #WhatsAppSettings).
-4. Tag 4 (Action/Trend Context): Extract the primary value proposition (e.g., #TechTips, #FreeAI, #YouTubeGrowth, #SafetyTips, #MoneyTips).
+2. Tag 2: Must be exactly "#TamilFacts"
+3. Tag 3 (Core Fact Category): Extract the primary fact subject from the script text (e.g., #ScienceFacts, #HistoryFacts, #SpaceFacts, #BodyFacts, #NatureFacts, #TechFacts).
+4. Tag 4 (Value Context): Extract the primary value (e.g., #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts).
 No other tags are allowed. All tags must use CamelCase with no internal punctuation.
 
 TITLE FORMULAS THAT WORK:
-- "Ungal [daily thing] ethana AI use pannudhu theriyuma?"
-- "[AI concept] - Simple-a explain pannuren!"
-- "Yen [AI tool] ungalai [behavior]? - Unmai theriyuma"
-- "[Number] seconds-la [concept] purinju vidunga!"
+- "Oru vishayam theriyuma? [Amazing fact hook]!"
+- "[Number] varusham purana [thing] edible-a irukku?!"
+- "Nee yaarukkum theriyadhu [shocking fact] - Unmai theriyuma?"
+- "[Thing] pathi nee ninaichadhu thappu! Reality ithu dhaan!"
 """
 
 PIPELINE_PROMPTS = {
@@ -116,27 +118,23 @@ PIPELINE_PROMPTS = {
 }
 
 TOPIC_CATEGORIES = [
-    "ai_in_daily_life",           # How AI works in Swiggy, Google Maps, YouTube, WhatsApp — things everyone uses
-    "ai_safety_and_scams",        # Deepfake scams, AI voice cloning fraud, how to protect yourself — fear-based viral
-    "ai_tools_for_students",      # Free AI tools for studying, homework, interview prep — student appeal
-    "ai_health_and_wellbeing",    # AI in hospitals, AI diagnosing diseases, health apps with AI — health concern appeal
-    "ai_money_and_jobs",          # Which jobs AI will change, how to use AI to earn/save money — money appeal
-    "ai_behind_the_scenes",       # How Netflix recommends, how Siri understands, how UPI detects fraud — curiosity appeal
-    "ai_myths_vs_reality",        # Will AI take over? Can AI think? Common fears debunked simply — fear/wonder appeal
+    "science_facts",           # Amazing science phenomena (honey never spoils, water bears, etc.)
+    "history_secrets",         # Hidden history facts, lost civilizations, ancient tech
+    "space_universe",          # Space facts, black holes, planets, cosmic phenomena
+    "human_body_psychology",   # Body facts, brain quirks, psychology surprises
+    "nature_animals",          # Animal superpowers, plant intelligence, weird nature
+    "tech_innovation",         # Invention stories, accidental discoveries, engineering marvels
+    "mind_blowing_didyouknow", # General mind-blowing facts across all domains
 ]
 
-SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in simple, beginner-friendly tech tutorials in the style of "Skills Maker TV".
-Your goal is to explain extremely useful, trending tech/smart life hacks, study tools, phone settings, and financial AI features in a warm, encouraging, brotherly tone (like a tech mentor or helpful older brother).
-Tone: Warm, encouraging, clear, and highly engaging South Indian Tamil mentor. Natural, enthusiastic, and easy to follow. Speak clearly and articulate every word so that Tamil viewers all over the world can understand easily. Speak with high-energy, fast-paced (calibrated for 1.10x speed), direct, and enthusiastic conversational delivery (pacing, tone, and inflection should sound like a high-retention educational shorts creator). Avoid overly dramatic anime narrator style or hyper-reactive shouting. Maintain a friendly, helpful, and professional creator tone.
-CRITICAL AUDIENCE DIRECTIVE: Your PRIMARY audience is NOT tech people. Your primary audience is COMMON Tamil people — students, homemakers, shopkeepers, auto drivers, parents, and elders. Explain concepts the way you'd explain them to a beginner. If the topic can't be explained using examples from their daily routine (phone, WhatsApp, Google, Swiggy, bank, hospital), REJECT it and pick a different topic.
-Target Audience: Tamil-speaking viewers aged 12–65+ across ALL demographics, spanning:
-1) Parents & Homemakers (cares about child safety online, AI scams, WhatsApp AI features, smart home tips).
-2) Middle-aged & Elders (cares about AI safety, deepfake scams, UPI/finance security, health AI, understanding AI news).
-3) Students & Young People (cares about free AI study tools, career guidance, AI shortcuts for productivity).
-4) Small Business Owners & Workers (cares about AI tools to save time/money, job security, practical AI uses).
+SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter for "Simple Tips by VJ" - specializing in mind-blowing "Did You Know" facts in the style of high-retention educational shorts creators.
+Your goal is to explain surprising, verified facts from science, history, space, nature, and technology in a warm, exciting, brotherly tone (like an older brother sharing a cool secret).
+Tone: Warm, enthusiastic, clear, and highly engaging South Indian Tamil mentor. Natural, fast-paced (calibrated for 1.10x speed), direct, and conversational delivery. Avoid overly dramatic anime narrator style or hyper-reactive shouting. Maintain a friendly, helpful, and professional creator tone.
+CRITICAL AUDIENCE DIRECTIVE: Your PRIMARY audience is COMMON Tamil people — students, homemakers, shopkeepers, auto drivers, parents, and elders. Explain facts the way you'd explain them to a curious friend. Use examples from their daily life when possible. If the fact can't be made relatable to a general Tamil audience, REJECT it and pick a different fact.
+Target Audience: Tamil-speaking viewers aged 12–65+ across ALL demographics.
 Language Rules:
-1. Voiceover Script (`script`, `hook_script`, `problem_context`, `solution_tech`, `retention_loop`, `outro_cta`): Write in colloquial, day-to-day spoken Tamil using Tamil script mixed with common English technical terms written in standard English characters (e.g. write "phone settings", "shortcut", "verify", "memory", "AI" inline). Do NOT use overly formal, literary, or archaic Tamil words (e.g., use standard spoken words like 'பண்ணுங்க' instead of 'செய்யுங்கள்'). Enforce clean and universally understandable Tanglish/colloquial vocabulary.
-   Example: "உங்க phone-ல இந்த secret setting-ஐ உடனே மாத்துங்க! உங்க browser speed-ஐ boost பண்ண ஒரு simple hack..."
+1. Voiceover Script: Write in colloquial, day-to-day spoken Tamil using Tamil script mixed with common English terms/names written in standard English characters (e.g. write "Honey", "Egypt", "NASA", "Blue Whale" inline). Do NOT use overly formal, literary, or archaic Tamil words (e.g., use 'பண்ணுங்க' instead of 'செய்யுங்கள்').
+   Example: "உங்கள் தெய்வம் போல் மாதிரி வரும் இந்த fact-ஐ கேட்டு shock ஆக போய் விடுங்கள்! Honey-க்கு எப்போதும் expiry date இல்ல... 3000 varusham purana honey edible-a irukku!"
    Style Reference Example (Use this exact spoken tone and structure flow):
    "உங்க போனை ராக்கெட் வேகத்துல மாத்தணுமா? போன் ரொம்ப ஸ்லோவா இருக்கா? ஆப்ஸ் ஓபன் ஆக லேட் ஆகுதா? ஸ்கிரீன் ட்ரான்சிஷன் லேக் ஆகுதா? டெய்லி யூஸ் கஷ்டமா இருக்கா? அப்போ உங்க ஆண்ட்ராய்டு போன்ல செட்டிங்ஸ் போங்க. கீழே ஸ்க்ரோல் பண்ணி அபௌட் போன கிளிக் பண்ணுங்க. அங்க பில்ட் நம்பரை செவன் தடவை டாப் பண்ணுங்க. டெவலப்பர் ஆப்ஷன்ஸ் உடனே எனேபிள் ஆகும். ஆனா வெயிட் பண்ணுங்க. இதுல ஒரு ட்விஸ்ட் இருக்கு. இப்போ செட்டிங்ஸ்ல டெவலப்பர் ஆப்ஷன்ஸ்குள்ள போங்க. கீழ ஸ்க்ரோல் பண்ணீங்கன்னா விண்டோ அனிமேஷன் ஸ்கேல், ட்ரான்சிஷன் அனிமேஷன் ஸ்கேல், அனிமேட்டர் டுரேஷன் ஸ்கேல் இந்த மூணு செட்டிங்ஸையும் ஜீரோ. இல்லன்னா ஆஃப் பண்ணிடுங்க. அவ்வளவுதான். உங்க போன் இப்போ புதுசா வாங்குன மாதிரி படு வேகமா இருக்கும். இந்த ஹேக் யூஸ்ஃபுல்லா இருந்ததா? உங்க போன் ஸ்பீட் எப்படி இருக்கு? கமெண்ட்ஸ்ல சொல்லுங்க. மறக்காம ஷேர் பண்ணுங்க, நன்றி!"
 2. Subtitles & Captions (`subtitle_chunks`):
@@ -573,6 +571,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     """
     from config import is_gemini_disabled
     
+    day_name, slot, category = get_slot_info()
+    
     # ── OFFLINE MODE CHECK ──
     # If all LLM providers are exhausted, immediately use offline fallback
     if _OFFLINE_MODE_ACTIVE:
@@ -589,8 +589,6 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     if not client and not is_gemini_disabled():
         print("⚠️ Gemini API Client missing! Cannot run multi-agent script generation.")
         return None
-    
-    day_name, slot, category = get_slot_info()
     strategy_enhancement = get_category_prompt_enhancement(category, slot)
     
     # Check for session length cap from performance insights
@@ -759,53 +757,30 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
   "comment_bait_question": "A polarizing debate question in Tanglish or Tamil about the topic to spark discussion/arguments in comments (e.g. 'Ethu best-nu neenga neneikiringa?', 'WhatsApp call record panrathu right-a thapa?'). Avoid generic CTAs like 'Comment below'."
 }""".replace("{category}", category)
 
-    # ── AI EDUCATION CUSTOM PATH ──
-    is_ai_slot = True
-    if is_ai_slot:
-        print("🤖 [AI Education Path] Initializing 3-stage AI Shorts pipeline...")
+    # ── FACT SHORTS CUSTOM PATH ──
+    is_fact_slot = True
+    if is_fact_slot:
+        print("🧠 [Fact Shorts Path] Initializing fact pipeline...")
         selected_category = random.choice(TOPIC_CATEGORIES)
         
         # Step 1: Select a topic using TOPIC_SELECTOR_PROMPT
         selector_prompt = PIPELINE_PROMPTS["topic_selector"] + f"\nRotate / Focus on Category: {selected_category}\n"
-        print("🕵️ [AGENT 0] Topic Selector Agent: Generating AI topic...")
+        print("🕵️ [AGENT 0] Topic Selector Agent: Generating fact topic...")
         topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True)
         
         if topic_data_res and "topic" in topic_data_res:
             selected_headline = topic_data_res.get("topic")
-            selected_url = "https://github.com/vjaab/YtSimpleTips"
+            selected_url = topic_data_res.get("source_url", "https://en.wikipedia.org")
             
-            # Step 2: Generate script using GITHUB_SCRIPT_GENERATION_PROMPT or SCRIPT_GENERATION_PROMPT
-            is_github = "github" in selected_headline.lower() or "github" in selected_url.lower()
-            if is_github:
-                print("💡 [GitHub Trend Agent] GitHub topic detected. Enforcing GITHUB_SCRIPT_GENERATION_PROMPT...")
-                script_writer_prompt = f"""You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
-
-Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this GitHub repository:
-
-TOPIC: {topic_data_res.get("topic")}
-CORE CONCEPT: {topic_data_res.get("core_concept")}
-REAL WORLD EXAMPLE: {topic_data_res.get("real_world_example")}
-SURPRISING FACT: {topic_data_res.get("surprising_fact")}
-
-SCRIPT RULES:
-1. DURATION: 150-190 words maximum (approx 60-75 seconds total duration)
-2. LANGUAGE: Natural spoken Tanglish peer voice. Never use textbook Tamil.
-3. STRUCTURE (strict 4-part sequential timeline blocks):
-   - Hook (0-5 sec): High-energy curiosity question or statement.
-   - Repo What & Why (5-25 sec): Explain what it does using a simple real-world analogy.
-   - Live Demo Proof (25-55 sec): Walk through the most mind-blowing feature.
-   - Algorithm Loop & CTA (55-65 sec): Create an abrupt loop-friendly ending + subscription CTA.
-
-OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
-            else:
-                script_writer_prompt = PIPELINE_PROMPTS["script_writer"].format(
-                    topic=topic_data_res.get("topic"),
-                    hook_question=topic_data_res.get("hook_question"),
-                    core_concept=topic_data_res.get("core_concept"),
-                    real_world_example=topic_data_res.get("real_world_example"),
-                    surprising_fact=topic_data_res.get("surprising_fact"),
-                    target_segment=topic_data_res.get("target_segment", "all")
-                )
+            # Step 2: Generate script using standard SCRIPT_GENERATION_PROMPT
+            script_writer_prompt = PIPELINE_PROMPTS["script_writer"].format(
+                topic=topic_data_res.get("topic"),
+                hook_question=topic_data_res.get("hook_question"),
+                core_concept=topic_data_res.get("core_concept"),
+                real_world_example=topic_data_res.get("real_world_example"),
+                surprising_fact=topic_data_res.get("surprising_fact"),
+                target_segment=topic_data_res.get("target_segment", "all")
+            )
             print("📝 [AGENT 1] Script Writer Agent: Generating script...")
             script_text = None
             try:
@@ -841,30 +816,10 @@ OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
                 refined_requirements = refined_requirements.replace('"original_news_url": "Direct source url"', f'"original_news_url": "{selected_url}"')
                 refined_requirements = refined_requirements.replace('"use_case_evidence_url": "Direct source url of the fact to take a screenshot of."', f'"use_case_evidence_url": "{selected_url}"')
                 
-                if is_github:
-                    storyboard_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
-                    
-STORYBOARD AGENT TASK:
-Given the following GitHub trending script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
-
-MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
-- Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
-- Scene 4-12 (Repo What & Why, approx 5-25s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
-- Scene 13-30 (Live Demo Proof, approx 25-55s): Visual must describe terminal running code or the website UI in action.
-- Scene 31-40 (Loop & CTA, approx 55-65s): Visual must point down to the channel name, loop back to the hook.
-
-SCRIPT:
-{script_text}
-
-Return ONLY a JSON object matching the required schema:
-{refined_requirements}
-"""
-                else:
-                    storyboard_prompt = f"""{SYSTEM_PERSONA}
+                storyboard_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
-Given the following AI education script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
+Given the following fact script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
 You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
 
 SCRIPT:
@@ -1024,40 +979,13 @@ Return ONLY a JSON object matching the required schema:
     print(f"🎯 Selected Hook: {best_hook.get('text')}")
 
     # ── AGENT 3: NARRATIVE ──
-    is_github = "github" in selected_headline.lower() or "github" in selected_url.lower()
     print("📖 [AGENT 3] Narrative Agent: Creating script draft...")
-    if is_github:
-        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Narrative guidelines...")
-        narrative_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
-
-NARRATIVE AGENT TASK:
-Create a step-by-step tutorial or tip flow for the trending GitHub repository: {selected_headline}.
-Ensure it follows the 4-part sequential structure:
-1. HOOK (0-5s): Opening curiosity question or statement.
-2. REPO WHAT & WHY (5-20s): Simple explanation of the project.
-3. LIVE DEMO PROOF (20-35s): Showing it in action.
-4. ALGORITHM LOOP & CTA (35-45s): Abrupt loop-friendly ending.
-
-RESEARCH:
-{json.dumps(research)}
-
-SELECTED HOOK:
-{best_hook.get("text")}
-
-Return ONLY a JSON object representing the narrative draft:
-{{
-  "hook": "...",
-  "problem": "...",
-  "solution": "...",
-  "engagement_question": "..."
-}}"""
-    else:
-        narrative_prompt = NARRATIVE_AGENT_TEMPLATE.format(
-            persona=SYSTEM_PERSONA,
-            research_json=json.dumps(research),
-            selected_hook=best_hook.get("text"),
-            selection_instruction=selection_instruction
-        )
+    narrative_prompt = NARRATIVE_AGENT_TEMPLATE.format(
+        persona=SYSTEM_PERSONA,
+        research_json=json.dumps(research),
+        selected_hook=best_hook.get("text"),
+        selection_instruction=selection_instruction
+    )
     narrative = call_gemini_api(client, narrative_prompt)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not narrative:
@@ -1066,32 +994,13 @@ Return ONLY a JSON object representing the narrative draft:
 
     # ── AGENT 4: RETENTION OPTIMIZER ──
     print("⚡ [AGENT 4] Pacing Optimizer: Shortening sentences...")
-    if is_github:
-        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Retention/Pacing rules...")
-        retention_prompt = f"""Role: You are a viral Tamil YouTube Shorts scriptwriter specializing in converting raw GitHub trending repositories into high-retention tech videos.
-
-RETENTION OPTIMIZER TASK:
-Rewrite the narrative draft to maximize retention and structure it strictly into the 4-part script format.
-The script must feel like a rapid-fire peer conversation.
-
-RULES:
-1. TOTAL WORD COUNT: Strictly 110-130 words.
-2. SCRIPT STRUCTURE (MANDATORY):
-   - HOOK (0-5s): Hook selection trigger.
-   - PROBLEM (5-20s): Repo What & Why.
-   - SOLUTION (20-35s): Live Demo Proof.
-   - ENGAGEMENT QUESTION (35-45s): Loop-friendly ending + subscription CTA.
-3. SCRIPT SENTENCES: Short and punchy (strictly between 8 to 12 words each).
-4. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
-
-DRAFT:
-{json.dumps(narrative)}
-"""
-    else:
-        retention_prompt = RETENTION_OPTIMIZER_TEMPLATE.format(
-            persona=SYSTEM_PERSONA,
-            narrative_json=json.dumps(narrative)
-        )
+    retention_prompt = RETENTION_OPTIMIZER_TEMPLATE.format(
+        persona=SYSTEM_PERSONA,
+        narrative_json=json.dumps(narrative),
+        word_count_limit_str=word_count_limit_str,
+        best_hook=best_hook.get("text"),
+        is_continuation=is_continuation
+    )
     optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not optimized:
@@ -1126,37 +1035,11 @@ DRAFT:
     refined_requirements = refined_requirements.replace('"original_news_url": "Direct source url"', f'"original_news_url": "{selected_url}"')
     refined_requirements = refined_requirements.replace('"use_case_evidence_url": "Direct source url of the fact to take a screenshot of."', f'"use_case_evidence_url": "{selected_url}"')
 
-    if is_github:
-        print("💡 [GitHub Trend Agent] Enforcing GitHub specific Storyboard structure in Humanizer...")
-        github_humanizer_template = """{persona}
-
-HUMANIZER AGENT TASK:
-Convert the optimized script into the final JSON output.
-You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
-
-MANDATORY STRUCTURAL TIMELINE BLOCKS FOR STORYBOARD:
-- Scene 1-3 (Hook, approx 0-5s): Visual must describe VJ showing a shocked expression, pointing to a computer/phone screen, or a flashy headline.
-- Scene 4-12 (Repo What & Why, approx 5-25s): Visual must describe the screen-recording of the GitHub repository page showing stars/README (set the visual_type to 'photo' and ensure the stock_search_query or visual_prompt mentions the GitHub page).
-- Scene 13-30 (Live Demo Proof, approx 25-55s): Visual must describe terminal running code or the website UI in action.
-- Scene 31-40 (Loop & CTA, approx 55-65s): Visual must point down to the channel name, loop back to the hook.
-
-SCRIPT:
-{optimized_script}
-
-Return ONLY a JSON object matching the required schema:
-{schema_requirements}"""
-        
-        humanizer_prompt = github_humanizer_template.format(
-            persona=SYSTEM_PERSONA,
-            optimized_script=optimized.get("optimized_script", ""),
-            schema_requirements=refined_requirements
-        )
-    else:
-        humanizer_prompt = HUMANIZER_AGENT_TEMPLATE.format(
-            persona=SYSTEM_PERSONA,
-            optimized_script=optimized.get("optimized_script", ""),
-            schema_requirements=refined_requirements
-        )
+    humanizer_prompt = HUMANIZER_AGENT_TEMPLATE.format(
+        persona=SYSTEM_PERSONA,
+        optimized_script=optimized.get("optimized_script", ""),
+        schema_requirements=refined_requirements
+    )
     
     final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
     
