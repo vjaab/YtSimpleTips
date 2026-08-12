@@ -998,8 +998,7 @@ Return ONLY a JSON object matching the required schema:
         persona=SYSTEM_PERSONA,
         narrative_json=json.dumps(narrative),
         word_count_limit_str=word_count_limit_str,
-        best_hook=best_hook.get("text"),
-        is_continuation=is_continuation
+        best_hook=best_hook.get("text")
     )
     optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True)
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
