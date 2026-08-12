@@ -1268,7 +1268,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         
         # Create silent audio clip for MoviePy
         from moviepy.audio.AudioClip import AudioClip
-        import numpy as np
         def make_silence(t):
             return np.zeros((2,), dtype=np.float32)
         audio = AudioClip(make_silence, duration=audio_duration, fps=44100)
