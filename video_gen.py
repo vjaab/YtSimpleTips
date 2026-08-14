@@ -250,51 +250,101 @@ def set_resolutions(is_longform=False):
         FRAME_W, FRAME_H = 1080, 1920
 
 def _prepare_evidence_canvas(img, url=None):
-    """Draws an obsidian border and floating URL pill around screenshot evidence."""
+    """Draws an obsidian border and floating URL pill around screenshot evidence in 9:16 vertical mode."""
     canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
     
-    # Scale image to fit inside 90% of screen width
-    target_w = int(FRAME_W * 0.90)
-    ratio = target_w / float(img.width)
-    target_h = int(img.height * ratio)
+    # Target: fill 9:16 frame (1080x1920) maintaining screenshot aspect ratio
+    # Scale to fill height (1920) or width (1080) whichever fills the frame
+    target_aspect = FRAME_W / FRAME_H  # 9/16 = 0.5625
+    img_aspect = img.width / img.height
     
-    # If height is too tall, scale down
-    max_h = int(FRAME_H * 0.70)
-    if target_h > max_h:
-        ratio = max_h / float(img.height)
-        target_w = int(img.width * ratio)
-        target_h = max_h
-        
+    if img_aspect > target_aspect:
+        # Image is wider than 9:16 - scale to fill width, crop top/bottom
+        target_w = FRAME_W
+        target_h = int(FRAME_W / img_aspect)
+    else:
+        # Image is taller than 9:16 (vertical) - scale to fill height, crop sides
+        target_h = FRAME_H
+        target_w = int(FRAME_H * img_aspect)
+    
     scaled_img = img.resize((target_w, target_h), Image.LANCZOS)
     
-    cx = (FRAME_W - target_w) // 2
-    cy = (FRAME_H - target_h) // 2
+    # Center crop to exact 9:16 frame
+    cx = (target_w - FRAME_W) // 2
+    cy = (target_h - FRAME_H) // 2
+    cropped_img = scaled_img.crop((cx, cy, cx + FRAME_W, cy + FRAME_H))
+    
+    # Paste full-frame screenshot
+    canvas.paste(cropped_img, (0, 0))
     
     draw = ImageDraw.Draw(canvas)
     
-    # Shadow
-    draw.rounded_rectangle([cx+8, cy+16, cx+target_w+8, cy+target_h+16], radius=24, fill=(0,0,0,140))
-    # Border with sleek neon accent
-    draw.rounded_rectangle([cx-4, cy-4, cx+target_w+4, cy+target_h+4], radius=24, fill=(204,255,0,255))
-    # Inner Image
-    canvas.paste(scaled_img, (cx, cy))
+    # Semi-transparent dark overlay for text readability
+    draw.rectangle([0, 0, FRAME_W, FRAME_H], fill=(0, 0, 0, 100))
     
-    # Floating URL banner
+    # Neon accent border frame
+    border_margin = 20
+    draw.rounded_rectangle(
+        [border_margin, border_margin, FRAME_W - border_margin, FRAME_H - border_margin],
+        radius=30, outline=(204, 255, 0, 255), width=6
+    )
+    
+    # Floating URL banner at bottom
     if url:
         url_text = url.replace("https://", "").replace("http://", "").split("/")[0]
-        font = get_font_for_text(url_text, 28, "bold")
+        font = get_font_for_text(url_text, 36, "bold")
         tw, th = font.getbbox(url_text)[2] - font.getbbox(url_text)[0], font.getbbox(url_text)[3] - font.getbbox(url_text)[1]
         
-        banner_w = tw + 60
-        banner_h = th + 24
+        banner_w = tw + 80
+        banner_h = th + 32
         bx = (FRAME_W - banner_w) // 2
-        by = cy - banner_h - 20
+        by = FRAME_H - banner_h - 80
         
-        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=15, fill=(15,15,20,240))
-        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=15, outline=(204,255,0,255), width=2)
-        draw.text((bx + 30, by + 12), url_text, fill=(204,255,0,255), font=font)
+        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=20, fill=(15, 15, 20, 230))
+        draw.rounded_rectangle([bx, by, bx+banner_w, by+banner_h], radius=20, outline=(204, 255, 0, 255), width=3)
+        draw.text((bx + 40, by + 16), url_text, fill=(204, 255, 0, 255), font=font)
         
     return canvas
+
+
+def prepare_evidence_clip_with_visibility(screenshot_path, duration, visibility_ratio=0.6, url=None):
+    """
+    Creates an evidence screenshot clip visible for visibility_ratio of duration (default 60%).
+    Fades in over first 20%, holds for visibility_ratio, fades out over last 20%.
+    """
+    if not screenshot_path or not os.path.exists(screenshot_path):
+        img = Image.new("RGBA", (FRAME_W, FRAME_H), (15, 15, 20, 255))
+        return ImageClip(np.array(img)).with_duration(duration)
+    
+    img = Image.open(screenshot_path).convert("RGBA")
+    canvas = _prepare_evidence_canvas(img, url)
+    clip = ImageClip(np.array(canvas)).with_duration(duration)
+    
+    # Apply visibility window: fade in (0-10%), hold (10%-70%), fade out (70%-80%)
+    # Actually: visible for 60% = fade in 5%, hold 50%, fade out 5% (centered)
+    # Or simpler: visible middle 60% with 20% fade in/out on each side
+    fade_in_dur = duration * 0.2
+    visible_dur = duration * visibility_ratio
+    fade_out_dur = duration * 0.2
+    hold_start = fade_in_dur
+    hold_end = fade_in_dur + visible_dur
+    
+    def make_frame_with_visibility(t):
+        frame = clip.get_frame(t)
+        alpha = 1.0
+        
+        if t < fade_in_dur:
+            alpha = t / fade_in_dur
+        elif t > hold_end:
+            alpha = max(0.0, 1.0 - (t - hold_end) / fade_out_dur)
+        
+        if alpha < 1.0:
+            # Blend with black background
+            frame = (frame * alpha).astype(np.uint8)
+        
+        return frame
+    
+    return VideoClip(make_frame_with_visibility, duration=duration)
 
 def prepare_top_panel_screenshot_clip(screenshot_path, duration):
     """Loads screenshot, pads/crops to 1080x864, and returns an ImageClip."""
@@ -1476,11 +1526,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # 2. Add normal background images / video b-roll
         if vpath and os.path.exists(vpath):
             if ENABLE_EVIDENCE_SCREENSHOTS and vpath.endswith(".png") and "screenshot" in vpath.lower():
-                # Full-screen fallback whiteboard bg
-                top_bg = ColorClip(size=(FRAME_W, FRAME_H), color=(248, 246, 240), duration=safe_dur).with_start(c_start).with_position((0, 0))
-                background_clips.append(top_bg)
-                # Render screenshot on the top panel (y=192 to 1056)
-                ss_clip = prepare_top_panel_screenshot_clip(vpath, safe_dur).with_start(c_start).with_position((0, 192))
+                # Full-screen 9:16 vertical evidence screenshot with 60% visibility window
+                evidence_url = script_json.get("original_news_url") or script_json.get("use_case_evidence_url") or script_json.get("source_url")
+                ss_clip = prepare_evidence_clip_with_visibility(vpath, safe_dur, visibility_ratio=0.6, url=evidence_url).with_start(c_start).with_position((0, 0))
                 background_clips.append(ss_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
                 # Ken burns zoom with randomized direction for visual variety (sized to full screen)
