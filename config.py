@@ -372,5 +372,5 @@ ENABLE_DYNAMIC_BGM_CURVE = True
 TRENDING_NICHE_BIAS = 0.15
 
 # YouTube Partner Program (YPP) compliance settings
-DEFAULT_PRIVACY_STATUS = "public"
+DEFAULT_PRIVACY_STATUS = "private"
 ENABLE_TTS_FALLBACK = False
