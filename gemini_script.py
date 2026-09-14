@@ -1392,12 +1392,13 @@ def set_providers_exhausted():
 def call_fallback_model(prompt):
     """
     Attempts to call non-Gemini fallback APIs in sequence:
-    Cloudflare Workers AI -> Cerebras -> Groq -> OpenAI -> Anthropic (Claude) -> DeepSeek -> OpenRouter.
+    OpenRouter (free router) -> Groq -> Cloudflare Workers AI -> OpenAI -> Anthropic (Claude) -> DeepSeek -> Cerebras.
     Returns the parsed JSON response dict or None.
     """
     import os
     import json
     import requests
+    import time
 
     def clean_and_parse_json(content):
         raw = content.strip()
@@ -1407,7 +1408,83 @@ def call_fallback_model(prompt):
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         return json.loads(raw.strip())
 
-    # 0. Cloudflare Workers AI (fast, free tier available)
+    # 0. OpenRouter Free Router (auto-selects from currently available free models)
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
+    if openrouter_key:
+        headers = {
+            "Authorization": f"Bearer {openrouter_key}",
+            "Content-Type": "application/json"
+        }
+        openrouter_models = [
+            "openrouter/free",
+            "nvidia/nemotron-3-ultra:free",
+            "nex-agi/nex-n2-pro:free",
+            "dots-studio/dots3-note-preview:free",
+            "qwen/qwen-2.5-72b-instruct",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "moonshotai/kimi-k2.6",
+            "google/gemini-2.5-flash",
+            "deepseek/deepseek-chat:free",
+            "nvidia/llama-3.1-nemotron-70b-instruct:free"
+        ]
+        for or_model in openrouter_models:
+            print(f"🔮 Falling back to OpenRouter ({or_model})...")
+            try:
+                payload = {
+                    "model": or_model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.7,
+                    "max_tokens": 4096
+                }
+                r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    return clean_and_parse_json(content)
+                elif r.status_code == 429:
+                    print(f"⚠️ OpenRouter ({or_model}) rate limited (429). Retrying after delay...")
+                    time.sleep(5)
+                    continue
+                else:
+                    print(f"⚠️ OpenRouter API ({or_model}) failed with code {r.status_code}: {r.text}")
+            except Exception as e:
+                print(f"⚠️ OpenRouter ({or_model}) fallback failed: {e}")
+
+    # 1. Groq (current developer-plan models with 429 retry logic)
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        headers = {
+            "Authorization": f"Bearer {groq_key}",
+            "Content-Type": "application/json"
+        }
+        groq_models = [
+            "openai/gpt-oss-20b",
+            "qwen/qwen3.6-27b",
+            "openai/gpt-oss-120b"
+        ]
+        for model_name in groq_models:
+            print(f"🔮 Falling back to Groq ({model_name})...")
+            try:
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.7
+                }
+                r = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    return clean_and_parse_json(content)
+                elif r.status_code == 429:
+                    print(f"⚠️ Groq ({model_name}) rate limited (429). Retrying after delay...")
+                    time.sleep(10)
+                    continue
+                else:
+                    print(f"⚠️ Groq ({model_name}) failed with code {r.status_code}: {r.text}")
+            except Exception as e:
+                print(f"⚠️ Groq ({model_name}) fallback failed: {e}")
+
+    # 2. Cloudflare Workers AI (with daily quota check)
     cloudflare_token = os.getenv("CLOUDFLARE_API_TOKEN")
     cloudflare_account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
     if cloudflare_token and cloudflare_account_id:
@@ -1430,7 +1507,7 @@ def call_fallback_model(prompt):
                     "messages": [{"role": "user", "content": prompt}],
                     "response_format": {"type": "json_object"},
                     "temperature": 0.7,
-                    "max_tokens": 4096  # Prevent truncation for JSON output
+                    "max_tokens": 4096
                 }
                 r = requests.post(
                     f"https://api.cloudflare.com/client/v4/accounts/{cloudflare_account_id}/ai/run/{model_name}",
@@ -1440,14 +1517,10 @@ def call_fallback_model(prompt):
                 )
                 if r.status_code == 200:
                     result = r.json()["result"]
-                    # Handle different response formats
                     if model_name in gpt_oss_models:
-                        # Chat Completions format: choices[0].message.content
                         raw_content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
                     else:
-                        # Legacy format: response
                         raw_content = result.get("response", "")
-                    # Some models return the response as a dict (already parsed JSON)
                     if isinstance(raw_content, dict):
                         return raw_content
                     content = raw_content.strip() if isinstance(raw_content, str) else ""
@@ -1456,7 +1529,12 @@ def call_fallback_model(prompt):
                     else:
                         print(f"⚠️ Cloudflare ({model_name}) returned empty content")
                 else:
+                    err_text = r.text.lower()
                     print(f"⚠️ Cloudflare ({model_name}) failed with code {r.status_code}: {r.text}")
+                    # Check for daily quota exhaustion
+                    if "daily free allocation" in err_text or "neurons" in err_text:
+                        print("🚫 Cloudflare daily quota exhausted. Skipping all remaining CF models.")
+                        break
                     # Cache permanent failures: 400 (bad model), 403 (no access), 404 (not found)
                     if r.status_code in (400, 403, 404):
                         _FAILED_CLOUDFLARE_MODELS.add(model_name)
@@ -1464,65 +1542,7 @@ def call_fallback_model(prompt):
             except Exception as e:
                 print(f"⚠️ Cloudflare ({model_name}) fallback failed: {e}")
 
-    # 1. Cerebras (Llama 3.3 70B)
-    cerebras_key = os.getenv("CEREBRAS_API_KEY")
-    if cerebras_key:
-        headers = {
-            "Authorization": f"Bearer {cerebras_key}",
-            "Content-Type": "application/json"
-        }
-        cerebras_models = ["zai-glm-4.7", "gpt-oss-120b"]
-        for model_name in cerebras_models:
-            print(f"🔮 Falling back to Cerebras ({model_name})...")
-            try:
-                payload = {
-                    "model": model_name,
-                    "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
-                    "temperature": 0.7
-                }
-                r = requests.post("https://api.cerebras.ai/v1/chat/completions", json=payload, headers=headers, timeout=30)
-                if r.status_code == 200:
-                    content = r.json()["choices"][0]["message"]["content"].strip()
-                    return clean_and_parse_json(content)
-                else:
-                    print(f"⚠️ Cerebras API ({model_name}) failed with code {r.status_code}: {r.text}")
-            except Exception as e:
-                print(f"⚠️ Cerebras ({model_name}) fallback failed: {e}")
-
-    # 2. Groq (with model preference order - only verified working models)
-    groq_key = os.getenv("GROQ_API_KEY")
-    if groq_key:
-        headers = {
-            "Authorization": f"Bearer {groq_key}",
-            "Content-Type": "application/json"
-        }
-        groq_models = [
-            "llama-3.3-70b-versatile",
-            "qwen/qwen3-32b",
-            "openai/gpt-oss-120b",
-            "gemma2-9b-it",
-            "llama-3.1-8b-instant"
-        ]
-        for model_name in groq_models:
-            print(f"🔮 Falling back to Groq ({model_name})...")
-            try:
-                payload = {
-                    "model": model_name,
-                    "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
-                    "temperature": 0.7
-                }
-                r = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=30)
-                if r.status_code == 200:
-                    content = r.json()["choices"][0]["message"]["content"].strip()
-                    return clean_and_parse_json(content)
-                else:
-                    print(f"⚠️ Groq ({model_name}) failed with code {r.status_code}: {r.text}")
-            except Exception as e:
-                print(f"⚠️ Groq ({model_name}) fallback failed: {e}")
-
-    # 2. OpenAI
+    # 3. OpenAI
     openai_key = os.getenv("OPENAI_API_KEY")
     if openai_key:
         print("🔮 Falling back to OpenAI (gpt-4o-mini)...")
@@ -1546,7 +1566,7 @@ def call_fallback_model(prompt):
         except Exception as e:
             print(f"⚠️ OpenAI fallback failed: {e}")
 
-    # 3. Anthropic (Claude)
+    # 4. Anthropic (Claude)
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     if anthropic_key:
         print("🔮 Falling back to Anthropic (claude-3-5-haiku-20241022)...")
@@ -1570,7 +1590,7 @@ def call_fallback_model(prompt):
         except Exception as e:
             print(f"⚠️ Anthropic fallback failed: {e}")
 
-    # 4. DeepSeek
+    # 5. DeepSeek
     deepseek_key = os.getenv("DEEPSEEK_API_KEY")
     if deepseek_key:
         print("🔮 Falling back to DeepSeek (deepseek-chat)...")
@@ -1594,40 +1614,31 @@ def call_fallback_model(prompt):
         except Exception as e:
             print(f"⚠️ DeepSeek fallback failed: {e}")
 
-    # 5. OpenRouter
-    openrouter_key = os.getenv("OPENROUTER_API_KEY")
-    if openrouter_key:
+    # 6. Cerebras (lower priority, documented production models)
+    cerebras_key = os.getenv("CEREBRAS_API_KEY")
+    if cerebras_key:
         headers = {
-            "Authorization": f"Bearer {openrouter_key}",
+            "Authorization": f"Bearer {cerebras_key}",
             "Content-Type": "application/json"
         }
-        openrouter_models = [
-            "qwen/qwen-2.5-72b-instruct",
-            "meta-llama/llama-3.3-70b-instruct:free",
-            "moonshotai/kimi-k2.6",
-            "nvidia/nemotron-3-ultra:free",
-            "google/gemini-2.5-flash",
-            "deepseek/deepseek-chat:free",
-            "nvidia/llama-3.1-nemotron-70b-instruct:free"
-        ]
-        for or_model in openrouter_models:
-            print(f"🔮 Falling back to OpenRouter ({or_model})...")
+        cerebras_models = ["llama3.1-8b", "gpt-oss-120b"]
+        for model_name in cerebras_models:
+            print(f"🔮 Falling back to Cerebras ({model_name})...")
             try:
                 payload = {
-                    "model": or_model,
+                    "model": model_name,
                     "messages": [{"role": "user", "content": prompt}],
                     "response_format": {"type": "json_object"},
-                    "temperature": 0.7,
-                    "max_tokens": 4096
+                    "temperature": 0.7
                 }
-                r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                r = requests.post("https://api.cerebras.ai/v1/chat/completions", json=payload, headers=headers, timeout=30)
                 if r.status_code == 200:
                     content = r.json()["choices"][0]["message"]["content"].strip()
                     return clean_and_parse_json(content)
                 else:
-                    print(f"⚠️ OpenRouter API ({or_model}) failed with code {r.status_code}: {r.text}")
+                    print(f"⚠️ Cerebras API ({model_name}) failed with code {r.status_code}: {r.text}")
             except Exception as e:
-                print(f"⚠️ OpenRouter ({or_model}) fallback failed: {e}")
+                print(f"⚠️ Cerebras ({model_name}) fallback failed: {e}")
 
     # All fallbacks exhausted
     print("🚨 All fallback models exhausted. Setting offline mode.")
