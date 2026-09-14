@@ -263,9 +263,7 @@ jobs:
           echo "📹 Found video: $VIDEO_FILE"
           
           # Generate metadata from script and set as env vars
-          python3 << 'PYEOF' | while IFS= read -r line; do
-            echo "$line" >> $GITHUB_ENV
-          done
+          cat > /tmp/set_metadata.py << 'ENDOFSCRIPT'
 import json, os, glob, re
 scripts = json.load(open('visual_shorts_scripts.json'))
 video_files = glob.glob('output/visual_short_*.mp4')
@@ -280,12 +278,15 @@ if video_files:
             print(f'TITLE={script["title"]}')
             print(f'DESC=Visual Tamil Short: {script["topic"]}')
             print(f'TAGS={" ".join(["#Shorts", "#Tamil", "#VisualShorts", "#SimpleTipsByVJ"])}')
-PYEOF
+ENDOFSCRIPT
+          python3 /tmp/set_metadata.py | while IFS= read -r line; do
+            echo "$line" >> $GITHUB_ENV
+          done
           
       - name: Upload to YouTube
         if: env.TITLE != ''
         run: |
-          python3 << 'PYEOF'
+          cat > /tmp/upload_video.py << 'ENDOFSCRIPT'
 from youtube_upload import upload_video
 import os, glob
 video_file = max(glob.glob('output/visual_short_*.mp4'), key=os.path.getmtime)
@@ -303,7 +304,8 @@ if uploaded:
 else:
     print(f'Upload failed: {result}')
     exit(1)
-PYEOF
+ENDOFSCRIPT
+          python3 /tmp/upload_video.py
           
       - name: Notify Telegram
         if: env.YOUTUBE_URL != ''
