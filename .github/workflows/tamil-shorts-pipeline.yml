@@ -262,7 +262,7 @@ jobs:
           fi
           echo "📹 Found video: $VIDEO_FILE"
           
-# Generate metadata from script
+          # Generate metadata from script
           python << 'PYEOF' >> $GITHUB_ENV
 import json, os, glob, re
 scripts = json.load(open('visual_shorts_scripts.json'))
