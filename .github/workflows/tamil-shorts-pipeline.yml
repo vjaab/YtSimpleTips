@@ -251,7 +251,7 @@ jobs:
         run: |
           python -m scripts.run_visual_shorts
           
-- name: Upload Visual Short to YouTube
+      - name: Upload Visual Short to YouTube
         if: always()
         run: |
           # Find the generated visual short video
