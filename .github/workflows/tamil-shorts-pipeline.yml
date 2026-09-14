@@ -251,7 +251,7 @@ jobs:
         run: |
           python -m scripts.run_visual_shorts
           
-      - name: Upload Visual Short to YouTube
+- name: Upload Visual Short to YouTube
         if: always()
         run: |
           # Find the generated visual short video
@@ -263,7 +263,7 @@ jobs:
           echo "📹 Found video: $VIDEO_FILE"
           
           # Generate metadata from script and set as env vars
-          python3 -c "
+          cat > /tmp/set_metadata.py << 'PYEOF'
 import json, os, glob, re
 scripts = json.load(open('visual_shorts_scripts.json'))
 video_files = glob.glob('output/visual_short_*.mp4')
@@ -275,17 +275,18 @@ if video_files:
         script_id = match.group(1)
         script = next((s for s in scripts if s['id'] == script_id), None)
         if script:
-            print(f'TITLE={script[\"title\"]}')
-            print(f'DESC=Visual Tamil Short: {script[\"topic\"]}')
-            print(f'TAGS={\" \".join([\"#Shorts\", \"#Tamil\", \"#VisualShorts\", \"#SimpleTipsByVJ\"])}')
-" | while IFS= read -r line; do
+            print(f'TITLE={script["title"]}')
+            print(f'DESC=Visual Tamil Short: {script["topic"]}')
+            print(f'TAGS={" ".join(["#Shorts", "#Tamil", "#VisualShorts", "#SimpleTipsByVJ"])}')
+PYEOF
+          python3 /tmp/set_metadata.py | while IFS= read -r line; do
             echo "$line" >> $GITHUB_ENV
           done
           
       - name: Upload to YouTube
         if: env.TITLE != ''
         run: |
-          python3 -c "
+          cat > /tmp/upload_video.py << 'PYEOF'
 from youtube_upload import upload_video
 import os, glob
 video_file = max(glob.glob('output/visual_short_*.mp4'), key=os.path.getmtime)
@@ -303,7 +304,8 @@ if uploaded:
 else:
     print(f'Upload failed: {result}')
     exit(1)
-"
+PYEOF
+          python3 /tmp/upload_video.py
           
       - name: Notify Telegram
         if: env.YOUTUBE_URL != ''
