@@ -12,7 +12,7 @@ on:
 
 jobs:
   run-pipeline:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 360 # 6 hours max (increased to handle API rate limits)
     permissions:
@@ -189,6 +189,131 @@ jobs:
           else
             echo "✅ No changes to logs detected."
           fi
+
+  run-visual-shorts:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          df -h
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+          
+      - name: Verify FFmpeg Installation
+        run: ffmpeg -version
+          
+      - name: Install Project Python Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install "numpy<2.0"
+          pip install -r requirements.txt
+          pip install --upgrade imageio imageio-ffmpeg moviepy
+          
+      - name: Setup Environment Secrets (.env)
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_2 }}" ]; then
+            echo "GEMINI_API_KEY_2=${{ secrets.GEMINI_API_KEY_2 }}" >> .env
+          fi
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+          
+      - name: Setup YouTube Auth Files
+        run: |
+          echo '${{ secrets.CLIENT_SECRET_JSON }}' > client_secret.json
+          echo '${{ secrets.TOKEN_JSON }}' > token.json
+          
+      - name: Run Visual-Only Shorts Pipeline
+        run: |
+          python -m scripts.run_visual_shorts
+          
+      - name: Upload Visual Short to YouTube
+        if: always()
+        run: |
+          # Find the generated visual short video
+          VIDEO_FILE=$(find output -name "visual_short_*.mp4" -type f | head -1)
+          if [ -z "$VIDEO_FILE" ]; then
+            echo "❌ No visual short video found"
+            exit 1
+          fi
+          echo "📹 Found video: $VIDEO_FILE"
+          
+          # Generate metadata from script
+          python -c "
+import json, os, glob, re
+# Find the latest visual short script used
+scripts = json.load(open('visual_shorts_scripts.json'))
+video_files = glob.glob('output/visual_short_*.mp4')
+if video_files:
+    latest = max(video_files, key=os.path.getmtime)
+    basename = os.path.basename(latest)
+    # Extract script_id from visual_short_{script_id}_{timestamp}.mp4
+    match = re.match(r'visual_short_(.+)_\d{8}_\d{6}\.mp4', basename)
+    if match:
+        script_id = match.group(1)
+        script = next((s for s in scripts if s['id'] == script_id), None)
+        if script:
+            print(f'TITLE={script[\"title\"]}')
+            print(f'DESC=Visual Tamil Short: {script[\"topic\"]}')
+            print(f'TAGS={\" \".join([\"#Shorts\", \"#Tamil\", \"#VisualShorts\", \"#SimpleTipsByVJ\"])}')
+" >> $GITHUB_ENV
+          
+      - name: Upload to YouTube
+        if: env.TITLE != ''
+        run: |
+          python -c "
+from youtube_upload import upload_video
+import os, glob
+video_file = max(glob.glob('output/visual_short_*.mp4'), key=os.path.getmtime)
+uploaded, result = upload_video(
+    video_file, 
+    os.environ['TITLE'], 
+    os.environ['DESC'], 
+    os.environ['TAGS'].split(),
+    is_longform=False
+)
+if uploaded:
+    print(f'YOUTUBE_URL=https://youtu.be/{result}')
+    with open(os.environ['GITHUB_ENV'], 'a') as f:
+        f.write(f'YOUTUBE_URL=https://youtu.be/{result}\n')
+else:
+    print(f'Upload failed: {result}')
+    exit(1)
+"
+        env:
+          GITHUB_ENV: ${{ github.env }}
+          
+      - name: Notify Telegram
+        if: env.YOUTUBE_URL != ''
+        run: |
+          curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="✅ Visual Short uploaded: ${{ env.YOUTUBE_URL }}" \
+            -d parse_mode="HTML"
 
   run-analytics:
     if: github.event_name == 'schedule' && github.event.schedule == '30 0 * * 0'
