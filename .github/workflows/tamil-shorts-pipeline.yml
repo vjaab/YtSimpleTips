@@ -263,47 +263,16 @@ jobs:
           echo "📹 Found video: $VIDEO_FILE"
           
           # Generate metadata from script and set as env vars
-          python3 -c "
-import json, os, glob, re
-scripts = json.load(open('visual_shorts_scripts.json'))
-video_files = glob.glob('output/visual_short_*.mp4')
-if video_files:
-    latest = max(video_files, key=os.path.getmtime)
-    basename = os.path.basename(latest)
-    match = re.match(r'visual_short_(.+)_\d{8}_\d{6}\.mp4', basename)
-    if match:
-        script_id = match.group(1)
-        script = next((s for s in scripts if s['id'] == script_id), None)
-        if script:
-            print('TITLE=' + script['title'])
-            print('DESC=Visual Tamil Short: ' + script['topic'])
-            print('TAGS=#Shorts #Tamil #VisualShorts #SimpleTipsByVJ')
-" | while IFS= read -r line; do
+          printf 'import json, os, glob, re\nscripts = json.load(open("visual_shorts_scripts.json"))\nvideo_files = glob.glob("output/visual_short_*.mp4")\nif video_files:\n    latest = max(video_files, key=os.path.getmtime)\n    basename = os.path.basename(latest)\n    match = re.match(r"visual_short_(.+)_\d{8}_\d{6}\.mp4", basename)\n    if match:\n        script_id = match.group(1)\n        script = next((s for s in scripts if s["id"] == script_id), None)\n        if script:\n            print("TITLE=" + script["title"])\n            print("DESC=Visual Tamil Short: " + script["topic"])\n            print("TAGS=#Shorts #Tamil #VisualShorts #SimpleTipsByVJ")\n' > /tmp/set_metadata.py
+          python3 /tmp/set_metadata.py | while IFS= read -r line; do
             echo "$line" >> $GITHUB_ENV
           done
           
       - name: Upload to YouTube
         if: env.TITLE != ''
         run: |
-          python3 -c "
-from youtube_upload import upload_video
-import os, glob
-video_file = max(glob.glob('output/visual_short_*.mp4'), key=os.path.getmtime)
-uploaded, result = upload_video(
-    video_file, 
-    os.environ['TITLE'], 
-    os.environ['DESC'], 
-    os.environ['TAGS'].split(),
-    is_longform=False
-)
-if uploaded:
-    print('YOUTUBE_URL=https://youtu.be/' + result)
-    with open(os.environ['GITHUB_ENV'], 'a') as f:
-        f.write('YOUTUBE_URL=https://youtu.be/' + result + '\n')
-else:
-    print('Upload failed: ' + result)
-    exit(1)
-"
+          printf 'from youtube_upload import upload_video\nimport os, glob\nvideo_file = max(glob.glob("output/visual_short_*.mp4"), key=os.path.getmtime)\nuploaded, result = upload_video(\n    video_file, \n    os.environ["TITLE"], \n    os.environ["DESC"], \n    os.environ["TAGS"].split(),\n    is_longform=False\n)\nif uploaded:\n    print("YOUTUBE_URL=https://youtu.be/" + result)\n    with open(os.environ["GITHUB_ENV"], "a") as f:\n        f.write("YOUTUBE_URL=https://youtu.be/" + result + "\n")\nelse:\n    print("Upload failed: " + result)\n    exit(1)\n' > /tmp/upload_video.py
+          python3 /tmp/upload_video.py
           
       - name: Notify Telegram
         if: env.YOUTUBE_URL != ''
