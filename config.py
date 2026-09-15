@@ -338,7 +338,7 @@ TARGET_AUDIO_DURATION = (60, 80)
 # Global Feature Flags
 ENABLE_LONGFORM = False
 ENABLE_TRENDING_ENGINE = True    # Phase 1: YouTube/Reddit/GitHub trending aggregation
-ENABLE_AVATAR = os.getenv("ENABLE_AVATAR", "false").lower() == "true"  # Disable talking-head avatar overlay in generated shorts
+ENABLE_AVATAR = False  # Disable talking-head avatar overlay in generated shorts (visual-only mode for MSFACTSTAMIL style)
 
 # Engagement & Retention Pillars (Production Spec 2026)
 ENABLE_KINETIC_CAPTIONS = True
@@ -361,7 +361,7 @@ ENABLE_WATERMARK = True               # Channel watermark overlay on video
 ENABLE_AI_DISCLOSURE_LABEL = True     # AI Human-in-the-loop production label (YPP compliance)
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
 ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video (DISABLED - caused clutter)
-ENABLE_STOCK_FOOTAGE = False          # Control whether to include stock footage (Pexels)
+ENABLE_STOCK_FOOTAGE = True          # Control whether to include stock footage (Pexels)
 ENABLE_AI_DISCLOSURE_LABEL = True     # YouTube AI-generated content disclosure label
 
 # Retention Engine Settings
