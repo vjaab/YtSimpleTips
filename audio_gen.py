@@ -820,7 +820,7 @@ def speed_up_audio(audio_path, factor):
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
     Generates Tamil/Tanglish voiceover using ElevenLabs (cloned voice) as primary.
-    Falls back to Edge TTS if ElevenLabs fails.
+    FAILS if ElevenLabs voice cloning is not working - no fallback.
     """
     global VOICE_FALLBACK_USED
     if custom_phonetic_map:
@@ -832,23 +832,15 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
-    # Primary: ElevenLabs with cloned voice
-    if ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID:
-        path = _generate_elevenlabs(clean_text, wav_path)
-        if not path:
-            print("⚠️ ElevenLabs (cloned voice) failed. Falling back to Edge TTS...")
-            path = _generate_edge_tts(clean_text, wav_path)
-            if not path:
-                raise RuntimeError("[audio_gen] Both ElevenLabs and Edge TTS voice generation failed!")
-            VOICE_FALLBACK_USED = True
-        else:
-            VOICE_FALLBACK_USED = False
-    else:
-        print("⚠️ ElevenLabs credentials not configured. Using Edge TTS...")
-        path = _generate_edge_tts(clean_text, wav_path)
-        if not path:
-            raise RuntimeError("[audio_gen] Edge TTS voice generation failed!")
-        VOICE_FALLBACK_USED = True
+    # Primary: ElevenLabs with cloned voice - REQUIRED, no fallback
+    if not ELEVENLABS_API_KEY or not ELEVENLABS_VOICE_ID:
+        raise RuntimeError("[audio_gen] ElevenLabs credentials not configured. Set ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in environment.")
+    
+    path = _generate_elevenlabs(clean_text, wav_path)
+    if not path:
+        raise RuntimeError("[audio_gen] ElevenLabs (cloned voice) synthesis failed. Pipeline requires working ElevenLabs voice cloning - no fallback allowed.")
+    
+    VOICE_FALLBACK_USED = False
         
     # Speed up audio to match the energetic pacing of reference short
     if VOICE_SPEED != 1.0:
