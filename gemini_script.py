@@ -95,8 +95,8 @@ OUTPUT FORMAT (JSON only):
   "hashtags": [
     "#Shorts",
     "#TamilFacts",
-    "Tag 3 (Core Fact Category): Must be exactly 1 tag representing the primary fact subject (e.g. #ScienceFacts, #HealthFacts, #MoneyTips, #PhoneHacks, #NatureFacts, #HistoryFacts, #FoodFacts, #LifeHacks) using CamelCase, no punctuation.",
-    "Tag 4 (Value Context): Must be exactly 1 tag representing the primary value (e.g. #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts, #SaveMoney, #StayHealthy, #UsefulTips) using CamelCase, no punctuation."
+    "Tag 3 (Core Fact Category): Must be exactly 1 tag from HIGH-PERFORMING list: #ScienceFacts #HealthTips #MoneySaving #PhoneHacks #LifeHacks #DidYouKnow #MindBlowing #TamilTech #UsefulFacts #DailyTips #TamilEducation #ViralFacts #KnowledgeShorts #SmartLiving #TamilViral",
+    "Tag 4 (Value Context): Must be exactly 1 tag from HIGH-PERFORMING list: #LearnDaily #SaveMoney #StayHealthy #BoostProductivity #TechTips #FactShorts #TamilShorts #ViralShorts #TrendingNow #MustWatch #ShareKaro #SubscribeNow"
   ],
   "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity, readable by all ages)",
   "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
@@ -106,9 +106,24 @@ HASHTAG GENERATION RULES:
 You must output exactly 4 relevant hashtags inside the "hashtags" array:
 1. Tag 1: Must be exactly "#Shorts"
 2. Tag 2: Must be exactly "#TamilFacts"
-3. Tag 3 (Core Fact Category): Extract the primary fact subject from the script text (e.g., #ScienceFacts, #HealthFacts, #MoneyTips, #PhoneHacks, #NatureFacts, #HistoryFacts, #FoodFacts, #LifeHacks).
-4. Tag 4 (Value Context): Extract the primary value (e.g., #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts, #SaveMoney, #StayHealthy, #UsefulTips).
-No other tags are allowed. All tags must use CamelCase with no internal punctuation.
+3. Tag 3 (Core Fact Category): Choose the BEST match from high-performing tags:
+   - Science/Body/Nature facts → #ScienceFacts or #MindBlowing or #ViralFacts
+   - Health/Body/Medical → #HealthTips or #StayHealthy
+   - Money/Savings/Finance/Govt schemes → #MoneySaving or #SaveMoney
+   - Phone/Tech/Settings/Apps → #PhoneHacks or #TamilTech or #TechTips
+   - Life hacks/Daily tips/Useful tricks → #LifeHacks or #DailyTips or #UsefulFacts
+   - Education/Knowledge/Learning → #TamilEducation or #KnowledgeShorts or #LearnDaily
+   - Smart living/Productivity → #SmartLiving or #BoostProductivity
+4. Tag 4 (Value Context): Choose the BEST match from high-performing tags:
+   - Learning/Educational → #LearnDaily or #FactShorts
+   - Money saving → #SaveMoney
+   - Health benefit → #StayHealthy
+   - Productivity/Tech → #BoostProductivity or #TechTips
+   - Viral potential → #ViralShorts or #TrendingNow
+   - Must watch/Shareable → #MustWatch or #ShareKaro
+   - Channel growth → #SubscribeNow or #TamilShorts
+No other tags allowed. All tags must use CamelCase with no internal punctuation.
+Pick tags that MAXIMIZE REACH and DISCOVERABILITY for Tamil audience 16-80.
 
 TITLE FORMULAS THAT WORK FOR ALL AGES:
 - "Oru vishayam theriyuma? [Amazing fact hook]!"
