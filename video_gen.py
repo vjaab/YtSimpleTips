@@ -1564,9 +1564,7 @@ def create_video(audio_path, script_json, chunks, output_path=None):
             background_clips.append(c_clip)
 
     # ── BOTTOM PANEL & TITLE BANNER ──
-    # Top Banner: Title Hook (at top of shorts, y=0)
-    middle_clip = create_middle_title_banner_clip(title_text, audio_duration, accent_color=accent_color, style_mode=banner_style_mode).with_start(0).with_position((0, 0))
-    background_clips.append(middle_clip)
+    # Title banner removed per user request
 
     # ── AVATAR VIDEO PIP OVERLAY (Side-positioned, integrated) ──
     skip_avatar = script_json.get("skip_avatar", False)
