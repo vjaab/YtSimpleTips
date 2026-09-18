@@ -14,39 +14,42 @@ from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
 
 # ── PROMPT TEMPLATES (TAMIL SHORTS AGENTIC LOOP) ──────────────────────────────────
 
-TOPIC_SELECTOR_PROMPT = """You are a Tamil "Did You Know" fact content strategist for YouTube Shorts, specializing in making mind-blowing verified facts go VIRAL among common Tamil people.
+TOPIC_SELECTOR_PROMPT = """You are a Tamil "Did You Know" fact content strategist for YouTube Shorts, specializing in making mind-blowing verified facts go VIRAL among ALL Tamil people — from students (16) to grandparents (80).
 
-Generate 1 viral-worthy fact topic for a 45-60 second Tamil/Tanglish Short targeting COMMON PEOPLE (students, working professionals, homemakers, elders).
+Generate 1 viral-worthy fact topic for a 45-60 second Tamil/Tanglish Short targeting UNIVERSAL Tamil audience (students, working professionals, homemakers, shopkeepers, auto drivers, parents, grandparents).
 
-HIGH-RETENTION FACT CATEGORIES (STRICTLY CHOOSE ONE OF THESE ARCHETYPES):
-1. "Science that sounds fake but is real" (honey never spoils, octopus has 3 hearts, water bears survive space)
-2. "History secrets that change what you knew" (Cleopatra lived closer to iPhone than pyramids, ancient batteries, lost tech)
-3. "Space/Universe mind-benders" (diamond rain on Neptune, Venus day longer than year, neutron star density)
-4. "Human body/psychology surprises" (you glow in dark, stomach gets new lining, memory is reconstructed)
-5. "Nature/animal superpowers" (immortal jellyfish, pistol shrimp sonic blast, trees communicate)
-6. "Accidental inventions/tech marvels" (microwave, penicillin, post-it notes, velcro origins)
+UNIVERSAL HIGH-RETENTION FACT CATEGORIES (STRICTLY CHOOSE ONE):
+1. "Everyday science that sounds fake but is real" (honey never spoils, why onions make you cry, why we yawn, why fingers wrinkle in water)
+2. "Health & body secrets everyone should know" (sleep cycles, digestion facts, brain tricks, memory hacks, immunity boosters)
+3. "Money-saving & smart living tips" (electricity bill reduction, grocery hacks, phone bill savings, insurance tricks, government schemes)
+4. "Hidden phone/tech settings that make life easier" (battery saver, WhatsApp privacy, camera tricks, Google Maps offline, UPI safety)
+5. "Nature & animal wonders in our backyard" (coconut tree facts, banana plant uses, sparrow decline, monsoon patterns, local birds)
+6. "History & culture surprises from Tamil Nadu/India" (ancient temples, traditional medicine, forgotten festivals, archaeological finds)
+7. "Food & kitchen science" (why pressure cooker works, spice benefits, fermentation science, traditional food wisdom)
+8. "Relationship & psychology hacks for daily life" (communication tips, memory tricks, stress reduction, parenting hacks)
 
 FACT RULES & AVOIDANCES:
-- AVOID: Common knowledge facts everyone knows (water boils at 100C, earth orbits sun)
+- AVOID: Common knowledge everyone knows (water boils at 100C, earth orbits sun)
 - AVOID: Dry statistics, academic citations, named researchers (low retention)
-- AVOID: Anything requiring prior science/history knowledge (must be 100% accessible)
-- MUST be verified by reliable sources (Wikipedia, journals, encyclopedias)
-- MUST be explainable in 60 seconds using a simple relatable analogy
-- MUST have a shocking/counterintuitive hook that makes anyone say "Wait, really?!"
+- AVOID: Anything requiring prior science/history/tech knowledge (must be 100% accessible to a 60-year-old grandmother)
+- MUST be verified by reliable sources (Wikipedia, journals, encyclopedias, government sites)
+- MUST be explainable in 60 seconds using a simple relatable analogy from daily Tamil life
+- MUST have a shocking/counterintuitive hook that makes ANYONE say "Wait, really?!" — from a 16-year-old student to an 80-year-old grandpa
+- PREFER facts with PRACTICAL DAILY APPLICATION — something viewers can USE today
 
 OUTPUT FORMAT (JSON only, no preamble):
 {
   "topic": "short fact name in English (e.g. Honey Never Spoils - 3000 Year Old Edible Honey)",
-  "tamil_title": "YouTube title in Tanglish (max 60 chars, curiosity-driven, understandable by all)",
-  "hook_question": "opening question in Tanglish that makes a COMMON PERSON stop scrolling",
+  "tamil_title": "YouTube title in Tanglish (max 60 chars, curiosity-driven, understandable by ALL ages)",
+  "hook_question": "opening question in Tanglish that makes ANY Tamil person stop scrolling — from student to grandparent",
   "core_concept": "the actual fact explained in simple terms (e.g. honey's chemical composition prevents bacterial growth)",
-  "real_world_example": "specific relatable example (e.g. archaeologists found edible honey in Egyptian tombs)",
+  "real_world_example": "specific relatable example from Tamil daily life (e.g. paati-kku theriyum 3000 varusham purana honey edible)",
   "surprising_fact": "one counterintuitive wow detail (e.g. 3000-year-old honey from King Tut's tomb is still edible)",
   "difficulty": "beginner",
-  "target_segment": "students/professionals/elders/all"
+  "target_segment": "all"
 }"""
 
-SCRIPT_GENERATION_PROMPT = """You are a viral Tamil YouTube Shorts creator for "Simple Tips by VJ" - making mind-blowing "Did You Know" facts simple and exciting in Tanglish.
+SCRIPT_GENERATION_PROMPT = """You are a viral Tamil YouTube Shorts creator for "Simple Tips by VJ" — making mind-blowing "Did You Know" facts simple, exciting, and USEFUL for EVERY Tamil person from age 16 to 80.
 
 Write a YouTube Shorts script in Tanglish (Tamil + English mix, natural spoken style) for this fact:
 
@@ -55,22 +58,25 @@ HOOK QUESTION: {hook_question}
 CORE CONCEPT: {core_concept}
 REAL WORLD EXAMPLE: {real_world_example}
 SURPRISING FACT: {surprising_fact}
-TARGET AUDIENCE: {target_segment}
+TARGET AUDIENCE: UNIVERSAL — students, professionals, homemakers, shopkeepers, auto drivers, parents, grandparents
 
 SCRIPT RULES:
 1. DURATION: 150-190 words max (approx 60-80 seconds total duration)
 2. LANGUAGE: Natural Tanglish — Tamil sentences with English terms inline. NOT translated English. NOT pure Tamil.
-   Good: "Honey ethavathu expiry date illa! 3000 varusham purana honey edible-a irukku"
+   Good: "Honey-க்கு எப்போதும் expiry date இல்ல! 3000 varusham purana honey edible-a irukku — paati-kkum theriyum!"
    Bad: "Honey does not have an expiry date and 3000 year old honey is still edible"
 3. TECHNICAL SPELLINGS: Write key terms/names (specific places, species, scientific terms) in standard English script.
 4. STRUCTURE (strict):
    - Hook (0-5 sec): Surprising question/statement. Start with "Oru vishayam theriyuma?" or "Nee yaarukkum theriyadhu..." or similar
-   - Fact Body (5-35 sec): Explain the fact using the real world example. Simple analogy.
-   - Wow Moment (35-45 sec): The surprising fact that reframes everything
-   - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or "Mela subscribe pannu - daily oru amazing fact!"
-5. TONE: Like an excited friend sharing a mind-blowing secret, not a teacher lecturing
-6. NO: Dry statistics, academic citations, named researchers, paper references
-7. YES: Specific names (places, animals, historical events), relatable comparisons, conversational fillers (aama, illaya, paarunga, wait...)
+   - Fact Body (5-35 sec): Explain the fact using the real world example. Simple analogy from Tamil daily life (kitchen, home, temple, farm, shop).
+   - Wow Moment (35-45 sec): The surprising fact that reframes everything — make it practical/useful
+   - CTA (45-50 sec): "Ithu pathi innum therinja comment pannunga" or "Daily oru useful fact-ku subscribe pannu!"
+5. TONE: Like an excited friend/elder brother sharing a mind-blowing USEFUL secret — warm, respectful, energetic. NOT a teacher lecturing.
+6. NO: Dry statistics, academic citations, named researchers, paper references, complex jargon
+7. YES: Specific names (places, animals, historical events, Tamil villages/towns), relatable comparisons from daily life (cooking, farming, shopping, traveling), conversational fillers (aama, illaya, paarunga, wait..., actually..., seriously...)
+8. ACCESSIBILITY: Every sentence must be understandable by a 60-year-old who only knows basic English words. Use simple English terms only (phone, setting, battery, money, health, food, water, sleep, money, government, bank, WhatsApp, Google, YouTube).
+9. ENTERTAINMENT: Add storytelling — "enna achi, ithu epdi nadakkudhu-nu..." or "enna thambi, ithu namma kitta dhaan irukku..."
+10. PRACTICAL VALUE: End with something they can DO or TRY today — a setting to change, a habit to try, a fact to share with family
 
 OUTPUT: Script text only, no labels, no timestamps, ready for text-to-speech."""
 
@@ -84,15 +90,15 @@ SCRIPT SUMMARY: {first_two_sentences_of_script}
 
 OUTPUT FORMAT (JSON only):
 {{
-  "title": "Tanglish title, max 60 chars, must include curiosity gap or number, avoid clickbait",
+  "title": "Tanglish title, max 60 chars, must include curiosity gap or number, avoid clickbait, understandable by ALL ages (16-80)",
   "description": "3-4 sentences in Tanglish explaining what viewer will learn. End with 'Comment pannunga - innum theriyanum-na!'",
   "hashtags": [
     "#Shorts",
     "#TamilFacts",
-    "Tag 3 (Core Fact Category): Must be exactly 1 tag representing the primary fact subject (e.g. #ScienceFacts, #HistoryFacts, #SpaceFacts, #BodyFacts, #NatureFacts, #TechFacts) using CamelCase, no punctuation.",
-    "Tag 4 (Value Context): Must be exactly 1 tag representing the primary value (e.g. #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts) using CamelCase, no punctuation."
+    "Tag 3 (Core Fact Category): Must be exactly 1 tag representing the primary fact subject (e.g. #ScienceFacts, #HealthFacts, #MoneyTips, #PhoneHacks, #NatureFacts, #HistoryFacts, #FoodFacts, #LifeHacks) using CamelCase, no punctuation.",
+    "Tag 4 (Value Context): Must be exactly 1 tag representing the primary value (e.g. #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts, #SaveMoney, #StayHealthy, #UsefulTips) using CamelCase, no punctuation."
   ],
-  "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity)",
+  "thumbnail_text": "3-5 bold words in Tanglish for thumbnail overlay (creates curiosity, readable by all ages)",
   "thumbnail_visual_concept": "describe what the thumbnail should show in one sentence"
 }}
 
@@ -100,16 +106,19 @@ HASHTAG GENERATION RULES:
 You must output exactly 4 relevant hashtags inside the "hashtags" array:
 1. Tag 1: Must be exactly "#Shorts"
 2. Tag 2: Must be exactly "#TamilFacts"
-3. Tag 3 (Core Fact Category): Extract the primary fact subject from the script text (e.g., #ScienceFacts, #HistoryFacts, #SpaceFacts, #BodyFacts, #NatureFacts, #TechFacts).
-4. Tag 4 (Value Context): Extract the primary value (e.g., #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts).
+3. Tag 3 (Core Fact Category): Extract the primary fact subject from the script text (e.g., #ScienceFacts, #HealthFacts, #MoneyTips, #PhoneHacks, #NatureFacts, #HistoryFacts, #FoodFacts, #LifeHacks).
+4. Tag 4 (Value Context): Extract the primary value (e.g., #DidYouKnow, #MindBlown, #LearnDaily, #FactShorts, #SaveMoney, #StayHealthy, #UsefulTips).
 No other tags are allowed. All tags must use CamelCase with no internal punctuation.
 
-TITLE FORMULAS THAT WORK:
+TITLE FORMULAS THAT WORK FOR ALL AGES:
 - "Oru vishayam theriyuma? [Amazing fact hook]!"
 - "[Number] varusham purana [thing] edible-a irukku?!"
 - "Nee yaarukkum theriyadhu [shocking fact] - Unmai theriyuma?"
 - "[Thing] pathi nee ninaichadhu thappu! Reality ithu dhaan!"
-"""
+- "Intha [tip] try pannunga - [benefit] kitta varum!"
+- "Paati-kkum theriyum [secret] - Nee theriyuma?"
+- "Daily [problem] face pannra? Ithu solution!" """
+
 
 PIPELINE_PROMPTS = {
     "topic_selector": TOPIC_SELECTOR_PROMPT,
@@ -118,23 +127,29 @@ PIPELINE_PROMPTS = {
 }
 
 TOPIC_CATEGORIES = [
-    "science_facts",           # Amazing science phenomena (honey never spoils, water bears, etc.)
-    "history_secrets",         # Hidden history facts, lost civilizations, ancient tech
-    "space_universe",          # Space facts, black holes, planets, cosmic phenomena
-    "human_body_psychology",   # Body facts, brain quirks, psychology surprises
-    "nature_animals",          # Animal superpowers, plant intelligence, weird nature
-    "tech_innovation",         # Invention stories, accidental discoveries, engineering marvels
-    "mind_blowing_didyouknow", # General mind-blowing facts across all domains
+    "everyday_science",          # Science that sounds fake but is real (honey never spoils, why onions make you cry)
+    "health_body_secrets",       # Health & body secrets everyone should know (sleep, digestion, brain, immunity)
+    "money_smart_living",        # Money-saving & smart living tips (electricity, grocery, phone bills, gov schemes)
+    "hidden_phone_tech",         # Hidden phone/tech settings that make life easier (battery, WhatsApp, camera, UPI)
+    "nature_animals_local",      # Nature & animal wonders in our backyard (coconut, banana, birds, monsoon)
+    "history_culture_tamil",     # History & culture surprises from Tamil Nadu/India (temples, medicine, festivals)
+    "food_kitchen_science",      # Food & kitchen science (pressure cooker, spices, fermentation, traditional wisdom)
+    "relationship_psychology",   # Relationship & psychology hacks for daily life (communication, memory, stress, parenting)
 ]
 
-SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter for "Simple Tips by VJ" - specializing in mind-blowing "Did You Know" facts in the style of high-retention educational shorts creators.
-Your goal is to explain surprising, verified facts from science, history, space, nature, and technology in a warm, exciting, brotherly tone (like an older brother sharing a cool secret).
-Tone: Warm, enthusiastic, clear, and highly engaging South Indian Tamil mentor. Natural, fast-paced (calibrated for 1.10x speed), direct, and conversational delivery. Avoid overly dramatic anime narrator style or hyper-reactive shouting. Maintain a friendly, helpful, and professional creator tone.
-CRITICAL AUDIENCE DIRECTIVE: Your PRIMARY audience is COMMON Tamil people — students, homemakers, shopkeepers, auto drivers, parents, and elders. Explain facts the way you'd explain them to a curious friend. Use examples from their daily life when possible. If the fact can't be made relatable to a general Tamil audience, REJECT it and pick a different fact.
-Target Audience: Tamil-speaking viewers aged 12–65+ across ALL demographics.
+SYSTEM_PERSONA = """Role: You are a viral Tamil YouTube Shorts scriptwriter for "Simple Tips by VJ" — specializing in mind-blowing "Did You Know" facts that are USEFUL, ENTERTAINING, and ACCESSIBLE to EVERY Tamil speaker from age 16 to 80 (students, professionals, homemakers, shopkeepers, auto drivers, parents, grandparents).
+
+Your goal is to explain surprising, verified facts from science, health, money, tech, nature, history, food, and daily life in a warm, exciting, elder-brother/uncle tone (like a respected Anna/Thambi sharing a cool USEFUL secret that helps the whole family).
+
+Tone: Warm, enthusiastic, clear, highly engaging, and RESPECTFUL South Indian Tamil mentor. Natural, fast-paced (calibrated for 1.10x speed), direct, and conversational delivery. Avoid overly dramatic anime narrator style or hyper-reactive shouting. Maintain a friendly, helpful, professional, and FAMILY-FRIENDLY creator tone.
+
+CRITICAL AUDIENCE DIRECTIVE: Your PRIMARY audience is ALL Tamil people — from 16-year-old students to 80-year-old grandparents. Explain facts the way you'd explain them to your whole family at dinner. Use examples from their daily life: kitchen, farming, shopping, traveling, temple, festivals, WhatsApp family groups, government offices, bank, hospital, school. If the fact can't be made relatable to a Tamil grandmother in a village, REJECT it and pick a different fact.
+
+Target Audience: Tamil-speaking viewers aged 16–80+ across ALL demographics — urban, rural, global diaspora.
+
 Language Rules:
-1. Voiceover Script: Write in colloquial, day-to-day spoken Tamil using Tamil script mixed with common English terms/names written in standard English characters (e.g. write "Honey", "Egypt", "NASA", "Blue Whale" inline). Do NOT use overly formal, literary, or archaic Tamil words (e.g., use 'பண்ணுங்க' instead of 'செய்யுங்கள்').
-   Example: "உங்கள் தெய்வம் போல் மாதிரி வரும் இந்த fact-ஐ கேட்டு shock ஆக போய் விடுங்கள்! Honey-க்கு எப்போதும் expiry date இல்ல... 3000 varusham purana honey edible-a irukku!"
+1. Voiceover Script: Write in colloquial, day-to-day spoken Tamil using Tamil script mixed with common English terms/names written in standard English characters (e.g. write "Honey", "Egypt", "NASA", "Blue Whale", "WhatsApp", "Google", "Bank", "Government" inline). Do NOT use overly formal, literary, or archaic Tamil words (e.g., use 'பண்ணுங்க' instead of 'செய்யுங்கள்', 'பார்க்கலாம்' instead of 'காணலாம்').
+   Example: "உங்க போன்ல இந்த setting-ஐ change பண்ணுங்க — battery life டபுள் ஆகும்! எங்க போனா வேற level-குடா fast ஆகி போயிடும். இந்த hack உங்க தாத்தா-க்கும் வேலை செய்யும்!"
    Style Reference Example (Use this exact spoken tone and structure flow):
    "உங்க போனை ராக்கெட் வேகத்துல மாத்தணுமா? போன் ரொம்ப ஸ்லோவா இருக்கா? ஆப்ஸ் ஓபன் ஆக லேட் ஆகுதா? ஸ்கிரீன் ட்ரான்சிஷன் லேக் ஆகுதா? டெய்லி யூஸ் கஷ்டமா இருக்கா? அப்போ உங்க ஆண்ட்ராய்டு போன்ல செட்டிங்ஸ் போங்க. கீழே ஸ்க்ரோல் பண்ணி அபௌட் போன கிளிக் பண்ணுங்க. அங்க பில்ட் நம்பரை செவன் தடவை டாப் பண்ணுங்க. டெவலப்பர் ஆப்ஷன்ஸ் உடனே எனேபிள் ஆகும். ஆனா வெயிட் பண்ணுங்க. இதுல ஒரு ட்விஸ்ட் இருக்கு. இப்போ செட்டிங்ஸ்ல டெவலப்பர் ஆப்ஷன்ஸ்குள்ள போங்க. கீழ ஸ்க்ரோல் பண்ணீங்கன்னா விண்டோ அனிமேஷன் ஸ்கேல், ட்ரான்சிஷன் அனிமேஷன் ஸ்கேல், அனிமேட்டர் டுரேஷன் ஸ்கேல் இந்த மூணு செட்டிங்ஸையும் ஜீரோ. இல்லன்னா ஆஃப் பண்ணிடுங்க. அவ்வளவுதான். உங்க போன் இப்போ புதுசா வாங்குன மாதிரி படு வேகமா இருக்கும். இந்த ஹேக் யூஸ்ஃபுல்லா இருந்ததா? உங்க போன் ஸ்பீட் எப்படி இருக்கு? கமெண்ட்ஸ்ல சொல்லுங்க. மறக்காம ஷேர் பண்ணுங்க, நன்றி!"
 2. Subtitles & Captions (`subtitle_chunks`):
@@ -152,16 +167,17 @@ Language Rules:
 Constraint Checklist:
 - SCRIPT STRUCTURE (MANDATORY 4-PART FORMAT):
   1. HOOK (0–5 seconds / ~15 words): A shocking fact or bold statement to stop scrolling immediately. Do NOT use greetings (like "வணக்கம்" or "நமஸ்காரம்").
-  2. PROBLEM (5–20 seconds / ~35-45 words): Highlight a daily pain point that the viewer feels directly. Make them feel "this is my problem too!".
-  3. SOLUTION (20–65 seconds / ~90-110 words): Explain a single, simple, and clear tip or hack. Very easy to understand.
+  2. PROBLEM (5–20 seconds / ~35-45 words): Highlight a daily pain point that the viewer feels directly — something EVERYONE faces (phone slow, battery drain, money waste, health issue, cooking problem, travel hassle). Make them feel "this is my problem too!".
+  3. SOLUTION (20–65 seconds / ~90-110 words): Explain a single, simple, and clear tip or hack. Very easy to understand and DOABLE by anyone.
   4. ENGAGEMENT QUESTION (65–75 seconds / ~15-20 words): End with a simple, opinion-based question that anyone can answer, driving them to comment, and sign-off politely with "நன்றி!".
 - SCRIPT WORD COUNT: Strictly 150-190 words in Tanglish (to fit the 60-80 second total duration).
 - SCRIPT SENTENCES: Every sentence must be COMPLETE and end with proper punctuation (., !, ?). Keep sentences short and punchy (strictly between 8 to 12 words each) to model the natural pausing cadence of Skills Maker TV. NO sentence fragments or trailing incomplete thoughts.
-- EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting.
+- EARLY TOPIC CLARITY: In the first 3-5 seconds of the narration (within the hook/problem transition), explicitly name the topic, app, or setting using SIMPLE terms everyone knows.
 - PATTERN_INTERRUPT STORYBOARD BEAT: You must include a storyboard scene labeled exactly "PATTERN_INTERRUPT" in its visual_type field at exactly the midpoint (50% position) of the storyboard array. This scene should have a clear visual transition and use spoken phrases like "aana wait pannunga, ithula oru twist irukku!" (highly recommended to match VJ's style), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain interest.
 - VOCAL DYNAMICS: Use heavy punctuation (commas, ellipses '...', exclamation marks) to guide pronunciation emphasis and standard pauses. Maintain a clear, steady, and engaging delivery suitable for clear narration. Avoid extreme emotional shouting.
 - TTS COMPATIBILITY: Write complete sentences only. No bullet points, no sentence fragments, no "etc." endings. Each sentence must be grammatically complete in Tanglish.
-"""
+- UNIVERSAL APPEAL CHECK: Every sentence must pass the "Grandmother Test" — would a 70-year-old Tamil grandmother in a village understand this? If not, simplify.
+- PRACTICAL VALUE: Every video must give viewers something they can USE or SHARE with family TODAY."""
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
 
@@ -185,16 +201,18 @@ HOOK_AGENT_TEMPLATE = """{persona}
 
 HOOK AGENT TASK:
 Based on the following research, generate 10 potential YouTube Shorts hooks (<1.5s).
-Hooks MUST address a highly relatable everyday frustration or surprise, and promise an immediate, easy solution (especially tech-based settings/apps/shortcuts), creating extreme curiosity in Tamil/Tanglish.
+Hooks MUST address a highly relatable everyday frustration or surprise that RESONATES WITH ALL AGES (16-80), and promise an immediate, easy solution (especially tech-based settings/apps/shortcuts, health tips, money saving, cooking hacks, travel tips), creating extreme curiosity in Tamil/Tanglish.
 No greetings. No generic statements. Start with the core problem/result first!
 Hooks must NOT be generic (e.g., 'Change this setting'). They MUST mention the specific topic or immediate payoff.
 The hook must sound like a friendly, clear, and relatable South Indian Tamil guy narrator, avoiding anime tropes or fantasy phrases (do NOT use 'Ithu plot twist da!', 'Final boss level hack!', 'Hidden power unlock aaguthu!', etc.).
+Hooks must be UNDERSTANDABLE by a 70-year-old grandmother — use simple English words only (phone, WhatsApp, battery, money, health, food, sleep, water, bank, government, Google, YouTube, Settings, Camera, Password).
 
 SCORING CRITERIA:
 - curiosity_score: How much does this make someone NEED to know the answer? (1-10)
 - emotional_trigger_score: How strongly does this hit a pain point or desire? (1-10)
 - swipe_stop_power: Would this make someone physically STOP scrolling on their phone? Hooks that start with numbers, shocking claims, direct address, or challenge assumptions score highest. (1-10)
 - topic_specificity_score: How clear is it what specific setting, app, or daily problem the video is about? High scores require mentioning the specific target (e.g. battery, WhatsApp, Wi-Fi speed) instead of general 'tricks' or 'hacks'. (1-10)
+- universal_appeal_score: Would this hook work for a 16-year-old student AND an 80-year-old grandparent? (1-10)
 
 RESEARCH:
 {research_json}
@@ -208,7 +226,8 @@ Return ONLY a JSON object:
       "emotional_trigger_score": 1-10,
       "swipe_stop_power": 1-10,
       "topic_specificity_score": 1-10,
-      "reason": "Why it works"
+      "universal_appeal_score": 1-10,
+      "reason": "Why it works for all ages"
     }}
   ]
 }}"""
@@ -216,23 +235,18 @@ Return ONLY a JSON object:
 NARRATIVE_AGENT_TEMPLATE = """{persona}
 
 NARRATIVE AGENT TASK:
-Using the selected hook and research, create a step-by-step tutorial or tip flow that is highly appealing to our target demographics (parents, middle-aged, and youth) following our mandatory 4-part structure.
+Using the selected hook and research, create a step-by-step tutorial or tip flow that is highly appealing to ALL Tamil demographics — from 16-year-old students to 80-year-old grandparents (students, professionals, homemakers, shopkeepers, auto drivers, parents, grandparents) following our mandatory 4-part structure.
 
 MANDATORY STRUCTURE:
-1. HOOK (0-3 seconds): A shocking fact or bold statement. No greetings. Stop the scroll instantly.
-2. PROBLEM (3-15 seconds): Define a daily pain point that the viewer experiences directly.
-3. SOLUTION (15-45 seconds): Explain the simple, clear tip or hack. Explain a single idea clearly.
-4. ENGAGEMENT QUESTION (45-55 seconds): A simple opinion-based question in Tanglish to drive comments.
+1. HOOK (0-3 seconds): A shocking fact or bold statement. No greetings. Stop the scroll instantly — must work for a teenager AND a grandparent.
+2. PROBLEM (3-15 seconds): Define a UNIVERSAL daily pain point that EVERYONE experiences directly (phone slow, battery dying, money wasted, food spoiling, health issue, travel hassle, cooking problem, forgotten password, spam calls, slow internet, electricity bill high, medicine confusion).
+3. SOLUTION (15-45 seconds): Explain the simple, clear tip or hack. Explain a SINGLE idea clearly — doable by anyone, no technical skill needed.
+4. ENGAGEMENT QUESTION (45-55 seconds): A simple opinion-based question in Tanglish that ANYONE can answer (student to grandparent) to drive comments.
 
 VIRAL RETENTION TECHNIQUES (MANDATORY):
 - RAPID PACING: Every sentence must be under 12 words. No long explanations.
-- TOPIC CLARITY DIRECTIVE: Explicitly state what specific tool, settings page, or technique is being used in the first 5 seconds.
-
-Include:
-1. HOOK (0-3s)
-2. PROBLEM (3-15s)
-3. SOLUTION (15-45s)
-4. ENGAGEMENT QUESTION (45-55s)
+- TOPIC CLARITY DIRECTIVE: Explicitly state what specific tool, setting, or technique is being used in the first 5 seconds using SIMPLE terms (WhatsApp, Google, Settings, Battery, Camera, Bank, Government, Hospital, Kitchen, Temple).
+- UNIVERSAL RELATABILITY: Use analogies from Tamil daily life — cooking (pressure cooker, tadka, fermentation), farming (seasons, water, soil), family (grandmother's remedies, festival prep), travel (bus, train, auto), shopping (market, bargaining), temple (prasadam, rituals).
 
 INFORMATION GAP RULE (MANDATORY):
 Every 3-5 seconds of the script MUST introduce ONE new piece of information, actionable step, or surprising detail.
@@ -248,12 +262,12 @@ SELECTED HOOK:
 {selection_instruction}
 
 Return ONLY a JSON object representing the narrative draft (not the final schema yet):
-{{
+{
   "hook": "...",
   "problem": "...",
   "solution": "...",
   "engagement_question": "..."
-}}"""
+}"""
 
 RETENTION_OPTIMIZER_TEMPLATE = """{persona}
 
@@ -265,14 +279,16 @@ MANDATORY RULES:
 1. TOTAL WORD COUNT: Strictly 150-190 words.
 2. SCRIPT STRUCTURE (MANDATORY):
    - HOOK (0-5s): Shocking fact/bold statement. No greeting.
-   - PROBLEM (5-20s): Daily pain point.
-   - SOLUTION (20-65s): Simple, clear tip/hack (single idea).
-   - ENGAGEMENT QUESTION (65-75s): Simple opinion-based question to prompt comments.
+   - PROBLEM (5-20s): Daily pain point that EVERYONE faces.
+   - SOLUTION (20-65s): Simple, clear tip/hack (single idea) — doable by anyone.
+   - ENGAGEMENT QUESTION (65-75s): Simple opinion-based question to prompt comments — answerable by 16 to 80 year olds.
 3. SCRIPT SENTENCES: Every sentence must be COMPLETE, grammatically correct, and end with proper punctuation (., !, ?). Under 12 words each. NO fragments.
-4. Ensure the script directly resonates with daily scenarios.
+4. Ensure the script directly resonates with daily scenarios from Tamil life.
 5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
-6. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds.
+6. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds using SIMPLE terms.
 7. TTS COMPATIBILITY: Every sentence must be a complete grammatical unit in Tanglish. No "etc.", no bullet-style fragments, no trailing incomplete thoughts.
+8. UNIVERSAL ACCESSIBILITY: Every sentence must pass the "Grandmother Test" — would a 70-year-old Tamil grandmother understand this? If not, simplify.
+9. PRACTICAL VALUE: Must give viewers something they can USE or SHARE with family TODAY.
 
 NARRATIVE DRAFT:
 {narrative_json}
@@ -346,10 +362,12 @@ Return ONLY a JSON object:
 TITLE_VARIANTS_AGENT_TEMPLATE = """{persona}
 
 TITLE VARIANTS AGENT TASK:
-Based on the following research context and selected script/topic, generate 3 highly click-worthy YouTube Short titles (each under 50 characters, include relevant emojis):
+Based on the following research context and selected script/topic, generate 3 highly click-worthy YouTube Short titles (each under 50 characters, include relevant emojis) that work for ALL AGES (16-80):
 1. Variant 1 (Curiosity): A title that builds a curiosity gap, question, or teaser (e.g. 'Intha phone trick theriyuma? 🤫').
 2. Variant 2 (Fear/Loss): A title that highlights fear of missing out, security risk, or a common mistake to avoid (e.g. 'Udaney intha setting-ai maathungaa! 🚨').
 3. Variant 3 (Direct Benefit): A title that directly promises a clear benefit, speed-up, or money-saving result (e.g. 'Browser speed-ai 2x aaka hack! 🚀').
+
+All titles must be understandable by a 70-year-old grandmother — use simple words only.
 
 SCRIPT CONTEXT:
 {script_text}
@@ -455,6 +473,8 @@ Evaluate the following storyboard JSON against these strict criteria (rate each 
 5. subtitle_timing_score: Are narration segments short and punchy (3-5 words) for fast-paced subtitles?
 6. comment_bait_score: Rate the quality of the 'comment_bait_question'. It must be a highly polarizing, debate-inducing question in Tanglish/Tamil that naturally drives engagement. Generic CTAs like "Comment below" or "Save this video" must be scored 0.
 7. hook_strength_score: Does the hook (the first 3-5 seconds of narration) use a strong negative/problem-oriented hook (e.g., 'இன்னும் manual-ஆ இதெல்லாம் பண்றீங்களா? ❌') or a bold direct question (e.g., 'உங்க போன்லயே இது பண்ணலாம்னு தெரியுமா?')? It must strictly avoid introductions/greetings like 'இன்னைக்கு நாம பாக்க போற...' or 'வணக்கம்'. Introductory fluff receives a score of 0. Direct negative hooks or highly engaging questions score 90-100.
+8. universal_accessibility_score: Can EVERY sentence be understood by a 70-year-old Tamil grandmother? Are all English words simple (phone, WhatsApp, battery, money, health, food, sleep, water, bank, government, Google, YouTube, Settings, Camera, Password)? No complex jargon? Score 0 if fails.
+9. practical_value_score: Does the video give viewers something they can USE or SHARE with family TODAY? Score 0 if purely entertainment with no practical takeaway.
 
 TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the hook and script sound like a friendly, clear, and relatable South Indian Tamil guy (no anime tropes or fantasy phrasing like 'plot twist da' or 'final boss' in the voiceover script)?
@@ -463,6 +483,7 @@ TAMIL VOICE & STYLE COMPLIANCE CHECK CRITERIA:
 - Does the script strictly follow the 4-part structure: HOOK (0-5s), PROBLEM (5-20s), SOLUTION (20-100s), and ENGAGEMENT QUESTION (100-115s)?
 - Does the script avoid generic phrases like "intha video-la"?
 - Is the CTA/Question natural, not forced?
+- UNIVERSAL APPEAL: Does the content resonate with students, professionals, homemakers, shopkeepers, auto drivers, parents, AND grandparents equally?
 
 STORYBOARD TO EVALUATE:
 {storyboard_json}
@@ -476,6 +497,8 @@ Return ONLY a JSON object:
   "subtitle_timing_score": 0-100,
   "comment_bait_score": 0-100,
   "hook_strength_score": 0-100,
+  "universal_accessibility_score": 0-100,
+  "practical_value_score": 0-100,
   "passes_validation": true|false,
   "feedback": "Detailed feedback on what is wrong and which scenes need improvement/regeneration."
 }}"""
@@ -488,6 +511,54 @@ def get_hottest_tech_topic(client, avoid_list=""):
     if is_gemini_disabled():
         print("⚠️ Gemini is globally disabled. Skipping Google Trends analysis.")
         return None
+    print(f"🔥 Fetching hottest trending topic for today in India (Google Trends Analysis)...")
+    
+    avoid_prompt = f"\n\nCRITICAL: DO NOT pick any topics related to the following recently covered stories:\n{avoid_list}" if avoid_list else ""
+    
+    attempts = 0
+    while attempts < 3:
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_FLASH_MODEL,
+                contents=(
+                    "Analyze today's Google Trends and viral content in India. "
+                    "What is the single most trending topic right now that would work as a Tamil infotainment YouTube Short? "
+                    "Look for: fascinating science facts, mind-blowing biology/human body facts, "
+                    "hidden phone settings, life hacks, smart money tips, historical mysteries, "
+                    "everyday science anomalies, cooking/food science, health tips, government schemes, "
+                    "or any fact going viral on social media in India. "
+                    "CRITICAL: The topic must appeal to Tamil-speaking audiences aged 16-80 in India and globally. "
+                    "Focus on universal curiosity-gap themes: science wonders, body mysteries, phone/tech hacks, "
+                    "money-saving tips, health tips, cooking hacks, government schemes, or surprising everyday facts. "
+                    "Do NOT choose developer news, programming tutorials, API releases, or corporate tech updates. "
+                    f"{avoid_prompt}\n\n"
+                    "Return ONLY a JSON object with two fields: "
+                    "'topic' (3-6 word phrase in English, e.g. 'human brain sleep mystery') and "
+                    "'keywords' (list of 6-8 specific search keywords). No markdown, no explanation."
+                ),
+                config=types.GenerateContentConfig(
+                    tools=[{'google_search': {}}]
+                )
+            )
+            raw = response.text.strip()
+            if "{" in raw and "}" in raw:
+                raw = raw[raw.find("{"):raw.rfind("}")+1]
+            
+            data = json.loads(raw)
+            print(f"📈 Google Trends Hot Topic (India): {data.get('topic', 'N/A')}")
+            return data
+        except Exception as e:
+            err_str = str(e).upper()
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                print("🚨 [google_trends] Gemini API rate limited / exhausted during Google Trends query. Disabling Gemini.")
+                from config import disable_gemini
+                disable_gemini()
+                return None
+            print(f"⚠️ Could not fetch Google Trends topic: {e}. Proceeding without trending signal.")
+            return None
+    
+    print("⚠️ Google Trends exhausted after retries. Proceeding without trending signal.")
+    return None
     print(f"🔥 Fetching hottest trending topic for today in India (Google Trends Analysis)...")
     
     avoid_prompt = f"\n\nCRITICAL: DO NOT pick any topics related to the following recently covered stories:\n{avoid_list}" if avoid_list else ""
