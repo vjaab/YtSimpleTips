@@ -819,8 +819,8 @@ def speed_up_audio(audio_path, factor):
 
 def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     """
-    Generates Tamil/Tanglish voiceover using Edge TTS (free, no voice cloning needed).
-    Falls back to ElevenLabs with standard multilingual voice if Edge TTS fails.
+    Generates Tamil/Tanglish voiceover using ElevenLabs (cloned voice) as primary.
+    Falls back to Edge TTS if ElevenLabs fails.
     """
     global VOICE_FALLBACK_USED
     if custom_phonetic_map:
@@ -832,17 +832,23 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     today = datetime.now().strftime("%Y%m%d_%H%M%S")
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
-    # Primary: Edge TTS (free, Tamil support, no cloning needed)
-    path = _generate_edge_tts(clean_text, wav_path)
-    if not path:
-        print("⚠️ Edge TTS failed. Falling back to ElevenLabs (standard voice)...")
-        # Fallback: ElevenLabs with standard multilingual voice (not cloned)
-        path = _generate_elevenlabs_standard(clean_text, wav_path)
+    # Primary: ElevenLabs with cloned voice
+    if ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID:
+        path = _generate_elevenlabs(clean_text, wav_path)
         if not path:
-            raise RuntimeError("[audio_gen] Both Edge TTS and ElevenLabs voice generation failed!")
-        VOICE_FALLBACK_USED = True
+            print("⚠️ ElevenLabs (cloned voice) failed. Falling back to Edge TTS...")
+            path = _generate_edge_tts(clean_text, wav_path)
+            if not path:
+                raise RuntimeError("[audio_gen] Both ElevenLabs and Edge TTS voice generation failed!")
+            VOICE_FALLBACK_USED = True
+        else:
+            VOICE_FALLBACK_USED = False
     else:
-        VOICE_FALLBACK_USED = False
+        print("⚠️ ElevenLabs credentials not configured. Using Edge TTS...")
+        path = _generate_edge_tts(clean_text, wav_path)
+        if not path:
+            raise RuntimeError("[audio_gen] Edge TTS voice generation failed!")
+        VOICE_FALLBACK_USED = True
         
     # Speed up audio to match the energetic pacing of reference short
     if VOICE_SPEED != 1.0:
