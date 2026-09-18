@@ -2059,24 +2059,8 @@ def create_video(audio_path, script_json, chunks, output_path=None):
         # ── ENTITY OVERLAYS ──
         _render_entity_overlays(p_draw, pil_frame, script_json, t, accent_color)
 
-        # ── SINGLE PREMIUM DYNAMIC CAPTION LAYER (Centered in middle third) ──
-        active_chunk = None
-        for chunk in chunks:
-            if chunk["start"] <= t <= chunk["end"]:
-                active_chunk = chunk
-                break
-                
-        if not active_chunk and chunks and t > chunks[-1]["end"]:
-            active_chunk = chunks[-1]
-            
-        if active_chunk:
-            chunk_words = active_chunk.get("words", [])
-            if chunk_words:
-                cap_arr = render_dynamic_word_caption(chunk_words, t, accent_color=(255, 255, 255), highlight_color=caption_highlight)
-                if cap_arr is not None:
-                    pil_cap = Image.fromarray(cap_arr).convert("RGBA")
-                    pil_frame.alpha_composite(pil_cap)
-        
+        # Captions removed per user request
+
         # ── Emoji reaction overlays ──
         if ENABLE_EMOJI_OVERLAYS:
             for em in emoji_moments:
