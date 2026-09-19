@@ -277,12 +277,12 @@ SELECTED HOOK:
 {selection_instruction}
 
 Return ONLY a JSON object representing the narrative draft (not the final schema yet):
-{
+{{
   "hook": "...",
   "problem": "...",
   "solution": "...",
   "engagement_question": "..."
-}"""
+}}"""
 
 RETENTION_OPTIMIZER_TEMPLATE = """{persona}
 
