@@ -918,65 +918,104 @@ Return ONLY a JSON object matching the required schema:
                 final_script = call_gemini_api(client, storyboard_prompt, model='gemini-2.5-flash')
                 
                 if final_script and "storyboard" in final_script:
-                    final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
-                    final_script["description"] = metadata_res.get("description") or final_script.get("description")
-                    final_script["hashtags"] = metadata_res.get("hashtags") or final_script.get("hashtags")
-                    final_script["comment_bait_question"] = metadata_res.get("thumbnail_text") or final_script.get("comment_bait_question")
-                    final_script["original_news_headline"] = topic_data_res.get("topic")
-                    final_script["original_news_url"] = selected_url
-                    final_script["use_case_evidence_url"] = selected_url
-                    final_script["script"] = script_text
+                    storyboard = final_script["storyboard"]
+                    total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
+                    scene_count = len(storyboard)
+                    length_ok = scene_count >= 20 and total_words >= 90
                     
-                    subtitle_chunks = []
-                    rebuilt_script_parts = []
-                    for scene in final_script["storyboard"]:
-                        scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
-                        narration_text = scene.get("narration", "")
-                        rebuilt_script_parts.append(narration_text)
-                        
-                        v_type = scene.get("visual_type", "")
-                        info_type = scene.get("infographic_type", "none").lower()
-                        if "infographic" in v_type.lower() and info_type in ("none", ""):
-                            info_type = "stat"
-                        
-                        has_info = info_type not in ("none", "")
-                        info_data = scene.get("infographic_data", {})
-                        
-                        vis_prompt = scene.get("visual_prompt", "")
-                        stock_query = scene.get("stock_search_query", "").strip()
-                        if not stock_query:
-                            words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
-                            stock_query = " ".join(words) if words else "tech"
-                        
-                        chunk = {
-                            "chunk_id": scene_num,
-                            "text": narration_text,
-                            "english_caption": scene.get("on_screen_text", ""),
-                            "start": 0.0,
-                            "end": 0.0,
-                            "has_infographic": has_info,
-                            "infographic_type": info_type,
-                            "infographic_data": info_data,
-                            "stock_search_query": stock_query,
-                            "nano_visual_prompt": vis_prompt,
-                            "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
-                            "camera_motion": scene.get("camera_motion", "None"),
-                            "transition": scene.get("transition", "Match cut")
-                        }
-                        subtitle_chunks.append(chunk)
+                    if not length_ok:
+                        print(f"⚠️ [Fact Shorts Path] Storyboard too short: {scene_count} scenes / {total_words} words. Need 25-40 scenes / 90+ words. Retrying...")
+                        # Trigger self-correction by re-calling storyboard agent with feedback
+                        correction_prompt = f"""{SYSTEM_PERSONA}
+
+STORYBOARD AGENT TASK:
+Given the following fact script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
+You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
+
+SCRIPT:
+{script_text}
+
+PREVIOUS ATTEMPT FAILED: Only produced {scene_count} scenes with {total_words} total words.
+CRITICAL REQUIREMENT: You MUST produce 25-40 scenes. Each scene's narration field must be 3-5 words.
+Total word count across all narration fields must be 90+ words.
+
+Return ONLY a JSON object matching the required schema:
+{refined_requirements}
+"""
+                        print("🔄 [Fact Shorts Path] Retrying Storyboard Agent with length correction...")
+                        final_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash')
+                        if not final_script or "storyboard" not in final_script:
+                            print("⚠️ [Fact Shorts Path] Correction retry failed. Falling back to default generation path...")
+                        else:
+                            # Re-check length after correction
+                            storyboard = final_script["storyboard"]
+                            total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
+                            scene_count = len(storyboard)
+                            length_ok = scene_count >= 20 and total_words >= 90
+                            if not length_ok:
+                                print(f"⚠️ [Fact Shorts Path] Still too short after retry: {scene_count} scenes / {total_words} words. Falling back...")
+                                final_script = None
                     
-                    final_script["subtitle_chunks"] = subtitle_chunks
-                    final_script["title_variants"] = [
-                        final_script.get("title", "Secret Trick!"),
-                        final_script.get("title", "Secret Trick!") + " 🤫",
-                        "Don't Miss This! 🚨"
-                    ]
+                    if final_script and "storyboard" in final_script and length_ok:
+                        final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
+                        final_script["description"] = metadata_res.get("description") or final_script.get("description")
+                        final_script["hashtags"] = metadata_res.get("hashtags") or final_script.get("hashtags")
+                        final_script["comment_bait_question"] = metadata_res.get("thumbnail_text") or final_script.get("comment_bait_question")
+                        final_script["original_news_headline"] = topic_data_res.get("topic")
+                        final_script["original_news_url"] = selected_url
+                        final_script["use_case_evidence_url"] = selected_url
+                        final_script["script"] = script_text
+                        
+                        subtitle_chunks = []
+                        rebuilt_script_parts = []
+                        for scene in final_script["storyboard"]:
+                            scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
+                            narration_text = scene.get("narration", "")
+                            rebuilt_script_parts.append(narration_text)
+                            
+                            v_type = scene.get("visual_type", "")
+                            info_type = scene.get("infographic_type", "none").lower()
+                            if "infographic" in v_type.lower() and info_type in ("none", ""):
+                                info_type = "stat"
+                            
+                            has_info = info_type not in ("none", "")
+                            info_data = scene.get("infographic_data", {})
+                            
+                            vis_prompt = scene.get("visual_prompt", "")
+                            stock_query = scene.get("stock_search_query", "").strip()
+                            if not stock_query:
+                                words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
+                                stock_query = " ".join(words) if words else "tech"
+                            
+                            chunk = {
+                                "chunk_id": scene_num,
+                                "text": narration_text,
+                                "english_caption": scene.get("on_screen_text", ""),
+                                "start": 0.0,
+                                "end": 0.0,
+                                "has_infographic": has_info,
+                                "infographic_type": info_type,
+                                "infographic_data": info_data,
+                                "stock_search_query": stock_query,
+                                "nano_visual_prompt": vis_prompt,
+                                "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
+                                "camera_motion": scene.get("camera_motion", "None"),
+                                "transition": scene.get("transition", "Match cut")
+                            }
+                            subtitle_chunks.append(chunk)
+                        
+                        final_script["subtitle_chunks"] = subtitle_chunks
+                        final_script["title_variants"] = [
+                            final_script.get("title", "Secret Trick!"),
+                            final_script.get("title", "Secret Trick!") + " 🤫",
+                            "Don't Miss This! 🚨"
+                        ]
+                        
+                        final_script = apply_cta_rotation(final_script)
+                        print("🎉 [Fact Shorts Path] Script and storyboard generated successfully!")
+                        return final_script
                     
-                    final_script = apply_cta_rotation(final_script)
-                    print("🎉 [AI Education Path] Script and storyboard generated successfully!")
-                    return final_script
-                    
-        print("⚠️ [AI Education Path] Custom generation failed/incomplete. Falling back to default generation path...")
+        print("⚠️ [Fact Shorts Path] Custom generation failed/incomplete. Falling back to default generation path...")
 
     # ── AGENT 0: SELECTOR ──
     if not forced_article:
@@ -1184,7 +1223,13 @@ Return ONLY a JSON object matching the required schema:
                 _to_int(validation_result.get('hook_strength_score', 0))
             ]
             
-            if all(score >= 90 for score in scores) or validation_result.get('passes_validation') is True:
+            # Length/scene-count gate: ensure storyboard has enough scenes/words for minimum duration
+            storyboard = final_script.get("storyboard", [])
+            total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
+            scene_count = len(storyboard)
+            length_ok = scene_count >= 20 and total_words >= 90  # headroom above 76-word / 25s gate
+            
+            if all(score >= 90 for score in scores) and length_ok:
                 print("   ⭐ Storyboard passed all quality checks (>90% scores)!")
                 final_script["quality_scores"] = {
                     "story_continuity": _to_int(validation_result.get('story_continuity_score')),
@@ -1198,6 +1243,8 @@ Return ONLY a JSON object matching the required schema:
                 break
             else:
                 feedback = validation_result.get('feedback', 'Improve storyboard flow, transition logic and visual alignment.')
+                if not length_ok:
+                    feedback += f"\nCRITICAL: Storyboard only has {scene_count} scenes / {total_words} words — you MUST produce 25-40 scenes to meet the required script length."
                 print(f"   ⚠️ Storyboard failed quality checks. Feedback: {feedback}")
                 print("   🔄 Triggering self-correction loop in Humanizer Agent...")
                 
@@ -1507,11 +1554,8 @@ def call_fallback_model(prompt):
             "nex-agi/nex-n2-pro:free",
             "dots-studio/dots3-note-preview:free",
             "qwen/qwen-2.5-72b-instruct",
-            "meta-llama/llama-3.3-70b-instruct:free",
             "moonshotai/kimi-k2.6",
             "google/gemini-2.5-flash",
-            "deepseek/deepseek-chat:free",
-            "nvidia/llama-3.1-nemotron-70b-instruct:free"
         ]
         for or_model in openrouter_models:
             print(f"🔮 Falling back to OpenRouter ({or_model})...")
