@@ -11,7 +11,7 @@ import re
 from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ENABLE_AVATAR
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url, get_next_avatar
-from gemini_script import pick_and_generate_script, _OFFLINE_MODE_ACTIVE
+from gemini_script import pick_and_generate_script, is_offline_mode_active, reset_offline_mode
 from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
 from audio_gen import generate_voiceover, clean_tts_text
@@ -170,14 +170,14 @@ def run_pipeline(forced_category=None, dry_run=False):
     
     while attempts < MAX_RETRY_ATTEMPTS:
         # Recalculate max_attempts each iteration to respect offline mode changes
-        current_max_attempts = 1 if _OFFLINE_MODE_ACTIVE else MAX_RETRY_ATTEMPTS
+        current_max_attempts = 1 if is_offline_mode_active() else MAX_RETRY_ATTEMPTS
         if attempts >= current_max_attempts:
             log_message(f"🔴 [OFFLINE MODE] Max attempts ({current_max_attempts}) reached. Stopping.")
             break
             
         log_message(f"STEP 3 (Attempt {attempts+1}/{current_max_attempts}): Multi-Agent Tanglish Script Generation...")
         
-        if _OFFLINE_MODE_ACTIVE and attempts > 0:
+        if is_offline_mode_active() and attempts > 0:
             log_message("🔴 [OFFLINE MODE] Already used offline fallback. No more retries.")
             break
         
@@ -187,6 +187,7 @@ def run_pipeline(forced_category=None, dry_run=False):
 
         if not script_data:
             log_message("❌ Script generation failed. Retrying...")
+            reset_offline_mode()
             attempts += 1
             time.sleep(5)
             continue
