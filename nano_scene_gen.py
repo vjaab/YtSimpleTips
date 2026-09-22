@@ -9,8 +9,7 @@ import time
 import random
 import hashlib
 from datetime import datetime
-from google import genai
-from config import GEMINI_API_KEY, OUTPUT_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
+from config import GEMINI_API_KEY, OUTPUT_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS, GEMINI_FLASH_MODEL
 
 TODAY = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -153,7 +152,7 @@ Return ONLY a JSON object:
             try:
                 client = _get_client()
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model=GEMINI_FLASH_MODEL,
                     contents=prompt,
                     config=genai.types.GenerateContentConfig(temperature=0.5)
                 )

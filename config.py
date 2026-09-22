@@ -344,10 +344,35 @@ def get_ordered_models_for_category(category="", task_type="reasoning"):
         # Main content generation / reasoning: Priority 1 first, then Priority 3, then Priority 2, then Priority 4
         return [MODEL_PRIORITY_1, MODEL_PRIORITY_3, MODEL_PRIORITY_2, MODEL_PRIORITY_4]
 
-# Model Configurations
-GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-2.5-pro")
-GEMINI_FLASH_MODEL = os.getenv("GEMINI_FLASH_MODEL", "gemini-2.5-flash")
-GEMINI_FLASH_LITE_MODEL = os.getenv("GEMINI_FLASH_LITE_MODEL", "gemini-2.5-flash-lite")
+# Gemini Model Configurations (Gemini 3 Family & Specialized Endpoints)
+# 1. General & High-Performance Workhorses
+GEMINI_FLASH_MODEL = os.getenv("GEMINI_FLASH_MODEL", "gemini-3.8-flash")          # Default workhorse (1M/64k tokens)
+GEMINI_FLASH_LITE_MODEL = os.getenv("GEMINI_FLASH_LITE_MODEL", "gemini-3.5-flash-lite") # Fast, low-latency, microtasks
+GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-3.1-pro-preview")        # Deep multi-step reasoning
+
+# 2. Audio & Live Real-Time Models
+GEMINI_LIVE_MODEL = os.getenv("GEMINI_LIVE_MODEL", "gemini-3.8-live")
+GEMINI_LIVE_EXTENDED_THINKING_MODEL = os.getenv("GEMINI_LIVE_EXTENDED_THINKING_MODEL", "gemini-3.8-live-extended-thinking")
+GEMINI_TRANSCRIBE_MODEL = os.getenv("GEMINI_TRANSCRIBE_MODEL", "gemini-3.5-transcribe")
+GEMINI_TTS_MODEL = os.getenv("GEMINI_TTS_MODEL", "gemini-3.1-flash-tts-preview")
+
+# 3. Model Registries & Legacy Fallbacks
+GEMINI_ACTIVE_MODELS = [
+    GEMINI_FLASH_MODEL,
+    GEMINI_FLASH_LITE_MODEL,
+    GEMINI_PRO_MODEL,
+]
+GEMINI_AUDIO_MODELS = [
+    GEMINI_LIVE_MODEL,
+    GEMINI_LIVE_EXTENDED_THINKING_MODEL,
+    GEMINI_TRANSCRIBE_MODEL,
+    GEMINI_TTS_MODEL,
+]
+GEMINI_LEGACY_MODELS = [
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
+    "gemini-2.5-flash-lite",
+]
 
 # API Call Spacing Delay to prevent rate-limiting on Free Tier keys
 GEMINI_RPM_SLEEP = float(os.getenv("GEMINI_RPM_SLEEP", "2.0"))

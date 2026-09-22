@@ -57,10 +57,10 @@ for path in frame_paths:
     except Exception as e:
         print(f"Error loading {path}: {e}")
 
-print("Sending request to Gemini 2.5 Flash...")
+print("Sending request to Gemini 3.8 Flash...")
 try:
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-3.8-flash",
         contents=contents,
     )
     print("\n=== ANALYSIS RESULT ===")

@@ -12,87 +12,51 @@ def get_slot_info():
     hour = ist_now.hour
     
     morning_categories = {
-        "Mon": "🧠 Amazing Science Facts",
-        "Tue": "🌍 World & History Secrets",
-        "Wed": "🔬 Tech & Innovation Wonders",
-        "Thu": "🌌 Space & Universe Mysteries",
-        "Fri": "🧬 Human Body & Psychology",
+        "Mon": "🧠 Mind-Blowing Science Curiosities",
+        "Tue": "🧬 Human Body & Dark Psychology",
+        "Wed": "💰 Money-Saving & Smart Living Tricks",
+        "Thu": "🍳 Food, Health & Kitchen Science",
+        "Fri": "🌍 Mysterious History & Culture Secrets",
         "Sat": "🐾 Nature & Animal Oddities",
-        "Sun": "💡 Mind-Blowing Did You Know"
+        "Sun": "🧠 Mind-Blowing Science Curiosities"
     }
     
     afternoon_categories = {
-        "Mon": "🌍 World & History Secrets",
-        "Tue": "🔬 Tech & Innovation Wonders",
-        "Wed": "🌌 Space & Universe Mysteries",
-        "Thu": "🧬 Human Body & Psychology",
+        "Mon": "🧬 Human Body & Dark Psychology",
+        "Tue": "💰 Money-Saving & Smart Living Tricks",
+        "Wed": "🍳 Food, Health & Kitchen Science",
+        "Thu": "🌍 Mysterious History & Culture Secrets",
         "Fri": "🐾 Nature & Animal Oddities",
-        "Sat": "💡 Mind-Blowing Did You Know",
-        "Sun": "🧠 Amazing Science Facts"
+        "Sat": "🧠 Mind-Blowing Science Curiosities",
+        "Sun": "🧬 Human Body & Dark Psychology"
     }
     
     evening_categories = {
-        "Mon": "🔬 Tech & Innovation Wonders",
-        "Tue": "🌌 Space & Universe Mysteries",
-        "Wed": "🧬 Human Body & Psychology",
+        "Mon": "💰 Money-Saving & Smart Living Tricks",
+        "Tue": "🍳 Food, Health & Kitchen Science",
+        "Wed": "🌍 Mysterious History & Culture Secrets",
         "Thu": "🐾 Nature & Animal Oddities",
-        "Fri": "💡 Mind-Blowing Did You Know",
-        "Sat": "🧠 Amazing Science Facts",
-        "Sun": "🌍 World & History Secrets"
+        "Fri": "🧠 Mind-Blowing Science Curiosities",
+        "Sat": "🧬 Human Body & Dark Psychology",
+        "Sun": "💰 Money-Saving & Smart Living Tricks"
     }
     
     if hour < 12:
         slot = "Slot A (Morning)"
-        category = morning_categories.get(day_name, "🧠 Amazing Science Facts")
+        category = morning_categories.get(day_name, "🧠 Mind-Blowing Science Curiosities")
     elif hour < 16:
         slot = "Slot B (Afternoon)"
-        category = afternoon_categories.get(day_name, "🌍 World & History Secrets")
+        category = afternoon_categories.get(day_name, "🧬 Human Body & Dark Psychology")
     else:
         slot = "Slot C (Evening)"
-        category = evening_categories.get(day_name, "🔬 Tech & Innovation Wonders")
+        category = evening_categories.get(day_name, "💰 Money-Saving & Smart Living Tricks")
         
-    # Load performance insights for dynamic strategy boosting
-    import os
-    import json
-    
-    insights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "performance_insights.json")
-    if os.path.exists(insights_path):
-        try:
-            with open(insights_path, 'r', encoding='utf-8') as f:
-                insights = json.load(f)
-                top_categories_raw = insights.get("top_categories", [])
-                
-                category_mapping = {
-                    "simple_ai": "🤖 Simple AI Hacks for Everyone",
-                    "practical_ai": "🤖 Practical AI Tools & Jobs",
-                    "future_ai": "🤖 AI Demystified & Future Tech"
-                }
-                
-                top_mapped = []
-                for cat in top_categories_raw:
-                    mapped = category_mapping.get(cat.lower().split()[0]) or category_mapping.get(cat.lower())
-                    if not mapped:
-                        for k, v in category_mapping.items():
-                            if k in cat.lower() or cat.lower() in k:
-                                mapped = v
-                                break
-                    if mapped and mapped not in top_mapped:
-                        top_mapped.append(mapped)
-                        
-                top_mapped = [c for c in top_mapped if c.startswith("🤖")]
-                if top_mapped and category not in top_mapped:
-                    boosted_cat = top_mapped[0]
-                    print(f"📈 [ecosystem] Boosting category priority: Overriding '{category}' with top-performer '{boosted_cat}'")
-                    category = boosted_cat
-        except Exception as e:
-            print(f"⚠️ Failed to apply category boosting: {e}")
-            
     return day_name, slot, category
 
 SERIES_MAP = {
-    "Slot A": {"name": "Simple Tips by VJ", "tagline": "அறிவியல் & விண்வெளி ரகசியங்கள்! Science & Space Secrets!"},
-    "Slot B": {"name": "Simple Tips by VJ", "tagline": "ஆச்சரியமான உண்மைகள்! Mind-Blowing Unknown Facts!"},
-    "Slot C": {"name": "Simple Tips by VJ", "tagline": "தினசரி லைஃப் ஹேக்ஸ் & டிப்ஸ்! Daily Life Hacks & Tips!"},
+    "Slot A": {"name": "Simple Tips by VJ", "tagline": "அறிவியல் & இயற்கை ஆச்சரியங்கள்! Science & Nature Wonders!"},
+    "Slot B": {"name": "Simple Tips by VJ", "tagline": "மனித உடல் & மன மர்மங்கள்! Human Body & Mind Mysteries!"},
+    "Slot C": {"name": "Simple Tips by VJ", "tagline": "பணம் சேமிப்பு & வீட்டு குறிப்புகள்! Money & Smart Life Hacks!"},
 }
 
 def get_series_identity(slot):
@@ -103,40 +67,68 @@ def get_series_identity(slot):
 
 def get_category_prompt_enhancement(category, slot):
     """
-    Returns specific instructions and formatting for the given Tamil infotainment category.
+    Returns specific instructions and viral formatting for the given high-yield Tamil infotainment category.
     """
     base_instructions = (
-        "FOCUS: High curiosity gap, mind-blowing and true facts, or extremely viral daily hacks. The hook must immediately "
-        "trigger curiosity or state a highly relatable daily convenience problem, promising a simple solution in Tanglish. "
-        "Keep the tone friendly, conversational, and energetic (Tanglish).\n"
-        "To get millions of views, start with a massive hook, keep script pacing fast, and end with a seamless loop back to the hook."
+        "FOCUS: High curiosity gap, mind-blowing and verified facts, or extremely high-utility daily hacks.\n"
+        "HOOK RULE: Start with the shocking result, pain point, or mind-bending question in the first 2 seconds. "
+        "NO robotic clichés (BAN: 'Oru vishayam theriyuma?', 'Intha video-la...', 'Nee yaarukkum theriyadhu...').\n"
+        "TONE: Energetic, friendly, conversational elder-brother/friend (VJ style). Spoken Tamil with natural English terms.\n"
+        "PACING: Rapid, punchy sentences (under 10 words). Use commas and ellipses for breathing pauses."
     )
     
     enhancements = {
-        "🤖 AI Demystified & Future Tech": f"""
+        "🧠 Mind-Blowing Science Curiosities": f"""
             {base_instructions}
-            CATEGORY: AI Demystified & Future Tech
-            GOAL: Demystify an AI concept (how neural nets work, how LLMs think, how deepfakes are made) or share a future tech update. Make it extremely simple for everyday Tamil people of all ages to understand. Keep it fascinating and highly visual to drive maximum views. Include tips on AI safety (e.g. avoiding audio/video deepfake scams). Connect the concept to something they already use daily (phone, Google, YouTube, ATM).
-            VIRAL HOOK FOR COMMON PEOPLE: "Ungal phone camera-la irukura AI brain — ithu enna pannum theriyuma?"
-            HOOK TEMPLATE (Tamil): "விஞ்ஞான உலகத்துல அடுத்ததா வரப்போற இந்த ஒரு மிரட்டலான AI விஷயம் பத்தி தெரியுமா?"
+            CATEGORY: 🧠 Mind-Blowing Science Curiosities
+            GOAL: Explain a mind-bending science fact that sounds completely fake or impossible, but is 100% verified.
+            TOPICS: Ancient edible honey, ocean waters not mixing, earth spinning stop anomaly, speed of light, microwave invention accident, sound in space.
+            VIRAL HOOK STYLE: State the impossible-sounding fact directly with shock:
+            Example: "3000 வருஷம் பழமையான தேனை இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க!"
         """,
-        "🤖 Practical AI Tools & Jobs": f"""
+        "🧬 Human Body & Dark Psychology": f"""
             {base_instructions}
-            CATEGORY: Practical AI Tools & Jobs
-            GOAL: Show students, job seekers, homemakers, and office workers how to use free AI tools (ChatGPT, Claude, Gamma, Google Gemini) to study, learn, automate tasks, earn money, or prepare for interviews. Focus on tools that even a non-tech person can use immediately. Pacing must be extremely practical and step-by-step.
-            VIRAL HOOK FOR COMMON PEOPLE: "Intha free AI tool use panna, ungal kid homework 5 minutes-la mudiyum!"
-            HOOK TEMPLATE (Tamil): "உங்க study அல்லது office work-ஐ 10 மடங்கு வேகமாக்க இந்த ஒரு free AI tool-ஐ உடனே use பண்ணுங்க..."
+            CATEGORY: 🧬 Human Body & Dark Psychology
+            GOAL: Share a fascinating human body reaction, brain trick, sleep hack, or psychological behavior that viewers experience daily.
+            TOPICS: Why we forget why we entered a room (doorway effect), 3-second lie detection hack, why songs get stuck in your head, sleep cycle trick, goosebumps science.
+            VIRAL HOOK STYLE: Call out the exact daily phenomenon everyone experiences:
+            Example: "ஒரு ரூம்க்குள்ள நுழைஞ்ச உடனே எதுக்கு வந்தோம்னு மூளைக்கு மறந்து போகுதா? இதுக்கு பின்னாடி ஒரு செம சயின்ஸ் இருக்கு!"
         """,
-        "🤖 Simple AI Hacks for Everyone": f"""
+        "💰 Money-Saving & Smart Living Tricks": f"""
             {base_instructions}
-            CATEGORY: Simple AI Hacks for Everyone
-            GOAL: Share simple AI features built into everyday tools like WhatsApp, Google search, keyboard apps, or phone settings (e.g. Google Lens, Live Translate, spam detection) that kids, parents, shopkeepers, and grandmas can easily use to make daily life simpler. Avoid ALL jargon. Explain like you're telling your neighborhood uncle.
-            VIRAL HOOK FOR COMMON PEOPLE: "Ungal WhatsApp-la AI already irukku — ithu enna pannum theriyuma?"
-            HOOK TEMPLATE (Tamil): "உங்க phone-ல WhatsApp-ல இருக்குற இந்த ஒரு ரகசிய AI feature பத்தி தெரியுமா?"
+            CATEGORY: 💰 Money-Saving & Smart Living Tricks
+            GOAL: Deliver an immediate, actionable money-saving tip, hidden bank charge cancellation, electricity bill reducer, or consumer protection hack.
+            TOPICS: 40% electricity bill reduction, hidden bank SMS/ATM charges you can turn off, fake gold detection at home, petrol pump cheat prevention, free government welfare schemes.
+            VIRAL HOOK STYLE: Immediate wallet saving or loss prevention:
+            Example: "உங்க கரண்ட் பில்லை 40% வரைக்கும் குறைக்க இந்த ஒரு சின்ன பழக்கத்தை மாத்துங்க போதும்!"
+        """,
+        "🍳 Food, Health & Kitchen Science": f"""
+            {base_instructions}
+            CATEGORY: 🍳 Food, Health & Kitchen Science
+            GOAL: Explain fascinating everyday food science, kitchen cooking hacks, or food adulteration tests that any family can try today.
+            TOPICS: 1-drop milk adulteration test, why onions make you cry and the spoon hack to stop it, pressure cooker 4x speed science, drinking water standing myth, fermentation secrets.
+            VIRAL HOOK STYLE: Household test or eye-opening kitchen revelation:
+            Example: "நீங்க குடிக்கிற பால்ல கலப்படம் இருக்கான்னு வெறும் 1 சொட்டு தண்ணில ஈஸியா கண்டுபிடிச்சிடலாம்!"
+        """,
+        "🌍 Mysterious History & Culture Secrets": f"""
+            {base_instructions}
+            CATEGORY: 🌍 Mysterious History & Culture Secrets
+            GOAL: Reveal a mind-blowing historical, archaeological, or architectural marvel from Tamil Nadu or ancient India.
+            TOPICS: Brihadeeswarar Temple shadow & engineering mystery, Keezhadi ancient civilization water drainage, Kumari Kandam facts, Chettinad houses natural cooling, floating stones of Rameshwaram.
+            VIRAL HOOK STYLE: Ancient mystery that modern science is still studying:
+            Example: "1000 வருஷத்துக்கு முன்னாடி எந்த சிமெண்ட்டும் இல்லாம கட்டப்பட்ட தஞ்சை பெரிய கோவில் நிழல் தரையில விழாதா? உண்மை என்ன தெரியுமா?"
+        """,
+        "🐾 Nature & Animal Oddities": f"""
+            {base_instructions}
+            CATEGORY: 🐾 Nature & Animal Oddities
+            GOAL: Unveil an unbelievable animal ability, strange creature survival trick, or backyard nature wonder.
+            TOPICS: Crows remember human faces for life, octopus with 3 hearts and blue blood, the immortal jellyfish, trees communicating underground through fungal networks.
+            VIRAL HOOK STYLE: Unbelievable superpower in animals:
+            Example: "நம்ம வீட்டு வாசல்ல வர்ற காகத்துக்கு மனுஷங்களோட முகத்தை ஆயுசுக்கும் ஞாபகம் வச்சுக்கிற பவர் இருக்குன்னு சொன்னா நம்புவீங்களா?"
         """
     }
     
-    return enhancements.get(category, enhancements.get("🤖 AI Demystified & Future Tech"))
+    return enhancements.get(category, enhancements.get("🧠 Mind-Blowing Science Curiosities"))
 
 # Curated Category Color Palette System
 _CATEGORY_PALETTES = {

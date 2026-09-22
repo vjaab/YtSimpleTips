@@ -325,7 +325,7 @@ def get_efficiency_report() -> Dict[str, Any]:
 def call_gemini_with_efficiency(
     prompt: str,
     api_keys: List[str],
-    model: str = "gemini-2.5-flash",
+    model: str = "gemini-3.8-flash",
     temperature: float = 0.7,
     response_mime_type: str = "application/json"
 ) -> Any:

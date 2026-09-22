@@ -22,12 +22,15 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
         return []
 
     search_queries = {
-        "🤖 AI Demystified & Future Tech": ["AI explained simple", "how AI works daily life", "AI future technology 2026", "deepfake detection tips"],
-        "🤖 Practical AI Tools & Jobs": ["free AI tools for students", "AI tools for office work", "ChatGPT tricks beginners", "AI job skills 2026"],
-        "🤖 Simple AI Hacks for Everyone": ["WhatsApp AI features", "Google Lens AI tricks", "phone AI hidden settings", "AI apps for parents"],
+        "🧠 Mind-Blowing Science Curiosities": ["mind blowing science facts", "unbelievable space discoveries", "physics tricks real life", "weird science facts"],
+        "🧬 Human Body & Dark Psychology": ["human body weird facts", "dark psychology tricks", "brain psychological facts", "body subconscious signals"],
+        "💰 Money-Saving & Smart Living Tricks": ["smart money saving hacks", "daily life genius tricks", "clever shopping tricks", "supermarket psychological tricks"],
+        "🍳 Food, Health & Kitchen Science": ["kitchen science tricks", "food facts you did not know", "healthy body everyday tricks", "cooking science secrets"],
+        "🌍 Mysterious History & Culture Secrets": ["unexplained history mysteries", "ancient engineering wonders", "bizarre historical facts", "hidden culture secrets"],
+        "🐾 Nature & Animal Oddities": ["crazy animal survival tricks", "nature unbelievable secrets", "ocean mystery creatures", "weird animal behaviors"],
     }
 
-    queries = search_queries.get(category, ["tech tips hidden features", "finance hacks"])
+    queries = search_queries.get(category, ["mind blowing science facts", "everyday psychological tricks", "money saving genius hacks"])
     trending_keywords = []
 
     for query in queries[:2]:  # Limit to 2 queries to save API quota
@@ -68,8 +71,8 @@ def _fetch_youtube_trending_keywords(category="tech tips"):
 
 
 def _fetch_reddit_trending_keywords():
-    """Fetches trending keywords from tech/tips subreddits using OAuth."""
-    subreddits = ["LifeProTips", "Android", "iphone", "technology"]
+    """Fetches trending keywords from viral curiosity and life hack subreddits using OAuth."""
+    subreddits = ["todayilearned", "Damnthatsinteresting", "explainlikeimfive", "LifeProTips", "science"]
     trending_keywords = []
 
     # Reddit API requires OAuth for reliable access

@@ -3,10 +3,12 @@ from google.genai import types
 import json
 import os
 import requests
-from datetime import datetime
-from config import GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS
-from topic_tracker import check_story_uniqueness
+from config import (
+    GEMINI_API_KEY, TRACKER_FILE, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS,
+    GEMINI_FLASH_MODEL
+)
 from gemini_script import is_offline_mode_active
+from topic_tracker import check_story_uniqueness
 
 # Best-effort trending signal integration
 try:
@@ -47,29 +49,30 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
     
     prompt = f"""
-    Generate 5 highly viral, trending or popular GitHub repositories that common people or developers would find fascinating, related to coding, AI, tools, utility scripts, or software hacks.
-    These topics MUST be actual popular GitHub repositories.
+    Generate 5 highly viral, surprising "Did You Know" facts, life hacks, or mind-blowing curiosities that Tamil audiences would find fascinating, related to {category}.
     Category focus: "{category}"
     These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
-    They must be surprising, accurate, and optimized for a 45-55 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    They must be surprising, accurate, and optimized for a 45-60 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
-    GITHUB TRENDING CRITERIA:
-    1. Every topic MUST be a popular or trending GitHub repository (e.g., vxcontrol/pentagi, lowlighter/metrics).
-    2. Focus on high "curiosity gap" or "utility" hooks: "This free GitHub tool can do X", "This insane GitHub repository changes how you write code", "Why everyone is talking about this GitHub project".
+    VIRAL CRITERIA:
+    1. Every topic MUST be a verified fact or actionable tip with a credible source URL (Wikipedia, Britannica, Nature, reputable news/science sites, government sites).
+    2. Focus on high "curiosity gap" or "daily utility" hooks: "Why this happens...", "Did you know that...", "This secret will change how you...", "Shocking reason why...".
+    3. Make people stop scrolling and say "Wait, really?!" or "I need to share this with my family!".
+    4. NO common knowledge that everyone already knows.
     
     {avoid_instruction}
     
-    CRITICAL REQUIREMENT: For each topic, you MUST provide its real, active GitHub URL (e.g., https://github.com/username/repository) as the source_url. This URL must be active and correct!
+    CRITICAL REQUIREMENT: For each topic, provide a real, verifiable source URL as the source_url (e.g., https://en.wikipedia.org/wiki/... or credible news/journal article).
     
     Return ONLY a JSON object containing a "tips" array matching this schema:
     {{
       "tips": [
         {{
-          "title": "Short descriptive English title of the GitHub topic (e.g. lowlighter/metrics - Generate Infographics for GitHub Profile)",
-          "description": "A rich, detailed 2-3 sentence explanation of the GitHub repository in English, explaining what it does and why it is useful or trending.",
-          "source_url": "Direct GitHub URL of the repository (e.g. https://github.com/lowlighter/metrics)",
-          "source_name": "GitHub",
-          "keywords": ["GitHub", "repository", "open-source"],
+          "title": "Short descriptive English title of the topic (e.g. Honey Never Spoils - 3000 Year Old Edible Honey Found)",
+          "description": "A rich, detailed 2-3 sentence explanation of the fact in English, explaining what it is, why it's surprising, and the science/history behind it.",
+          "source_url": "Direct source URL (e.g. https://en.wikipedia.org/wiki/Honey#Preservation)",
+          "source_name": "Wikipedia / Journal / News",
+          "keywords": ["did you know", "fact", "science"],
           "category": "{category}"
         }}
       ]
@@ -78,6 +81,12 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     Do NOT wrap in markdown tags like ```json.
     """
     
+    def _is_valid_source_url(u: str) -> bool:
+        if not u or not isinstance(u, str):
+            return False
+        u_lower = u.lower().strip()
+        return u_lower.startswith("http://") or u_lower.startswith("https://")
+
     # 1. Attempt prioritized models (Priority 1-4 based on category) via OpenRouter first
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
     if openrouter_key:
@@ -95,17 +104,11 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                         print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
                         continue
                     
-                    if "github.com" in url.lower():
-                        print(f"🔍 Validating GitHub URL: {url}")
-                        if not validate_github_url(url):
-                            print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
-                            continue
-                        print(f"✅ GitHub URL validated: {url}")
+                    if _is_valid_source_url(url):
+                        unique_facts.append(fact)
                     else:
-                        print(f"⏭️ [fetch_topics fallback] Skipping non-GitHub URL: {url}")
+                        print(f"⏭️ [fetch_topics fallback] Skipping invalid URL: {url}")
                         continue
-                        
-                    unique_facts.append(fact)
                 
                 if unique_facts:
                     print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via prioritized models.")
@@ -149,18 +152,11 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                             print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
                             continue
                         
-                        # Validate GitHub URL
-                        if "github.com" in url.lower():
-                            print(f"🔍 Validating GitHub URL: {url}")
-                            if not validate_github_url(url):
-                                print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
-                                continue
-                            print(f"✅ GitHub URL validated: {url}")
+                        if _is_valid_source_url(url):
+                            unique_facts.append(fact)
                         else:
-                            print(f"⏭️ [fetch_topics fallback] Skipping non-GitHub URL: {url}")
+                            print(f"⏭️ [fetch_topics fallback] Skipping invalid URL: {url}")
                             continue
-                            
-                        unique_facts.append(fact)
                     
                     if unique_facts:
                         print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via Gemini (Priority 5).")
@@ -196,19 +192,12 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                     print(f"⏭️ [fetch_topics fallback models] Skipping non-unique fact: {title}. Reason: {reason}")
                     continue
                 
-                # Validate GitHub URL
-                if "github.com" in url.lower():
-                    print(f"🔍 Validating GitHub URL: {url}")
-                    if not validate_github_url(url):
-                        print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
-                        continue
-                    print(f"✅ GitHub URL validated: {url}")
+                if _is_valid_source_url(url):
+                    unique_facts.append(fact)
                 else:
-                    print(f"⏭️ [fetch_topics fallback models] Skipping non-GitHub URL: {url}")
+                    print(f"⏭️ [fetch_topics fallback models] Skipping invalid URL: {url}")
                     continue
-                    
-                unique_facts.append(fact)
-            
+                
             if unique_facts:
                 print(f"✅ [fetch_topics fallback models] Successfully generated {len(unique_facts)} unique facts via secondary fallback models.")
                 return unique_facts
@@ -331,7 +320,7 @@ def fetch_facts_for_category(category):
     while attempts < 3:
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model=GEMINI_FLASH_MODEL,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     tools=[{'google_search': {}}],
