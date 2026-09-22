@@ -303,6 +303,47 @@ CLOUDFLARE_ALL_MODELS = (
 
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
 
+# ── MODEL PRIORITIES ACROSS PIPELINE WORKFLOWS ─────────────────────────────────
+# Priority 1: Main content generation / reasoning
+MODEL_PRIORITY_1 = os.getenv("MODEL_PRIORITY_1", "nvidia/nemotron-3-ultra-550b-a55b:free")
+# Priority 2: Coding + technical topics
+MODEL_PRIORITY_2 = os.getenv("MODEL_PRIORITY_2", "poolside/laguna-s-2.1:free")
+# Priority 3: Fast high-volume fallback
+MODEL_PRIORITY_3 = os.getenv("MODEL_PRIORITY_3", "nvidia/nemotron-3.5-lightning:free")
+# Priority 4: Finance/business topics
+MODEL_PRIORITY_4 = os.getenv("MODEL_PRIORITY_4", "inclusionai/ling-3.0-flash-fin:free")
+# Priority 5: Google Search / current-topic discovery
+MODEL_PRIORITY_5 = os.getenv("MODEL_PRIORITY_5", "Existing Gemini")
+
+def get_ordered_models_for_category(category="", task_type="reasoning"):
+    """
+    Returns ordered model identifiers according to workflow priorities:
+    1. nvidia/nemotron-3-ultra-550b-a55b:free -> Main content generation / reasoning
+    2. poolside/laguna-s-2.1:free -> Coding + technical topics
+    3. nvidia/nemotron-3.5-lightning:free -> Fast high-volume fallback
+    4. inclusionai/ling-3.0-flash-fin:free -> Finance/business topics
+    5. Existing Gemini -> Google Search / current-topic discovery
+    """
+    cat_lower = str(category or "").lower()
+    is_coding_tech = any(k in cat_lower for k in [
+        "code", "coding", "tech", "github", "developer", "phone", "hidden_phone_tech",
+        "software", "terminal", "algorithm", "innovation", "api", "hack", "script"
+    ])
+    is_finance_biz = any(k in cat_lower for k in [
+        "money", "finance", "business", "smart_living", "money_smart_living", "budget",
+        "scheme", "saving", "investment", "tax", "bank", "cost", "bill", "earn"
+    ])
+
+    if is_coding_tech:
+        # Coding & technical topics: Priority 2 first, then Priority 1, then Priority 3, then Priority 4
+        return [MODEL_PRIORITY_2, MODEL_PRIORITY_1, MODEL_PRIORITY_3, MODEL_PRIORITY_4]
+    elif is_finance_biz:
+        # Finance & business topics: Priority 4 first, then Priority 1, then Priority 3, then Priority 2
+        return [MODEL_PRIORITY_4, MODEL_PRIORITY_1, MODEL_PRIORITY_3, MODEL_PRIORITY_2]
+    else:
+        # Main content generation / reasoning: Priority 1 first, then Priority 3, then Priority 2, then Priority 4
+        return [MODEL_PRIORITY_1, MODEL_PRIORITY_3, MODEL_PRIORITY_2, MODEL_PRIORITY_4]
+
 # Model Configurations
 GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-2.5-pro")
 GEMINI_FLASH_MODEL = os.getenv("GEMINI_FLASH_MODEL", "gemini-2.5-flash")

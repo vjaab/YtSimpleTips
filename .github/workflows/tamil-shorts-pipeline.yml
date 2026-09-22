@@ -132,6 +132,17 @@ jobs:
           if [ ! -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
             echo "CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" >> .env
           fi
+          # ── MODEL PRIORITIES ──
+          # Priority 1: nvidia/nemotron-3-ultra-550b-a55b:free -> Main content generation / reasoning
+          # Priority 2: poolside/laguna-s-2.1:free -> Coding + technical topics
+          # Priority 3: nvidia/nemotron-3.5-lightning:free -> Fast high-volume fallback
+          # Priority 4: inclusionai/ling-3.0-flash-fin:free -> Finance/business topics
+          # Priority 5: Existing Gemini -> Google Search / current-topic discovery
+          echo "MODEL_PRIORITY_1=nvidia/nemotron-3-ultra-550b-a55b:free" >> .env
+          echo "MODEL_PRIORITY_2=poolside/laguna-s-2.1:free" >> .env
+          echo "MODEL_PRIORITY_3=nvidia/nemotron-3.5-lightning:free" >> .env
+          echo "MODEL_PRIORITY_4=inclusionai/ling-3.0-flash-fin:free" >> .env
+          echo "MODEL_PRIORITY_5=Existing Gemini" >> .env
           
       - name: Setup YouTube Auth Files
         run: |

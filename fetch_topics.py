@@ -39,8 +39,9 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
         print("🔴 [OFFLINE MODE] Skipping LLM fallback generation. Returning empty.")
         return []
     
-    print(f"🔮 [fetch_topics] Attempting LLM generation fallback (without search grounding) for category '{category}'...")
-    client = get_gemini_client()
+    print(f"🔮 [fetch_topics] Attempting prioritized LLM fallback for category '{category}'...")
+    from gemini_script import call_fallback_model
+    from config import is_gemini_disabled, GEMINI_FLASH_MODEL
     
     avoid_list_str = "\n".join([f"- {t}" for t in avoid_titles if t])
     avoid_instruction = f"CRITICAL: DO NOT generate any tips or hacks related to the following recently covered topics:\n{avoid_list_str}\n" if avoid_list_str else ""
@@ -77,30 +78,14 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     Do NOT wrap in markdown tags like ```json.
     """
     
-    if client:
-        attempts = 0
-        while attempts < 3:
-            try:
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=0.7
-                    )
-                )
-                raw = response.text.strip()
-                if "```json" in raw:
-                    raw = raw[raw.find("```json")+7:raw.rfind("```")]
-                elif "```" in raw:
-                    raw = raw[raw.find("```")+3:raw.rfind("```")]
-                raw = raw.strip()
-                if raw.startswith("["):
-                    facts = json.loads(raw)
-                else:
-                    data = json.loads(raw)
-                    facts = data.get("tips", []) if isinstance(data, dict) else data
-                
-                # Filter unique facts
+    # 1. Attempt prioritized models (Priority 1-4 based on category) via OpenRouter first
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
+    if openrouter_key:
+        print(f"🔮 [fetch_topics fallback] Attempting prioritized OpenRouter models for '{category}'...")
+        try:
+            fallback_res = call_fallback_model(prompt, category=category, task_type="reasoning", expect_json=True)
+            if fallback_res:
+                facts = fallback_res.get("tips", []) if isinstance(fallback_res, dict) else fallback_res
                 unique_facts = []
                 for fact in facts:
                     title = fact.get("title", "")
@@ -110,7 +95,6 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                         print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
                         continue
                     
-                    # Validate GitHub URL
                     if "github.com" in url.lower():
                         print(f"🔍 Validating GitHub URL: {url}")
                         if not validate_github_url(url):
@@ -124,28 +108,83 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                     unique_facts.append(fact)
                 
                 if unique_facts:
-                    print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via LLM.")
+                    print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via prioritized models.")
                     return unique_facts
-                
-                print("⚠️ [fetch_topics fallback] All LLM generated facts were duplicates. Retrying fallback generation...")
-                attempts += 1
-            except Exception as e:
-                err_str = str(e).lower()
-                is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
-                if is_depleted_or_429:
-                    from config import disable_gemini
-                    disable_gemini()
-                    print("🚨 [fetch_topics fallback] Globally disabling Gemini after 429/credit depletion. Breaking to use non-Gemini fallback.")
-                    break
-                print(f"⚠️ [fetch_topics fallback] LLM fallback failed: {e}. Retrying...")
-                attempts += 1
-    else:
-        print("⚠️ Gemini API Client missing/disabled. Skipping Gemini LLM fallback.")
+        except Exception as e:
+            print(f"⚠️ [fetch_topics fallback] Prioritized models fallback error: {e}")
+
+    # 2. Priority 5: Gemini fallback (standard Gemini without Search Grounding)
+    if not is_gemini_disabled():
+        client = get_gemini_client()
+        if client:
+            attempts = 0
+            while attempts < 3:
+                try:
+                    response = client.models.generate_content(
+                        model=GEMINI_FLASH_MODEL,
+                        contents=prompt,
+                        config=types.GenerateContentConfig(
+                            temperature=0.7
+                        )
+                    )
+                    raw = response.text.strip()
+                    if "```json" in raw:
+                        raw = raw[raw.find("```json")+7:raw.rfind("```")]
+                    elif "```" in raw:
+                        raw = raw[raw.find("```")+3:raw.rfind("```")]
+                    raw = raw.strip()
+                    if raw.startswith("["):
+                        facts = json.loads(raw)
+                    else:
+                        data = json.loads(raw)
+                        facts = data.get("tips", []) if isinstance(data, dict) else data
+                    
+                    # Filter unique facts
+                    unique_facts = []
+                    for fact in facts:
+                        title = fact.get("title", "")
+                        url = fact.get("source_url", "")
+                        is_unique, reason = check_story_uniqueness(new_title=title, new_url=url)
+                        if not is_unique:
+                            print(f"⏭️ [fetch_topics fallback] Skipping non-unique fact: {title}. Reason: {reason}")
+                            continue
+                        
+                        # Validate GitHub URL
+                        if "github.com" in url.lower():
+                            print(f"🔍 Validating GitHub URL: {url}")
+                            if not validate_github_url(url):
+                                print(f"⚠️ GitHub URL returned 404 or unreachable: {url}. Skipping.")
+                                continue
+                            print(f"✅ GitHub URL validated: {url}")
+                        else:
+                            print(f"⏭️ [fetch_topics fallback] Skipping non-GitHub URL: {url}")
+                            continue
+                            
+                        unique_facts.append(fact)
+                    
+                    if unique_facts:
+                        print(f"✅ [fetch_topics fallback] Successfully generated {len(unique_facts)} unique facts via Gemini (Priority 5).")
+                        return unique_facts
+                    
+                    print("⚠️ [fetch_topics fallback] All Gemini generated facts were duplicates. Retrying fallback generation...")
+                    attempts += 1
+                except Exception as e:
+                    err_str = str(e).lower()
+                    is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
+                    if is_depleted_or_429:
+                        from config import disable_gemini
+                        disable_gemini()
+                        print("🚨 [fetch_topics fallback] Globally disabling Gemini after 429/credit depletion. Breaking to use secondary fallbacks.")
+                        break
+                    print(f"⚠️ [fetch_topics fallback] Gemini fallback failed: {e}. Retrying...")
+                    attempts += 1
+        else:
+            print("⚠️ Gemini API Client missing/disabled. Skipping Gemini LLM fallback.")
             
-    print("🚨 [fetch_topics fallback] Attempting non-Gemini fallback models (Groq/OpenAI/etc)...")
+    # 3. Secondary non-Gemini fallback models (Groq/Cloudflare/OpenAI/etc)
+    print("🚨 [fetch_topics fallback] Attempting secondary non-Gemini fallback models (Groq/OpenAI/etc)...")
     try:
-        from gemini_script import call_fallback_model
-        fallback_res = call_fallback_model(prompt)
+        fallback_res = call_fallback_model(prompt, category=category, task_type="reasoning", expect_json=True)
         if fallback_res:
             facts = fallback_res.get("tips", []) if isinstance(fallback_res, dict) else fallback_res
             unique_facts = []
@@ -171,10 +210,10 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                 unique_facts.append(fact)
             
             if unique_facts:
-                print(f"✅ [fetch_topics fallback models] Successfully generated {len(unique_facts)} unique facts via fallback models.")
+                print(f"✅ [fetch_topics fallback models] Successfully generated {len(unique_facts)} unique facts via secondary fallback models.")
                 return unique_facts
     except Exception as e:
-        print(f"⚠️ [fetch_topics fallback models] Non-Gemini fallback also failed: {e}")
+        print(f"⚠️ [fetch_topics fallback models] Secondary fallback also failed: {e}")
         
     return []
 

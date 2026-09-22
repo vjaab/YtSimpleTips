@@ -34,5 +34,11 @@ Every generated script must strictly follow this exact 4-part sequential timelin
 - **Audio (Tanglish):** Create an abrupt ending that links directly back into the hook line for infinite loops, followed by: "மறக்காம 'Simple Tips by VJ' சேனலை சப்ஸ்கிரைப் பண்ணுங்க!"
 ---
 
+## Model Priorities for Coding / Tech
+- **Primary (Priority 2):** `poolside/laguna-s-2.1:free` (Coding + technical topics specialist)
+- **Fallback (Priority 1):** `nvidia/nemotron-3-ultra-550b-a55b:free` (Main content generation / reasoning)
+- **High-Volume Fallback (Priority 3):** `nvidia/nemotron-3.5-lightning:free` (Fast fallback)
+- **Discovery (Priority 5):** `Existing Gemini` (Google Search Grounding)
+
 ## Execution Command
 When the user gives you a GitHub URL or repository name, look up the description, stars, and use case. Then, execute the structural blueprint above.

@@ -851,8 +851,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
         
         # Step 1: Select a topic using TOPIC_SELECTOR_PROMPT
         selector_prompt = PIPELINE_PROMPTS["topic_selector"] + f"\nRotate / Focus on Category: {selected_category}\n"
-        print("🕵️ [AGENT 0] Topic Selector Agent: Generating fact topic...")
-        topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True)
+        print(f"🕵️ [AGENT 0] Topic Selector Agent: Generating fact topic for '{selected_category}'...")
+        topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True, category=selected_category, task_type="reasoning")
         
         if topic_data_res and "topic" in topic_data_res:
             selected_headline = topic_data_res.get("topic")
@@ -867,15 +867,23 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 surprising_fact=topic_data_res.get("surprising_fact"),
                 target_segment=topic_data_res.get("target_segment", "all")
             )
-            print("📝 [AGENT 1] Script Writer Agent: Generating script...")
+            print("📝 [AGENT 1] Script Writer Agent: Generating script via prioritized models...")
             script_text = None
             try:
-                # Direct generation without JSON constraints
-                response = client.models.generate_content(
+                # Prioritized generation: P1 (nemotron) or specialized P2/P4 -> P3 fallback -> P5 Gemini
+                script_raw = call_gemini_api(
+                    client,
+                    script_writer_prompt,
                     model=GEMINI_FLASH_MODEL,
-                    contents=script_writer_prompt
+                    prefer_fallback=True,
+                    category=selected_category,
+                    task_type="script_writer",
+                    expect_json=False
                 )
-                script_text = response.text.strip()
+                if isinstance(script_raw, str):
+                    script_text = script_raw.strip()
+                elif isinstance(script_raw, dict):
+                    script_text = script_raw.get("script") or script_raw.get("text") or str(script_raw)
             except Exception as e:
                 print(f"⚠️ Script Writer Agent failed: {e}")
                 
@@ -890,7 +898,7 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                     first_two_sentences_of_script=summary_sentences
                 )
                 print("🏷️ [AGENT 2] Metadata Agent: Generating Title & Tags...")
-                metadata_res = call_gemini_api(client, metadata_prompt, prefer_fallback=True)
+                metadata_res = call_gemini_api(client, metadata_prompt, prefer_fallback=True, category=selected_category, task_type="metadata")
                 if not metadata_res:
                     metadata_res = {}
                 
@@ -915,7 +923,7 @@ Return ONLY a JSON object matching the required schema:
 {refined_requirements}
 """
                 print("🎬 [AGENT 3] Storyboard Agent: Generating storyboard layout...")
-                final_script = call_gemini_api(client, storyboard_prompt, model='gemini-2.5-flash')
+                final_script = call_gemini_api(client, storyboard_prompt, model='gemini-2.5-flash', category=selected_category, task_type="reasoning")
                 
                 if final_script and "storyboard" in final_script:
                     storyboard = final_script["storyboard"]
@@ -943,7 +951,7 @@ Return ONLY a JSON object matching the required schema:
 {refined_requirements}
 """
                         print("🔄 [Fact Shorts Path] Retrying Storyboard Agent with length correction...")
-                        final_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash')
+                        final_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash', category=selected_category, task_type="reasoning")
                         if not final_script or "storyboard" not in final_script:
                             print("⚠️ [Fact Shorts Path] Correction retry failed. Falling back to default generation path...")
                         else:
@@ -1025,7 +1033,7 @@ Return ONLY a JSON object matching the required schema:
             selection_instruction=selection_instruction,
             news_context=news_context
         )
-        selection = call_gemini_api(client, selector_prompt)
+        selection = call_gemini_api(client, selector_prompt, category=category, task_type="reasoning")
         if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
         if not selection or "selected_headline" not in selection:
             print("⚠️ Selector Agent failed. Attempting offline fallback script...")
@@ -1070,7 +1078,7 @@ Return ONLY a JSON object matching the required schema:
         target_headline=selected_headline,
         context=isolated_context
     )
-    sharpened_data = call_gemini_api(client, sharpener_prompt, prefer_fallback=True)
+    sharpened_data = call_gemini_api(client, sharpener_prompt, prefer_fallback=True, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if sharpened_data:
         isolated_context += f"\nSharpened Facts: {json.dumps(sharpened_data)}"
@@ -1081,7 +1089,7 @@ Return ONLY a JSON object matching the required schema:
         persona=SYSTEM_PERSONA,
         news_context=isolated_context
     )
-    research = call_gemini_api(client, research_prompt)
+    research = call_gemini_api(client, research_prompt, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not research:
         print("⚠️ Research Agent failed. Attempting offline fallback script...")
@@ -1093,7 +1101,7 @@ Return ONLY a JSON object matching the required schema:
         persona=SYSTEM_PERSONA,
         research_json=json.dumps(research)
     )
-    hooks_data = call_gemini_api(client, hook_prompt, prefer_fallback=True)
+    hooks_data = call_gemini_api(client, hook_prompt, prefer_fallback=True, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not hooks_data or "hooks" not in hooks_data:
         print("⚠️ Hook Agent failed. Attempting offline fallback script...")
@@ -1111,7 +1119,7 @@ Return ONLY a JSON object matching the required schema:
         selected_hook=best_hook.get("text"),
         selection_instruction=selection_instruction
     )
-    narrative = call_gemini_api(client, narrative_prompt)
+    narrative = call_gemini_api(client, narrative_prompt, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not narrative:
         print("⚠️ Narrative Agent failed. Attempting offline fallback script...")
@@ -1125,7 +1133,7 @@ Return ONLY a JSON object matching the required schema:
         word_count_limit_str=word_count_limit_str,
         best_hook=best_hook.get("text")
     )
-    optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True)
+    optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     if not optimized:
         print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
@@ -1137,7 +1145,7 @@ Return ONLY a JSON object matching the required schema:
         persona=SYSTEM_PERSONA,
         optimized_script=optimized.get("optimized_script", "")
     )
-    retention_result = call_gemini_api(client, retention_sci_prompt, model=GEMINI_PRO_MODEL)
+    retention_result = call_gemini_api(client, retention_sci_prompt, model=GEMINI_PRO_MODEL, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     
     retention_map = {}
@@ -1165,7 +1173,7 @@ Return ONLY a JSON object matching the required schema:
         schema_requirements=refined_requirements
     )
     
-    final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash')
+    final_script = call_gemini_api(client, humanizer_prompt, model='gemini-2.5-flash', category=category, task_type="reasoning")
     
     if final_script and "storyboard" in final_script:
         # ── AGENT 6: VALIDATOR & SELF-CORRECTION LOOP ──
@@ -1178,7 +1186,7 @@ Return ONLY a JSON object matching the required schema:
                 persona=SYSTEM_PERSONA,
                 storyboard_json=json.dumps(final_script, ensure_ascii=False)
             )
-            validation_result = call_gemini_api(client, validator_prompt, model='gemini-2.5-flash')
+            validation_result = call_gemini_api(client, validator_prompt, model='gemini-2.5-flash', category=category, task_type="reasoning")
             
             if not validation_result:
                 print("⚠️ Validator Agent failed to respond. Proceeding with current storyboard.")
@@ -1254,7 +1262,7 @@ Return ONLY a JSON object matching the required schema:
                     schema_requirements=refined_requirements
                 ) + f"\n\nCRITICAL FEEDBACK FROM AUDITOR (YOU MUST CORRECT THESE ISSUES AND RETRY):\n{feedback}"
                 
-                corrected_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash')
+                corrected_script = call_gemini_api(client, correction_prompt, model='gemini-2.5-flash', category=category, task_type="reasoning")
                 if corrected_script:
                     final_script = corrected_script
                 validation_attempts += 1
@@ -1266,7 +1274,7 @@ Return ONLY a JSON object matching the required schema:
                 persona=SYSTEM_PERSONA,
                 script_text=final_script.get("script") or final_script.get("optimized_script") or optimized.get("optimized_script", "")
             )
-            title_variants_res = call_gemini_api(client, title_variants_prompt, prefer_fallback=True)
+            title_variants_res = call_gemini_api(client, title_variants_prompt, prefer_fallback=True, category=category, task_type="metadata")
             if title_variants_res and "title_variants" in title_variants_res:
                 final_script["title_variants"] = title_variants_res["title_variants"]
             else:
@@ -1522,16 +1530,22 @@ def set_providers_exhausted():
         _OFFLINE_MODE_ACTIVE = True
         print("🔴 [OFFLINE MODE] All LLM providers exhausted at runtime. Switching to offline fallback scripts only.")
 
-def call_fallback_model(prompt):
+def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=True):
     """
-    Attempts to call non-Gemini fallback APIs in sequence:
-    OpenRouter (free router) -> Groq -> Cloudflare Workers AI -> OpenAI -> Anthropic (Claude) -> DeepSeek -> Cerebras.
-    Returns the parsed JSON response dict or None.
+    Attempts to call fallback APIs according to the repository priority hierarchy:
+    Priority 1: nvidia/nemotron-3-ultra-550b-a55b:free (Main content generation / reasoning)
+    Priority 2: poolside/laguna-s-2.1:free (Coding + technical topics)
+    Priority 3: nvidia/nemotron-3.5-lightning:free (Fast high-volume fallback)
+    Priority 4: inclusionai/ling-3.0-flash-fin:free (Finance/business topics)
+    Priority 5: Existing Gemini (handled upstream or as secondary fallback)
+    followed by generic OpenRouter fallbacks -> Groq -> Cloudflare Workers AI -> OpenAI -> Anthropic (Claude) -> DeepSeek -> Cerebras.
+    Returns parsed JSON dict (if expect_json=True) or string response (if expect_json=False) or None.
     """
     import os
     import json
     import requests
     import time
+    from config import get_ordered_models_for_category
 
     def clean_and_parse_json(content):
         raw = content.strip()
@@ -1541,39 +1555,56 @@ def call_fallback_model(prompt):
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         return json.loads(raw.strip())
 
-    # 0. OpenRouter Free Router (auto-selects from currently available free models)
+    # 0. OpenRouter with prioritized models based on category & task
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
     if openrouter_key:
         headers = {
             "Authorization": f"Bearer {openrouter_key}",
             "Content-Type": "application/json"
         }
-        openrouter_models = [
+        
+        # Priority 1 to 4 models tailored by category/domain
+        openrouter_models = get_ordered_models_for_category(category, task_type)
+        
+        # Extended fallback routers if top priorities are rate-limited
+        for extra_model in [
             "openrouter/free",
-            "nvidia/nemotron-3-ultra:free",
             "nex-agi/nex-n2-pro:free",
             "dots-studio/dots3-note-preview:free",
             "qwen/qwen-2.5-72b-instruct",
             "moonshotai/kimi-k2.6",
             "google/gemini-2.5-flash",
-        ]
+        ]:
+            if extra_model not in openrouter_models:
+                openrouter_models.append(extra_model)
+
         for or_model in openrouter_models:
-            print(f"🔮 Falling back to OpenRouter ({or_model})...")
+            print(f"🔮 Calling OpenRouter ({or_model}) [Domain: {category or 'General'}]...")
             try:
                 payload = {
                     "model": or_model,
                     "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
                     "temperature": 0.7,
                     "max_tokens": 4096
                 }
+                if expect_json:
+                    payload["response_format"] = {"type": "json_object"}
+
                 r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                
+                # If json_object format was rejected (400), retry without it
+                if r.status_code == 400 and expect_json:
+                    payload.pop("response_format", None)
+                    r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30)
+
                 if r.status_code == 200:
                     content = r.json()["choices"][0]["message"]["content"].strip()
-                    return clean_and_parse_json(content)
+                    if expect_json:
+                        return clean_and_parse_json(content)
+                    return content
                 elif r.status_code == 429:
-                    print(f"⚠️ OpenRouter ({or_model}) rate limited (429). Retrying after delay...")
-                    time.sleep(5)
+                    print(f"⚠️ OpenRouter ({or_model}) rate limited (429). Retrying next priority model...")
+                    time.sleep(1)
                     continue
                 else:
                     print(f"⚠️ OpenRouter API ({or_model}) failed with code {r.status_code}: {r.text}")
@@ -1598,16 +1629,20 @@ def call_fallback_model(prompt):
                 payload = {
                     "model": model_name,
                     "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
                     "temperature": 0.7
                 }
+                if expect_json:
+                    payload["response_format"] = {"type": "json_object"}
+
                 r = requests.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers, timeout=30)
                 if r.status_code == 200:
                     content = r.json()["choices"][0]["message"]["content"].strip()
-                    return clean_and_parse_json(content)
+                    if expect_json:
+                        return clean_and_parse_json(content)
+                    return content
                 elif r.status_code == 429:
                     print(f"⚠️ Groq ({model_name}) rate limited (429). Retrying after delay...")
-                    time.sleep(10)
+                    time.sleep(5)
                     continue
                 else:
                     print(f"⚠️ Groq ({model_name}) failed with code {r.status_code}: {r.text}")
@@ -1623,11 +1658,8 @@ def call_fallback_model(prompt):
             "Authorization": f"Bearer {cloudflare_token}",
             "Content-Type": "application/json"
         }
-        # gpt-oss models use Chat Completions format (choices[0].message.content)
-        # instead of legacy {response: "..."} format
         gpt_oss_models = {"@cf/openai/gpt-oss-120b", "@cf/openai/gpt-oss-20b"}
         for model_name in CLOUDFLARE_MODELS:
-            # Skip models that already failed permanently in this run
             if model_name in _FAILED_CLOUDFLARE_MODELS:
                 print(f"⏭️ Skipping known-bad Cloudflare model: {model_name}")
                 continue
@@ -1635,10 +1667,12 @@ def call_fallback_model(prompt):
             try:
                 payload = {
                     "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
                     "temperature": 0.7,
                     "max_tokens": 4096
                 }
+                if expect_json:
+                    payload["response_format"] = {"type": "json_object"}
+
                 r = requests.post(
                     f"https://api.cloudflare.com/client/v4/accounts/{cloudflare_account_id}/ai/run/{model_name}",
                     json=payload,
@@ -1652,20 +1686,20 @@ def call_fallback_model(prompt):
                     else:
                         raw_content = result.get("response", "")
                     if isinstance(raw_content, dict):
-                        return raw_content
+                        return raw_content if expect_json else json.dumps(raw_content)
                     content = raw_content.strip() if isinstance(raw_content, str) else ""
                     if content:
-                        return clean_and_parse_json(content)
+                        if expect_json:
+                            return clean_and_parse_json(content)
+                        return content
                     else:
                         print(f"⚠️ Cloudflare ({model_name}) returned empty content")
                 else:
                     err_text = r.text.lower()
                     print(f"⚠️ Cloudflare ({model_name}) failed with code {r.status_code}: {r.text}")
-                    # Check for daily quota exhaustion
                     if "daily free allocation" in err_text or "neurons" in err_text:
                         print("🚫 Cloudflare daily quota exhausted. Skipping all remaining CF models.")
                         break
-                    # Cache permanent failures: 400 (bad model), 403 (no access), 404 (not found)
                     if r.status_code in (400, 403, 404):
                         _FAILED_CLOUDFLARE_MODELS.add(model_name)
                         print(f"🚫 Caching {model_name} as permanently failed for this run")
@@ -1684,13 +1718,17 @@ def call_fallback_model(prompt):
             payload = {
                 "model": "gpt-4o-mini",
                 "messages": [{"role": "user", "content": prompt}],
-                "response_format": {"type": "json_object"},
                 "temperature": 0.7
             }
+            if expect_json:
+                payload["response_format"] = {"type": "json_object"}
+
             r = requests.post("https://api.openai.com/v1/chat/completions", json=payload, headers=headers, timeout=30)
             if r.status_code == 200:
                 content = r.json()["choices"][0]["message"]["content"].strip()
-                return clean_and_parse_json(content)
+                if expect_json:
+                    return clean_and_parse_json(content)
+                return content
             else:
                 print(f"⚠️ OpenAI API failed with code {r.status_code}: {r.text}")
         except Exception as e:
@@ -1714,7 +1752,9 @@ def call_fallback_model(prompt):
             r = requests.post("https://api.anthropic.com/v1/messages", json=payload, headers=headers, timeout=30)
             if r.status_code == 200:
                 content = r.json()["content"][0]["text"].strip()
-                return clean_and_parse_json(content)
+                if expect_json:
+                    return clean_and_parse_json(content)
+                return content
             else:
                 print(f"⚠️ Anthropic API failed with code {r.status_code}: {r.text}")
         except Exception as e:
@@ -1732,13 +1772,17 @@ def call_fallback_model(prompt):
             payload = {
                 "model": "deepseek-chat",
                 "messages": [{"role": "user", "content": prompt}],
-                "response_format": {"type": "json_object"},
                 "temperature": 0.7
             }
+            if expect_json:
+                payload["response_format"] = {"type": "json_object"}
+
             r = requests.post("https://api.deepseek.com/chat/completions", json=payload, headers=headers, timeout=30)
             if r.status_code == 200:
                 content = r.json()["choices"][0]["message"]["content"].strip()
-                return clean_and_parse_json(content)
+                if expect_json:
+                    return clean_and_parse_json(content)
+                return content
             else:
                 print(f"⚠️ DeepSeek API failed with code {r.status_code}: {r.text}")
         except Exception as e:
@@ -1758,13 +1802,17 @@ def call_fallback_model(prompt):
                 payload = {
                     "model": model_name,
                     "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
                     "temperature": 0.7
                 }
+                if expect_json:
+                    payload["response_format"] = {"type": "json_object"}
+
                 r = requests.post("https://api.cerebras.ai/v1/chat/completions", json=payload, headers=headers, timeout=30)
                 if r.status_code == 200:
                     content = r.json()["choices"][0]["message"]["content"].strip()
-                    return clean_and_parse_json(content)
+                    if expect_json:
+                        return clean_and_parse_json(content)
+                    return content
                 else:
                     print(f"⚠️ Cerebras API ({model_name}) failed with code {r.status_code}: {r.text}")
             except Exception as e:
@@ -1775,11 +1823,14 @@ def call_fallback_model(prompt):
     set_providers_exhausted()
     return None
 
-def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallback=False):
+def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallback=False, category="", task_type="reasoning", expect_json=True):
     """
-    Helper to execute Gemini API call with robust fallback to alternate models and APIs.
-    Automatically rotates Gemini API keys. If a model fails on all keys, it is removed 
-    from rotation and we immediately proceed to the next fallback without waiting.
+    Helper to execute pipeline model calls according to the 5-tier priority hierarchy:
+    Priority 1: nvidia/nemotron-3-ultra-550b-a55b:free (Main content generation / reasoning)
+    Priority 2: poolside/laguna-s-2.1:free (Coding + technical topics)
+    Priority 3: nvidia/nemotron-3.5-lightning:free (Fast high-volume fallback)
+    Priority 4: inclusionai/ling-3.0-flash-fin:free (Finance/business topics)
+    Priority 5: Existing Gemini (Google Search Grounding & high-capacity reasoning fallback)
     """
     from config import is_gemini_disabled
     
@@ -1790,15 +1841,16 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
     
     if is_gemini_disabled():
         print("🚨 Gemini is currently disabled due to rate limit/depletion. Proceeding directly to fallback models.")
-        return call_fallback_model(prompt)
+        return call_fallback_model(prompt, category=category, task_type=task_type, expect_json=expect_json)
 
-    if prefer_fallback:
-        print("💡 Lighter/cheaper task detected. Attempting fallback model first to conserve Gemini quota...")
-        fallback_res = call_fallback_model(prompt)
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
+    if prefer_fallback or openrouter_key:
+        print(f"💡 Attempting prioritized model (P1-P4) for '{category or 'main content'}'...")
+        fallback_res = call_fallback_model(prompt, category=category, task_type=task_type, expect_json=expect_json)
         if fallback_res:
-            print("   ✅ Handled successfully by fallback model!")
+            print("   ✅ Handled successfully by prioritized model!")
             return fallback_res
-        print("   🔄 Fallback failed or not configured. Routing back to Gemini API.")
+        print("   🔄 Prioritized OpenRouter models exhausted or rate-limited. Routing to Priority 5 (Gemini API)...")
 
     client = client_arg or get_gemini_client()
     if not client:
@@ -1819,16 +1871,18 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
     while attempts < max_attempts and models_to_try:
         current_model = models_to_try[model_idx % len(models_to_try)]
         try:
-            print(f"🔮 Calling Gemini API with model {current_model}...")
+            print(f"🔮 Calling Gemini API with model {current_model} (Priority 5)...")
             response = client.models.generate_content(
                 model=current_model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.7,
-                    response_mime_type="application/json"
+                    response_mime_type="application/json" if expect_json else "text/plain"
                 )
             )
             raw = response.text.strip()
+            if not expect_json:
+                return raw
             # Clean possible markdown wrapping
             if "```json" in raw:
                 raw = raw[raw.find("```json")+7:raw.rfind("```")]
@@ -1875,8 +1929,8 @@ def call_gemini_api(client_arg, prompt, model='gemini-2.5-flash', prefer_fallbac
                     
             attempts += 1
             
-    print("🚨 All Gemini models depleted or failed. Attempting fallback models...")
-    fallback_res = call_fallback_model(prompt)
+    print("🚨 All Gemini models depleted or failed. Attempting secondary fallback models...")
+    fallback_res = call_fallback_model(prompt, category=category, task_type=task_type, expect_json=expect_json)
     if fallback_res:
         return fallback_res
 
