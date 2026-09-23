@@ -93,6 +93,8 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 CEREBRAS_API_KEY = os.getenv("CEREBRAS_API_KEY", "")
+SAMBANOVA_API_KEY = os.getenv("SAMBANOVA_API_KEY", "")
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY", "")
 
 # Trending Engine API Keys (Phase 1)
 YOUTUBE_DATA_API_KEY = os.getenv("YOUTUBE_DATA_API_KEY", "")
@@ -301,8 +303,6 @@ CLOUDFLARE_ALL_MODELS = (
     CLOUDFLARE_VAD_MODELS
 )
 
-PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
-
 # ── MODEL PRIORITIES ACROSS PIPELINE WORKFLOWS ─────────────────────────────────
 # Priority 1: Main content generation / reasoning
 MODEL_PRIORITY_1 = os.getenv("MODEL_PRIORITY_1", "nvidia/nemotron-3-ultra-550b-a55b:free")
@@ -397,14 +397,12 @@ MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
 BGM_VOLUME = 0.08
-VOICE_SPEED = 1.10
-AVATAR_SYNC_OFFSET = float(os.getenv("AVATAR_SYNC_OFFSET", "0.16"))
+VOICE_SPEED = 1.0  # Native neural speed (1.03x) is handled directly inside ElevenLabs; avoids robotic atempo phase distortion
 TARGET_AUDIO_DURATION = (60, 80)
 
 # Global Feature Flags
 ENABLE_LONGFORM = False
 ENABLE_TRENDING_ENGINE = True    # Phase 1: YouTube/Reddit/GitHub trending aggregation
-ENABLE_AVATAR = False  # Disable talking-head avatar overlay in generated shorts (visual-only mode for MSFACTSTAMIL style)
 
 # Engagement & Retention Pillars (Production Spec 2026)
 ENABLE_KINETIC_CAPTIONS = True
@@ -428,7 +426,6 @@ ENABLE_AI_DISCLOSURE_LABEL = True     # AI Human-in-the-loop production label (Y
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
 ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video (DISABLED - caused clutter)
 ENABLE_STOCK_FOOTAGE = True          # Control whether to include stock footage (Pexels)
-ENABLE_AI_DISCLOSURE_LABEL = True     # YouTube AI-generated content disclosure label
 
 # Retention Engine Settings
 VISUAL_CUT_TARGET_SECONDS = 2.0

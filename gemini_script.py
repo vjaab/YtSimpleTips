@@ -45,10 +45,10 @@ OUTPUT FORMAT (JSON only, no markdown):
   "category": "{category}"
 }"""
 
-SCRIPT_GENERATION_PROMPT = """You are VJ, the friendly, energetic, and witty creator of "Simple Tips by VJ" — creating viral, highly engaging YouTube Shorts in spoken Tamil.
+SCRIPT_GENERATION_PROMPT = """You are VJ, the friendly, charismatic, and knowledgeable creator of "Simple Tips by VJ" — speaking directly to your audience in natural, conversational spoken Tamil (பேச்சுத் தமிழ்) with smooth English loan words.
 
-Your goal is to write a 100% NATURAL, HUMAN-SOUNDING YouTube Shorts script in spoken Tamil with English terms.
-It must NEVER sound like an AI bot, textbook lecture, or translated article. Talk like an enthusiastic, caring elder brother or friend sharing an unbelievable, eye-opening secret!
+Your goal is to write a 100% NATURAL, HUMAN-SOUNDING YouTube Shorts script.
+It must NEVER sound like an AI bot, textbook lecture, news bulletin, or stiff translated article. Talk like an enthusiastic, caring buddy sharing a mind-bending secret over chai!
 
 TOPIC: {topic}
 HOOK: {hook_question}
@@ -56,32 +56,37 @@ CORE CONCEPT: {core_concept}
 RELATABLE EXAMPLE: {real_world_example}
 MIND-BLOWING TWIST: {surprising_fact}
 
-CRITICAL RULES FOR 100% NATURAL HUMAN SPEECH:
-1. BAN ROBOTIC OPENERS:
-   - NEVER start with: "Oru vishayam theriyuma?", "ஒரு விஷயம் தெரியுமா?", "Intha video-la...", "இந்த வீடியோல...", "Welcome back...", "வணக்கம் நண்பர்களே".
-   - START IMMEDIATELY with the shocking claim, pain point, or mind-bending question!
-   - Example Good Hook: "3000 வருஷம் பழமையான தேன் இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க!"
-   - Example Good Hook: "ஒரு ரூம்க்குள்ள நுழைஞ்ச உடனே எதுக்கு வந்தோம்னு மூளைக்கு டக்குனு மறந்து போகுதா? இதுக்கு பின்னாடி ஒரு செம சயின்ஸ் இருக்கு!"
+CRITICAL RULES FOR 100% NATURAL HUMAN CONVERSATION:
+1. BAN ALL ROBOTIC OPENERS:
+   - NEVER start with: "Oru vishayam theriyuma?", "ஒரு விஷயம் தெரியுமா?", "Intha video-la...", "இந்த வீடியோல...", "Welcome back...", "வணக்கம் நண்பர்களே", "உங்களுக்கு இது தெரியுமா...".
+   - DIVE IMMEDIATELY into the core curiosity, unbelievable fact, or relatable pain point in the first 2 seconds!
+   - Example Human Openers:
+     * "3000 வருஷம் பழமையான தேன் இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க!"
+     * "ரூம்க்குள்ள போன உடனே எதுக்கு வந்தோம்னு மூளைக்கு டக்குனு மறந்து போயிடுதா? நம்ம எல்லாருக்குமே இது நடந்திருக்கும்!"
+     * "விமானத்துல போறப்போ சாப்பாடு ஏன் சப்புனு இருக்கு தெரியுமா? தப்பு சமையல்ல இல்ல... நம்ம நாக்குல!"
 
-2. SCRIPT LANGUAGE (SPOKEN TAMIL SCRIPT WITH INLINE ENGLISH):
-   - Write in day-to-day colloquial spoken Tamil using Tamil script for Tamil words (பண்ணுங்க, பாருங்க, சொல்றேன், இருக்கு, நில்லுங்க, ஆனா).
-   - Use standard English letters for technical/scientific/common words inline (e.g., Honey, Egypt, Brain, Neurons, Bacteria, Microwave, Electricity, Experiment, Test, Result).
-   - NEVER use formal, literary, or archaic bookish Tamil (BAN: செய்யுங்கள், காணலாம், அறிக, பதிவிறக்கம், முடிவுரை). Use real spoken language: பண்ணுங்க, பார்க்கலாம், தெரிஞ்சுக்கோங்க.
+2. CASUAL SPOKEN TAMIL (பேச்சுத் தமிழ்):
+   - Always write in real everyday spoken Tamil: பண்ணுங்க (not செய்யுங்கள்), பாருங்க (not பாருங்கள்), தெரிஞ்சுக்கோங்க (not அறிந்துகொள்ளுங்கள்), ஆயிடும் (not ஆகும்), இப்போ (not இப்போது), சொல்றேன் கேளுங்க.
+   - Use natural conversational micro-reactions and pauses:
+     "அட என்னங்க சொல்றீங்க?!", "கொஞ்சம் யோசிச்சு பாருங்களேன்...", "சொன்னா நம்ப மாட்டீங்க...", "கேட்டா ஷாக் ஆயிடுவீங்க...", "நம்ம எல்லாருக்குமே இது நடந்திருக்கும்...", "சிம்பிளா சொல்லணும்னா...", "இங்க தான் மேட்டரே இருக்கு!".
+   - Mix common English nouns naturally inline (e.g. Brain, Honey, Egypt, Sugar, Flight, Battery, Salt, Water, Pressure, Test, Result).
 
-3. CONVERSATIONAL FILLERS & CONNECTIVE TISSUE:
-   - Inject natural Tamil conversational reactions: "ஆக்சுவலா என்ன நடக்குதுன்னா...", "ஒரு நிமிஷம் நில்லுங்க...", "அட ஆமால?", "ஆனா இங்க தான் ஒரு செம ட்விஸ்ட் இருக்கு...", "ட்ரை பண்ணி பாருங்க!".
-   - Pacing: Short, punchy sentences (6 to 10 words). Use commas (,) and ellipses (...) generously so the voice pauses naturally for breath and emphasis.
+3. HUMAN PACING & BREATHING CADENCE:
+   - Vary your sentence length! Mix quick 3-to-5 word punchy reactions with smooth 8-to-12 word explanations.
+   - Generously use ellipses (...) for natural human pauses and hesitation: "ஆனா இங்க தான்... ஒரு பெரிய ட்விஸ்ட் இருக்கு."
+   - Use exclamation marks (!) for genuine emotional excitement, and question marks (?) for engaging rhetorical questions.
 
 4. 4-PART SCRIPT STRUCTURE:
-   - Hook (0-5s): Shocking fact / impossible claim / universal mystery.
-   - The Relatable Mystery (5-25s): The everyday scenario or test. Why this happens.
-   - The Mind-Blowing Twist (25-45s): The scientific or historical reality that shatters assumptions.
-   - Natural Wrap / Comment Loop (45-55s): Ask a quick opinion or urge viewers to share with family.
+   - The Hook (0-5s): A shocking question or impossible-sounding reality.
+   - The Relatable Mystery (5-20s): Connect with a daily habit or real-world scenario ("நம்மில் பல பேருக்கு...", "டெய்லி நம்ம பார்க்குற...").
+   - The Mind-Blowing Reveal (20-40s): The scientific or psychological "Aha!" moment explained simply.
+   - The Natural Wrap (40-50s): A fun debate question or friendly wrap ("நீங்க என்ன நினைக்கிறீங்க? கமெண்ட்ல சொல்லுங்க!").
 
-5. TOTAL DURATION & LENGTH:
-   - 120-150 words in spoken Tamil (timed for 45-60 seconds at natural 1.10x creator speed).
+5. SCRIPT LENGTH & WORD COUNT:
+   - STRICT LIMIT: 115-135 words in spoken Tamil (timed for 40-50 seconds at natural, relaxed human storytelling speed).
+   - NEVER pack too many words. Give the voice room to breathe!
 
-OUTPUT: Return ONLY the raw script text in spoken Tamil, ready for natural ElevenLabs text-to-speech. No labels, no bullet points, no timestamps."""
+OUTPUT: Return ONLY the raw script text in spoken Tamil, ready for ElevenLabs voice cloning. No labels, no brackets, no bullet points, no timestamps."""
 
 TITLE_TAGS_PROMPT = """You are an expert YouTube SEO optimizer specializing in viral regional South Indian infotainment Shorts ("Simple Tips by VJ").
 
@@ -120,24 +125,24 @@ TOPIC_CATEGORIES = [
     "nature_animal_oddities",        # 🐾 Nature & animal oddities (crows face memory for life, octopus 3 hearts & blue blood, trees talking underground)
 ]
 
-SYSTEM_PERSONA = """Role: You are VJ, the beloved creator and voice behind "Simple Tips by VJ" — creating viral, mind-blowing, and highly useful Tamil YouTube Shorts.
+SYSTEM_PERSONA = """Role: You are VJ, the charismatic creator and voice behind "Simple Tips by VJ" — creating viral, mind-blowing, and universally relatable Tamil YouTube Shorts.
 
 Persona & Tone:
-- You are like a friendly, energetic, knowledgeable elder brother or close buddy talking over chai.
-- Warm, enthusiastic, engaging, and 100% NATURAL.
-- NEVER speak like an AI robot, corporate narrator, or textbook lecturer.
-- BAN ROBOTIC CLICHÉS: Never use "Oru vishayam theriyuma?", "Intha video-la...", "Nee yaarukkum theriyadhu...", "வணக்கம் நண்பர்களே".
-- Start immediately with the shocking result or curiosity hook in the first 2 seconds!
+- You are a warm, energetic, and authentic friend or elder brother talking one-on-one.
+- 100% NATURAL HUMAN VOICE — relaxed, conversational, witty, and engaging.
+- NEVER sound like an AI bot, robotic narrator, news reader, or dry lecturer.
+- BANNED CLICHÉS: Never use "Oru vishayam theriyuma?", "Intha video-la...", "Nee yaarukkum theriyadhu...", "வணக்கம் நண்பர்களே", "உங்களுக்கு இது தெரியுமா...".
+- Hook the listener instantly in the first 2 seconds!
 
-Language:
-- Write in colloquial, everyday spoken Tamil using Tamil script for Tamil words and standard English script for technical/scientific terms inline.
-- Style Reference:
-  "3000 வருஷம் பழமையான தேனை இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க! எகிப்துல பிரமிடுகளை தோண்டும்போது கிடைச்ச தேனை டெஸ்ட் பண்ணி பார்த்த சயின்டிஸ்ட் வாயடைச்சு போயிட்டாங்க. ஏன்னா அது இன்னமும் பிரெஷ்ஷா, சாப்பிடக்கூடிய நிலையில இருக்கு. இது எப்படி சாத்தியம்? தேன்ல ஈரம் அதாவது வாட்டர் கண்டென்ட் ரொம்ப ரொம்ப கம்மி. அதோட அதுல நேச்சுரலாவே அசிடிக் தன்மை இருக்கு. அதனால பாக்டீரியா அல்லது பூஞ்சை அதுக்குள்ள உயிர் வாழவே முடியாது! ஆனா வெயிட் பண்ணுங்க... கடையில வாங்குற சில பாக்கெட் தேன்ல சர்க்கரை பாகு கலந்தா அது கெட்டுப்போயிடும். ப்யூர் தேன் எப்பவுமே கெட்டுப்போகாது. இந்த இன்ட்ரஸ்டிங் ஃபேக்ட் உங்களுக்கு பிடிச்சிருந்தா, மறக்காம உங்க நண்பர்களுக்கும் ஷேர் பண்ணுங்க!"
+Language Style:
+- Colloquial everyday spoken Tamil (பேச்சுத் தமிழ்) with standard English technical terms inline.
+- Use real spoken grammar: பண்ணுங்க, பாப்போம், தெரிஞ்சுக்கோங்க, ஆயிடும், நில்லுங்க, ஆனா, சொல்றேன் கேளுங்க.
+- Natural micro-reactions: "அட ஆமால?", "கொஞ்சம் யோசிச்சு பாருங்களேன்...", "சொன்னா நம்ப மாட்டீங்க...", "சிம்பிளா சொல்லணும்னா...".
 
-Pacing & TTS Rhythm:
-- Short punchy sentences (under 10 words).
-- Use commas (,) and ellipses (...) generously to create natural human breathing spaces.
-- Use exclamation marks (!) at big reveals to trigger emotional energy."""
+TTS Rhythm & Breath Control:
+- Varied sentence rhythm: quick punchy reactions mixed with smooth explanations.
+- Use commas (,) and ellipses (...) to introduce natural human pauses and breathing space.
+- Expressive punctuation (! and ?) for authentic emotional pitch dynamics."""
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
 
@@ -238,17 +243,17 @@ Rewrite the narrative draft to maximize retention, remove ALL fluff, and structu
 The script must feel like a rapid-fire conversation, NOT a lecture.
 
 MANDATORY RULES:
-1. TOTAL WORD COUNT: Strictly 150-190 words.
+1. TOTAL WORD COUNT: Strictly 115-135 words (relaxed, natural human pacing for a 45-55s Short).
 2. SCRIPT STRUCTURE (MANDATORY):
    - HOOK (0-5s): Shocking fact/bold statement. No greeting.
-   - PROBLEM (5-20s): Daily pain point that EVERYONE faces.
-   - SOLUTION (20-65s): Simple, clear tip/hack (single idea) — doable by anyone.
-   - ENGAGEMENT QUESTION (65-75s): Simple opinion-based question to prompt comments — answerable by 16 to 80 year olds.
-3. SCRIPT SENTENCES: Every sentence must be COMPLETE, grammatically correct, and end with proper punctuation (., !, ?). Under 12 words each. NO fragments.
+   - PROBLEM (5-20s): Daily pain point or relatable mystery that EVERYONE wonders about.
+   - SOLUTION (20-45s): Simple, clear explanation — doable and graspable by anyone.
+   - ENGAGEMENT QUESTION (45-55s): Friendly opinion question to prompt comments.
+3. SCRIPT SENTENCES: Every sentence must be COMPLETE, conversational, and end with proper punctuation (., !, ?). Under 10-12 words each.
 4. Ensure the script directly resonates with daily scenarios from Tamil life.
-5. Add an ellipsis '...' after key settings or complex terms to force the TTS to pause naturally.
-6. TOPIC VERIFICATION: Verify that the exact setting, app name, or topic is named clearly and explicitly in the first 5 seconds using SIMPLE terms.
-7. TTS COMPATIBILITY: Every sentence must be a complete grammatical unit in Tanglish. No "etc.", no bullet-style fragments, no trailing incomplete thoughts.
+5. Add an ellipsis '...' after key reveals or thought shifts to give the TTS natural breathing room.
+6. TOPIC VERIFICATION: Verify that the exact subject or mystery is named clearly in the first 5 seconds using SIMPLE terms.
+7. TTS COMPATIBILITY: Output must be colloquial spoken Tamil (பேச்சுத் தமிழ்) with standard English loanwords. No fragments, no "etc.", no incomplete trailing thoughts.
 8. UNIVERSAL ACCESSIBILITY: Every sentence must pass the "Grandmother Test" — would a 70-year-old Tamil grandmother understand this? If not, simplify.
 9. PRACTICAL VALUE: Must give viewers something they can USE or SHARE with family TODAY.
 
@@ -257,7 +262,7 @@ NARRATIVE DRAFT:
 
 Return ONLY a JSON object:
 {{
-  "optimized_script": "The full rewritten text combining all parts into a fast-paced Tanglish script adhering to the 4-part structure. STRICTLY 150-190 words.",
+  "optimized_script": "The full rewritten text combining all parts into a natural, conversational Tanglish script adhering to the 4-part structure. STRICTLY 115-135 words.",
   "word_count": 0
 }}"""
 
@@ -601,39 +606,65 @@ def apply_cta_rotation(final_script):
 
 def sanitize_script_against_ai_cliches(text: str) -> str:
     """
-    Cleans up any stubborn AI clichés, repetitive bot phrases, or stiff senthamizh
-    words so the script sounds 100% natural, human, and conversational.
+    Cleans up stubborn AI clichés, repetitive bot phrases, and stiff senthamizh
+    words so the script sounds 100% natural, human, and conversational like VJ.
     """
     if not text:
         return ""
     import re
-    # Replace common robotic starters with high-energy conversational openers
+    # Strip common robotic AI openers completely instead of substituting with other cliches
     banned_openers = [
-        (r'^(?:Oru vishayam theriyuma|ஒரு விஷயம் தெரியுமா)[\s?!.,-]*', 'உங்களுக்கு இது தெரியுமா... '),
-        (r'^(?:Nee yaarukkum theriyadhu|யாருக்கும் தெரியாது)[\s?!.,-]*', 'நம்மில் பல பேருக்கு தெரியாத ஒரு உண்மை... '),
-        (r'^(?:Intha video-la namma paarkalaam|இந்த வீடியோல நம்ம பார்க்க போறோம்)[\s?!.,-]*', 'ஒரு நிமிஷம் கவனிங்க... '),
-        (r'^(?:Welcome back to Simple Tips by VJ|வணக்கம் நண்பர்களே)[\s?!.,-]*', ''),
+        (r'^(?:Oru vishayam theriyuma|ஒரு விஷயம் தெரியுமா)[\s?!.,-]*', ''),
+        (r'^(?:Nee yaarukkum theriyadhu|யாருக்கும் தெரியாது)[\s?!.,-]*', ''),
+        (r'^(?:Ungalukku idhu theriyuma|உங்களுக்கு இது தெரியுமா)[\s?!.,-]*', ''),
+        (r'^(?:Nammil pala perukku theriyaadha|நம்மில் பல பேருக்கு தெரியாத)[\s?!.,-]*', ''),
+        (r'^(?:Intha video-la namma paarkalaam|இந்த வீடியோல நம்ம பார்க்க போறோம்)[\s?!.,-]*', ''),
+        (r'^(?:Intha video-la|இந்த வீடியோல)[\s?!.,-]*', ''),
+        (r'^(?:Welcome back to Simple Tips by VJ|வணக்கம் நண்பர்களே|வணக்கம்)[\s?!.,-]*', ''),
         (r'^(?:Today we are going to see|இன்னைக்கு நாம பார்க்க போறது)[\s?!.,-]*', ''),
+        (r'^(?:Did you know that|Did you know)[\s?!.,-]*', ''),
     ]
     # Iteratively strip stacked openers
-    for _ in range(3):
+    for _ in range(4):
         original = text
         for pattern, replacement in banned_openers:
             text = re.sub(pattern, replacement, text, flags=re.IGNORECASE).strip()
         if text == original:
             break
         
-    # Replace bookish formal Tamil with colloquial spoken Tamil (no \b for Tamil unicode chars)
+    # Replace bookish/formal/stiff Tamil with natural conversational spoken Tamil (பேச்சுத் தமிழ்)
     colloquial_replacements = [
         ('செய்யுங்கள்', 'பண்ணுங்க'),
+        ('செய்ய வேண்டும்', 'பண்ணனும்'),
+        ('செய்து பாருங்கள்', 'பண்ணி பாருங்க'),
         ('காணலாம்', 'பார்க்கலாம்'),
+        ('காணப்படும்', 'இருக்கும்'),
         ('அறிந்துகொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்க'),
+        ('தெரிந்து கொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்க'),
         ('பதிவிறக்கம்', 'டவுன்லோடு'),
         ('செயலி', 'ஆப்'),
         ('நினைவில் கொள்ளுங்கள்', 'மறந்துடாதீங்க'),
         ('முடிவாக', 'கடைசியா'),
+        ('முடிவுரை', 'கடைசியா'),
         ('முதலாவதாக', 'முதல்ல'),
         ('இரண்டாவதாக', 'அடுத்ததா'),
+        ('பயன்படுத்துங்கள்', 'யூஸ் பண்ணுங்க'),
+        ('பயன்படுத்தலாம்', 'யூஸ் பண்ணலாம்'),
+        ('ஆகும்', 'ஆயிடும்'),
+        ('சாத்தியமாகும்', 'சாத்தியம் தான்'),
+        ('சாத்தியம்', 'சாத்தியமா'),
+        ('சாப்பிடக்கூடும்', 'சாப்பிடலாம்'),
+        ('என்றால்', 'அப்படின்னா'),
+        ('எனவே', 'அதனால'),
+        ('ஆகையால்', 'அதனால'),
+        ('மட்டுமல்லாமல்', 'மட்டும் இல்லாம'),
+        ('அதேபோல்', 'அதே மாதிரி'),
+        ('மிகவும்', 'ரொம்பவே'),
+        ('அதிகமாக', 'நெறைய'),
+        ('இப்போது', 'இப்போ'),
+        ('எப்போது', 'எப்போ'),
+        ('அப்போது', 'அப்போ'),
+        ('உடனடியாக', 'டக்குனு'),
     ]
     for target, replacement in colloquial_replacements:
         text = text.replace(target, replacement)
@@ -645,6 +676,10 @@ def sanitize_script_against_ai_cliches(text: str) -> str:
         (r'\bparkalam\b', 'paapom'),
         (r'\bkavanikkavum\b', 'gavaninga'),
         (r'\bninaivil kollungal\b', 'maranthudatheenga'),
+        (r'\baagum\b', 'aayidum'),
+        (r'\bippodhu\b', 'ippo'),
+        (r'\beppodhu\b', 'eppo'),
+        (r'\bappodhu\b', 'appo'),
     ]
     for pattern, replacement in tanglish_replacements:
         text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
@@ -686,11 +721,11 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     
     if session_length_cap:
         print(f"📉 [gemini_script] Applying session length cap of {session_length_cap} words.")
-        local_persona = local_persona.replace("150-190", f"50-{session_length_cap}")
-        local_optimizer = local_optimizer.replace("150-190", f"50-{session_length_cap}")
+        local_persona = local_persona.replace("115-135", f"50-{session_length_cap}")
+        local_optimizer = local_optimizer.replace("115-135", f"50-{session_length_cap}")
         word_count_limit_str = f"STRICT LIMIT: Total word count MUST be between 50-{session_length_cap} words."
     else:
-        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 150-190 words."
+        word_count_limit_str = "STRICT LIMIT: Total word count MUST be between 115-135 words."
 
     SYSTEM_PERSONA = local_persona
     RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
@@ -914,8 +949,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
                 storyboard_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
-Given the following fact script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
+Given the following fact script, break it down into a sequence of short narration segments (4-6 words each) and generate a detailed visual storyboard.
+You must produce 18-28 storyboard scenes to align with the 115-135 words script length.
 
 SCRIPT:
 {script_text}
@@ -930,23 +965,23 @@ Return ONLY a JSON object matching the required schema:
                     storyboard = final_script["storyboard"]
                     total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
                     scene_count = len(storyboard)
-                    length_ok = scene_count >= 20 and total_words >= 90
+                    length_ok = scene_count >= 15 and total_words >= 80
                     
                     if not length_ok:
-                        print(f"⚠️ [Fact Shorts Path] Storyboard too short: {scene_count} scenes / {total_words} words. Need 25-40 scenes / 90+ words. Retrying...")
+                        print(f"⚠️ [Fact Shorts Path] Storyboard too short: {scene_count} scenes / {total_words} words. Need 18-28 scenes / 80+ words. Retrying...")
                         # Trigger self-correction by re-calling storyboard agent with feedback
                         correction_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
-Given the following fact script, break it down into a sequence of short narration segments (5-8 words each) and generate a detailed visual storyboard.
-You must produce exactly 25-40 storyboard scenes to align with the 150-190 words script length.
+Given the following fact script, break it down into a sequence of short narration segments (4-6 words each) and generate a detailed visual storyboard.
+You must produce 18-28 storyboard scenes to align with the 115-135 words script length.
 
 SCRIPT:
 {script_text}
 
 PREVIOUS ATTEMPT FAILED: Only produced {scene_count} scenes with {total_words} total words.
-CRITICAL REQUIREMENT: You MUST produce 25-40 scenes. Each scene's narration field must be 3-5 words.
-Total word count across all narration fields must be 90+ words.
+CRITICAL REQUIREMENT: You MUST produce 18-28 scenes. Each scene's narration field must be 4-6 words.
+Total word count across all narration fields must be 80+ words.
 
 Return ONLY a JSON object matching the required schema:
 {refined_requirements}
@@ -1528,7 +1563,7 @@ def reset_offline_mode():
 def check_all_providers_exhausted():
     """Check if all LLM providers are exhausted based on config state."""
     global _ALL_LLM_PROVIDERS_EXHAUSTED, _OFFLINE_MODE_ACTIVE
-    from config import is_gemini_disabled, CEREBRAS_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+    from config import is_gemini_disabled, CEREBRAS_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, SAMBANOVA_API_KEY, HUGGINGFACE_API_KEY
     
     # Check if Gemini is disabled
     gemini_disabled = is_gemini_disabled()
@@ -1541,9 +1576,11 @@ def check_all_providers_exhausted():
     anthropic_available = bool(ANTHROPIC_API_KEY)
     deepseek_available = bool(DEEPSEEK_API_KEY)
     cloudflare_available = bool(CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID)
+    sambanova_available = bool(SAMBANOVA_API_KEY)
+    huggingface_available = bool(HUGGINGFACE_API_KEY)
     
     # If Gemini is disabled AND no other providers have keys, we're in offline mode
-    if gemini_disabled and not any([cerebras_available, groq_available, openrouter_available, openai_available, anthropic_available, deepseek_available, cloudflare_available]):
+    if gemini_disabled and not any([cerebras_available, groq_available, openrouter_available, openai_available, anthropic_available, deepseek_available, cloudflare_available, sambanova_available, huggingface_available]):
         _ALL_LLM_PROVIDERS_EXHAUSTED = True
         _OFFLINE_MODE_ACTIVE = True
         print("🔴 [OFFLINE MODE] No LLM API keys configured. Switching to offline fallback scripts only.")
@@ -1567,7 +1604,7 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
     Priority 3: nvidia/nemotron-3.5-lightning:free (Fast high-volume fallback)
     Priority 4: inclusionai/ling-3.0-flash-fin:free (Finance/business topics)
     Priority 5: Existing Gemini (handled upstream or as secondary fallback)
-    followed by generic OpenRouter fallbacks -> Groq -> Cloudflare Workers AI -> OpenAI -> Anthropic (Claude) -> DeepSeek -> Cerebras.
+    followed by generic OpenRouter fallbacks -> Groq -> Cloudflare Workers AI -> OpenAI -> Anthropic (Claude) -> DeepSeek -> Cerebras -> SambaNova -> HuggingFace.
     Returns parsed JSON dict (if expect_json=True) or string response (if expect_json=False) or None.
     """
     import os
@@ -1846,6 +1883,90 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
                     print(f"⚠️ Cerebras API ({model_name}) failed with code {r.status_code}: {r.text}")
             except Exception as e:
                 print(f"⚠️ Cerebras ({model_name}) fallback failed: {e}")
+
+    # 7. SambaNova (fast Llama/DeepSeek inference — OpenAI-compatible API)
+    sambanova_key = os.getenv("SAMBANOVA_API_KEY")
+    if sambanova_key:
+        headers = {
+            "Authorization": f"Bearer {sambanova_key}",
+            "Content-Type": "application/json"
+        }
+        sambanova_models = [
+            "Meta-Llama-3.3-70B-Instruct",
+            "DeepSeek-V3.2",
+            "MiniMax-M3",
+            "gpt-oss-120b"
+        ]
+        for model_name in sambanova_models:
+            print(f"🔮 Falling back to SambaNova ({model_name})...")
+            try:
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 4096
+                }
+                if expect_json:
+                    payload["response_format"] = {"type": "json_object"}
+
+                r = requests.post("https://api.sambanova.ai/v1/chat/completions", json=payload, headers=headers, timeout=30)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    if expect_json:
+                        return clean_and_parse_json(content)
+                    return content
+                elif r.status_code == 429:
+                    print(f"⚠️ SambaNova ({model_name}) rate limited (429). Trying next model...")
+                    time.sleep(2)
+                    continue
+                elif r.status_code == 402:
+                    print(f"⚠️ SambaNova requires payment method / balance (402). Skipping remaining SambaNova models.")
+                    break
+                else:
+                    print(f"⚠️ SambaNova ({model_name}) failed with code {r.status_code}: {r.text[:200]}")
+            except Exception as e:
+                print(f"⚠️ SambaNova ({model_name}) fallback failed: {e}")
+
+    # 8. HuggingFace Inference API (free serverless — OpenAI-compatible router)
+    hf_key = os.getenv("HUGGINGFACE_API_KEY")
+    if hf_key:
+        headers = {
+            "Authorization": f"Bearer {hf_key}",
+            "Content-Type": "application/json"
+        }
+        hf_models = [
+            "meta-llama/Llama-3.3-70B-Instruct",
+            "Qwen/Qwen2.5-72B-Instruct",
+            "meta-llama/Llama-3.1-8B-Instruct"
+        ]
+        for model_name in hf_models:
+            print(f"🔮 Falling back to HuggingFace ({model_name})...")
+            try:
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 4096,
+                    "stream": False
+                }
+                # Modern HF router endpoint (OpenAI compatible)
+                r = requests.post("https://router.huggingface.co/hf-inference/v1/chat/completions", json=payload, headers=headers, timeout=60)
+                if r.status_code == 200:
+                    content = r.json()["choices"][0]["message"]["content"].strip()
+                    if expect_json:
+                        return clean_and_parse_json(content)
+                    return content
+                elif r.status_code == 429:
+                    print(f"⚠️ HuggingFace ({model_name}) rate limited (429). Trying next model...")
+                    time.sleep(2)
+                    continue
+                elif r.status_code == 503:
+                    print(f"⚠️ HuggingFace ({model_name}) model loading (503). Trying next model...")
+                    continue
+                else:
+                    print(f"⚠️ HuggingFace ({model_name}) failed with code {r.status_code}: {r.text[:200]}")
+            except Exception as e:
+                print(f"⚠️ HuggingFace ({model_name}) fallback failed: {e}")
 
     # All fallbacks exhausted
     print("🚨 All fallback models exhausted. Setting offline mode.")

@@ -8,9 +8,9 @@ import traceback
 from datetime import datetime
 import re
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ENABLE_AVATAR
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED
 from fetch_topics import fetch_facts_for_category
-from topic_tracker import record_story, update_youtube_url, get_next_avatar
+from topic_tracker import record_story, update_youtube_url
 from gemini_script import pick_and_generate_script, is_offline_mode_active, reset_offline_mode
 from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
@@ -281,23 +281,13 @@ def run_pipeline(forced_category=None, dry_run=False):
         # ── STEP 4: Generate Cloned Voice Audio ──
         log_message("STEP 4: Generating Tamil cloned voiceover...")
         
-        # Select Intro Video for Lip-Sync (Rotation) - only if avatar is enabled
-        if ENABLE_AVATAR:
-            intro_videos = glob.glob("assets/video/*.mp4")
-            if not intro_videos:
-                intro_videos = ["assets/video/Firefly_video_final.mp4"]
-            selected_avatar = get_next_avatar(intro_videos)
-            script_data["lipsync_face_path"] = selected_avatar
-            log_message(f"Selected Lip-Sync Template: {selected_avatar} (from {len(intro_videos)} options)")
-        else:
-            script_data["lipsync_face_path"] = None
-            log_message("ℹ️ Avatar disabled by config (ENABLE_AVATAR=False). Skipping avatar selection.")
+
         
         has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
         use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
         
         if has_kaggle and not use_local_only:
-            log_message("🚀 Triggering Kaggle GPU Handover for voice generation + lip-sync...")
+            log_message("🚀 Triggering Kaggle GPU Handover for voice generation...")
             custom_map = script_data.get("phonetic_pronunciation_map", {})
             results = trigger_kaggle_gpu_job(script_data, custom_map)
             
@@ -313,16 +303,11 @@ def run_pipeline(forced_category=None, dry_run=False):
                 audio_path = results.get("audio_path")
                 duration = results.get("duration")
                 word_timestamps = results.get("word_timestamps")
-                ls_path = results.get("lipsync_path")
-                script_data["kaggle_lipsync_path"] = ls_path
                 
                 audio_received = audio_path and os.path.exists(audio_path)
-                ls_received = ls_path and os.path.exists(ls_path)
                 
-                if audio_received and ls_received:
-                    log_message("✅ Received Audio and Lip-Sync from Kaggle GPU!")
-                elif audio_received:
-                    log_message("✅ Received Audio from Kaggle GPU! (Lip-Sync was missing/failed)")
+                if audio_received:
+                    log_message("✅ Received Audio from Kaggle GPU!")
                 else:
                     log_message("❌ Kaggle job finished but critical audio output is missing.")
                     kaggle_failed = True
@@ -354,15 +339,6 @@ def run_pipeline(forced_category=None, dry_run=False):
             except Exception as e:
                 log_message(f"❌ Local voiceover failed: {e}")
                 audio_path = None
-            script_data["kaggle_lipsync_path"] = None
-            # Avatar display controlled by ENABLE_AVATAR config flag
-            if ENABLE_AVATAR:
-                script_data["skip_avatar"] = False
-                if dry_run:
-                    log_message("ℹ️ [DRY-RUN] Retaining avatar template for visual composition verification.")
-            else:
-                script_data["skip_avatar"] = True
-                log_message("ℹ️ Avatar disabled by config (ENABLE_AVATAR=False).")
             
         # Propagate Voice Fallback Status
         import audio_gen
@@ -396,8 +372,7 @@ def run_pipeline(forced_category=None, dry_run=False):
     keywords = script_data.get("keywords", [])
     record_story(
         title, fact_headline, subcat, keywords,
-        voice_used="VJ_Cloned_Voice", youtube_url="pending_upload", source_url=fact_url,
-        avatar_used=None if script_data.get("skip_avatar") else script_data.get("lipsync_face_path")
+        voice_used="VJ_Cloned_Voice", youtube_url="pending_upload", source_url=fact_url
     )
 
     # ── STEP 5: Build Word Visual Chunks ──

@@ -389,7 +389,6 @@ def build_video_from_script(script, output_name=None):
         "aspect_ratio": script["aspect_ratio"],
         "target_platform": script["target_platform"],
         "visual_only": True,
-        "skip_avatar": True,
         "visual_shorts_scenes": script["scenes"],
         "subtitle_chunks": chunks
     }

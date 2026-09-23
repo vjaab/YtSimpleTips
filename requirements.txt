@@ -11,8 +11,6 @@ imageio-ffmpeg
 opencv-python-headless
 numpy>=1.26.0,<2.0.0
 rapidfuzz
-rembg
-onnxruntime
 
 
 # Audio & Voice Cloning

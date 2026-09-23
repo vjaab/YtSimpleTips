@@ -29,7 +29,7 @@ from config import (
     ENABLE_DUAL_CAPTIONS, ENABLE_ADVANCED_TRANSITIONS, ENABLE_CATEGORY_COLORS,
     ENABLE_FACT_COUNTER, ENABLE_COUNTDOWN_TIMER, ENABLE_SOUND_ON_INDICATOR,
     ENABLE_SEAMLESS_LOOP, ENABLE_LONGFORM, ENABLE_EVIDENCE_SCREENSHOTS,
-    ENABLE_AI_DISCLOSURE_LABEL, AVATAR_SYNC_OFFSET,
+    ENABLE_AI_DISCLOSURE_LABEL,
 )
 from infographic_gen import build_infographic_clip, get_font_for_text, is_char_supported
 from entity_fetcher import fetch_all_entities
@@ -75,8 +75,6 @@ def _generate_layout_profile(headline: str) -> dict:
     # Hook transition
     hook_transition_time = rng.uniform(3.5, 5.0)            # was fixed 4.2s
 
-    # Avatar horizontal offset
-    avatar_x_offset = rng.randint(-60, 60)                  # was always centered
 
     # Subtitle Y jitter
     subtitle_y_jitter = rng.randint(-30, 30)                # was fixed 0
@@ -113,7 +111,6 @@ def _generate_layout_profile(headline: str) -> dict:
         "progress_bar_height": progress_bar_height,
         "progress_bar_position": progress_bar_position,
         "hook_transition_time": hook_transition_time,
-        "avatar_x_offset": avatar_x_offset,
         "subtitle_y_jitter": subtitle_y_jitter,
         "cta_pill_color": cta_pill_color,
         "cta_headline_template": cta_headline_template,
@@ -122,7 +119,7 @@ def _generate_layout_profile(headline: str) -> dict:
     print(f"🎲 Layout Profile: gradient={gradient_position}@{gradient_height_pct:.0%}, "
           f"particles={particle_style}, title_gap={title_bottom_gap}px, "
           f"progress={progress_bar_position}@{progress_bar_height}px, "
-          f"avatar_offset={avatar_x_offset}px, cta_variant={cta_variant}")
+          f"cta_variant={cta_variant}")
     return profile
 
 
@@ -172,14 +169,6 @@ def desaturate_frame(frame, factor=0.85):
     hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
     return cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
 
-# Per-video color grading variation seed (anti-repetition for YPP compliance)
-# Each video gets slightly different color parameters so no two look identical
-import random as _cg_random
-_COLOR_GRADE_SEED = _cg_random.Random()
-_COLOR_GRADE_SEED.seed()  # Random seed per pipeline run
-_CG_SAT_FACTOR = _COLOR_GRADE_SEED.uniform(0.85, 0.95)    # Saturation: 0.85-0.95
-_CG_GAMMA = _COLOR_GRADE_SEED.uniform(1.15, 1.25)          # Gamma: 1.15-1.25
-_CG_CONTRAST = _COLOR_GRADE_SEED.uniform(1.12, 1.18)       # Contrast: 1.12-1.18
 
 def apply_cartoon_color_grade(frame):
     """
@@ -822,10 +811,10 @@ def render_clean_caption(text_or_words, progress=1.0, accent_color=(204, 255, 0)
     
     # Position based on y_position parameter
     if y_position == "lower":
-        # Lower third - avoids avatar on right, captions on left
+        # Lower third area
         y_pos = int(FRAME_H * 0.72) - (len(lines) * line_h // 2)
     else:
-        # Middle - for videos without avatar
+        # Middle position
         y_pos = int(FRAME_H * 0.50) - (len(lines) * line_h // 2)
     
     # Calculate max line width for background pill
@@ -1223,43 +1212,6 @@ def _mix_and_master_audio(voice_path, bgm_path, output_duration, output_path, sf
         print(f"⚠️ [audio_mastering] Audio mixing failed: {e}. Copying raw voice.")
         shutil.copy(voice_path, output_path)
 
-def _generate_lipsync_video(audio_path, face_path=None):
-    if face_path is None:
-        face_path = os.path.join(ASSETS_DIR, "video", "Firefly_video_final.mp4")
-    if not os.path.exists(face_path):
-        print(f"{os.path.basename(face_path)} not found in assets. Skipping lip sync.")
-        return None
-
-    output_path = os.path.join(OUTPUT_DIR, "temp_lipsync.mp4")
-    
-    # If Kaggle was enabled but failed to return a lipsync (e.g., crashed), do NOT fall back to local MPS/CPU 
-    # to avoid extremely long 30+ min processing times.
-    has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
-    use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
-    
-    if has_kaggle and not use_local_only:
-        print("⚠️ Kaggle GPU was enabled but no lip-sync received. Skipping slow local fallback.")
-        return None
-
-    try:
-        from lip_sync import get_available_engine, generate_lip_sync
-        engine = get_available_engine()
-        print(f"🎭 Lip-sync engine: {engine or 'None available'}")
-
-        result = generate_lip_sync(
-            face_path=face_path,
-            audio_path=audio_path,
-            output_path=output_path,
-        )
-
-        if result and os.path.exists(result):
-            print(f"🎭 Lip-sync successful: {result}")
-            return result
-    except Exception as e:
-        print(f"🎭 Lip-sync helper import/execution failed: {e}")
-
-    print("🎭 Lip-sync generation failed or unavailable.")
-    return None
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ── MAIN VIDEO RENDERING ENGINE ──────────────────────────────────────────────
@@ -1353,7 +1305,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     TITLE_BOTTOM_GAP = layout_profile.get("title_bottom_gap", 192)
     progress_bar_height = layout_profile.get("progress_bar_height", 6)
     progress_bar_position = layout_profile.get("progress_bar_position", "bottom")
-    avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
     subtitle_y_jitter = layout_profile.get("subtitle_y_jitter", 0)
     
     # ── RESOLVE FACT COUNTER ──
@@ -1566,223 +1517,6 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # ── BOTTOM PANEL & TITLE BANNER ──
     # Title banner removed per user request
 
-    # ── AVATAR VIDEO PIP OVERLAY (Side-positioned, integrated) ──
-    skip_avatar = script_json.get("skip_avatar", False)
-    if not skip_avatar:
-        lipsync_path = script_json.get("kaggle_lipsync_path")
-        face_template = script_json.get("lipsync_face_path") or os.path.join(ASSETS_DIR, "video", "Firefly_video_final.mp4")
-        if not lipsync_path or not os.path.exists(lipsync_path):
-            lipsync_path = _generate_lipsync_video(audio_path, face_template)
-            
-        avatar_video_path = lipsync_path if lipsync_path else face_template
-        if avatar_video_path and os.path.exists(avatar_video_path):
-            print(f"Preparing Talking Head Avatar PiP from: {avatar_video_path}")
-            try:
-                vid_clip = VideoFileClip(avatar_video_path).without_audio()
-                
-                # Apply A/V sync offset if configured (lag compensation for MuseTalk/lip-sync)
-                if AVATAR_SYNC_OFFSET > 0 and vid_clip.duration > AVATAR_SYNC_OFFSET:
-                    vid_clip = vid_clip.subclipped(AVATAR_SYNC_OFFSET)
-                    print(f"   ⏱️ Applied A/V sync offset of -{AVATAR_SYNC_OFFSET}s to avatar clip.")
-
-                if vid_clip.duration < audio_duration:
-                    vid_clip = vid_clip.with_effects([vfx.Loop(duration=audio_duration)])
-                else:
-                    vid_clip = vid_clip.subclipped(0, audio_duration)
-                
-                w_a, h_a = vid_clip.size
-                target_aspect = 9 / 16
-                if w_a / h_a > target_aspect:
-                    new_w = int(h_a * target_aspect)
-                    x1 = (w_a - new_w) // 2
-                    vid_clip = vid_clip.cropped(x1=x1, y1=0, x2=x1+new_w, y2=h_a)
-                else:
-                    new_h = int(w_a / target_aspect)
-                    y1 = int((h_a - new_h) * 0.12) if h_a > new_h else 0
-                    vid_clip = vid_clip.cropped(x1=0, y1=y1, x2=w_a, y2=y1+new_h)
-                w_a, h_a = vid_clip.size
-                
-                # Sizing for optimized processing
-                width_pip, height_pip = 360, 640
-                avatar_mod_w, avatar_mod_h = 360, 640
-                avatar_clip = vid_clip.resized((avatar_mod_w, avatar_mod_h))
-                
-                # AI Background Removal with IMPROVED edge feathering
-                try:
-                    use_fast_chromakey = os.getenv("USE_FAST_CHROMAKEY", "false") == "true"
-                    
-                    if use_fast_chromakey:
-                        print("👤 [video_gen] Fast Chromakey Background Removal enabled for local dry-run...")
-                        unmasked_avatar = avatar_clip
-                        mask_cache = {}
-                        fps = getattr(vid_clip, "fps", 30.0) or 30.0
-                        
-                        def make_mask_frame(t):
-                            frame_idx = int(round(t * fps))
-                            if frame_idx in mask_cache:
-                                return mask_cache[frame_idx]
-                            frame = unmasked_avatar.get_frame(t)
-                            
-                            # Sample background color from multiple regions
-                            bg_color = (frame[0:15, 0:15].mean(axis=(0, 1)) + frame[0:15, -15:].mean(axis=(0, 1)) + frame[-15:, 0:15].mean(axis=(0, 1)) + frame[-15:, -15:].mean(axis=(0, 1))) / 4.0
-                            diff = np.abs(frame.astype(np.float32) - bg_color)
-                            mask = np.any(diff > 25, axis=2).astype(np.uint8) * 255  # Lower tolerance
-                            
-                            # IMPROVED: Better morphology for edge cleaning
-                            kernel = np.ones((7, 7), np.uint8)
-                            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=2)
-                            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
-                            
-                            # EDGE FEATHERING: Gaussian blur for smooth edges
-                            mask = cv2.GaussianBlur(mask, (15, 15), 0)
-                            mask = (mask / 255.0).astype(np.float32)
-                            
-                            # Watermark erasure: zero out bottom 15%
-                            h_mask, w_mask = mask.shape
-                            watermark_height = int(h_mask * 0.15)
-                            mask[-watermark_height:, :] = 0.0
-                            mask_cache[frame_idx] = mask
-                            return mask
-                            
-                    else:
-                        from rembg import remove, new_session
-                        print("👤 [video_gen] Initializing AI Background Removal (u2net_human_seg) with edge refinement...")
-                        rembg_session = new_session(model_name="u2net_human_seg")
-                        unmasked_avatar = avatar_clip
-                        mask_cache = {}
-                        fps = getattr(vid_clip, "fps", 30.0) or 30.0
-                        
-                        def make_mask_frame(t):
-                            frame_idx = int(round(t * fps))
-                            if frame_idx in mask_cache:
-                                return mask_cache[frame_idx]
-                            frame = unmasked_avatar.get_frame(t)
-                            rgba = remove(
-                                frame,
-                                session=rembg_session,
-                                alpha_matting=True,
-                                alpha_matting_foreground_threshold=240,
-                                alpha_matting_background_threshold=10,
-                                alpha_matting_erode_size=5,
-                                post_process_mask=True
-                            )
-                            mask = (rgba[:, :, 3] / 255.0).astype(np.float32)
-                            
-                            # POST-PROCESS: Additional edge feathering
-                            mask = cv2.GaussianBlur(mask, (11, 11), 0)
-                            
-                            # Watermark erasure: zero out bottom 15%
-                            h_mask, w_mask = mask.shape
-                            watermark_height = int(h_mask * 0.15)
-                            mask[-watermark_height:, :] = 0.0
-                            mask_cache[frame_idx] = mask
-                            return mask
-                        
-                    mclip = VideoClip(make_mask_frame, is_mask=True, duration=audio_duration)
-                    avatar_clip = avatar_clip.with_mask(mclip)
-                    print("   ✅ Background removal with edge feathering applied.")
-                except Exception as re_err:
-                    print(f"⚠️ rembg failed: {re_err}. Falling back to Rounded Card with feathered edges.")
-                    rad = int(min(width_pip, height_pip) * 0.18)
-                    mask = np.ones((height_pip, width_pip), dtype=np.float32)
-                    Y, X = np.ogrid[:height_pip, :width_pip]
-                    for y, x in [(rad, rad), (rad, width_pip-rad), (height_pip-rad, rad), (height_pip-rad, width_pip-rad)]:
-                        dist = np.sqrt((Y-y)**2 + (X-x)**2)
-                        corner_mask = (dist > rad) & ( ( (Y<rad) if y==rad else (Y>height_pip-rad) ) & ( (X<rad) if x==rad else (X>width_pip-rad) ) )
-                        mask[corner_mask] = 0.0
-                    # Feather the fallback mask too
-                    mask = cv2.GaussianBlur(mask, (21, 21), 0)
-                    mclip = VideoClip(lambda t: mask, is_mask=True, duration=audio_duration)
-                    avatar_clip = avatar_clip.with_mask(mclip)
-                
-                # Subtle "alive" motion parameters
-                zoom_speed = 0.05 / max(audio_duration, 1.0)
-                avatar_x_offset = layout_profile.get("avatar_x_offset", 0)
-                
-                # Retrieve timing for hook and CTA
-                hook_end = chunks[0]["end"] if chunks else 3.0
-                cta_start = chunks[-1]["start"] if chunks else audio_duration - 4.0
-                
-                # Shared cache to speed up rendering (MoviePy queries frame and mask independently)
-                frame_cache = {}
-                
-                def render_avatar_frame_and_mask(t):
-                    t_round = round(t, 2)
-                    if t_round in frame_cache:
-                        return frame_cache[t_round]
-                        
-                    # Get small RGB frame and mask frame (360x640)
-                    rgb_small = avatar_clip.get_frame(t)
-                    mask_small = avatar_clip.mask.get_frame(t)
-                    
-                    # Construct small RGBA frame
-                    rgba_small = np.zeros((avatar_mod_h, avatar_mod_w, 4), dtype=np.uint8)
-                    rgba_small[:, :, :3] = rgb_small
-                    rgba_small[:, :, 3] = (mask_small * 255).astype(np.uint8)
-                    
-                    pil_small = Image.fromarray(rgba_small, "RGBA")
-                    
-                    # Apply subtle rotation/scaling for alive effect
-                    alive_scale = 1.0 + zoom_speed * t + 0.003 * math.sin(t * 1.5)
-                    alive_angle = 0.3 * math.sin(t * 1.2 + 0.3)
-                    
-                    # Rotate small image
-                    pil_small = pil_small.rotate(alive_angle, resample=Image.Resampling.BICUBIC, expand=False)
-                    
-                    if t <= hook_end or t >= cta_start:
-                        # Full Screen: Scale up 360x640 to 1080x1920
-                        full_w = int(FRAME_W * alive_scale)
-                        full_h = int(FRAME_H * alive_scale)
-                        pil_full = pil_small.resize((full_w, full_h), Image.Resampling.LANCZOS)
-                        
-                        # Crop/center to FRAME_W, FRAME_H
-                        canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0,0,0,0))
-                        cx = full_w // 2
-                        cy = full_h // 2
-                        x1 = cx - FRAME_W // 2
-                        y1 = cy - FRAME_H // 2
-                        canvas.paste(pil_full, (-x1, -y1))
-                        
-                        arr = np.array(canvas)
-                        rgb = arr[:, :, :3]
-                        mask = arr[:, :, 3] / 255.0
-                    else:
-                        # Bottom-Centered Presenter Cutout (Skills Maker / VJ style)
-                        canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
-                        
-                        # Scale the avatar to be prominent at the bottom center
-                        avatar_width = int(400 * (FRAME_W / 1080.0))
-                        scale_factor = avatar_width / avatar_mod_w
-                        avatar_height = int(avatar_mod_h * scale_factor * alive_scale)
-                        avatar_width = int(avatar_width * alive_scale)
-                        
-                        face_resized = pil_small.resize((avatar_width, avatar_height), Image.Resampling.LANCZOS)
-                        
-                        # Center horizontally, align to the bottom edge of the frame
-                        bx = (FRAME_W - avatar_width) // 2 + avatar_x_offset
-                        by = FRAME_H - avatar_height
-                        
-                        # Composite onto canvas using alpha channel as mask
-                        canvas.paste(face_resized, (bx, by), face_resized)
-                        
-                        arr = np.array(canvas)
-                        rgb = arr[:, :, :3]
-                        mask = arr[:, :, 3] / 255.0
-                        
-                    # Maintain cache bounds
-                    if len(frame_cache) > 40:
-                        frame_cache.clear()
-                    frame_cache[t_round] = (rgb, mask)
-                    return rgb, mask
-
-                avatar_pip = VideoClip(lambda t: render_avatar_frame_and_mask(t)[0], has_constant_size=True).with_duration(audio_duration).with_start(0)
-                avatar_mask = VideoClip(lambda t: render_avatar_frame_and_mask(t)[1], is_mask=True, duration=audio_duration).with_start(0)
-                avatar_pip = avatar_pip.with_mask(avatar_mask)
-                
-                background_clips.append(avatar_pip)
-                print("✅ [video_gen] Optimized Avatar Dynamic PiP added (circular during tutorial, full-screen in hook/cta).")
-            except Exception as av_err:
-                print(f"❌ [video_gen] Failed to process avatar video clip: {av_err}")
 
     # ════════════════════════════════════════════════════════════════════════════════════
     # ── ENTITY OVERLAY RENDERERS ─────────────────────────────────────────────────
