@@ -517,56 +517,7 @@ def get_hottest_tech_topic(client, avoid_list=""):
         except Exception as e:
             err_str = str(e).upper()
             if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                print("🚨 [google_trends] Gemini API rate limited / exhausted during Google Trends query. Disabling Gemini.")
-                from config import disable_gemini
-                disable_gemini()
-                return None
-            print(f"⚠️ Could not fetch Google Trends topic: {e}. Proceeding without trending signal.")
-            return None
-    
-    print("⚠️ Google Trends exhausted after retries. Proceeding without trending signal.")
-    return None
-    print(f"🔥 Fetching hottest trending topic for today in India (Google Trends Analysis)...")
-    
-    avoid_prompt = f"\n\nCRITICAL: DO NOT pick any topics related to the following recently covered stories:\n{avoid_list}" if avoid_list else ""
-    
-    attempts = 0
-    while attempts < 3:
-        try:
-            response = client.models.generate_content(
-                model=GEMINI_FLASH_MODEL,
-                contents=(
-                    "Analyze today's Google Trends and viral content in India. "
-                    "What is the single most trending topic right now that would work as a Tamil infotainment YouTube Short? "
-                    "Look for: fascinating science facts, mind-blowing biology/human body facts, "
-                    "hidden phone settings, life hacks, smart money tips, historical mysteries, "
-                    "everyday science anomalies, or any fact going viral on social media in India. "
-                    "CRITICAL: The topic must appeal to Tamil-speaking audiences aged 16-35 in India and globally. "
-                    "Focus on universal curiosity-gap themes: science wonders, body mysteries, phone/tech hacks, "
-                    "money-saving tips, or surprising everyday facts. "
-                    "Do NOT choose developer news, programming tutorials, API releases, or corporate tech updates. "
-                    f"{avoid_prompt}\n\n"
-                    "Return ONLY a JSON object with two fields: "
-                    "'topic' (3-6 word phrase in English, e.g. 'human brain sleep mystery') and "
-                    "'keywords' (list of 6-8 specific search keywords). No markdown, no explanation."
-                ),
-                config=types.GenerateContentConfig(
-                    tools=[{'google_search': {}}]
-                )
-            )
-            raw = response.text.strip()
-            if "{" in raw and "}" in raw:
-                raw = raw[raw.find("{"):raw.rfind("}")+1]
-            
-            data = json.loads(raw)
-            print(f"📈 Google Trends Hot Topic (India): {data.get('topic', 'N/A')}")
-            return data
-        except Exception as e:
-            err_str = str(e).upper()
-            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                print("🚨 [google_trends] Gemini API rate limited / exhausted during Google Trends query. Disabling Gemini.")
-                from config import disable_gemini
-                disable_gemini()
+                print(f"⚠️ [google_trends] Google Search grounding rate limited: {e}. Proceeding without trending signal.")
                 return None
             print(f"⚠️ Could not fetch Google Trends topic: {e}. Proceeding without trending signal.")
             return None
@@ -603,6 +554,103 @@ def apply_cta_rotation(final_script):
     final_script["comment_bait_question"] = selected_cta
     print(f"🔄 CTA Rotation: Assigned selected CTA: '{selected_cta}'")
     return final_script
+
+def normalize_storyboard(raw_storyboard):
+    """
+    Normalizes storyboard into a standard list of scene dictionaries.
+    Ensures every scene is a dict with 'narration' and 'scene_number'.
+    Safely handles:
+    - Dict of scenes: {"scene_1": {...}, "scene_2": {...}} or {"scenes": [...]} or {"items": [...]}
+    - List of strings: ["Scene 1: Narration text", "Scene 2: Narration text"]
+    - List of dicts (standard)
+    - Mixed lists
+    - JSON-encoded strings
+    - Plain text blocks
+    """
+    if not raw_storyboard:
+        return []
+
+    # If it's a JSON string, try to parse it
+    if isinstance(raw_storyboard, str):
+        raw_storyboard = raw_storyboard.strip()
+        if (raw_storyboard.startswith("{") and raw_storyboard.endswith("}")) or (raw_storyboard.startswith("[") and raw_storyboard.endswith("]")):
+            try:
+                raw_storyboard = json.loads(raw_storyboard)
+            except Exception:
+                pass
+
+    # If it's still a string, split into non-empty lines
+    if isinstance(raw_storyboard, str):
+        lines = [line.strip() for line in raw_storyboard.splitlines() if line.strip()]
+        raw_storyboard = lines if lines else [raw_storyboard]
+
+    # If it's a dict, extract the scene list or dict values
+    if isinstance(raw_storyboard, dict):
+        for key in ["scenes", "storyboard", "shots", "items", "data"]:
+            if key in raw_storyboard and isinstance(raw_storyboard[key], (list, dict)):
+                raw_storyboard = raw_storyboard[key]
+                break
+        if isinstance(raw_storyboard, dict):
+            raw_storyboard = list(raw_storyboard.values())
+
+    if not isinstance(raw_storyboard, list):
+        return []
+
+    normalized = []
+    for idx, item in enumerate(raw_storyboard):
+        if isinstance(item, dict):
+            # If this dict wraps another dict e.g. {"scene_1": {"narration": ...}}
+            if len(item) == 1 and not any(k in item for k in ["narration", "text", "script"]):
+                inner_val = next(iter(item.values()))
+                if isinstance(inner_val, dict):
+                    item = inner_val
+                elif isinstance(inner_val, str):
+                    item = {"narration": inner_val}
+
+            narration = item.get("narration") or item.get("text") or item.get("dialogue") or item.get("script") or ""
+            if not isinstance(narration, str):
+                narration = str(narration or "")
+            item["narration"] = narration
+            if "scene_number" not in item:
+                item["scene_number"] = idx + 1
+            normalized.append(item)
+        elif isinstance(item, str):
+            clean_text = item.strip()
+            if clean_text:
+                words = [w.strip(",.!?\"'") for w in clean_text.split() if len(w) > 3]
+                stock_query = " ".join(words[:3]) if words else "technology"
+                caption = " ".join(clean_text.split()[:3]).upper()
+                normalized.append({
+                    "scene_number": idx + 1,
+                    "narration": clean_text,
+                    "visual_type": "Google Video Generation",
+                    "visual_prompt": clean_text,
+                    "stock_search_query": stock_query,
+                    "on_screen_text": caption,
+                    "camera_motion": "None",
+                    "transition": "Match cut",
+                    "duration": 3
+                })
+        elif isinstance(item, (list, tuple)):
+            str_parts = [str(x) for x in item if str(x).strip()]
+            if str_parts:
+                clean_text = " ".join(str_parts)
+                words = [w.strip(",.!?\"'") for w in clean_text.split() if len(w) > 3]
+                stock_query = " ".join(words[:3]) if words else "technology"
+                caption = " ".join(clean_text.split()[:3]).upper()
+                normalized.append({
+                    "scene_number": idx + 1,
+                    "narration": clean_text,
+                    "visual_type": "Google Video Generation",
+                    "visual_prompt": clean_text,
+                    "stock_search_query": stock_query,
+                    "on_screen_text": caption,
+                    "camera_motion": "None",
+                    "transition": "Match cut",
+                    "duration": 3
+                })
+
+    return normalized
 
 def sanitize_script_against_ai_cliches(text: str) -> str:
     """
@@ -961,16 +1009,18 @@ Return ONLY a JSON object matching the required schema:
                 print("🎬 [AGENT 3] Storyboard Agent: Generating storyboard layout...")
                 final_script = call_gemini_api(client, storyboard_prompt, model=GEMINI_FLASH_MODEL, category=selected_category, task_type="reasoning")
                 
-                if final_script and "storyboard" in final_script:
-                    storyboard = final_script["storyboard"]
-                    total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
-                    scene_count = len(storyboard)
-                    length_ok = scene_count >= 15 and total_words >= 80
-                    
-                    if not length_ok:
-                        print(f"⚠️ [Fact Shorts Path] Storyboard too short: {scene_count} scenes / {total_words} words. Need 18-28 scenes / 80+ words. Retrying...")
-                        # Trigger self-correction by re-calling storyboard agent with feedback
-                        correction_prompt = f"""{SYSTEM_PERSONA}
+                try:
+                    if final_script and "storyboard" in final_script:
+                        storyboard = normalize_storyboard(final_script.get("storyboard"))
+                        final_script["storyboard"] = storyboard
+                        total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
+                        scene_count = len(storyboard)
+                        length_ok = scene_count >= 15 and total_words >= 80
+                        
+                        if not length_ok:
+                            print(f"⚠️ [Fact Shorts Path] Storyboard too short: {scene_count} scenes / {total_words} words. Need 18-28 scenes / 80+ words. Retrying...")
+                            # Trigger self-correction by re-calling storyboard agent with feedback
+                            correction_prompt = f"""{SYSTEM_PERSONA}
 
 STORYBOARD AGENT TASK:
 Given the following fact script, break it down into a sequence of short narration segments (4-6 words each) and generate a detailed visual storyboard.
@@ -986,79 +1036,85 @@ Total word count across all narration fields must be 80+ words.
 Return ONLY a JSON object matching the required schema:
 {refined_requirements}
 """
-                        print("🔄 [Fact Shorts Path] Retrying Storyboard Agent with length correction...")
-                        final_script = call_gemini_api(client, correction_prompt, model=GEMINI_FLASH_MODEL, category=selected_category, task_type="reasoning")
-                        if not final_script or "storyboard" not in final_script:
-                            print("⚠️ [Fact Shorts Path] Correction retry failed. Falling back to default generation path...")
-                        else:
-                            # Re-check length after correction
-                            storyboard = final_script["storyboard"]
-                            total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
-                            scene_count = len(storyboard)
-                            length_ok = scene_count >= 20 and total_words >= 90
-                            if not length_ok:
-                                print(f"⚠️ [Fact Shorts Path] Still too short after retry: {scene_count} scenes / {total_words} words. Falling back...")
-                                final_script = None
-                    
-                    if final_script and "storyboard" in final_script and length_ok:
-                        final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
-                        final_script["description"] = metadata_res.get("description") or final_script.get("description")
-                        final_script["hashtags"] = metadata_res.get("hashtags") or final_script.get("hashtags")
-                        final_script["comment_bait_question"] = metadata_res.get("thumbnail_text") or final_script.get("comment_bait_question")
-                        final_script["original_news_headline"] = topic_data_res.get("topic")
-                        final_script["original_news_url"] = selected_url
-                        final_script["use_case_evidence_url"] = selected_url
-                        final_script["script"] = script_text
+                            print("🔄 [Fact Shorts Path] Retrying Storyboard Agent with length correction...")
+                            final_script = call_gemini_api(client, correction_prompt, model=GEMINI_FLASH_MODEL, category=selected_category, task_type="reasoning")
+                            if not final_script or "storyboard" not in final_script:
+                                print("⚠️ [Fact Shorts Path] Correction retry failed. Falling back to default generation path...")
+                            else:
+                                # Re-check length after correction
+                                storyboard = normalize_storyboard(final_script.get("storyboard"))
+                                final_script["storyboard"] = storyboard
+                                total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
+                                scene_count = len(storyboard)
+                                length_ok = scene_count >= 20 and total_words >= 90
+                                if not length_ok:
+                                    print(f"⚠️ [Fact Shorts Path] Still too short after retry: {scene_count} scenes / {total_words} words. Falling back...")
+                                    final_script = None
                         
-                        subtitle_chunks = []
-                        rebuilt_script_parts = []
-                        for scene in final_script["storyboard"]:
-                            scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
-                            narration_text = sanitize_script_against_ai_cliches(scene.get("narration", ""))
-                            scene["narration"] = narration_text
-                            rebuilt_script_parts.append(narration_text)
+                        if final_script and "storyboard" in final_script and length_ok:
+                            final_script["storyboard"] = normalize_storyboard(final_script.get("storyboard"))
+                            final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
+                            final_script["description"] = metadata_res.get("description") or final_script.get("description")
+                            final_script["hashtags"] = metadata_res.get("hashtags") or final_script.get("hashtags")
+                            final_script["comment_bait_question"] = metadata_res.get("thumbnail_text") or final_script.get("comment_bait_question")
+                            final_script["original_news_headline"] = topic_data_res.get("topic")
+                            final_script["original_news_url"] = selected_url
+                            final_script["use_case_evidence_url"] = selected_url
+                            final_script["script"] = script_text
                             
-                            v_type = scene.get("visual_type", "")
-                            info_type = scene.get("infographic_type", "none").lower()
-                            if "infographic" in v_type.lower() and info_type in ("none", ""):
-                                info_type = "stat"
+                            subtitle_chunks = []
+                            rebuilt_script_parts = []
+                            for scene in final_script["storyboard"]:
+                                if not isinstance(scene, dict):
+                                    continue
+                                scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
+                                narration_text = sanitize_script_against_ai_cliches(str(scene.get("narration", "")))
+                                scene["narration"] = narration_text
+                                rebuilt_script_parts.append(narration_text)
+                                
+                                v_type = str(scene.get("visual_type", ""))
+                                info_type = str(scene.get("infographic_type", "none")).lower()
+                                if "infographic" in v_type.lower() and info_type in ("none", ""):
+                                    info_type = "stat"
+                                
+                                has_info = info_type not in ("none", "")
+                                info_data = scene.get("infographic_data", {})
+                                
+                                vis_prompt = str(scene.get("visual_prompt", ""))
+                                stock_query = str(scene.get("stock_search_query", "")).strip()
+                                if not stock_query:
+                                    words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
+                                    stock_query = " ".join(words) if words else "tech"
+                                
+                                chunk = {
+                                    "chunk_id": scene_num,
+                                    "text": narration_text,
+                                    "english_caption": scene.get("on_screen_text", ""),
+                                    "start": 0.0,
+                                    "end": 0.0,
+                                    "has_infographic": has_info,
+                                    "infographic_type": info_type,
+                                    "infographic_data": info_data,
+                                    "stock_search_query": stock_query,
+                                    "nano_visual_prompt": vis_prompt,
+                                    "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
+                                    "camera_motion": scene.get("camera_motion", "None"),
+                                    "transition": scene.get("transition", "Match cut")
+                                }
+                                subtitle_chunks.append(chunk)
                             
-                            has_info = info_type not in ("none", "")
-                            info_data = scene.get("infographic_data", {})
+                            final_script["subtitle_chunks"] = subtitle_chunks
+                            final_script["title_variants"] = [
+                                final_script.get("title", "Secret Trick!"),
+                                final_script.get("title", "Secret Trick!") + " 🤫",
+                                "Don't Miss This! 🚨"
+                            ]
                             
-                            vis_prompt = scene.get("visual_prompt", "")
-                            stock_query = scene.get("stock_search_query", "").strip()
-                            if not stock_query:
-                                words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
-                                stock_query = " ".join(words) if words else "tech"
-                            
-                            chunk = {
-                                "chunk_id": scene_num,
-                                "text": narration_text,
-                                "english_caption": scene.get("on_screen_text", ""),
-                                "start": 0.0,
-                                "end": 0.0,
-                                "has_infographic": has_info,
-                                "infographic_type": info_type,
-                                "infographic_data": info_data,
-                                "stock_search_query": stock_query,
-                                "nano_visual_prompt": vis_prompt,
-                                "visual_type": "photo" if "image" in v_type.lower() or "photo" in v_type.lower() else "video",
-                                "camera_motion": scene.get("camera_motion", "None"),
-                                "transition": scene.get("transition", "Match cut")
-                            }
-                            subtitle_chunks.append(chunk)
-                        
-                        final_script["subtitle_chunks"] = subtitle_chunks
-                        final_script["title_variants"] = [
-                            final_script.get("title", "Secret Trick!"),
-                            final_script.get("title", "Secret Trick!") + " 🤫",
-                            "Don't Miss This! 🚨"
-                        ]
-                        
-                        final_script = apply_cta_rotation(final_script)
-                        print("🎉 [Fact Shorts Path] Script and storyboard generated successfully!")
-                        return final_script
+                            final_script = apply_cta_rotation(final_script)
+                            print("🎉 [Fact Shorts Path] Script and storyboard generated successfully!")
+                            return final_script
+                except Exception as e:
+                    print(f"⚠️ [Fact Shorts Path] Error parsing storyboard: {e}. Falling back to default generation path...")
                     
         print("⚠️ [Fact Shorts Path] Custom generation failed/incomplete. Falling back to default generation path...")
 
@@ -1269,8 +1325,9 @@ Return ONLY a JSON object matching the required schema:
             ]
             
             # Length/scene-count gate: ensure storyboard has enough scenes/words for minimum duration
-            storyboard = final_script.get("storyboard", [])
-            total_words = sum(len(s.get("narration", "").split()) for s in storyboard)
+            storyboard = normalize_storyboard(final_script.get("storyboard", []))
+            final_script["storyboard"] = storyboard
+            total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
             scene_count = len(storyboard)
             length_ok = scene_count >= 20 and total_words >= 90  # headroom above 76-word / 25s gate
             
@@ -1328,17 +1385,20 @@ Return ONLY a JSON object matching the required schema:
     if final_script:
         # Map storyboard to subtitle_chunks for compatibility with main.py and downstream video gen
         if "storyboard" in final_script:
+            final_script["storyboard"] = normalize_storyboard(final_script.get("storyboard"))
             subtitle_chunks = []
             rebuilt_script_parts = []
             for scene in final_script["storyboard"]:
+                if not isinstance(scene, dict):
+                    continue
                 scene_num = scene.get("scene_number", len(subtitle_chunks) + 1)
-                narration_text = sanitize_script_against_ai_cliches(scene.get("narration", ""))
+                narration_text = sanitize_script_against_ai_cliches(str(scene.get("narration", "")))
                 scene["narration"] = narration_text
                 rebuilt_script_parts.append(narration_text)
                 
                 # Check visual type for infographic
-                v_type = scene.get("visual_type", "")
-                info_type = scene.get("infographic_type", "none").lower()
+                v_type = str(scene.get("visual_type", ""))
+                info_type = str(scene.get("infographic_type", "none")).lower()
                 
                 # Check for visual type compatibility
                 if "infographic" in v_type.lower() and info_type in ("none", ""):
@@ -1348,8 +1408,8 @@ Return ONLY a JSON object matching the required schema:
                 info_data = scene.get("infographic_data", {})
                 
                 # Extract stock_search_query from storyboard or fall back to visual_prompt
-                vis_prompt = scene.get("visual_prompt", "")
-                stock_query = scene.get("stock_search_query", "").strip()
+                vis_prompt = str(scene.get("visual_prompt", ""))
+                stock_query = str(scene.get("stock_search_query", "")).strip()
                 if not stock_query:
                     words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
                     stock_query = " ".join(words) if words else "tech"
@@ -1619,7 +1679,15 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
             raw = raw[raw.find("```json")+7:raw.rfind("```")]
         elif "```" in raw:
             raw = raw[raw.find("```")+3:raw.rfind("```")]
-        return json.loads(raw.strip())
+        raw = raw.strip()
+        try:
+            return json.loads(raw)
+        except Exception:
+            start = raw.find("{")
+            end = raw.rfind("}")
+            if start != -1 and end != -1 and end > start:
+                return json.loads(raw[start:end+1])
+            raise
 
     # 0. OpenRouter with prioritized models based on category & task
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
@@ -1635,8 +1703,6 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
         # Extended fallback routers if top priorities are rate-limited
         for extra_model in [
             "openrouter/free",
-            "nex-agi/nex-n2-pro:free",
-            "dots-studio/dots3-note-preview:free",
             "qwen/qwen-2.5-72b-instruct",
             "moonshotai/kimi-k2.6",
             "google/gemini-2.5-flash",
@@ -1669,9 +1735,16 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
                         return clean_and_parse_json(content)
                     return content
                 elif r.status_code == 429:
+                    err_text = r.text.lower()
+                    if "free-models-per-day" in err_text or "daily" in err_text:
+                        print("🚫 OpenRouter daily free tier limit reached. Skipping remaining OpenRouter models.")
+                        break
                     print(f"⚠️ OpenRouter ({or_model}) rate limited (429). Retrying next priority model...")
                     time.sleep(1)
                     continue
+                elif r.status_code == 402:
+                    print(f"⚠️ OpenRouter insufficient credits (402). Skipping remaining paid OpenRouter models.")
+                    break
                 else:
                     print(f"⚠️ OpenRouter API ({or_model}) failed with code {r.status_code}: {r.text}")
             except Exception as e:
@@ -1685,9 +1758,9 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
             "Content-Type": "application/json"
         }
         groq_models = [
-            "llama-3.3-70b-versatile",
-            "llama-3.1-8b-instant",
-            "deepseek-r1-distill-llama-70b"
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-20b",
+            "qwen/qwen3.8-27b",
         ]
         for model_name in groq_models:
             print(f"🔮 Falling back to Groq ({model_name})...")
@@ -1749,8 +1822,10 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
                     result = r.json()["result"]
                     if model_name in gpt_oss_models:
                         raw_content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                    elif isinstance(result, dict) and "choices" in result and result["choices"]:
+                        raw_content = result["choices"][0].get("message", {}).get("content", "")
                     else:
-                        raw_content = result.get("response", "")
+                        raw_content = result.get("response", "") if isinstance(result, dict) else ""
                     if isinstance(raw_content, dict):
                         return raw_content if expect_json else json.dumps(raw_content)
                     content = raw_content.strip() if isinstance(raw_content, str) else ""
@@ -2047,7 +2122,15 @@ def call_gemini_api(client_arg, prompt, model=None, prefer_fallback=False, categ
             elif "```" in raw:
                 raw = raw[raw.find("```")+3:raw.rfind("```")]
             
-            return json.loads(raw.strip())
+            raw = raw.strip()
+            try:
+                return json.loads(raw)
+            except Exception:
+                start = raw.find("{")
+                end = raw.rfind("}")
+                if start != -1 and end != -1 and end > start:
+                    return json.loads(raw[start:end+1])
+                raise
         except Exception as e:
             err_str = str(e).lower()
             is_rate_limit_or_overload = any(

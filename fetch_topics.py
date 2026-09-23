@@ -166,11 +166,18 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
                     attempts += 1
                 except Exception as e:
                     err_str = str(e).lower()
-                    is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
-                    if is_depleted_or_429:
+                    if "prepayment credits" in err_str:
                         from config import disable_gemini
                         disable_gemini()
-                        print("🚨 [fetch_topics fallback] Globally disabling Gemini after 429/credit depletion. Breaking to use secondary fallbacks.")
+                        print("🚨 [fetch_topics fallback] Globally disabling Gemini after credit depletion. Breaking to use secondary fallbacks.")
+                        break
+                    elif "429" in err_str or "resource exhausted" in err_str:
+                        print("⚠️ [fetch_topics fallback] Gemini rate limited (429). Retrying next key or secondary fallback...")
+                        if len(GEMINI_API_KEYS) > 1:
+                            rotate_gemini_api_key()
+                            client = get_gemini_client()
+                            attempts += 1
+                            continue
                         break
                     print(f"⚠️ [fetch_topics fallback] Gemini fallback failed: {e}. Retrying...")
                     attempts += 1
@@ -380,19 +387,20 @@ def fetch_facts_for_category(category):
                 k in err_str
                 for k in ["503", "429", "unavailable", "rate limit", "resource exhausted", "demand", "temporary"]
             )
-            is_depleted_or_429 = "prepayment credits" in err_str or "429" in err_str or "resource exhausted" in err_str
-            
-            if is_depleted_or_429:
+            if "prepayment credits" in err_str:
+                from config import disable_gemini
+                disable_gemini()
+                print("🚨 [fetch_topics] Prepayment credits depleted. Globally disabling Gemini.")
+                break
+            elif "429" in err_str or "resource exhausted" in err_str:
                 if len(GEMINI_API_KEYS) > 1:
                     rotate_gemini_api_key()
                     client = get_gemini_client()
-                    print("🔄 [fetch_topics] Successfully rotated API key after 429 / credit depletion. Retrying immediately...")
+                    print("🔄 [fetch_topics] Rotated API key after search grounding 429. Retrying...")
                     attempts += 1
                     continue
                 else:
-                    from config import disable_gemini
-                    disable_gemini()
-                    print("🚨 [fetch_topics] Only 1 key available or exhausted. Globally disabling Gemini after 429/credit depletion. Breaking to fallback.")
+                    print("⚠️ [fetch_topics] Search grounding rate limited. Falling back to LLM topic generation.")
                     break
                 
             if is_rate_limit:
