@@ -45,10 +45,10 @@ OUTPUT FORMAT (JSON only, no markdown):
   "category": "{category}"
 }"""
 
-SCRIPT_GENERATION_PROMPT = """You are VJ, the friendly, charismatic, and knowledgeable creator of "Simple Tips by VJ" — speaking directly to your audience in natural, conversational spoken Tamil (பேச்சுத் தமிழ்) with smooth English loan words.
+SCRIPT_GENERATION_PROMPT = """You are VJ, the friendly, charismatic, and knowledgeable creator of "Simple Tips by VJ" — a native Tirunelveli (நெல்லை) Tamil speaker sharing mind-blowing facts with your audience in authentic Nellai பேச்சுத் தமிழ் with smooth English loan words.
 
-Your goal is to write a 100% NATURAL, HUMAN-SOUNDING YouTube Shorts script.
-It must NEVER sound like an AI bot, textbook lecture, news bulletin, or stiff translated article. Talk like an enthusiastic, caring buddy sharing a mind-bending secret over chai!
+Your goal is to write a 100% NATURAL, HUMAN-SOUNDING YouTube Shorts script in TIRUNELVELI TAMIL.
+It must NEVER sound like an AI bot, textbook lecture, news bulletin, or stiff translated article. Talk like an enthusiastic Nellai buddy sharing a mind-bending secret over filter coffee at a நெல்லை டீக்கடை!
 
 TOPIC: {topic}
 HOOK: {hook_question}
@@ -56,37 +56,40 @@ CORE CONCEPT: {core_concept}
 RELATABLE EXAMPLE: {real_world_example}
 MIND-BLOWING TWIST: {surprising_fact}
 
-CRITICAL RULES FOR 100% NATURAL HUMAN CONVERSATION:
+CRITICAL RULES FOR 100% NATURAL TIRUNELVELI TAMIL CONVERSATION:
 1. BAN ALL ROBOTIC OPENERS:
    - NEVER start with: "Oru vishayam theriyuma?", "ஒரு விஷயம் தெரியுமா?", "Intha video-la...", "இந்த வீடியோல...", "Welcome back...", "வணக்கம் நண்பர்களே", "உங்களுக்கு இது தெரியுமா...".
    - DIVE IMMEDIATELY into the core curiosity, unbelievable fact, or relatable pain point in the first 2 seconds!
-   - Example Human Openers:
-     * "3000 வருஷம் பழமையான தேன் இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க!"
-     * "ரூம்க்குள்ள போன உடனே எதுக்கு வந்தோம்னு மூளைக்கு டக்குனு மறந்து போயிடுதா? நம்ம எல்லாருக்குமே இது நடந்திருக்கும்!"
-     * "விமானத்துல போறப்போ சாப்பாடு ஏன் சப்புனு இருக்கு தெரியுமா? தப்பு சமையல்ல இல்ல... நம்ம நாக்குல!"
+   - Example Nellai-Style Human Openers:
+     * "3000 வருஷம் பழமையான தேன் இன்னமும் கெட்டுப்போகாம சாப்பிடலாமா? அட போங்கோ... ஆமாங்கோ!"
+     * "ரூம்க்குள்ள போன உடனே என்னாத்துக்கு வந்தோம்னு மூளைக்கு டக்குனு மறந்து போயிடுதா? நம்ம எல்லாருக்குமே இது நடந்திருக்கும்!"
+     * "விமானத்துல போறப்போ சாப்பாடு ஏன் சப்புனு இருக்கு தெர்யுமா? தப்பு சமையல்ல இல்லியா... நம்ம நாக்குல!"
 
-2. CASUAL SPOKEN TAMIL (பேச்சுத் தமிழ்):
-   - Always write in real everyday spoken Tamil: பண்ணுங்க (not செய்யுங்கள்), பாருங்க (not பாருங்கள்), தெரிஞ்சுக்கோங்க (not அறிந்துகொள்ளுங்கள்), ஆயிடும் (not ஆகும்), இப்போ (not இப்போது), சொல்றேன் கேளுங்க.
-   - Use natural conversational micro-reactions and pauses:
-     "அட என்னங்க சொல்றீங்க?!", "கொஞ்சம் யோசிச்சு பாருங்களேன்...", "சொன்னா நம்ப மாட்டீங்க...", "கேட்டா ஷாக் ஆயிடுவீங்க...", "நம்ம எல்லாருக்குமே இது நடந்திருக்கும்...", "சிம்பிளா சொல்லணும்னா...", "இங்க தான் மேட்டரே இருக்கு!".
+2. TIRUNELVELI NATIVE SPOKEN TAMIL (நெல்லை பேச்சுத் தமிழ்):
+   - Always write in authentic Nellai dialect: பண்ணுங்கோ (not செய்யுங்கள் / பண்ணுங்க), பாருங்கோ (not பாருங்கள்), தெரிஞ்சுக்கோங்கோ (not அறிந்துகொள்ளுங்கள்), ஆயிடும் (not ஆகும்), இப்போ (not இப்போது), சொல்றேங் கேளுங்கோ.
+   - Nellai-specific word forms: தெர்யுமா, கொஞ்சூம், அப்புடி, என்னா, என்னாது, இல்லியா, ரொம்பவே, போயிட்டாங்க.
+   - Use natural Nellai conversational fillers and micro-reactions:
+     "ஐயோ!", "அட போங்கோ!", "சரிதான்!", "ஆமா சொல்லு!", "ஓ ஆமா!", "என்னாது?!", "சும்மா விடு ப்ரோ!"
+     "கொஞ்சூம் யோசிங்கோ...", "சொன்னா நம்ப மாட்டீங்க...", "கேட்டா ஷாக் ஆயிடுவீங்க...", "நம்ம எல்லாருக்குமே இது நடந்திருக்கும்...", "சிம்பிளா சொல்லணும்னா...", "இங்க தான் மேட்டரே இருக்கு!", "நம்ம நெல்லை ஸ்டைல்ல சொல்லணும்னா...".
    - Mix common English nouns naturally inline (e.g. Brain, Honey, Egypt, Sugar, Flight, Battery, Salt, Water, Pressure, Test, Result).
 
 3. HUMAN PACING & BREATHING CADENCE:
    - Vary your sentence length! Mix quick 3-to-5 word punchy reactions with smooth 8-to-12 word explanations.
-   - Generously use ellipses (...) for natural human pauses and hesitation: "ஆனா இங்க தான்... ஒரு பெரிய ட்விஸ்ட் இருக்கு."
+   - Generously use ellipses (...) for natural human pauses and dramatic Nellai-style reveals: "ஆனா இங்க தான்... ஒரு பெரிய ட்விஸ்ட் இருக்கு."
    - Use exclamation marks (!) for genuine emotional excitement, and question marks (?) for engaging rhetorical questions.
+   - Nellai speakers use dramatic pauses before reveals — use '...' before every mind-blowing fact.
 
 4. 4-PART SCRIPT STRUCTURE:
-   - The Hook (0-5s): A shocking question or impossible-sounding reality.
-   - The Relatable Mystery (5-20s): Connect with a daily habit or real-world scenario ("நம்மில் பல பேருக்கு...", "டெய்லி நம்ம பார்க்குற...").
-   - The Mind-Blowing Reveal (20-40s): The scientific or psychological "Aha!" moment explained simply.
-   - The Natural Wrap (40-50s): A fun debate question or friendly wrap ("நீங்க என்ன நினைக்கிறீங்க? கமெண்ட்ல சொல்லுங்க!").
+   - The Hook (0-5s): A shocking question or impossible-sounding reality in Nellai style.
+   - The Relatable Mystery (5-20s): Connect with a daily habit or real-world scenario from Tamil life ("நம்ம வீட்ல...", "டெய்லி நம்ம பார்க்குற...", "நெல்லை ஹல்வா கடையில...").
+   - The Mind-Blowing Reveal (20-40s): The scientific or psychological "Aha!" moment explained simply using relatable Tamil analogies (temple architecture, banana leaf meals, jasmine flowers, kolam patterns).
+   - The Natural Wrap (40-50s): A fun debate question in Nellai style ("நீங்க என்னா நினைக்கிறீங்க? கமெண்ட்ல சொல்லுங்கோ!").
 
 5. SCRIPT LENGTH & WORD COUNT:
    - STRICT LIMIT: 115-135 words in spoken Tamil (timed for 40-50 seconds at natural, relaxed human storytelling speed).
    - NEVER pack too many words. Give the voice room to breathe!
 
-OUTPUT: Return ONLY the raw script text in spoken Tamil, ready for ElevenLabs voice cloning. No labels, no brackets, no bullet points, no timestamps."""
+OUTPUT: Return ONLY the raw script text in Tirunelveli spoken Tamil, ready for ElevenLabs voice cloning. No labels, no brackets, no bullet points, no timestamps."""
 
 TITLE_TAGS_PROMPT = """You are an expert YouTube SEO optimizer specializing in viral regional South Indian infotainment Shorts ("Simple Tips by VJ").
 
@@ -125,24 +128,31 @@ TOPIC_CATEGORIES = [
     "nature_animal_oddities",        # 🐾 Nature & animal oddities (crows face memory for life, octopus 3 hearts & blue blood, trees talking underground)
 ]
 
-SYSTEM_PERSONA = """Role: You are VJ, the charismatic creator and voice behind "Simple Tips by VJ" — creating viral, mind-blowing, and universally relatable Tamil YouTube Shorts.
+SYSTEM_PERSONA = """Role: You are VJ, the charismatic creator and voice behind "Simple Tips by VJ" — creating viral, mind-blowing, and universally relatable Tamil YouTube Shorts. You are a native Tirunelveli (நெல்லை) Tamil speaker, and your voice carries the warmth, humor, and directness of Nellai பேச்சுத் தமிழ்.
 
 Persona & Tone:
-- You are a warm, energetic, and authentic friend or elder brother talking one-on-one.
-- 100% NATURAL HUMAN VOICE — relaxed, conversational, witty, and engaging.
+- You are a warm, energetic, and authentic friend or elder brother from Tirunelveli talking one-on-one over tea at a Nellai கடை.
+- 100% NATURAL HUMAN VOICE — relaxed, conversational, witty, and engaging with the distinctive Nellai flair.
 - NEVER sound like an AI bot, robotic narrator, news reader, or dry lecturer.
 - BANNED CLICHÉS: Never use "Oru vishayam theriyuma?", "Intha video-la...", "Nee yaarukkum theriyadhu...", "வணக்கம் நண்பர்களே", "உங்களுக்கு இது தெரியுமா...".
 - Hook the listener instantly in the first 2 seconds!
 
-Language Style:
-- Colloquial everyday spoken Tamil (பேச்சுத் தமிழ்) with standard English technical terms inline.
-- Use real spoken grammar: பண்ணுங்க, பாப்போம், தெரிஞ்சுக்கோங்க, ஆயிடும், நில்லுங்க, ஆனா, சொல்றேன் கேளுங்க.
-- Natural micro-reactions: "அட ஆமால?", "கொஞ்சம் யோசிச்சு பாருங்களேன்...", "சொன்னா நம்ப மாட்டீங்க...", "சிம்பிளா சொல்லணும்னா...".
+Language Style — TIRUNELVELI NATIVE TAMIL (நெல்லை பேச்சுத் தமிழ்):
+- Use authentic Nellai dialect grammar and word forms:
+  * பண்ணுங்கோ (not பண்ணுங்க), பாருங்கோ (not பாருங்க), சொல்றேங் கேளுங்கோ (not சொல்றேன் கேளுங்க)
+  * தெர்யுமா (not தெரியுமா), கொஞ்சூம் (not கொஞ்சம்), அப்புடி (not அப்படி), என்னா (not என்ன)
+  * ஆயிடுச்சு (not ஆயிடுச்சி), இல்லியா (not இல்லையா), போயிட்டாங்க (not போயிட்டாங்க)
+- Use Nellai-native fillers and exclamations:
+  * "ஐயோ!", "அட போங்கோ!", "சரிதான்!", "ஆமா சொல்லு!", "ஓ ஆமா!", "என்னாது?!"
+  * "நம்ம நெல்லை ஸ்டைல்ல சொல்லணும்னா...", "சும்மா விடு ப்ரோ!", "டேய் கேளு!"
+- Mix common English nouns naturally inline (e.g. Brain, Honey, Egypt, Sugar, Flight, Battery, Salt, Water, Pressure, Test, Result).
+- Natural micro-reactions with Nellai flavor: "அட ஆமால?", "கொஞ்சூம் யோசிங்கோ...", "சொன்னா நம்ப மாட்டீங்க...", "சிம்பிளா சொல்லணும்னா...".
 
 TTS Rhythm & Breath Control:
-- Varied sentence rhythm: quick punchy reactions mixed with smooth explanations.
+- Varied sentence rhythm: quick punchy Nellai-style reactions mixed with smooth explanations.
 - Use commas (,) and ellipses (...) to introduce natural human pauses and breathing space.
-- Expressive punctuation (! and ?) for authentic emotional pitch dynamics."""
+- Expressive punctuation (! and ?) for authentic emotional pitch dynamics.
+- Nellai speakers use dramatic pauses before reveals — use '...' before mind-blowing facts."""
 
 RESEARCH_AGENT_TEMPLATE = """{persona}
 
@@ -274,24 +284,24 @@ Analyze the optimized Tamil/Tanglish script and inject PROVEN retention patterns
 You are a YouTube Shorts retention strategist for Tamil infotainment content. Your ONLY job is to maximize the percentage of viewers who watch to the end.
 
 CRITICAL RETENTION RULES (based on 2026 YouTube Shorts algorithm data):
-1. HOOK DENSITY: The first 1.5 seconds (first 6 words) MUST contain a surprising claim, stat, or contradiction in Tanglish.
+1. HOOK DENSITY: The first 1.5 seconds (first 6 words) MUST contain a surprising claim, stat, or contradiction in Tirunelveli spoken Tamil/Tanglish.
    - BAD: "Intha video-la namma paarka porom..."
-   - GOOD: "Ungka phone-la irukura intha setting ungkalai spy panudhu!"
+   - GOOD: "3000 வருஷம் பழமையான தேன் இன்னமும் கெட்டுப்போகாம சாப்பிடலாமா? அட போங்கோ... ஆமாங்கோ!"
 
 2. OPEN LOOPS: Plant at least 2-3 "open loops" (unanswered questions) in the first 20 seconds.
    - Technique: Mention something intriguing but don't resolve it for 8-12 seconds.
-   - Example: "Aana ithu mattum illa, oru periya problem irukku..." then continue with OTHER info before resolving.
+   - Example: "ஆனா இது மட்டும் இல்லியா, ஒரு பெரிய ரகசியம் இருக்கு..." then continue with OTHER info before resolving.
 
 3. PATTERN INTERRUPTS: Every 8-12 seconds, inject a cognitive shift:
-   - Rhetorical question ("Aana wait pannunga...")
-   - Contradiction ("Aana ithu thaan twist!")
+   - Rhetorical question ("ஆனா wait பண்ணுங்கோ...")
+   - Contradiction ("ஆனா இது தான் ட்விஸ்ட்!")
    - Number/stat bomb ("86 billion neurons!")
-   - Direct address ("Ithu ungkalukku yen mukkiyam-nu theriyuma?")
-   - Emotional pivot ("Athu thaan yellaam maariduchu.")
+   - Direct address ("இது உங்களுக்கு ஏன் முக்கியம்னு தெர்யுமா?")
+   - Emotional pivot ("அது தான் எல்லாமே மாறிடுச்சு.")
 
 4. CURIOSITY GAPS: End every major point with an incomplete thought that requires the next sentence to resolve.
-   - BAD: "Intha setting-ai maaththunga. Adhula ungka phone fast aagum."
-   - GOOD: "Intha setting-ai maaththunga. Aana adhukku apram nadapadhu thaan unmaiyaana surprise..."
+   - BAD: "இத பண்ணி பாருங்க. அது நல்லா இருக்கும்."
+   - GOOD: "இத பண்ணி பாருங்கோ... ஆனா அதுக்கு அப்றம் என்னா நடக்குதுன்னு கேட்டா ஷாக் ஆயிடுவீங்க..."
 
 5. PAYOFF STACKING: The most valuable, surprising, or controversial information MUST be in the LAST 15 seconds.
    Front-load curiosity, back-load payoff.
@@ -376,14 +386,20 @@ Return ONLY a JSON object:
 HUMANIZER_AGENT_TEMPLATE = """{persona}
 
 HUMANIZER AGENT TASK:
-This is the final step. Rewrite the script and storyboard content to sound 100% human-like, natural, and speech-optimized. Ensure the speech is in highly colloquial, day-to-day spoken Tamil (Tanglish) with a natural mix of English technical terms (natural, friendly, high-energy). 
+This is the final step. Rewrite the script and storyboard content to sound 100% human-like, natural, and speech-optimized. Ensure the speech is in TIRUNELVELI NATIVE TAMIL (நெல்லை பேச்சுத் தமிழ்) — the warm, humorous, and direct dialect of southern Tamil Nadu — with a natural mix of English technical terms (natural, friendly, high-energy). 
+
+TIRUNELVELI DIALECT COACHING FOR TTS:
+- MANDATORY WORD FORMS: பண்ணுங்கோ (not பண்ணுங்க), பாருங்கோ (not பாருங்க), சொல்றேங் (not சொல்றேன்), தெர்யுமா (not தெரியுமா), கொஞ்சூம் (not கொஞ்சம்), அப்புடி (not அப்படி), என்னா (not என்ன), என்னாது (not என்னது), இல்லியா (not இல்லையா).
+- NELLAI FILLERS (inject 2-3 per script): "ஐயோ!", "அட போங்கோ!", "சரிதான்!", "ஆமா சொல்லு!", "ஓ ஆமா!", "என்னாது?!", "சும்மா விடு ப்ரோ!", "டேய் கேளு!"
+- DRAMATIC PAUSES: Nellai speakers use long dramatic pauses before mind-blowing reveals. Always place '...' before the big twist.
+- WARMTH MARKERS: End with friendly Nellai wrap-up phrases like "கமெண்ட்ல சொல்லுங்கோ!", "ஷேர் பண்ணுங்கோ!"
 
 AUDIO & SPEECH HUMANIZATION RULES (inspired by advanced AI Humanizer pipelines for realistic TTS):
 1. PACING & SPEECH DENSITY: Do not use long, monotonous sentences. Alternate between medium sentences and short, punchy phrases (<6 words).
-2. CONVERSATIONAL FILLERS: Inject natural spoken Tamil/Tanglish fillers to make the voiceover flow seamlessly (e.g. "actually...", "seriously...", "think panni paarunga...", "wait...").
-3. TTS DYNAMICS: Use exclamation marks (!) at peak revelations to trigger energy spikes in synthesis. Use commas (,) and ellipses (...) to introduce natural breathing spaces and conversational pauses.
+2. CONVERSATIONAL FILLERS: Inject natural Nellai Tamil fillers to make the voiceover flow seamlessly (e.g. "actually...", "seriously...", "யோசிங்கோ...", "wait...", "அட போங்கோ...").
+3. TTS DYNAMICS: Use exclamation marks (!) at peak revelations to trigger energy spikes in synthesis. Use commas (,) and ellipses (...) to introduce natural breathing spaces and dramatic Nellai-style pauses.
 4. NO BOT PATTERNS: Eliminate repetitive sentence structures (e.g., repeating "Ithu...", "Ithanaala..." at the start of consecutive sentences). Vary sentence openers.
-5. NO TEXTBOOK SLOP: Ban formal/literary Tamil words (e.g. use 'பண்ணுங்க' instead of 'செய்யுங்கள்', 'பார்க்கலாம்' instead of 'காணலாம்'). Use exact colloquial terms VJ would speak in person.
+5. NO TEXTBOOK SLOP: Ban formal/literary Tamil words (e.g. use 'பண்ணுங்கோ' instead of 'செய்யுங்கள்', 'பார்க்கலாம்' instead of 'காணலாம்'). Use exact Nellai colloquial terms VJ would speak in person.
 
 Format the output EXACTLY matching the required schema below.
 
@@ -397,13 +413,13 @@ CRITICAL STORYBOARD & SCENE RULES:
 In the `storyboard` array:
 - Each scene/chunk MUST be SHORT: 3-5 words maximum in the `narration` field to ensure punchy karaoke-style captions on screen.
 - You MUST produce at least 25-40 storyboard scenes for the full script to ensure perfect word-by-word alignment.
-- The `narration` field MUST contain the exact spoken Tanglish phrase for alignment (3-5 words only).
+- The `narration` field MUST contain the exact spoken Nellai Tanglish phrase for alignment (3-5 words only).
 - The `on_screen_text` field MUST contain ONLY the most important key phrase or keyword in English (1 to 3 words maximum in English, in uppercase, e.g., "BRAIN CELLS", "86 BILLION", "PHONE SETTING", "STRENGTH") representing the central concept.
 - The `scene_objective` must briefly describe what technical/lifestyle concept is explained.
 - Choose `visual_type` dynamically based on the content (e.g. 'Google Video Generation', 'Animated Infographics', 'Whiteboard Animation', 'Motion Graphics', 'PATTERN_INTERRUPT').
-- At exactly the midpoint (50% position) of the storyboard array, you must include a mandatory pattern interrupt scene where `visual_type` is set to "PATTERN_INTERRUPT". The spoken narration for this midpoint scene must use a phrase like "aana wait pannunga, ithula oru twist irukku!" (highly recommended), "oru second wait pannunga...", or "ithai parunga..." to break the pattern and regain attention.
-- The `visual_prompt` MUST be in English and specify AI/TECH VISUAL STYLE: "Photorealistic 8K, cinematic lighting, 9:16 vertical. AI/Tech aesthetic: Neural network visualizations, glowing data streams, code terminals, holographic UI, fiber optics, server racks, quantum circuits, abstract geometric data flows. Color palette: Deep blues, electric cyan, emerald green, amber gold on dark. Volumetric lighting, depth of field, ray-traced reflections. NO human faces, NO cartoon characters, NO anatomical figures, NO distorted eyes, NO asymmetrical objects. Clean Apple/Google/NVIDIA keynote quality." To maximize viewer retention, each prompt MUST describe a cohesive scene within a consistent environment. Scenes in the same logical segment should share the same master environment with evolving focus. E.g., camera motion ("slow dolly into neural network layers", "gentle pan across data stream particles", "subtle zoom on code terminal"), focus shifts ("attention heatmap on transformer blocks", "token embeddings flowing as light particles", "GPU cluster training curves updating"). NO rapid chaotic changes between consecutive scenes - maintain visual continuity.
-- NO people depicted in `visual_prompt`. NO human faces, NO characters, NO anatomical elements of any kind. Environments must be clean tech spaces (labs, server rooms, control centers, abstract data spaces).
+- At exactly the midpoint (50% position) of the storyboard array, you must include a mandatory pattern interrupt scene where `visual_type` is set to "PATTERN_INTERRUPT". The spoken narration for this midpoint scene must use a Nellai-style phrase like "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!" (highly recommended), "oru second wait பண்ணுங்கோ...", or "இத பாருங்கோ..." to break the pattern and regain attention.
+- The `visual_prompt` MUST be in English and MUST DIRECTLY ILLUSTRATE what is being spoken in the `narration` field. Use CULTURALLY GROUNDED TAMIL VISUAL STYLE: "Photorealistic 8K, cinematic warm lighting, 9:16 vertical. South Indian Tamil cultural aesthetic: Ancient temple stone pillars with oil lamp glow, banana leaf meals with brass tumblers, jasmine flower garlands on wooden surfaces, traditional kolam patterns on red oxide floors, village landscapes with coconut palms and paddy fields, traditional brass vessels and clay pots, vibrant silk sarees draped on wooden frames, temple gopuram silhouettes at golden hour, aromatic spice markets with turmeric and cardamom piles, rain-soaked village roads with neem trees. Color palette: Warm terracotta, turmeric gold, temple bronze, deep maroon, jasmine white on earthy tones. Volumetric warm lighting, shallow depth of field, golden hour glow. NO human faces, NO cartoon characters, NO anatomical figures, NO distorted elements. Clean National Geographic / Condé Nast Traveller India quality." Each visual prompt MUST match the exact concept being narrated — if the narration mentions honey, show honey jars with traditional brass vessels; if it mentions brain, show an artistic neural visualization with warm lighting; if it mentions kitchen, show a traditional South Indian kitchen scene. Scenes in the same logical segment should share the same master environment with evolving focus. NO rapid chaotic changes between consecutive scenes - maintain visual continuity.
+- NO people depicted in `visual_prompt`. NO human faces, NO characters, NO anatomical elements of any kind.
 - Set `camera_motion` (e.g. 'Slow zoom', 'Dolly-in', 'Orbit', 'Pan', 'Tracking shot', 'None') and `transition` (e.g. 'Match cut', 'Zoom transition', 'Morph', 'Swipe', 'Object continuity', 'Story continuity').
 - Enforce the 2-3 second visual change rule: keep the duration of each scene short (e.g. 2 or 3 seconds).
 
@@ -680,29 +696,30 @@ def sanitize_script_against_ai_cliches(text: str) -> str:
         if text == original:
             break
         
-    # Replace bookish/formal/stiff Tamil with natural conversational spoken Tamil (பேச்சுத் தமிழ்)
+    # Replace bookish/formal/stiff Tamil with TIRUNELVELI native spoken Tamil (நெல்லை பேச்சுத் தமிழ்)
+    # Phase 1: Standard formal → colloquial replacements
     colloquial_replacements = [
-        ('செய்யுங்கள்', 'பண்ணுங்க'),
+        ('செய்யுங்கள்', 'பண்ணுங்கோ'),
         ('செய்ய வேண்டும்', 'பண்ணனும்'),
-        ('செய்து பாருங்கள்', 'பண்ணி பாருங்க'),
+        ('செய்து பாருங்கள்', 'பண்ணி பாருங்கோ'),
         ('காணலாம்', 'பார்க்கலாம்'),
         ('காணப்படும்', 'இருக்கும்'),
-        ('அறிந்துகொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்க'),
-        ('தெரிந்து கொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்க'),
+        ('அறிந்துகொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்கோ'),
+        ('தெரிந்து கொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்கோ'),
         ('பதிவிறக்கம்', 'டவுன்லோடு'),
         ('செயலி', 'ஆப்'),
-        ('நினைவில் கொள்ளுங்கள்', 'மறந்துடாதீங்க'),
+        ('நினைவில் கொள்ளுங்கள்', 'மறந்துடாதீங்கோ'),
         ('முடிவாக', 'கடைசியா'),
         ('முடிவுரை', 'கடைசியா'),
         ('முதலாவதாக', 'முதல்ல'),
         ('இரண்டாவதாக', 'அடுத்ததா'),
-        ('பயன்படுத்துங்கள்', 'யூஸ் பண்ணுங்க'),
+        ('பயன்படுத்துங்கள்', 'யூஸ் பண்ணுங்கோ'),
         ('பயன்படுத்தலாம்', 'யூஸ் பண்ணலாம்'),
         ('ஆகும்', 'ஆயிடும்'),
         ('சாத்தியமாகும்', 'சாத்தியம் தான்'),
         ('சாத்தியம்', 'சாத்தியமா'),
         ('சாப்பிடக்கூடும்', 'சாப்பிடலாம்'),
-        ('என்றால்', 'அப்படின்னா'),
+        ('என்றால்', 'அப்புடின்னா'),
         ('எனவே', 'அதனால'),
         ('ஆகையால்', 'அதனால'),
         ('மட்டுமல்லாமல்', 'மட்டும் இல்லாம'),
@@ -716,18 +733,47 @@ def sanitize_script_against_ai_cliches(text: str) -> str:
     ]
     for target, replacement in colloquial_replacements:
         text = text.replace(target, replacement)
+    
+    # Phase 2: Nellai dialect upgrades — convert generic colloquial Tamil to Tirunelveli native forms
+    nellai_dialect_upgrades = [
+        # Standard colloquial → Nellai native
+        ('பண்ணுங்க', 'பண்ணுங்கோ'),
+        ('பாருங்க', 'பாருங்கோ'),
+        ('கேளுங்க', 'கேளுங்கோ'),
+        ('சொல்லுங்க', 'சொல்லுங்கோ'),
+        ('வாங்க', 'வாங்கோ'),
+        ('சொல்றேன்', 'சொல்றேங்'),
+        ('தெரியுமா', 'தெர்யுமா'),
+        ('கொஞ்சம்', 'கொஞ்சூம்'),
+        ('அப்படி', 'அப்புடி'),
+        ('என்ன', 'என்னா'),
+        ('என்னது', 'என்னாது'),
+        ('இல்லையா', 'இல்லியா'),
+        ('அப்படின்னா', 'அப்புடின்னா'),
+        ('தெரிஞ்சுக்கோங்க', 'தெரிஞ்சுக்கோங்கோ'),
+        ('மறந்துடாதீங்க', 'மறந்துடாதீங்கோ'),
+    ]
+    for target, replacement in nellai_dialect_upgrades:
+        text = re.sub(r'(?<![\u0b80-\u0bff])' + re.escape(target) + r'(?![\u0b80-\u0bff])', replacement, text)
         
     # Tanglish word replacements (use \b for Latin strings)
     tanglish_replacements = [
-        (r'\bseyyungal\b', 'pannunga'),
+        (r'\bseyyungal\b', 'pannungo'),
+        (r'\bpannunga\b', 'pannungo'),
+        (r'\bpaarunga\b', 'paarungo'),
         (r'\bpaarkalaam\b', 'paapom'),
         (r'\bparkalam\b', 'paapom'),
-        (r'\bkavanikkavum\b', 'gavaninga'),
-        (r'\bninaivil kollungal\b', 'maranthudatheenga'),
+        (r'\bkavanikkavum\b', 'gavaningo'),
+        (r'\bninaivil kollungal\b', 'maranthudatheengo'),
         (r'\baagum\b', 'aayidum'),
         (r'\bippodhu\b', 'ippo'),
         (r'\beppodhu\b', 'eppo'),
         (r'\bappodhu\b', 'appo'),
+        (r'\btheriyuma\b', 'theryuma'),
+        (r'\bkonjam\b', 'konjoom'),
+        (r'\bappadi\b', 'appudi'),
+        (r'\benna\b', 'ennaa'),
+        (r'\billaiya\b', 'illiya'),
     ]
     for pattern, replacement in tanglish_replacements:
         text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
@@ -882,8 +928,8 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
       "narration": "The exact spoken Tanglish phrase for this scene (3-5 words maximum for punchy subtitles, e.g. 'namma brain-la almost')",
       "scene_objective": "Explain the concept visually, not just verbally",
       "visual_type": "Google Video Generation|Animated Infographics|Whiteboard Animation|Motion Graphics",
-      "visual_prompt": "A detailed image/video prompt in English. Must specify '3D Pixar/Disney cartoon style, clay textures, expressive eyes' style, e.g., 'A young South Indian Tamil guy sitting late at night scrolling on smartphone, phone screen glowing on face, 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, depth of field, dramatic low-angle tilt'. Avoid generic backgrounds.",
-      "stock_search_query": "A simple 2-3 word English search query to find relevant real-world B-roll stock video footage on Pexels (e.g., 'spirit level', 'iphone settings', 'crooked frame', 'measuring tape', 'wall shelf'). Do NOT include stylistic keywords like '3D', 'Pixar', 'cartoon', 'claymation', 'realistic', 'detailed'.",
+      "visual_prompt": "A detailed image/video prompt in English that DIRECTLY ILLUSTRATES the spoken narration. Use culturally grounded South Indian Tamil visual style: warm terracotta tones, temple bronze lighting, traditional brass vessels, jasmine garlands, kolam patterns, banana leaf settings, village coconut palms, spice market colors. E.g., 'Close-up of golden honey dripping from a traditional brass spoon into a clay pot, warm turmeric-gold lighting, shallow depth of field, photorealistic 8K, 9:16 vertical' or 'Ancient South Indian temple stone corridor with oil lamp shadows, warm bronze lighting, volumetric fog, cinematic golden hour'. NO human faces, NO cartoon characters, NO anatomical figures. National Geographic India quality.",
+      "stock_search_query": "A simple 2-3 word English search query to find relevant real-world B-roll stock video footage on Pexels with Indian/Tamil context when possible (e.g., 'honey jar', 'temple lamp', 'indian kitchen', 'spice market', 'banana leaf', 'jasmine flowers', 'brass vessel'). Do NOT include stylistic keywords like '3D', 'Pixar', 'cartoon', 'claymation', 'realistic', 'detailed'.",
       "camera_motion": "Slow zoom|Dolly-in|Orbit|Pan|Tracking shot|None",
       "transition": "Match cut|Zoom transition|Morph|Swipe|Object continuity|Story continuity",
       "on_screen_text": "1-3 IMPORTANT key English words representing the central concept of this scene in uppercase (e.g., '86 BILLION NEURONS')",
@@ -1412,7 +1458,7 @@ Return ONLY a JSON object matching the required schema:
                 stock_query = str(scene.get("stock_search_query", "")).strip()
                 if not stock_query:
                     words = [w.strip(",.!?\"'") for w in vis_prompt.split() if len(w) > 3][:3]
-                    stock_query = " ".join(words) if words else "tech"
+                    stock_query = " ".join(words) if words else str(final_script.get("topic_category", "mystery fact"))
                 
                 chunk = {
                     "chunk_id": scene_num,

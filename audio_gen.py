@@ -216,6 +216,33 @@ def preprocess_script_for_tts(text: str) -> str:
     
     # Remove markdown symbols: **, *, #, _, ~
     text = re.sub(r'[*#_~]', '', text)
+    
+    # ── TIRUNELVELI (NELLAI) DIALECT TTS OPTIMIZATION ──
+    # ElevenLabs Multilingual v2 processes Tamil+English code-switching well,
+    # but Nellai-specific elongated vowels and rolled consonants benefit from
+    # explicit phonetic hints via spelling normalization.
+    nellai_tts_hints = [
+        # Ensure Nellai suffix -ங்கோ is preserved (not normalized to -ங்க by upstream)
+        ('பண்ணுங்க', 'பண்ணுங்கோ'),
+        ('பாருங்க', 'பாருங்கோ'),
+        ('கேளுங்க', 'கேளுங்கோ'),
+        ('சொல்லுங்க', 'சொல்லுங்கோ'),
+        ('வாங்க', 'வாங்கோ'),
+        # Nellai vowel elongations for natural pronunciation
+        ('தெரியுமா', 'தெர்யுமா'),
+        ('கொஞ்சம்', 'கொஞ்சூம்'),
+        ('அப்படி', 'அப்புடி'),
+        ('இல்லையா', 'இல்லியா'),
+    ]
+    for target, replacement in nellai_tts_hints:
+        text = re.sub(r'(?<![\u0b80-\u0bff])' + re.escape(target) + r'(?![\u0b80-\u0bff])', replacement, text)
+    
+    # Normalize dramatic pauses for Nellai-style reveals:
+    # Ensure ellipses have breathing room (space before ...) for proper TTS pacing
+    text = re.sub(r'(\S)\.\.\.', r'\1 ...', text)
+    # Ensure exclamation-heavy Nellai reactions have proper spacing
+    text = re.sub(r'([!?])(\w)', r'\1 \2', text)
+    
     # Replace multiple spaces with single space
     text = re.sub(r'[ \t]+', ' ', text)
     # Strip leading/trailing whitespace
@@ -290,16 +317,22 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
         "text": cleaned_text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            # Tuned for authentic human creator speech:
-            # - stability 0.35: allows natural dynamic pitch variations and warm inflection
-            # - similarity_boost 0.70: prevents the stiff, robotic, monotone constraint of >0.80
-            # - style 0.40: adds natural dramatic expressiveness and enthusiasm
-            # - speed 1.03: natural energetic creator pacing directly via neural vocoder
-            "stability": 0.35,
-            "similarity_boost": 0.70,
-            "style": 0.40,
+            # Tuned for authentic TIRUNELVELI (Nellai) Tamil speech cadence:
+            # - stability 0.28: Nellai speakers have dramatic pitch swings —
+            #   excited highs on reveals ("அட போங்கோ!") and low conspiratorial whispers
+            #   before twists. Low stability lets the neural vocoder reproduce this range.
+            # - similarity_boost 0.65: slightly relaxed to allow the Nellai-native
+            #   pronunciation variations (elongated vowels, rolled consonants) to emerge
+            #   naturally without being constrained to a rigid voice template.
+            # - style 0.50: higher expressiveness for the dramatic storytelling energy
+            #   that defines Nellai Tamil — the "build-up → dramatic pause → reveal" cadence.
+            # - speed 1.00: natural Nellai pacing — slightly slower than generic Tamil
+            #   to allow the characteristic dramatic pauses and elongated vowels.
+            "stability": 0.28,
+            "similarity_boost": 0.65,
+            "style": 0.50,
             "use_speaker_boost": True,
-            "speed": 1.03
+            "speed": 1.00
         }
     }
     
