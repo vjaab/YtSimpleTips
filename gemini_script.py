@@ -411,6 +411,7 @@ SCHEMA REQUIREMENTS:
 
 CRITICAL STORYBOARD & SCENE RULES:
 In the `storyboard` array:
+- CRITICAL LENGTH REQUIREMENT: You MUST generate at least 25 to 35 scenes in the storyboard. The total narration word count MUST be between 100 and 130 words. Generating fewer than 20 scenes or fewer than 85 words is strictly prohibited and will cause system rejection. Do NOT summarize, compress, or shorten the script.
 - Each scene/chunk MUST be SHORT: 3-5 words maximum in the `narration` field to ensure punchy karaoke-style captions on screen.
 - You MUST produce at least 25-40 storyboard scenes for the full script to ensure perfect word-by-word alignment.
 - The `narration` field MUST contain the exact spoken Nellai Tanglish phrase for alignment (3-5 words only).
@@ -1424,8 +1425,16 @@ Return ONLY a JSON object matching the required schema:
                     "Don't Miss This! 🚨"
                 ]
 
+    # Ensure final_script meets basic minimum scene count / word count requirements
+    if final_script:
+        storyboard = normalize_storyboard(final_script.get("storyboard", []))
+        total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
+        if len(storyboard) < 15 or total_words < 70:
+            print(f"⚠️ [gemini_script] Script failed length/scene gates ({len(storyboard)} scenes, {total_words} words; min 15 scenes / 70 words). Rejecting generated script.")
+            final_script = None
+
     if not final_script:
-        print("⚠️ [gemini_script] Agent pipeline failed. Attempting offline fallback script...")
+        print("⚠️ [gemini_script] Agent pipeline failed or rejected. Attempting offline fallback script...")
         final_script = get_offline_fallback_script(category, failed_topics)
         
     if final_script:
@@ -1536,9 +1545,11 @@ def get_offline_fallback_script(category, failed_topics=None):
         print(f"⚠️ [gemini_script] Failed to load fallback_scripts.json: {e}")
         return None
 
+    import re
     # Normalize category for matching (handle emoji prefixes and variations)
     def normalize_cat(cat):
-        return cat.replace("🤖 ", "").replace("📱 ", "").strip().lower()
+        clean = re.sub(r'[^\w\s]', '', cat).strip().lower()
+        return " ".join(clean.split())
     
     norm_category = normalize_cat(category)
     
@@ -1549,17 +1560,17 @@ def get_offline_fallback_script(category, failed_topics=None):
     if not matching:
         # Broader match: check if category keywords are in sub_category
         cat_keywords = norm_category.split()
-        matching = [s for s in scripts if any(kw in normalize_cat(s.get("sub_category", "")) for kw in cat_keywords)]
+        matching = [s for s in scripts if any(kw in normalize_cat(s.get("sub_category", "")) for kw in cat_keywords if len(kw) > 3)]
     if not matching:
         matching = scripts  # Fallback to all scripts
 
     # Calculate word count for each script
-    for s in matching:
+    for s in scripts:
         script_text = s.get("script", "")
         s["_word_count"] = len(script_text.split()) if script_text else 0
 
-    # Minimum word count for 25s at 2.55 wps = ~65-70 words
-    MIN_WORDS = 70
+    # Minimum word count for 25s at 2.43-2.55 wps = ~70 words
+    MIN_WORDS = 75
     
     # Find scripts that pass full uniqueness check AND meet minimum word count
     unused = []
@@ -1585,24 +1596,17 @@ def get_offline_fallback_script(category, failed_topics=None):
         elif is_unique and word_count < MIN_WORDS:
             print(f"⚠️ [offline_fallback] Script '{s_title}' has only {word_count} words (min {MIN_WORDS}). Skipping.")
     
-    # If no scripts meet word count, relax the requirement
+    # If no unique scripts meet word count, fall back to matching scripts that meet MIN_WORDS
     if not unused:
-        print(f"⚠️ [offline_fallback] No scripts meet strict {MIN_WORDS} words with uniqueness. Checking all matching...")
+        print(f"⚠️ [offline_fallback] No unique scripts meet strict {MIN_WORDS} words with uniqueness. Checking all matching meeting word count...")
         for s in matching:
-            s_title = s.get("title", "")
-            s_news = s.get("original_news_headline", "")
-            is_unique, _ = check_story_uniqueness(
-                new_title=s_title,
-                new_url=s.get("original_news_url") or s.get("use_case_evidence_url", "")
-            )
-            
-            if is_unique and failed_topics:
-                for ft in failed_topics:
-                    if ft and (ft.lower() in s_title.lower() or ft.lower() in s_news.lower()):
-                        is_unique = False
-                        break
-                        
-            if is_unique:
+            if s.get("_word_count", 0) >= MIN_WORDS:
+                unused.append(s)
+
+    # If still none, check all scripts in repository meeting MIN_WORDS
+    if not unused:
+        for s in scripts:
+            if s.get("_word_count", 0) >= MIN_WORDS:
                 unused.append(s)
     
     # Absolute safety fallback: if every pre-packaged script was covered in history,
@@ -1610,7 +1614,8 @@ def get_offline_fallback_script(category, failed_topics=None):
     if not unused:
         print("⚠️ [offline_fallback] All pre-packaged scripts were recently used. Creating fresh rotated variant to ensure pipeline completion.")
         import copy, time
-        base_script = random.choice(matching or scripts)
+        valid_length_scripts = [s for s in scripts if s.get("_word_count", 0) >= MIN_WORDS]
+        base_script = random.choice(valid_length_scripts or matching or scripts)
         selected = copy.deepcopy(base_script)
         ts = int(time.time())
         date_str = datetime.now().strftime("%d %b")
@@ -1814,7 +1819,8 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
                 payload = {
                     "model": model_name,
                     "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.7
+                    "temperature": 0.7,
+                    "max_tokens": 4096
                 }
                 if expect_json:
                     payload["response_format"] = {"type": "json_object"}
@@ -2089,9 +2095,12 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
             except Exception as e:
                 print(f"⚠️ HuggingFace ({model_name}) fallback failed: {e}")
 
-    # All fallbacks exhausted
-    print("🚨 All fallback models exhausted. Setting offline mode.")
-    set_providers_exhausted()
+    # All non-Gemini fallbacks exhausted
+    print("🚨 All non-Gemini fallback models exhausted.")
+    from config import is_gemini_disabled
+    if is_gemini_disabled() or not GEMINI_API_KEYS:
+        print("🚨 Gemini is also disabled or not configured. Setting offline mode.")
+        set_providers_exhausted()
     return None
 
 def call_gemini_api(client_arg, prompt, model=None, prefer_fallback=False, category="", task_type="reasoning", expect_json=True):

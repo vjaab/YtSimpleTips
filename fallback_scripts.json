@@ -1,5 +1,3073 @@
 [
   {
+    "title": "தண்ணீரில் உப்பு போட்டா சீக்கிரம் கொதிக்குமா? Boiling Secret! 🧂",
+    "description": "Does adding salt to water make it boil faster? Science myth vs reality explained in Nellai Tamil dialect by VJ. #ScienceTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Boiling-point_elevation",
+    "original_news_headline": "தண்ணீரில் உப்பு போட்டா சீக்கிரம் கொதிக்குமா? Boiling Secret! 🧂",
+    "original_news_url": "https://en.wikipedia.org/wiki/Boiling-point_elevation",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Boiling-point_elevation"
+    ],
+    "hook": "தண்ணீரில் உப்பு போட்டா சீக்கிரம் கொதிக்குமா தெர்யுமா? 🧂",
+    "summary": "Salt increases boiling point so water actually takes longer to boil, but cooks food faster.",
+    "sub_category": "🧠 Mind-Blowing Science Curiosities",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Boiling point",
+      "Salt water science",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#ScienceCuriosity",
+      "#KitchenScience",
+      "#NellaiTamil",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "நீங்க சமையல் பண்றப்ப தண்ணி கொதிக்கிறதுக்கு முன்னாடியே உப்பு போடுவீங்களா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே சமையல் பண்றப்ப",
+        "on_screen_text": "KITCHEN HABIT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian kitchen with stone hearth and polished brass utensils, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "தண்ணி சீக்கிரம் கொதிக்கணும்னு",
+        "on_screen_text": "BOILING WATER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Heavy copper pot filled with water resting on flame with rising steam, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "உப்பு அள்ளி போடுவீங்க இல்லியா?",
+        "on_screen_text": "ADDING SALT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Coarse white sea salt crystals falling through air in macro slow motion, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "அட போங்கோ! உண்மை என்னா தெர்யுமா?",
+        "on_screen_text": "REAL TRUTH",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dramatic amber kitchen candlelight highlighting bubbling water surface, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "உப்பு போட்டா தண்ணி சீக்கிரம் கொதிக்காது!",
+        "on_screen_text": "BOILING MYTH",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Macro shot of salt crystals dissolving in hot water forming swirling refraction ripples, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "இன்னும் லேட்டா தான் கொதிக்கும்!",
+        "on_screen_text": "TAKES LONGER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vintage metal thermometer dipping into steaming water indicating rising temperature, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "Physics-ல இதுக்கு பேரு",
+        "on_screen_text": "PHYSICS LAW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Old scientific brass barometer with calligraphic formulas inscribed on parchment, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "Boiling Point Elevation-னு சொல்வாங்க பாருங்கோ.",
+        "on_screen_text": "ELEVATION",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glowing microscopic water molecules binding tightly around salt sodium ions, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "சாதாரண தண்ணீர் 100 டிகிரில கொதிக்கும்னா,",
+        "on_screen_text": "100 DEGREES",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Crystal clear water boiling smoothly in glass laboratory flask over blue flame, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "உப்பு போட்டா 102 டிகிரி தேவைப்படும்.",
+        "on_screen_text": "102 DEGREES",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Intense micro bubbles bursting violently at hot bottom of bronze cooking vessel, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual shift: A heavy traditional uruli vessel with fresh vegetable cuts, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "தண்ணி கொதிக்க நேரம் ஆனாலும்,",
+        "on_screen_text": "HOTTER WATER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dense aromatic steam rising gracefully against warm dark kitchen background, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "அதிக வெப்பத்துல காய்கறி போட்டா",
+        "on_screen_text": "COOKS FASTER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Fresh green drumsticks and carrots boiling rapidly in hot spiced broth, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "சாப்பாடு ரொம்ப சீக்கிரமா வெந்துடும்!",
+        "on_screen_text": "QUICK MEAL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional banana leaf feast spread with aromatic sambar and side dishes, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "அதனால சுவையும் கொஞ்சூம் கூடும் பாருங்கோ!",
+        "on_screen_text": "BETTER TASTE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Clay pot filled with steaming fragrant South Indian curry on red oxide floor, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "நீங்க சமையல் பண்றப்ப உப்பு எப்போ போடுவீங்க?",
+        "on_screen_text": "WHEN DO YOU ADD?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Rustic terracotta salt container with wooden scoop under golden morning ray, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT BELOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass oil lamp flickering gently beside ancient temple stone pillars, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Deep red silk drape with ornate golden temple border glowing under dramatic spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே சமையல் பண்றப்ப தண்ணி சீக்கிரம் கொதிக்கணும்னு உப்பு அள்ளி போடுவீங்க இல்லியா? அட போங்கோ! உண்மை என்னா தெர்யுமா? உப்பு போட்டா தண்ணி சீக்கிரம் கொதிக்காது! இன்னும் லேட்டா தான் கொதிக்கும்! Physics-ல இதுக்கு பேரு Boiling Point Elevation-னு சொல்வாங்க பாருங்கோ. சாதாரண தண்ணீர் 100 டிகிரில கொதிக்கும்னா, உப்பு போட்டா 102 டிகிரி தேவைப்படும். ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! தண்ணி கொதிக்க நேரம் ஆனாலும், அதிக வெப்பத்துல காய்கறி போட்டா சாப்பாடு ரொம்ப சீக்கிரமா வெந்துடும்! அதனால சுவையும் கொஞ்சூம் கூடும் பாருங்கோ! நீங்க சமையல் பண்றப்ப உப்பு எப்போ போடுவீங்க? கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே சமையல் பண்றப்ப",
+        "english_caption": "KITCHEN HABIT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian kitchen with stone hearth and polished brass utensils, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "தண்ணி சீக்கிரம் கொதிக்கணும்னு",
+        "english_caption": "BOILING WATER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Heavy copper pot filled with water resting on flame with rising steam, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "உப்பு அள்ளி போடுவீங்க இல்லியா?",
+        "english_caption": "ADDING SALT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Coarse white sea salt crystals falling through air in macro slow motion, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "அட போங்கோ! உண்மை என்னா தெர்யுமா?",
+        "english_caption": "REAL TRUTH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dramatic amber kitchen candlelight highlighting bubbling water surface, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "உப்பு போட்டா தண்ணி சீக்கிரம் கொதிக்காது!",
+        "english_caption": "BOILING MYTH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Macro shot of salt crystals dissolving in hot water forming swirling refraction ripples, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "இன்னும் லேட்டா தான் கொதிக்கும்!",
+        "english_caption": "TAKES LONGER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vintage metal thermometer dipping into steaming water indicating rising temperature, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "Physics-ல இதுக்கு பேரு",
+        "english_caption": "PHYSICS LAW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Old scientific brass barometer with calligraphic formulas inscribed on parchment, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "Boiling Point Elevation-னு சொல்வாங்க பாருங்கோ.",
+        "english_caption": "ELEVATION",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing microscopic water molecules binding tightly around salt sodium ions, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "சாதாரண தண்ணீர் 100 டிகிரில கொதிக்கும்னா,",
+        "english_caption": "100 DEGREES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Crystal clear water boiling smoothly in glass laboratory flask over blue flame, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "உப்பு போட்டா 102 டிகிரி தேவைப்படும்.",
+        "english_caption": "102 DEGREES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Intense micro bubbles bursting violently at hot bottom of bronze cooking vessel, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual shift: A heavy traditional uruli vessel with fresh vegetable cuts, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "தண்ணி கொதிக்க நேரம் ஆனாலும்,",
+        "english_caption": "HOTTER WATER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dense aromatic steam rising gracefully against warm dark kitchen background, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "அதிக வெப்பத்துல காய்கறி போட்டா",
+        "english_caption": "COOKS FASTER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Fresh green drumsticks and carrots boiling rapidly in hot spiced broth, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "சாப்பாடு ரொம்ப சீக்கிரமா வெந்துடும்!",
+        "english_caption": "QUICK MEAL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional banana leaf feast spread with aromatic sambar and side dishes, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "அதனால சுவையும் கொஞ்சூம் கூடும் பாருங்கோ!",
+        "english_caption": "BETTER TASTE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Clay pot filled with steaming fragrant South Indian curry on red oxide floor, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "நீங்க சமையல் பண்றப்ப உப்பு எப்போ போடுவீங்க?",
+        "english_caption": "WHEN DO YOU ADD?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Rustic terracotta salt container with wooden scoop under golden morning ray, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ!",
+        "english_caption": "COMMENT BELOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass oil lamp flickering gently beside ancient temple stone pillars, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Deep red silk drape with ornate golden temple border glowing under dramatic spotlight, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn"
+    }
+  },
+  {
+    "title": "ரூம்குள்ள போனதும் ஏன் விஷயம் மறந்து போகுது? Doorway Effect! 🚪",
+    "description": "Why we forget things when entering another room explained by Doorway Effect psychology in Nellai Tamil by VJ. #PsychologyTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Doorway_effect",
+    "original_news_headline": "ரூம்குள்ள போனதும் ஏன் விஷயம் மறந்து போகுது? Doorway Effect! 🚪",
+    "original_news_url": "https://en.wikipedia.org/wiki/Doorway_effect",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Doorway_effect"
+    ],
+    "hook": "ஒரு ரூம்ல இருந்து இன்னொரு ரூம்க்கு போனா ஏன் மறக்குது தெர்யுமா? 🚪",
+    "summary": "The Doorway Effect is a psychological event boundary where the brain flushes working memory.",
+    "sub_category": "🧬 Human Body & Dark Psychology",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Doorway effect",
+      "Human brain psychology",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#BrainPsychology",
+      "#HumanBody",
+      "#DoorwayEffect",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "உங்களுக்கும் ரூம்குள்ள போனதும் விஷயம் மறந்து போயிருக்கா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே கிச்சன்ல இருந்து",
+        "on_screen_text": "LEAVING ROOM",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian home wooden corridor with sunlight streaming through carved doorways, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "ஏதோ எடுக்க பெட்ரூமுக்கு போவீங்க,",
+        "on_screen_text": "WALKING INSIDE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ornate antique rosewood doorway opening into a dimly lit courtyard, 9:16 vertical, no humans.",
+        "camera_motion": "Tracking shot",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "ஆனா உள்ள போனதும் அப்புடியே நின்னுடுவீங்க!",
+        "on_screen_text": "SUDDEN BLANK",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Old ticking grandfather clock standing silently against weathered limestone wall, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "என்னா எடுக்க வந்தோம்னு மறந்து போய்டும்!",
+        "on_screen_text": "FORGOT WHAT?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Empty wooden study table with solitary candle flame flickering in breeze, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "அட போங்கோ! இது உங்களுக்கு மட்டும் இல்ல,",
+        "on_screen_text": "EVERYONE FEELS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Intricate brass astrolabe and optical lenses resting on velvet cloth, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "உலகத்துல எல்லாருக்கும் நடக்குற விந்தை!",
+        "on_screen_text": "UNIVERSAL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient celestial map carved on polished dark granite, warm lantern glow, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "Science-ல இதுக்கு பேரு என்னா தெர்யுமா?",
+        "on_screen_text": "WHAT NAME?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Leather-bound medical journal open under magnifying glass on oak desk, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "Doorway Effect-னு சொல்வாங்க பாருங்கோ!",
+        "on_screen_text": "DOORWAY EFFECT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dramatic glowing threshold doorway silhouetted with volumetric golden rays, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "நம்ம மூளை ஒரு கதவை தாண்டும் போது,",
+        "on_screen_text": "CROSSING DOOR",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Macro shot of antique brass door handle reflecting glowing golden lights, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "பழைய chapter முடிஞ்சு புது chapter ஆரம்பிக்குதுன்னு",
+        "on_screen_text": "NEW CHAPTER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "A heavy book turning pages automatically in soft ambient library light, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual break: A pulsing glowing brain neural network refreshing its memory cache, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "முந்தைய அறை நினைவுகளை அப்புடியே erase பண்ணிடும்!",
+        "on_screen_text": "CACHE CLEAR",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Digital data stream dissolving into soft smoke over ancient stone tiles, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "புது இடத்துக்கு தயாரா இருக்க இந்த reset பண்ணுது.",
+        "on_screen_text": "SYSTEM RESET",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Balanced stone pyramid sculpture in calm Zen sand garden, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "இதை சரி பண்ண ஒரே ஒரு சிம்பிள் டிப் சொல்றேங்,",
+        "on_screen_text": "SIMPLE FIX",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Small traditional brass oil lamp glowing with clear warm steady flame, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "மறுபடியும் பழைய ரூமுக்கு போய் நில்லுங்கோ பாருங்கோ!",
+        "on_screen_text": "STEP BACK",
+        "visual_type": "Cinematic",
+        "visual_prompt": "View looking back through carved wooden archway into warm sunlit verandah, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "அப்புடியே மறந்துபோன விஷயம் சட்டுன்னு நியாபகம் வரும்!",
+        "on_screen_text": "MEMORY BACK",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Golden spark igniting in center of dark crystalline sphere, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "உங்களுக்கும் இந்த மாதிரி மறதி அனுபவம் உண்டா?",
+        "on_screen_text": "HAPPENED TO YOU?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian brass bell hanging from carved temple ceiling, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "கமெண்ட்ல மறக்காம சொல்லுங்கோ பாப்போம்!",
+        "on_screen_text": "COMMENT NOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "South Indian stone courtyard lit by warm evening oil lamps, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே கிச்சன்ல இருந்து ஏதோ எடுக்க பெட்ரூமுக்கு போவீங்க, ஆனா உள்ள போனதும் அப்புடியே நின்னுடுவீங்க! என்னா எடுக்க வந்தோம்னு மறந்து போய்டும்! அட போங்கோ! இது உங்களுக்கு மட்டும் இல்ல, உலகத்துல எல்லாருக்கும் நடக்குற விந்தை! Science-ல இதுக்கு பேரு என்னா தெர்யுமா? Doorway Effect-னு சொல்வாங்க பாருங்கோ! நம்ம மூளை ஒரு கதவை தாண்டும் போது, பழைய chapter முடிஞ்சு புது chapter ஆரம்பிக்குதுன்னு ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! முந்தைய அறை நினைவுகளை அப்புடியே erase பண்ணிடும்! புது இடத்துக்கு தயாரா இருக்க இந்த reset பண்ணுது. இதை சரி பண்ண ஒரே ஒரு சிம்பிள் டிப் சொல்றேங், மறுபடியும் பழைய ரூமுக்கு போய் நில்லுங்கோ பாருங்கோ! அப்புடியே மறந்துபோன விஷயம் சட்டுன்னு நியாபகம் வரும்! உங்களுக்கும் இந்த மாதிரி மறதி அனுபவம் உண்டா? கமெண்ட்ல மறக்காம சொல்லுங்கோ பாப்போம்! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே கிச்சன்ல இருந்து",
+        "english_caption": "LEAVING ROOM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian home wooden corridor with sunlight streaming through carved doorways, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "ஏதோ எடுக்க பெட்ரூமுக்கு போவீங்க,",
+        "english_caption": "WALKING INSIDE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ornate antique rosewood doorway opening into a dimly lit courtyard, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "ஆனா உள்ள போனதும் அப்புடியே நின்னுடுவீங்க!",
+        "english_caption": "SUDDEN BLANK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Old ticking grandfather clock standing silently against weathered limestone wall, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "என்னா எடுக்க வந்தோம்னு மறந்து போய்டும்!",
+        "english_caption": "FORGOT WHAT?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Empty wooden study table with solitary candle flame flickering in breeze, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "அட போங்கோ! இது உங்களுக்கு மட்டும் இல்ல,",
+        "english_caption": "EVERYONE FEELS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Intricate brass astrolabe and optical lenses resting on velvet cloth, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "உலகத்துல எல்லாருக்கும் நடக்குற விந்தை!",
+        "english_caption": "UNIVERSAL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient celestial map carved on polished dark granite, warm lantern glow, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "Science-ல இதுக்கு பேரு என்னா தெர்யுமா?",
+        "english_caption": "WHAT NAME?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Leather-bound medical journal open under magnifying glass on oak desk, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "Doorway Effect-னு சொல்வாங்க பாருங்கோ!",
+        "english_caption": "DOORWAY EFFECT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dramatic glowing threshold doorway silhouetted with volumetric golden rays, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "நம்ம மூளை ஒரு கதவை தாண்டும் போது,",
+        "english_caption": "CROSSING DOOR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Macro shot of antique brass door handle reflecting glowing golden lights, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "பழைய chapter முடிஞ்சு புது chapter ஆரம்பிக்குதுன்னு",
+        "english_caption": "NEW CHAPTER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A heavy book turning pages automatically in soft ambient library light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual break: A pulsing glowing brain neural network refreshing its memory cache, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "முந்தைய அறை நினைவுகளை அப்புடியே erase பண்ணிடும்!",
+        "english_caption": "CACHE CLEAR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital data stream dissolving into soft smoke over ancient stone tiles, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "புது இடத்துக்கு தயாரா இருக்க இந்த reset பண்ணுது.",
+        "english_caption": "SYSTEM RESET",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Balanced stone pyramid sculpture in calm Zen sand garden, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "இதை சரி பண்ண ஒரே ஒரு சிம்பிள் டிப் சொல்றேங்,",
+        "english_caption": "SIMPLE FIX",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Small traditional brass oil lamp glowing with clear warm steady flame, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "மறுபடியும் பழைய ரூமுக்கு போய் நில்லுங்கோ பாருங்கோ!",
+        "english_caption": "STEP BACK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "View looking back through carved wooden archway into warm sunlit verandah, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "அப்புடியே மறந்துபோன விஷயம் சட்டுன்னு நியாபகம் வரும்!",
+        "english_caption": "MEMORY BACK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Golden spark igniting in center of dark crystalline sphere, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "உங்களுக்கும் இந்த மாதிரி மறதி அனுபவம் உண்டா?",
+        "english_caption": "HAPPENED TO YOU?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian brass bell hanging from carved temple ceiling, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "கமெண்ட்ல மறக்காம சொல்லுங்கோ பாப்போம்!",
+        "english_caption": "COMMENT NOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "South Indian stone courtyard lit by warm evening oil lamps, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn"
+    }
+  },
+  {
+    "title": "AC 24 டிகிரில வச்சா கரண்ட் பில் 25% குறையும்! Power Saving Hack! ⚡",
+    "description": "AC 24 degrees electricity power saving calculation explained in Nellai Tamil dialect by VJ. #MoneySavingTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Air_conditioning#Energy_consumption",
+    "original_news_headline": "AC 24 டிகிரில வச்சா கரண்ட் பில் 25% குறையும்! Power Saving Hack! ⚡",
+    "original_news_url": "https://en.wikipedia.org/wiki/Air_conditioning#Energy_consumption",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Air_conditioning#Energy_consumption"
+    ],
+    "hook": "AC 24 டிகிரில வச்சா கரண்ட் பில் 25% குறையும் தெர்யுமா? ⚡",
+    "summary": "Setting AC to 24C saves 6% power per degree compared to running at 18C.",
+    "sub_category": "💰 Money-Saving & Smart Living Tricks",
+    "breaking_news_level": 9,
+    "keywords": [
+      "AC power saving",
+      "Electricity bill hack",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#MoneySaving",
+      "#ElectricityBill",
+      "#LifeHackTamil",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "உங்க வீட்டு AC-யை எத்தன டிகிரில வைப்பீங்க? 18-ஆ இல்ல 24-ஆ? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே வெயில் காலத்துல",
+        "on_screen_text": "SUMMER HEAT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Sunlight glaring intensely through woven palm leaf window blinds, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "AC போட்டதும் சில்லுனு இருக்கணும்னு",
+        "on_screen_text": "CHILL AIR",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Sleek modern AC vent blowing subtle visible cool air mist with blue ambient lighting, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "ரிமோட்ல 18 டிகிரில வச்சுடுவீங்க இல்லியா?",
+        "on_screen_text": "18 DEGREES",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Modern sleek AC remote display glowing brightly with digital number 18, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "அட போங்கோ! மாசம் கடைசில கரண்ட் பில்",
+        "on_screen_text": "BIG BILL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Electricity bill document resting on teak table beside an ancient brass coin purse, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "வந்து நிக்கிறப்ப கண்ணுல தண்ணியே வந்துடும்!",
+        "on_screen_text": "SHOCKING COST",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Digital electric meter display spinning with red warning indicator lights, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "BEE அதாவது இந்திய அரசு ஆய்வுல",
+        "on_screen_text": "GOVT STUDY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Official energy star rating certificate sticker on sleek appliance surface, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "என்ன தெரியுமா சொல்றாங்க?",
+        "on_screen_text": "SECRET FACT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Warm volumetric beam illuminating clean wooden desk with energy charts, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "நீங்க AC-ல ஒரு டிகிரி கூட்ட கூட்ட,",
+        "on_screen_text": "EACH DEGREE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Digital thermostat knob clicking upward from 20 to 24 with golden light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "6% கரண்ட் மிச்சமாகும் பாருங்கோ!",
+        "on_screen_text": "SAVE 6%",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Stack of fresh Indian currency notes tied with golden thread on brass tray, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "அப்போ 18-ல இருந்து 24 டிகிரில வெச்சா,",
+        "on_screen_text": "SET 24C",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Digital temperature reading 24C in calming emerald green font on sleek wall unit, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual shift: A wooden ceiling fan spinning smoothly with gentle rhythmic breeze, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "மொத்தமா 25% கரண்ட் பில் அப்புடியே குறையும்!",
+        "on_screen_text": "25% SAVINGS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glowing 3D pie chart showing 25% energy reduction sliced cleanly, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "கூடவே ஒரு சீலிங் ஃபேனை கொஞ்சூம்",
+        "on_screen_text": "CEILING FAN",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian wooden ceiling fan circulating cool air across verandah, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "slow speed-ல ஓட விட்டீங்கன்னா,",
+        "on_screen_text": "SLOW SPEED",
+        "visual_type": "Cinematic",
+        "visual_prompt": "White linen curtains fluttering softly in cool indoor breeze, warm afternoon sun, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "குளிர்ச்சி ரூம் முழுக்க சமமா பரவிடும்!",
+        "on_screen_text": "EVEN COOLING",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Comfortable South Indian bedroom setting with terracotta floor tiles and cool ambiance, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "உடம்புக்கும் சளி பிடிக்காம ஆரோக்கியமா இருக்கும் பாருங்கோ!",
+        "on_screen_text": "HEALTHY SLEEP",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Neat cotton pillows and brass water jug on teak bedside table, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "உங்க வீட்ல AC எத்தன டிகிரில வைப்பீங்க?",
+        "on_screen_text": "YOUR SETTING?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Close-up of sleek AC remote on wooden bedside table, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT NOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass oil lamp flickering beside temple stone steps, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே வெயில் காலத்துல AC போட்டதும் சில்லுனு இருக்கணும்னு ரிமோட்ல 18 டிகிரில வச்சுடுவீங்க இல்லியா? அட போங்கோ! மாசம் கடைசில கரண்ட் பில் வந்து நிக்கிறப்ப கண்ணுல தண்ணியே வந்துடும்! BEE அதாவது இந்திய அரசு ஆய்வுல என்ன தெரியுமா சொல்றாங்க? நீங்க AC-ல ஒரு டிகிரி கூட்ட கூட்ட, 6% கரண்ட் மிச்சமாகும் பாருங்கோ! அப்போ 18-ல இருந்து 24 டிகிரில வெச்சா, ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! மொத்தமா 25% கரண்ட் பில் அப்புடியே குறையும்! கூடவே ஒரு சீலிங் ஃபேனை கொஞ்சூம் slow speed-ல ஓட விட்டீங்கன்னா, குளிர்ச்சி ரூம் முழுக்க சமமா பரவிடும்! உடம்புக்கும் சளி பிடிக்காம ஆரோக்கியமா இருக்கும் பாருங்கோ! உங்க வீட்ல AC எத்தன டிகிரில வைப்பீங்க? கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே வெயில் காலத்துல",
+        "english_caption": "SUMMER HEAT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sunlight glaring intensely through woven palm leaf window blinds, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "AC போட்டதும் சில்லுனு இருக்கணும்னு",
+        "english_caption": "CHILL AIR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sleek modern AC vent blowing subtle visible cool air mist with blue ambient lighting, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "ரிமோட்ல 18 டிகிரில வச்சுடுவீங்க இல்லியா?",
+        "english_caption": "18 DEGREES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Modern sleek AC remote display glowing brightly with digital number 18, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "அட போங்கோ! மாசம் கடைசில கரண்ட் பில்",
+        "english_caption": "BIG BILL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Electricity bill document resting on teak table beside an ancient brass coin purse, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "வந்து நிக்கிறப்ப கண்ணுல தண்ணியே வந்துடும்!",
+        "english_caption": "SHOCKING COST",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital electric meter display spinning with red warning indicator lights, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "BEE அதாவது இந்திய அரசு ஆய்வுல",
+        "english_caption": "GOVT STUDY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Official energy star rating certificate sticker on sleek appliance surface, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "என்ன தெரியுமா சொல்றாங்க?",
+        "english_caption": "SECRET FACT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Warm volumetric beam illuminating clean wooden desk with energy charts, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "நீங்க AC-ல ஒரு டிகிரி கூட்ட கூட்ட,",
+        "english_caption": "EACH DEGREE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital thermostat knob clicking upward from 20 to 24 with golden light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "6% கரண்ட் மிச்சமாகும் பாருங்கோ!",
+        "english_caption": "SAVE 6%",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Stack of fresh Indian currency notes tied with golden thread on brass tray, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "அப்போ 18-ல இருந்து 24 டிகிரில வெச்சா,",
+        "english_caption": "SET 24C",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Digital temperature reading 24C in calming emerald green font on sleek wall unit, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual shift: A wooden ceiling fan spinning smoothly with gentle rhythmic breeze, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "மொத்தமா 25% கரண்ட் பில் அப்புடியே குறையும்!",
+        "english_caption": "25% SAVINGS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing 3D pie chart showing 25% energy reduction sliced cleanly, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "கூடவே ஒரு சீலிங் ஃபேனை கொஞ்சூம்",
+        "english_caption": "CEILING FAN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian wooden ceiling fan circulating cool air across verandah, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "slow speed-ல ஓட விட்டீங்கன்னா,",
+        "english_caption": "SLOW SPEED",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "White linen curtains fluttering softly in cool indoor breeze, warm afternoon sun, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "குளிர்ச்சி ரூம் முழுக்க சமமா பரவிடும்!",
+        "english_caption": "EVEN COOLING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Comfortable South Indian bedroom setting with terracotta floor tiles and cool ambiance, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "உடம்புக்கும் சளி பிடிக்காம ஆரோக்கியமா இருக்கும் பாருங்கோ!",
+        "english_caption": "HEALTHY SLEEP",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Neat cotton pillows and brass water jug on teak bedside table, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "உங்க வீட்ல AC எத்தன டிகிரில வைப்பீங்க?",
+        "english_caption": "YOUR SETTING?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Close-up of sleek AC remote on wooden bedside table, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ!",
+        "english_caption": "COMMENT NOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass oil lamp flickering beside temple stone steps, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn"
+    }
+  },
+  {
+    "title": "தஞ்சை பெரிய கோவில் நிழல் தரையில் விழாதா? Thanjavur Mystery! 🏛️",
+    "description": "Thanjavur Brihadisvara temple shadow and 80-tonne capstone architectural mystery explained in Nellai Tamil by VJ. #ThanjavurTamil #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Brihadisvara_Temple,_Thanjavur#Architecture",
+    "original_news_headline": "தஞ்சை பெரிய கோவில் நிழல் தரையில் விழாதா? Thanjavur Mystery! 🏛️",
+    "original_news_url": "https://en.wikipedia.org/wiki/Brihadisvara_Temple,_Thanjavur#Architecture",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Brihadisvara_Temple,_Thanjavur#Architecture"
+    ],
+    "hook": "தஞ்சை பெரிய கோவில் நிழல் தரையில் விழாதா தெர்யுமா? 🏛️",
+    "summary": "The vimana shadow falls on the temple structure itself, not ground outside, a 1000-year Chola marvel.",
+    "sub_category": "🌍 Mysterious History & Culture Secrets",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Thanjavur temple",
+      "Brihadisvara mystery",
+      "Chola architecture",
+      "Nellai Tamil"
+    ],
+    "hashtags": [
+      "#ThanjavurTemple",
+      "#TamilHistory",
+      "#CholaEmpire",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "தஞ்சை பெரிய கோவிலை நேர்ல போய் பாத்திருக்கீங்களா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே ஆயிரம் வருஷங்களுக்கு முன்னாடி",
+        "on_screen_text": "1000 YEARS AGO",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Majestic granite temple vimana towering into warm golden hour sky with drifting clouds, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "ராஜராஜ சோழன் கட்டிய தஞ்சை பெரிய கோவில்",
+        "on_screen_text": "CHOLA PRIDE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Intricate stone carvings on ancient temple wall glowing with warm golden sunlight, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "உலக அதிசயங்களை விட பெரிய மர்மம் தெர்யுமா?",
+        "on_screen_text": "GREAT MYSTERY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Wide courtyard of ancient granite stone temple with dramatic perspective lines, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "கோவிலின் கோபுர நிழல் தரையில",
+        "on_screen_text": "TEMPLE SHADOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Golden hour sun casting sharp geometric shadows along massive stone base, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "எப்போதுமே விழாதுன்னு பல பேர் சொல்லுவாங்க!",
+        "on_screen_text": "NO SHADOW MYTH",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Pristine temple stone platform basking in midday solar brightness, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "அட போங்கோ! உண்மை என்னான்னு சொல்றேங் பாருங்கோ,",
+        "on_screen_text": "REAL FACT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient bronze architectural scale ruler and measuring thread on granite block, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "நிழல் கண்டிப்பா விழும்,",
+        "on_screen_text": "SHADOW FALLS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Soft evening shadow draping over the lower terraced levels of stone vimana, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "ஆனா வெளி வளாக தரையில விழாம,",
+        "on_screen_text": "ON THE BASE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Massive monolithic granite plinth stepping upward with precision interlocking joints, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "கோவிலின் பிரம்மாண்ட அடித்தளத்து மேலேயே விழும்!",
+        "on_screen_text": "CHOLA DESIGN",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Aerial view of temple base absorbing geometry of shadow within its own perimeter, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "அப்புடி ஒரு துல்லியமான கட்டட கலை விந்தை!",
+        "on_screen_text": "PERFECT MATH",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Sacred geometry diagrams etched into ancient palm leaf manuscript with gold ink, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual shift: The 80-tonne monolithic cupola stone glowing against a star-studded night sky, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "கோபுர உச்சி மேல இருக்கிற கும்பக்கல்",
+        "on_screen_text": "80 TON STONE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Extreme low angle view of monolithic spherical capstone perched 216 feet high, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "ஒரே பாறையில செதுக்கப்பட்ட 80 டன் எடை!",
+        "on_screen_text": "SINGLE GRANITE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Raw unpolished dark granite rock showing rich mineral veining under spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "கிரேன் எதுவுமே இல்லாத காலத்துல",
+        "on_screen_text": "NO CRANES",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Rope-tied timber scaffolding and stone rollers resting on earthen ramp, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "6 கிலோமீட்டர் தூரத்துக்கு மண் பாதை அமைச்சு",
+        "on_screen_text": "6 KM RAMP",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Historic rendering of gradual incline earthen ramp leading to temple height, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "யானைகளை வெச்சு உருட்டி கொண்டுபோய் வெச்சாங்களாம்!",
+        "on_screen_text": "HISTORIC FEAT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient bronze temple bell tolling with golden reverberations across stone corridor, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "நம்ம தமிழர்களின் இந்த அறிவியல் திறமை வியப்பா இருக்கு இல்லியா?",
+        "on_screen_text": "TAMIL PRIDE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass oil lamps glowing continuously in ancient sanctum corridor, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "நீங்க தஞ்சை பெரிய கோவில் போயிருக்கீங்களா?",
+        "on_screen_text": "HAVE YOU VISITED?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Wide vista of temple gopuram illuminated at twilight with deep blue sky, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT NOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "South Indian temple stone courtyard lit by warm evening oil lamps, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 20,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே ஆயிரம் வருஷங்களுக்கு முன்னாடி ராஜராஜ சோழன் கட்டிய தஞ்சை பெரிய கோவில் உலக அதிசயங்களை விட பெரிய மர்மம் தெர்யுமா? கோவிலின் கோபுர நிழல் தரையில எப்போதுமே விழாதுன்னு பல பேர் சொல்லுவாங்க! அட போங்கோ! உண்மை என்னான்னு சொல்றேங் பாருங்கோ, நிழல் கண்டிப்பா விழும், ஆனா வெளி வளாக தரையில விழாம, கோவிலின் பிரம்மாண்ட அடித்தளத்து மேலேயே விழும்! அப்புடி ஒரு துல்லியமான கட்டட கலை விந்தை! ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! கோபுர உச்சி மேல இருக்கிற கும்பக்கல் ஒரே பாறையில செதுக்கப்பட்ட 80 டன் எடை! கிரேன் எதுவுமே இல்லாத காலத்துல 6 கிலோமீட்டர் தூரத்துக்கு மண் பாதை அமைச்சு யானைகளை வெச்சு உருட்டி கொண்டுபோய் வெச்சாங்களாம்! நம்ம தமிழர்களின் இந்த அறிவியல் திறமை வியப்பா இருக்கு இல்லியா? நீங்க தஞ்சை பெரிய கோவில் போயிருக்கீங்களா? கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே ஆயிரம் வருஷங்களுக்கு முன்னாடி",
+        "english_caption": "1000 YEARS AGO",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Majestic granite temple vimana towering into warm golden hour sky with drifting clouds, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "ராஜராஜ சோழன் கட்டிய தஞ்சை பெரிய கோவில்",
+        "english_caption": "CHOLA PRIDE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Intricate stone carvings on ancient temple wall glowing with warm golden sunlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "உலக அதிசயங்களை விட பெரிய மர்மம் தெர்யுமா?",
+        "english_caption": "GREAT MYSTERY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Wide courtyard of ancient granite stone temple with dramatic perspective lines, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "கோவிலின் கோபுர நிழல் தரையில",
+        "english_caption": "TEMPLE SHADOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Golden hour sun casting sharp geometric shadows along massive stone base, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "எப்போதுமே விழாதுன்னு பல பேர் சொல்லுவாங்க!",
+        "english_caption": "NO SHADOW MYTH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Pristine temple stone platform basking in midday solar brightness, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "அட போங்கோ! உண்மை என்னான்னு சொல்றேங் பாருங்கோ,",
+        "english_caption": "REAL FACT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient bronze architectural scale ruler and measuring thread on granite block, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "நிழல் கண்டிப்பா விழும்,",
+        "english_caption": "SHADOW FALLS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Soft evening shadow draping over the lower terraced levels of stone vimana, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "ஆனா வெளி வளாக தரையில விழாம,",
+        "english_caption": "ON THE BASE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Massive monolithic granite plinth stepping upward with precision interlocking joints, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "கோவிலின் பிரம்மாண்ட அடித்தளத்து மேலேயே விழும்!",
+        "english_caption": "CHOLA DESIGN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Aerial view of temple base absorbing geometry of shadow within its own perimeter, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "அப்புடி ஒரு துல்லியமான கட்டட கலை விந்தை!",
+        "english_caption": "PERFECT MATH",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sacred geometry diagrams etched into ancient palm leaf manuscript with gold ink, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual shift: The 80-tonne monolithic cupola stone glowing against a star-studded night sky, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "கோபுர உச்சி மேல இருக்கிற கும்பக்கல்",
+        "english_caption": "80 TON STONE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Extreme low angle view of monolithic spherical capstone perched 216 feet high, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "ஒரே பாறையில செதுக்கப்பட்ட 80 டன் எடை!",
+        "english_caption": "SINGLE GRANITE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Raw unpolished dark granite rock showing rich mineral veining under spotlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "கிரேன் எதுவுமே இல்லாத காலத்துல",
+        "english_caption": "NO CRANES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Rope-tied timber scaffolding and stone rollers resting on earthen ramp, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "6 கிலோமீட்டர் தூரத்துக்கு மண் பாதை அமைச்சு",
+        "english_caption": "6 KM RAMP",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Historic rendering of gradual incline earthen ramp leading to temple height, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "யானைகளை வெச்சு உருட்டி கொண்டுபோய் வெச்சாங்களாம்!",
+        "english_caption": "HISTORIC FEAT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient bronze temple bell tolling with golden reverberations across stone corridor, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "நம்ம தமிழர்களின் இந்த அறிவியல் திறமை வியப்பா இருக்கு இல்லியா?",
+        "english_caption": "TAMIL PRIDE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass oil lamps glowing continuously in ancient sanctum corridor, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "நீங்க தஞ்சை பெரிய கோவில் போயிருக்கீங்களா?",
+        "english_caption": "HAVE YOU VISITED?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Wide vista of temple gopuram illuminated at twilight with deep blue sky, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "கமெண்ட்ல மறக்காம உங்க பதிலை சொல்லுங்கோ!",
+        "english_caption": "COMMENT NOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "South Indian temple stone courtyard lit by warm evening oil lamps, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 20,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn"
+    }
+  },
+  {
+    "title": "காகம் உங்க முகத்தை வாழ்நாள் முழுக்க மறக்காது! Crow Face Memory! 🦅",
+    "description": "Crow face memory scientific discovery explained in Nellai Tamil dialect by VJ. #NatureTamil #SimpleTipsByVJ #AnimalOddities",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Crow#Intelligence",
+    "original_news_headline": "காகம் உங்க முகத்தை வாழ்நாள் முழுக்க மறக்காது! Crow Face Memory! 🦅",
+    "original_news_url": "https://en.wikipedia.org/wiki/Crow#Intelligence",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Crow#Intelligence"
+    ],
+    "hook": "காகம் உங்க முகத்தை வாழ்நாள் முழுக்க மறக்காது தெர்யுமா? 🦅",
+    "summary": "Crows recognize and remember individual human faces for years and teach their young.",
+    "sub_category": "🐾 Nature & Animal Oddities",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Crow memory",
+      "Animal intelligence",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#NatureTamil",
+      "#AnimalFacts",
+      "#CrowMemory",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "உங்க வீட்டு காகம் உங்களை அடையாளம் கண்டு சாப்பாடு கேக்குமா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நம்ம வீட்டு மொட்டை மாடில",
+        "on_screen_text": "TERRACE CROWS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Red oxide terrace floor with terracotta pots and morning sunlight casting sharp shadows, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "தினமும் சாதம் திங்குற காகம்",
+        "on_screen_text": "DAILY VISITOR",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass plate with white rice grains on rustic wooden surface, warm morning glow, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "உங்களை பத்தி என்னா நினைக்றாங்க தெர்யுமா?",
+        "on_screen_text": "BIRD SECRETS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Lush neem tree branches silhouetted against sunrise sky with morning mist, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "அட போங்கோ! Washington University research-ல",
+        "on_screen_text": "SCIENCE STUDY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Scientific research papers and leather bound magnifying glass on dark wooden table, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "என்ன கண்டுபிடிச்சாங்க தெரியுமா?",
+        "on_screen_text": "BIG REVEAL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dramatic beam of sunlight highlighting an ancient stone courtyard, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "காகங்களுக்கு மனித முகத்தை",
+        "on_screen_text": "HUMAN FACES",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Artistic clay mask sculpture on temple wall lit by soft oil lamp flame, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "துல்லியமா அடையாளம் பாக்க முடியுமாம்!",
+        "on_screen_text": "SHARP MEMORY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Extreme macro of detailed biometric grid lines projected on black volcanic stone, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "அதாவது நீங்க அதுக்கு கொஞ்சூம்",
+        "on_screen_text": "KINDNESS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Clay water bowl for birds resting on red brick ledge with blooming jasmine flowers, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "அன்பா சோறு வெச்சா வாழ்நாள் முழுக்க",
+        "on_screen_text": "LIFELONG BOND",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass container filled with golden grains on hand-woven coir mat, 9:16 vertical, no humans.",
+        "camera_motion": "Tracking shot",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "நம்ம முகத்தை ஞாபகம் வெச்சுக்குமாம்!",
+        "on_screen_text": "REMEMBERED",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Old family heirloom photo album resting on teak wood table with warm lantern light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden dramatic lighting shift: dark thunderstorm clouds over ancient banyan tree, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "நீங்க கல்லை தூக்கி",
+        "on_screen_text": "IF ATTACKED",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Smooth river stones scattered near red soil pathway under dramatic low light, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "ஒரு காகத்தை விரட்டினா கூட,",
+        "on_screen_text": "DANGER CALL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dense tree canopy silhouetted against vivid orange dusk sky, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "அப்புடியே 5 வருஷம் கழிச்சு பாத்தாலும்",
+        "on_screen_text": "5 YEARS LATER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient temple stone sundial marking the passage of years, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "உங்களை பழிவாங்க மத்த காகங்களையும் கூப்பிடுமாம்!",
+        "on_screen_text": "MOB DEFENSE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Multiple bird silhouettes resting along old village roof tiles against sunset, 9:16 vertical, no humans.",
+        "camera_motion": "Tracking shot",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "தன்னோட குஞ்சுகளுக்கும் சொல்லி குடுக்குமாம்!",
+        "on_screen_text": "NEXT GEN",
+        "visual_type": "Cinematic",
+        "visual_prompt": "A delicate natural twig nest tucked securely in dense green foliage, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "இன்னாரு கெட்டவன்னு alert பண்ணிடுமாம்!",
+        "on_screen_text": "ALERT SYSTEM",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glowing network map of connected tree branches like neural synapses, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "அதனால காகத்துக்கு சோறு போடுறப்ப",
+        "on_screen_text": "DAILY FEED",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Polished bronze cup of fresh water surrounded by scattered grain, warm temple setting, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "மரியாதையா நில்லுங்கோ பாருங்கோ!",
+        "on_screen_text": "RESPECT BIRDS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Red oxide verandah floor with kolam patterns glowing in morning sunlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 20,
+        "narration": "உங்க வீட்டு காகம் உங்களை அடையாளம் கண்டு",
+        "on_screen_text": "YOUR CROWS?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "South Indian clay water pots lined up neatly along garden fence, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 21,
+        "narration": "சாப்பாடு கேக்குமான்னு கமெண்ட்ல சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT NOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ornate brass temple bell hanging in front of stone temple pillar, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 22,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நம்ம வீட்டு மொட்டை மாடில தினமும் சாதம் திங்குற காகம் உங்களை பத்தி என்னா நினைக்றாங்க தெர்யுமா? அட போங்கோ! Washington University research-ல என்ன கண்டுபிடிச்சாங்க தெரியுமா? காகங்களுக்கு மனித முகத்தை துல்லியமா அடையாளம் பாக்க முடியுமாம்! அதாவது நீங்க அதுக்கு கொஞ்சூம் அன்பா சோறு வெச்சா வாழ்நாள் முழுக்க நம்ம முகத்தை ஞாபகம் வெச்சுக்குமாம்! ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! நீங்க கல்லை தூக்கி ஒரு காகத்தை விரட்டினா கூட, அப்புடியே 5 வருஷம் கழிச்சு பாத்தாலும் உங்களை பழிவாங்க மத்த காகங்களையும் கூப்பிடுமாம்! தன்னோட குஞ்சுகளுக்கும் சொல்லி குடுக்குமாம்! இன்னாரு கெட்டவன்னு alert பண்ணிடுமாம்! அதனால காகத்துக்கு சோறு போடுறப்ப மரியாதையா நில்லுங்கோ பாருங்கோ! உங்க வீட்டு காகம் உங்களை அடையாளம் கண்டு சாப்பாடு கேக்குமான்னு கமெண்ட்ல சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நம்ம வீட்டு மொட்டை மாடில",
+        "english_caption": "TERRACE CROWS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Red oxide terrace floor with terracotta pots and morning sunlight casting sharp shadows, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "தினமும் சாதம் திங்குற காகம்",
+        "english_caption": "DAILY VISITOR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass plate with white rice grains on rustic wooden surface, warm morning glow, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "உங்களை பத்தி என்னா நினைக்றாங்க தெர்யுமா?",
+        "english_caption": "BIRD SECRETS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Lush neem tree branches silhouetted against sunrise sky with morning mist, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "அட போங்கோ! Washington University research-ல",
+        "english_caption": "SCIENCE STUDY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Scientific research papers and leather bound magnifying glass on dark wooden table, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "என்ன கண்டுபிடிச்சாங்க தெரியுமா?",
+        "english_caption": "BIG REVEAL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dramatic beam of sunlight highlighting an ancient stone courtyard, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "காகங்களுக்கு மனித முகத்தை",
+        "english_caption": "HUMAN FACES",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Artistic clay mask sculpture on temple wall lit by soft oil lamp flame, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "துல்லியமா அடையாளம் பாக்க முடியுமாம்!",
+        "english_caption": "SHARP MEMORY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Extreme macro of detailed biometric grid lines projected on black volcanic stone, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "அதாவது நீங்க அதுக்கு கொஞ்சூம்",
+        "english_caption": "KINDNESS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Clay water bowl for birds resting on red brick ledge with blooming jasmine flowers, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "அன்பா சோறு வெச்சா வாழ்நாள் முழுக்க",
+        "english_caption": "LIFELONG BOND",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass container filled with golden grains on hand-woven coir mat, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "நம்ம முகத்தை ஞாபகம் வெச்சுக்குமாம்!",
+        "english_caption": "REMEMBERED",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Old family heirloom photo album resting on teak wood table with warm lantern light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden dramatic lighting shift: dark thunderstorm clouds over ancient banyan tree, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "நீங்க கல்லை தூக்கி",
+        "english_caption": "IF ATTACKED",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Smooth river stones scattered near red soil pathway under dramatic low light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "ஒரு காகத்தை விரட்டினா கூட,",
+        "english_caption": "DANGER CALL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dense tree canopy silhouetted against vivid orange dusk sky, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "அப்புடியே 5 வருஷம் கழிச்சு பாத்தாலும்",
+        "english_caption": "5 YEARS LATER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient temple stone sundial marking the passage of years, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "உங்களை பழிவாங்க மத்த காகங்களையும் கூப்பிடுமாம்!",
+        "english_caption": "MOB DEFENSE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Multiple bird silhouettes resting along old village roof tiles against sunset, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "தன்னோட குஞ்சுகளுக்கும் சொல்லி குடுக்குமாம்!",
+        "english_caption": "NEXT GEN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A delicate natural twig nest tucked securely in dense green foliage, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "இன்னாரு கெட்டவன்னு alert பண்ணிடுமாம்!",
+        "english_caption": "ALERT SYSTEM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing network map of connected tree branches like neural synapses, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "அதனால காகத்துக்கு சோறு போடுறப்ப",
+        "english_caption": "DAILY FEED",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Polished bronze cup of fresh water surrounded by scattered grain, warm temple setting, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "மரியாதையா நில்லுங்கோ பாருங்கோ!",
+        "english_caption": "RESPECT BIRDS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Red oxide verandah floor with kolam patterns glowing in morning sunlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 20,
+        "text": "உங்க வீட்டு காகம் உங்களை அடையாளம் கண்டு",
+        "english_caption": "YOUR CROWS?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "South Indian clay water pots lined up neatly along garden fence, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 21,
+        "text": "சாப்பாடு கேக்குமான்னு கமெண்ட்ல சொல்லுங்கோ!",
+        "english_caption": "COMMENT NOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ornate brass temple bell hanging in front of stone temple pillar, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 22,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant maroon silk banner with gold trim illuminated under warm cinematic stage lights, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn",
+      "Washington": "wash-ing-ton",
+      "University": "yu-ni-ver-si-ti",
+      "research": "ree-serch"
+    }
+  },
+  {
+    "title": "ஆக்டோபஸுக்கு 3 இதயம் & நீல நிற ரத்தம்! Octopus Superpowers! 🐙",
+    "description": "Octopus three hearts and blue blood bizarre nature facts in Nellai Tanglish by VJ. #OctopusTamil #SimpleTipsByVJ #NatureOddities",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Octopus#Circulatory_system",
+    "original_news_headline": "ஆக்டோபஸுக்கு 3 இதயம் & நீல நிற ரத்தம்! Octopus Superpowers! 🐙",
+    "original_news_url": "https://en.wikipedia.org/wiki/Octopus#Circulatory_system",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Octopus#Circulatory_system"
+    ],
+    "hook": "கடலுக்கு அடியில 3 இதயம் இருக்கிற விசித்திர பிராணி தெர்யுமா? 🐙",
+    "summary": "Octopuses have 3 hearts, blue copper blood, and 9 brains distributed across arms.",
+    "sub_category": "🐾 Nature & Animal Oddities",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Octopus blood",
+      "Three hearts",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#NatureOddities",
+      "#OctopusTamil",
+      "#DeepSea",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "ஆக்டோபஸுக்கு 9 மூளை இருக்கிற விஷயம் உங்களுக்கு முன்னாடியே தெர்யுமா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே கடலுக்கு அடியில",
+        "on_screen_text": "DEEP OCEAN",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Deep indigo underwater ocean abyss with sunbeams piercing translucent water, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "ஒரு ஏலியன் பிராணி வாழுது தெர்யுமா?",
+        "on_screen_text": "ALIEN CREATURE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Bioluminescent coral reef glowing with deep emerald and azure light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "அட போங்கோ! அதுதான் ஆக்டோபஸ்!",
+        "on_screen_text": "OCTOPUS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Macro view of textured sea floor with pearlescent shells and smooth corals, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "நமக்கு ஒரு இதயம் தான் இருக்கு,",
+        "on_screen_text": "ONE HEART",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glowing anatomical red heart holographic representation in high tech dark space, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "ஆனா ஆக்டோபஸுக்கு மூணு இதயம்!",
+        "on_screen_text": "3 HEARTS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Three glowing crystalline heart chambers pulsing together in deep blue ocean void, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "ரெண்டு இதயம் gills-க்கு ரத்தம் அனுப்பும்,",
+        "on_screen_text": "GILL HEARTS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Flowing microfluidic stream of glowing cyan fluids branching smoothly, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "ஒண்ணு உடம்பு முழுக்க ரத்தம் பாய்ச்சும்.",
+        "on_screen_text": "BODY PUMP",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Central glowing sapphire core radiating concentric energy rings, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "இன்னொரு அதிரடி உண்மை சொல்றேங் பாருங்கோ,",
+        "on_screen_text": "SHOCKING FACT",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Deep underwater cavern with shimmering crystals reflecting cyan light, 9:16 vertical, no humans.",
+        "camera_motion": "Tracking shot",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "இதோட ரத்தத்தின் கலர் சிவப்பு இல்ல!",
+        "on_screen_text": "NOT RED BLOOD",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Clear glass beaker containing deep azure glowing liquid on black slate laboratory table, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "பளிச்சுன்னு நீல கலர்ல இருக்கும்!",
+        "on_screen_text": "BLUE BLOOD",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant electric blue fluid swirling inside an elegant crystal vial with warm side highlights, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual break: Dramatic copper ore nuggets reflecting intense golden amber spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "நம்ம ரத்தத்துல iron இருக்குறதால சிவப்பு,",
+        "on_screen_text": "IRON VS COPPER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Deep crimson ruby stone contrasted against polished raw copper metal block, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "ஆக்டோபஸ் ரத்தத்துல copper நிறஞ்சிருக்கு!",
+        "on_screen_text": "HEMOCYANIN",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glowing metallic copper dust floating in deep sea brine like luminous stars, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "குளிர்ந்த ஆழ்கடலில் ஆக்சிஜன் கொண்டுபோக",
+        "on_screen_text": "DEEP FREEZE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Glacial underwater ice caves illuminated by blue ambient light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "இந்த தாமிர சத்துதான் ரொம்ப உதவுதாம்!",
+        "on_screen_text": "SUPER SURVIVAL",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Microscopic molecular structure glowing with sapphire nodes and golden bonds, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "அதுமட்டுமில்ல, ஆக்டோபஸ் கைகள் ஒவ்வொண்ணுக்கும்",
+        "on_screen_text": "8 ARMS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Eight concentric geometric ripples expanding on still dark water surface, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "தனித்தனி mini brain உண்டு!",
+        "on_screen_text": "9 BRAINS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Nine interconnected glowing nodal points across a dark neural network matrix, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "மொத்தம் ஒன்பது மூளை இருக்கு பாருங்கோ!",
+        "on_screen_text": "DISTRIBUTED MIND",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Polished brass astrolabe reflecting warm lamplight in an ancient scholar library, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "இதுல எந்த விஷயம் உங்களுக்கு புதுசுன்னு",
+        "on_screen_text": "WHICH FACT?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian bronze bowl on weathered timber table under warm light, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 20,
+        "narration": "மறக்காம கமெண்ட்ல சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT BELOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Temple stone courtyard lit by evening brass oil lamps with gentle flickering flames, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 21,
+        "narration": "இதே மாதிரி சுவாரசியமான குறிப்புகளுக்கு",
+        "on_screen_text": "MORE FACTS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient palm leaf manuscript scroll tied with sacred saffron thread, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 22,
+        "narration": "Simple Tips by VJ சேனலை Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Deep red silk drape with ornate golden temple border glowing under dramatic spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே கடலுக்கு அடியில ஒரு ஏலியன் பிராணி வாழுது தெர்யுமா? அட போங்கோ! அதுதான் ஆக்டோபஸ்! நமக்கு ஒரு இதயம் தான் இருக்கு, ஆனா ஆக்டோபஸுக்கு மூணு இதயம்! ரெண்டு இதயம் gills-க்கு ரத்தம் அனுப்பும், ஒண்ணு உடம்பு முழுக்க ரத்தம் பாய்ச்சும். இன்னொரு அதிரடி உண்மை சொல்றேங் பாருங்கோ, இதோட ரத்தத்தின் கலர் சிவப்பு இல்ல! பளிச்சுன்னு நீல கலர்ல இருக்கும்! ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! நம்ம ரத்தத்துல iron இருக்குறதால சிவப்பு, ஆக்டோபஸ் ரத்தத்துல copper நிறஞ்சிருக்கு! குளிர்ந்த ஆழ்கடலில் ஆக்சிஜன் கொண்டுபோக இந்த தாமிர சத்துதான் ரொம்ப உதவுதாம்! அதுமட்டுமில்ல, ஆக்டோபஸ் கைகள் ஒவ்வொண்ணுக்கும் தனித்தனி mini brain உண்டு! மொத்தம் ஒன்பது மூளை இருக்கு பாருங்கோ! இதுல எந்த விஷயம் உங்களுக்கு புதுசுன்னு மறக்காம கமெண்ட்ல சொல்லுங்கோ! இதே மாதிரி சுவாரசியமான குறிப்புகளுக்கு Simple Tips by VJ சேனலை Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே கடலுக்கு அடியில",
+        "english_caption": "DEEP OCEAN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Deep indigo underwater ocean abyss with sunbeams piercing translucent water, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "ஒரு ஏலியன் பிராணி வாழுது தெர்யுமா?",
+        "english_caption": "ALIEN CREATURE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Bioluminescent coral reef glowing with deep emerald and azure light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "அட போங்கோ! அதுதான் ஆக்டோபஸ்!",
+        "english_caption": "OCTOPUS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Macro view of textured sea floor with pearlescent shells and smooth corals, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "நமக்கு ஒரு இதயம் தான் இருக்கு,",
+        "english_caption": "ONE HEART",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing anatomical red heart holographic representation in high tech dark space, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "ஆனா ஆக்டோபஸுக்கு மூணு இதயம்!",
+        "english_caption": "3 HEARTS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Three glowing crystalline heart chambers pulsing together in deep blue ocean void, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "ரெண்டு இதயம் gills-க்கு ரத்தம் அனுப்பும்,",
+        "english_caption": "GILL HEARTS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Flowing microfluidic stream of glowing cyan fluids branching smoothly, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "ஒண்ணு உடம்பு முழுக்க ரத்தம் பாய்ச்சும்.",
+        "english_caption": "BODY PUMP",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Central glowing sapphire core radiating concentric energy rings, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "இன்னொரு அதிரடி உண்மை சொல்றேங் பாருங்கோ,",
+        "english_caption": "SHOCKING FACT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Deep underwater cavern with shimmering crystals reflecting cyan light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "இதோட ரத்தத்தின் கலர் சிவப்பு இல்ல!",
+        "english_caption": "NOT RED BLOOD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Clear glass beaker containing deep azure glowing liquid on black slate laboratory table, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "பளிச்சுன்னு நீல கலர்ல இருக்கும்!",
+        "english_caption": "BLUE BLOOD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant electric blue fluid swirling inside an elegant crystal vial with warm side highlights, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual break: Dramatic copper ore nuggets reflecting intense golden amber spotlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "நம்ம ரத்தத்துல iron இருக்குறதால சிவப்பு,",
+        "english_caption": "IRON VS COPPER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Deep crimson ruby stone contrasted against polished raw copper metal block, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "ஆக்டோபஸ் ரத்தத்துல copper நிறஞ்சிருக்கு!",
+        "english_caption": "HEMOCYANIN",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glowing metallic copper dust floating in deep sea brine like luminous stars, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "குளிர்ந்த ஆழ்கடலில் ஆக்சிஜன் கொண்டுபோக",
+        "english_caption": "DEEP FREEZE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Glacial underwater ice caves illuminated by blue ambient light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "இந்த தாமிர சத்துதான் ரொம்ப உதவுதாம்!",
+        "english_caption": "SUPER SURVIVAL",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Microscopic molecular structure glowing with sapphire nodes and golden bonds, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "அதுமட்டுமில்ல, ஆக்டோபஸ் கைகள் ஒவ்வொண்ணுக்கும்",
+        "english_caption": "8 ARMS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Eight concentric geometric ripples expanding on still dark water surface, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "தனித்தனி mini brain உண்டு!",
+        "english_caption": "9 BRAINS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Nine interconnected glowing nodal points across a dark neural network matrix, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "மொத்தம் ஒன்பது மூளை இருக்கு பாருங்கோ!",
+        "english_caption": "DISTRIBUTED MIND",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Polished brass astrolabe reflecting warm lamplight in an ancient scholar library, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "இதுல எந்த விஷயம் உங்களுக்கு புதுசுன்னு",
+        "english_caption": "WHICH FACT?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian bronze bowl on weathered timber table under warm light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 20,
+        "text": "மறக்காம கமெண்ட்ல சொல்லுங்கோ!",
+        "english_caption": "COMMENT BELOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Temple stone courtyard lit by evening brass oil lamps with gentle flickering flames, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 21,
+        "text": "இதே மாதிரி சுவாரசியமான குறிப்புகளுக்கு",
+        "english_caption": "MORE FACTS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient palm leaf manuscript scroll tied with sacred saffron thread, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 22,
+        "text": "Simple Tips by VJ சேனலை Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Deep red silk drape with ornate golden temple border glowing under dramatic spotlight, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn",
+      "Washington": "wash-ing-ton",
+      "University": "yu-ni-ver-si-ti",
+      "research": "ree-serch"
+    }
+  },
+  {
+    "title": "3000 வருஷம் பழமையான தேன் கெட்டுப்போகாதா? Honey Science! 🍯",
+    "description": "Honey never spoils science explained in Nellai Tamil dialect by VJ. #KitchenScience #HoneyHack #SimpleTipsByVJ",
+    "use_case_evidence_url": "https://en.wikipedia.org/wiki/Honey#Preservation",
+    "original_news_headline": "3000 வருஷம் பழமையான தேன் கெட்டுப்போகாதா? Honey Science! 🍯",
+    "original_news_url": "https://en.wikipedia.org/wiki/Honey#Preservation",
+    "relevant_links": [
+      "https://en.wikipedia.org/wiki/Honey#Preservation"
+    ],
+    "hook": "3000 வருஷம் பழமையான தேன் கெட்டுப்போகாதா? 🍯",
+    "summary": "Pure honey never spoils due to zero water content and natural hydrogen peroxide acidity.",
+    "sub_category": "🍳 Food, Health & Kitchen Science",
+    "breaking_news_level": 9,
+    "keywords": [
+      "Honey science",
+      "Kitchen secrets",
+      "Nellai Tamil",
+      "Simple Tips by VJ"
+    ],
+    "hashtags": [
+      "#HoneyScience",
+      "#FoodHacks",
+      "#NellaiTamil",
+      "#SimpleTipsByVJ"
+    ],
+    "comment_bait_question": "உங்க வீட்ல தேன் சர்க்கரையா உறைஞ்சு போயிருக்கா? கமெண்ட்ல சொல்லுங்கோ!",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே உங்க சமையலறையில",
+        "on_screen_text": "KITCHEN SECRET",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional South Indian kitchen with stone grinding slab and brass ladles, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 2,
+        "narration": "இருக்கிற இந்த ஒரு பொருள்",
+        "on_screen_text": "ONE ITEM",
+        "visual_type": "Cinematic",
+        "visual_prompt": "A heavy vintage glass jar containing thick golden amber honey, warm morning light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 3,
+        "narration": "உலகத்துலேயே எக்ஸ்பைரி டேட்டே இல்லாத பொருள்!",
+        "on_screen_text": "NO EXPIRY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Close-up of golden honey dripping slowly from a wooden dipper into a brass vessel, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 4,
+        "narration": "அட போங்கோ! அதுதான் சுத்தமான தேன்!",
+        "on_screen_text": "PURE HONEY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Natural golden honeycomb section backlit with golden hour sunlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 5,
+        "narration": "எகிப்து பிரமிடுகள்ல 3000 வருஷம் முன்னாடி",
+        "on_screen_text": "EGYPT TOMBS",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient terracotta amphora urn resting in a sand-dusted stone tomb chamber, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 6,
+        "narration": "வெச்ச தேன் பானையை திறந்து பாத்தா கூட,",
+        "on_screen_text": "3000 YEARS OLD",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Clay pot sealed with beeswax lid covered in hieroglyphic engravings, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 7,
+        "narration": "இன்னைக்கு வரைக்கும் சாப்பிடக்கூடிய நிலையில இருக்கு!",
+        "on_screen_text": "STILL EDIBLE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Pristine clear amber honey glistening under beam of warm temple sunlight, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 8,
+        "narration": "இது எப்படி சாத்தியம்னு யோசிங்கோ?",
+        "on_screen_text": "HOW POSSIBLE?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Ancient bronze balances with weights on teak table near open window, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 9,
+        "narration": "தேன்ல தண்ணீர் சத்து 17% க்கும் குறைவு,",
+        "on_screen_text": "NO WATER",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dry micro-surface crystals reflecting pure amber glow with zero moisture, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 10,
+        "narration": "பாக்டீரியா வளர ஈரப்பதமே கெடையாது பாருங்கோ!",
+        "on_screen_text": "NO BACTERIA",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Sterile microscopic molecular lattice structure glowing with golden warmth, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 11,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Sudden visual shift: A steel spoon stirring hot tea with turbulent steam rising, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Morph"
+      },
+      {
+        "scene_number": 12,
+        "narration": "ஈரமான கரண்டியை உள்ள போட்டீங்கன்னா,",
+        "on_screen_text": "WET SPOON RISK",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Water droplet splashing into a jar of viscous liquid under crisp high speed lighting, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 13,
+        "narration": "கொஞ்சூம் ஈரத்துலையும் பூஞ்சான் பிடிச்சு வீணாகிடும்!",
+        "on_screen_text": "MOLD WARNING",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Dry wooden spoon resting safely next to sealed airtight glass jar, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 14,
+        "narration": "அதுமட்டுமில்ல, தேனை பிரிட்ஜ்ல வைக்காதீங்க!",
+        "on_screen_text": "NO FRIDGE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Cold frost condensation on glass surface with warning symbol, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 15,
+        "narration": "குளிர்ல அது சர்க்கரை மாதிரி உறைஞ்சுடும்.",
+        "on_screen_text": "CRYSTAL HONEY",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Golden crystalline sugar granules forming naturally inside raw honey jar, 9:16 vertical, no humans.",
+        "camera_motion": "Orbit",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 16,
+        "narration": "அப்புடி உறைஞ்சா வெந்நீர் கிண்ணத்துல",
+        "on_screen_text": "WARM WATER FIX",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass tumbler placed gently in a bowl of warm steaming water, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 17,
+        "narration": "கொஞ்சூம் நேரம் வச்சா பழையபடி உருகிடும்!",
+        "on_screen_text": "EASY RESTORE",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Golden honey melting smoothly into translucent syrup in warm bowl, 9:16 vertical, no humans.",
+        "camera_motion": "Dolly-in",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 18,
+        "narration": "உங்க வீட்டு தேன் உறைஞ்சு போயிருக்கா?",
+        "on_screen_text": "YOUR HONEY?",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Rustic kitchen wooden shelf with spice jars and honey bottle, 9:16 vertical, no humans.",
+        "camera_motion": "Pan",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 19,
+        "narration": "கமெண்ட்ல உங்க அனுபவத்தை சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT BELOW",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Traditional brass oil lamp glowing warmly on terracotta ledge, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      },
+      {
+        "scene_number": 20,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE VJ",
+        "visual_type": "Cinematic",
+        "visual_prompt": "Vibrant maroon silk banner with gold embroidery illuminated under warm spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut"
+      }
+    ],
+    "script": "நெல்லை மக்களே உங்க சமையலறையில இருக்கிற இந்த ஒரு பொருள் உலகத்துலேயே எக்ஸ்பைரி டேட்டே இல்லாத பொருள்! அட போங்கோ! அதுதான் சுத்தமான தேன்! எகிப்து பிரமிடுகள்ல 3000 வருஷம் முன்னாடி வெச்ச தேன் பானையை திறந்து பாத்தா கூட, இன்னைக்கு வரைக்கும் சாப்பிடக்கூடிய நிலையில இருக்கு! இது எப்படி சாத்தியம்னு யோசிங்கோ? தேன்ல தண்ணீர் சத்து 17% க்கும் குறைவு, பாக்டீரியா வளர ஈரப்பதமே கெடையாது பாருங்கோ! ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! ஈரமான கரண்டியை உள்ள போட்டீங்கன்னா, கொஞ்சூம் ஈரத்துலையும் பூஞ்சான் பிடிச்சு வீணாகிடும்! அதுமட்டுமில்ல, தேனை பிரிட்ஜ்ல வைக்காதீங்க! குளிர்ல அது சர்க்கரை மாதிரி உறைஞ்சுடும். அப்புடி உறைஞ்சா வெந்நீர் கிண்ணத்துல கொஞ்சூம் நேரம் வச்சா பழையபடி உருகிடும்! உங்க வீட்டு தேன் உறைஞ்சு போயிருக்கா? கமெண்ட்ல உங்க அனுபவத்தை சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+    "subtitle_chunks": [
+      {
+        "chunk_id": 1,
+        "text": "நெல்லை மக்களே உங்க சமையலறையில",
+        "english_caption": "KITCHEN SECRET",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional South Indian kitchen with stone grinding slab and brass ladles, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 2,
+        "text": "இருக்கிற இந்த ஒரு பொருள்",
+        "english_caption": "ONE ITEM",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A heavy vintage glass jar containing thick golden amber honey, warm morning light, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 3,
+        "text": "உலகத்துலேயே எக்ஸ்பைரி டேட்டே இல்லாத பொருள்!",
+        "english_caption": "NO EXPIRY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Close-up of golden honey dripping slowly from a wooden dipper into a brass vessel, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 4,
+        "text": "அட போங்கோ! அதுதான் சுத்தமான தேன்!",
+        "english_caption": "PURE HONEY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Natural golden honeycomb section backlit with golden hour sunlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 5,
+        "text": "எகிப்து பிரமிடுகள்ல 3000 வருஷம் முன்னாடி",
+        "english_caption": "EGYPT TOMBS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient terracotta amphora urn resting in a sand-dusted stone tomb chamber, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 6,
+        "text": "வெச்ச தேன் பானையை திறந்து பாத்தா கூட,",
+        "english_caption": "3000 YEARS OLD",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Clay pot sealed with beeswax lid covered in hieroglyphic engravings, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 7,
+        "text": "இன்னைக்கு வரைக்கும் சாப்பிடக்கூடிய நிலையில இருக்கு!",
+        "english_caption": "STILL EDIBLE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Pristine clear amber honey glistening under beam of warm temple sunlight, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 8,
+        "text": "இது எப்படி சாத்தியம்னு யோசிங்கோ?",
+        "english_caption": "HOW POSSIBLE?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Ancient bronze balances with weights on teak table near open window, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 9,
+        "text": "தேன்ல தண்ணீர் சத்து 17% க்கும் குறைவு,",
+        "english_caption": "NO WATER",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dry micro-surface crystals reflecting pure amber glow with zero moisture, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 10,
+        "text": "பாக்டீரியா வளர ஈரப்பதமே கெடையாது பாருங்கோ!",
+        "english_caption": "NO BACTERIA",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sterile microscopic molecular lattice structure glowing with golden warmth, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Sudden visual shift: A steel spoon stirring hot tea with turbulent steam rising, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 12,
+        "text": "ஈரமான கரண்டியை உள்ள போட்டீங்கன்னா,",
+        "english_caption": "WET SPOON RISK",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Water droplet splashing into a jar of viscous liquid under crisp high speed lighting, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "கொஞ்சூம் ஈரத்துலையும் பூஞ்சான் பிடிச்சு வீணாகிடும்!",
+        "english_caption": "MOLD WARNING",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Dry wooden spoon resting safely next to sealed airtight glass jar, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "அதுமட்டுமில்ல, தேனை பிரிட்ஜ்ல வைக்காதீங்க!",
+        "english_caption": "NO FRIDGE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Cold frost condensation on glass surface with warning symbol, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "குளிர்ல அது சர்க்கரை மாதிரி உறைஞ்சுடும்.",
+        "english_caption": "CRYSTAL HONEY",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Golden crystalline sugar granules forming naturally inside raw honey jar, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "அப்புடி உறைஞ்சா வெந்நீர் கிண்ணத்துல",
+        "english_caption": "WARM WATER FIX",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass tumbler placed gently in a bowl of warm steaming water, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "கொஞ்சூம் நேரம் வச்சா பழையபடி உருகிடும்!",
+        "english_caption": "EASY RESTORE",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Golden honey melting smoothly into translucent syrup in warm bowl, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 18,
+        "text": "உங்க வீட்டு தேன் உறைஞ்சு போயிருக்கா?",
+        "english_caption": "YOUR HONEY?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Rustic kitchen wooden shelf with spice jars and honey bottle, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 19,
+        "text": "கமெண்ட்ல உங்க அனுபவத்தை சொல்லுங்கோ!",
+        "english_caption": "COMMENT BELOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass oil lamp glowing warmly on terracotta ledge, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 20,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE VJ",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Vibrant maroon silk banner with gold embroidery illuminated under warm spotlight, 9:16 vertical, no humans."
+      }
+    ],
+    "phonetic_pronunciation_map": {
+      "Simple Tips": "sim-pl tips",
+      "Subscribe": "sub-skribe",
+      "PATTERN": "pat-urn",
+      "Washington": "wash-ing-ton",
+      "University": "yu-ni-ver-si-ti",
+      "research": "ree-serch"
+    }
+  },
+  {
     "title": "Cyber Defense: Automated Vulnerability Scanner Tool 🛡️",
     "description": "GitHub Trending page-la innaikku top trending list-la irukku PentAGI. How this autonomous AI hacking agent works explained in Tanglish by VJ. #AITamil #GitHubTrending #SimpleTipsByVJ",
     "use_case_evidence_url": "https://github.com/projectdiscovery/nuclei",
@@ -729,7 +3797,7 @@
     "title": "AI என்றால் என்ன? Robot-ஆ? உண்மை விளக்கம்! 🤔",
     "description": "Artificial Intelligence-nu solluvaanga — aana ithukku intelligence-ae illa. Reality check in Tanglish! #AITamil #TechTamil #VJVideos",
     "use_case_evidence_url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
-    "script": "Oru vishayam theriyuma? \"Artificial Intelligence\" -nu solluvaanga — aana ithukku intelligence-ae illa. Seriously. Ungal brain-la oru kuzhanthai paakkaradhukku, colour theriyum, face theriyum, emotions theriyum. Aana AI? Lakhs of photos paarthu, \"ithuvum ithuvum ithuvum — kuzhanthai\" nu matram learn pannidudhu. Pattern match thaan — think pannaadhu, feel pannaadhu, understand pannaadhu. Adhanaal thaan AI-kku simple questions-ae confuse aagudhu — aana chess-la world champion-a thokkudhu. Ithu pathi neenga enna nenaikkareenga? Comment pannunga!",
+    "script": "நெல்லை மக்களே ஒரு நிமிஷம் கேளுங்கோ! Artificial Intelligence-னு ஊரே பேசுது இல்லியா? ஆனா உண்மை என்னா தெர்யுமா? இதுக்கு சொந்தமா மூளையே கெடையாது! அட போங்கோ! seriously சொல்றேங்! நம்ம மூளை மாதிரி யோசிக்காது, வெறும் pattern matching மட்டும்தான் பண்ணும். லட்சக்கணக்கான data-வை பாத்து, அடுத்த வார்த்தை என்னான்னு guess பண்ணுது. ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு! Chess-ல world champion-ஐயே ஜெயிக்கும், ஆனா சின்ன காக்கா படம் கேட்டா தப்பு பண்ணிடும்! அதனால பயப்படாம உங்க வேலையில இதை smart-ஆ use பண்ணுங்கோ! AI நம்ம வேலையை தூக்கிடுமுன்னு நினைக்றீங்களா? கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ! மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
     "relevant_links": [
       "https://en.wikipedia.org/wiki/Artificial_intelligence"
     ],
@@ -756,128 +3824,408 @@
     "subtitle_chunks": [
       {
         "chunk_id": 1,
-        "text": "Oru vishayam theriyuma? \"Artificial Intelligence\" -nu solluvaanga —",
-        "english_caption": "WHAT IS AI",
+        "text": "நெல்லை மக்களே ஒரு நிமிஷம் கேளுங்கோ!",
+        "english_caption": "LISTEN UP",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A young South Indian man pointing at a glowing holographic text 'ARTIFICIAL INTELLIGENCE', 3D Pixar style, clay textures, expressive eyes, warm volume lighting, vertical 9:16."
+        "nano_visual_prompt": "Glowing holographic circuit board glowing with warm temple lamp lights, 9:16 vertical, cinematic aesthetic, no humans."
       },
       {
         "chunk_id": 2,
-        "text": "aana ithukku intelligence-ae illa. Seriously.",
-        "english_caption": "NO INTELLIGENCE",
+        "text": "Artificial Intelligence-னு ஊரே பேசுது இல்லியா?",
+        "english_caption": "TALK OF TOWN",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A cute cartoon robot looking confused with question marks floating around its head, scratching its head, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Modern server rack glowing in dark room, golden indicator lights, high tech cinematic, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 3,
-        "text": "Ungal brain-la oru kuzhanthai paakkaradhukku,",
-        "english_caption": "HUMAN BRAIN",
+        "text": "ஆனா உண்மை என்னா தெர்யுமா?",
+        "english_caption": "REAL TRUTH",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A close-up of a human brain glowing with warm soft light, digital energy pathways pulsing, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Ancient South Indian palm leaf manuscript next to glowing neon fiber optic cables on rustic wooden desk, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 4,
-        "text": "colour theriyum, face theriyum, emotions theriyum.",
-        "english_caption": "HUMAN PERCEPTION",
+        "text": "இதுக்கு சொந்தமா மூளையே கெடையாது!",
+        "english_caption": "NO REAL BRAIN",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A happy South Indian child looking at a colorful butterfly, smiling with bright expressive eyes, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Artistic golden mechanical gear brain sculpture illuminated with warm side-lighting, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 5,
-        "text": "Aana AI? Lakhs of photos paarthu,",
-        "english_caption": "AI SEEING",
+        "text": "அட போங்கோ! seriously சொல்றேங்!",
+        "english_caption": "SERIOUS FACT",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A wall of thousands of floating glowing digital photos of baby faces zooming past, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Macro shot of a glowing microchip resting on traditional banana leaf texture, warm bronze tone, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 6,
-        "text": "\"ithuvum ithuvum ithuvum — kuzhanthai\" nu matram learn pannidudhu.",
-        "english_caption": "PATTERN MATCHING",
+        "text": "நம்ம மூளை மாதிரி யோசிக்காது,",
+        "english_caption": "CANNOT THINK",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A robotic scanner highlighting eyes, nose, and mouth points on a photo, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Neural network pulses glowing like starry constellations over dark red oxide background, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 7,
-        "text": "Pattern match thaan — think pannaadhu, feel pannaadhu,",
-        "english_caption": "NO FEELINGS",
+        "text": "வெறும் pattern matching மட்டும்தான் பண்ணும்.",
+        "english_caption": "PATTERN MATCH",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A robot heart shape light flickering off, metallic surface, warm volumetric background, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Digital data cubes aligning neatly into rows, glowing turmeric gold and deep blue light, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 8,
-        "text": "understand pannaadhu. Adhanaal thaan AI-kku",
-        "english_caption": "NO UNDERSTANDING",
+        "text": "லட்சக்கணக்கான data-வை பாத்து,",
+        "english_caption": "BILLIONS DATA",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A robot trying to read a simple book and looking puzzled, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Endless digital archives of glowing scroll papers stacked inside a high-tech vault, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 9,
-        "text": "simple questions-ae confuse aagudhu —",
-        "english_caption": "CONFUSED AI",
+        "text": "அடுத்த வார்த்தை என்னான்னு guess பண்ணுது.",
+        "english_caption": "NEXT WORD",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A computer screen displaying '1+1=?' with errors and smoke coming out, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Glowing letters forming in air like sparks over an ancient Tamil stone inscription, 9:16 vertical, no humans."
       },
       {
         "chunk_id": 10,
-        "text": "aana chess-la world champion-a thokkudhu.",
-        "english_caption": "CHESS WINNER",
+        "text": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "english_caption": "PATTERN INTERRUPT",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": true,
+        "infographic_type": "stat",
+        "infographic_data": {
+          "title": "TWIST",
+          "stat": "99.9%",
+          "label": "Guessing Accuracy"
+        },
+        "nano_visual_prompt": "Dramatic split lighting on a massive bronze balance scale tilting rapidly, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 11,
+        "text": "Chess-ல world champion-ஐயே ஜெயிக்கும்,",
+        "english_caption": "CHESS MASTER",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "A giant metallic robotic arm moving a chess piece, winning a game against a shocked human player, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "Handcrafted rosewood chess pieces on an ornate brass chessboard with deep shadows, 9:16 vertical, no humans."
       },
       {
-        "chunk_id": 11,
-        "text": "Ithu pathi neenga enna nenaikkareenga? Comment pannunga!",
+        "chunk_id": 12,
+        "text": "ஆனா சின்ன காக்கா படம் கேட்டா தப்பு பண்ணிடும்!",
+        "english_caption": "SIMPLE ERRORS",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional clay bird statue resting on wooden table with digital pixel distortion, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 13,
+        "text": "அதனால பயப்படாம உங்க வேலையில",
+        "english_caption": "DONT FEAR",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Traditional brass oil lamp glowing steadily amidst flowing digital streams, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 14,
+        "text": "இதை smart-ஆ use பண்ணுங்கோ!",
+        "english_caption": "WORK SMART",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Modern smartphone open to an AI assistant tool on a clean wooden desk with filter coffee cup, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 15,
+        "text": "AI நம்ம வேலையை தூக்கிடுமுன்னு நினைக்றீங்களா?",
+        "english_caption": "TAKE JOBS?",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "Close-up of a glowing digital clock ticking with dramatic amber lighting, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 16,
+        "text": "கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ!",
         "english_caption": "COMMENT BELOW",
         "start": 0.0,
         "end": 0.0,
         "has_infographic": false,
         "infographic_type": "none",
         "infographic_data": {},
-        "nano_visual_prompt": "Close-up of a smartphone screen showing Tamil comments popping up with heart emojis, 3D Pixar style, vertical 9:16."
+        "nano_visual_prompt": "South Indian temple bronze bell ringing with glowing reverberations, 9:16 vertical, no humans."
+      },
+      {
+        "chunk_id": 17,
+        "text": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "english_caption": "SUBSCRIBE NOW",
+        "start": 0.0,
+        "end": 0.0,
+        "has_infographic": false,
+        "infographic_type": "none",
+        "infographic_data": {},
+        "nano_visual_prompt": "A warm red silk banner with golden embroidery glowing under cinematic spotlight, 9:16 vertical, no humans."
       }
     ],
     "original_news_headline": "AI என்றால் என்ன? Robot-ஆ? உண்மை விளக்கம்! 🤔",
-    "original_news_url": "https://en.wikipedia.org/wiki/Artificial_intelligence"
+    "original_news_url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+    "storyboard": [
+      {
+        "scene_number": 1,
+        "narration": "நெல்லை மக்களே ஒரு நிமிஷம் கேளுங்கோ!",
+        "on_screen_text": "LISTEN UP",
+        "scene_objective": "Scene 1",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Glowing holographic circuit board glowing with warm temple lamp lights, 9:16 vertical, cinematic aesthetic, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 2,
+        "narration": "Artificial Intelligence-னு ஊரே பேசுது இல்லியா?",
+        "on_screen_text": "TALK OF TOWN",
+        "scene_objective": "Scene 2",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Modern server rack glowing in dark room, golden indicator lights, high tech cinematic, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 3,
+        "narration": "ஆனா உண்மை என்னா தெர்யுமா?",
+        "on_screen_text": "REAL TRUTH",
+        "scene_objective": "Scene 3",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Ancient South Indian palm leaf manuscript next to glowing neon fiber optic cables on rustic wooden desk, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 4,
+        "narration": "இதுக்கு சொந்தமா மூளையே கெடையாது!",
+        "on_screen_text": "NO REAL BRAIN",
+        "scene_objective": "Scene 4",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Artistic golden mechanical gear brain sculpture illuminated with warm side-lighting, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 5,
+        "narration": "அட போங்கோ! seriously சொல்றேங்!",
+        "on_screen_text": "SERIOUS FACT",
+        "scene_objective": "Scene 5",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Macro shot of a glowing microchip resting on traditional banana leaf texture, warm bronze tone, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 6,
+        "narration": "நம்ம மூளை மாதிரி யோசிக்காது,",
+        "on_screen_text": "CANNOT THINK",
+        "scene_objective": "Scene 6",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Neural network pulses glowing like starry constellations over dark red oxide background, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 7,
+        "narration": "வெறும் pattern matching மட்டும்தான் பண்ணும்.",
+        "on_screen_text": "PATTERN MATCH",
+        "scene_objective": "Scene 7",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Digital data cubes aligning neatly into rows, glowing turmeric gold and deep blue light, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 8,
+        "narration": "லட்சக்கணக்கான data-வை பாத்து,",
+        "on_screen_text": "BILLIONS DATA",
+        "scene_objective": "Scene 8",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Endless digital archives of glowing scroll papers stacked inside a high-tech vault, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 9,
+        "narration": "அடுத்த வார்த்தை என்னான்னு guess பண்ணுது.",
+        "on_screen_text": "NEXT WORD",
+        "scene_objective": "Scene 9",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Glowing letters forming in air like sparks over an ancient Tamil stone inscription, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 10,
+        "narration": "ஆனா wait பண்ணுங்கோ, இதுல ஒரு twist இருக்கு!",
+        "on_screen_text": "PATTERN INTERRUPT",
+        "scene_objective": "Scene 10",
+        "visual_type": "PATTERN_INTERRUPT",
+        "visual_prompt": "Dramatic split lighting on a massive bronze balance scale tilting rapidly, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "stat",
+        "infographic_data": {
+          "title": "TWIST",
+          "stat": "99.9%",
+          "label": "Guessing Accuracy"
+        }
+      },
+      {
+        "scene_number": 11,
+        "narration": "Chess-ல world champion-ஐயே ஜெயிக்கும்,",
+        "on_screen_text": "CHESS MASTER",
+        "scene_objective": "Scene 11",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Handcrafted rosewood chess pieces on an ornate brass chessboard with deep shadows, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 12,
+        "narration": "ஆனா சின்ன காக்கா படம் கேட்டா தப்பு பண்ணிடும்!",
+        "on_screen_text": "SIMPLE ERRORS",
+        "scene_objective": "Scene 12",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Traditional clay bird statue resting on wooden table with digital pixel distortion, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 13,
+        "narration": "அதனால பயப்படாம உங்க வேலையில",
+        "on_screen_text": "DONT FEAR",
+        "scene_objective": "Scene 13",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Traditional brass oil lamp glowing steadily amidst flowing digital streams, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 14,
+        "narration": "இதை smart-ஆ use பண்ணுங்கோ!",
+        "on_screen_text": "WORK SMART",
+        "scene_objective": "Scene 14",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Modern smartphone open to an AI assistant tool on a clean wooden desk with filter coffee cup, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 15,
+        "narration": "AI நம்ம வேலையை தூக்கிடுமுன்னு நினைக்றீங்களா?",
+        "on_screen_text": "TAKE JOBS?",
+        "scene_objective": "Scene 15",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "Close-up of a glowing digital clock ticking with dramatic amber lighting, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 16,
+        "narration": "கமெண்ட்ல உங்க பதிலை சொல்லுங்கோ!",
+        "on_screen_text": "COMMENT BELOW",
+        "scene_objective": "Scene 16",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "South Indian temple bronze bell ringing with glowing reverberations, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      },
+      {
+        "scene_number": 17,
+        "narration": "மறக்காம Simple Tips by VJ Subscribe தட்டுங்கோ!",
+        "on_screen_text": "SUBSCRIBE NOW",
+        "scene_objective": "Scene 17",
+        "visual_type": "South Indian Cinematic",
+        "visual_prompt": "A warm red silk banner with golden embroidery glowing under cinematic spotlight, 9:16 vertical, no humans.",
+        "camera_motion": "Slow zoom",
+        "transition": "Match cut",
+        "infographic_type": "none",
+        "infographic_data": {}
+      }
+    ]
   },
   {
     "title": "இன்னைக்கு 10 முறை AI யூஸ் பண்ணீங்க — தெரியுமா? 😱",

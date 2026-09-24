@@ -170,27 +170,28 @@ def run_pipeline(forced_category=None, dry_run=False):
     
     while attempts < MAX_RETRY_ATTEMPTS:
         # Recalculate max_attempts each iteration to respect offline mode changes
-        current_max_attempts = 1 if is_offline_mode_active() else MAX_RETRY_ATTEMPTS
+        current_max_attempts = 3 if is_offline_mode_active() else MAX_RETRY_ATTEMPTS
         if attempts >= current_max_attempts:
             log_message(f"🔴 [OFFLINE MODE] Max attempts ({current_max_attempts}) reached. Stopping.")
             break
             
         log_message(f"STEP 3 (Attempt {attempts+1}/{current_max_attempts}): Multi-Agent Tanglish Script Generation...")
         
-        if is_offline_mode_active() and attempts > 0:
-            log_message("🔴 [OFFLINE MODE] Already used offline fallback. No more retries.")
-            break
-        
         script_data = pick_and_generate_script(
             articles=facts, extra_instruction="", forced_article=None, topic_type="research", failed_topics=failed_topics
         )
 
         if not script_data:
-            log_message("❌ Script generation failed. Retrying...")
-            reset_offline_mode()
-            attempts += 1
-            time.sleep(5)
-            continue
+            if is_offline_mode_active():
+                log_message("🔄 Script generation returned None in offline mode. Loading direct offline fallback...")
+                from gemini_script import get_offline_fallback_script
+                script_data = get_offline_fallback_script(category, failed_topics)
+            if not script_data:
+                log_message("❌ Script generation failed. Retrying...")
+                reset_offline_mode()
+                attempts += 1
+                time.sleep(5)
+                continue
             
         fact_headline = script_data.get("original_news_headline")
         fact_url = script_data.get("original_news_url")
