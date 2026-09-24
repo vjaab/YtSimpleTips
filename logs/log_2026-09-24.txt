@@ -33,3 +33,13 @@
 [09:59:05] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [09:59:05] STEP 12: Cleaning up output files...
 [09:59:05] === PIPELINE COMPLETED SUCCESSFULLY ===
+[17:36:43] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[17:36:43] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[17:36:43] STEP 1: Strategy Check -> Day: Thu, Slot: Slot C (Evening), Category: 🐾 Nature & Animal Oddities
+[17:36:43] STEP 2: Fetching facts using Search Grounding for '🐾 Nature & Animal Oddities'...
+[17:36:48] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[17:39:47] Aligning script text with subtitle chunks...
+[17:39:47] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:39:47] ⚠️ Script too short: ~13.1s estimated (29 words). Minimum is 25s (70+ words). Rejecting early.
+[17:39:47] 🔴 [OFFLINE MODE] Max attempts (1) reached. Stopping.
+[17:39:47] 🚨 Pipeline failed to build core assets after multiple attempts.
