@@ -11,6 +11,32 @@ from config import (
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
 
+def enhance_prompt_for_documentary(prompt, category=""):
+    """
+    Enhance visual prompt for Photorealistic 8K Documentary aesthetic (National Geographic / IMAX style).
+    Removes cartoon, Pixar, and clay references and injects rich, high-fidelity cinematic realism.
+    """
+    import re
+    clean = re.sub(r'\b(cartoon|pixar|disney|clay|claymation|clay textures|expressive eyes|character with)\b', '', prompt or "", flags=re.IGNORECASE).strip()
+    clean = re.sub(r'\s+', ' ', clean).strip()
+    
+    cat_lower = str(category or "").lower()
+    
+    if any(k in cat_lower for k in ["animal", "nature"]):
+        style_suffix = "National Geographic 8K wildlife documentary photograph, sharp telephoto lens, natural golden hour lighting, authentic micro textures, rich organic colors, atmospheric depth, 9:16 vertical."
+    elif any(k in cat_lower for k in ["food", "health", "kitchen"]):
+        style_suffix = "Culinary science macro cinematography, 8K ultra-detailed food photography, warm appetizing rim lighting, steam and crystalline textures, crisp focus, commercial studio lighting, 9:16 vertical."
+    elif any(k in cat_lower for k in ["history", "culture", "ancient"]):
+        style_suffix = "Cinematic historical documentary style, 35mm film aesthetic, authentic archaeological textures, atmospheric golden hour dust motes, dramatic lighting, 8K photorealistic, 9:16 vertical."
+    elif any(k in cat_lower for k in ["body", "psychology", "human", "brain"]):
+        style_suffix = "Cinematic 8K medical documentary aesthetic, dramatic chiaroscuro lighting, high-precision anatomical and neural detail, moody atmospheric haze, photorealistic, 9:16 vertical."
+    elif any(k in cat_lower for k in ["money", "living", "smart"]):
+        style_suffix = "Modern architectural photography, sleek clean minimalist aesthetic, crisp morning daylight, premium realistic textures, photorealistic 8K, 9:16 vertical."
+    else:  # Science / Technology / General
+        style_suffix = "Photorealistic 8K National Geographic science documentary style, hyper-detailed microscopic and cosmological elements, volumetric lighting, Octane render quality, IMAX cinema camera, shallow depth of field, dramatic rim lighting, razor-sharp focus, 9:16 vertical."
+        
+    return f"{clean}. {style_suffix} No text overlays, no watermarks, no logos, no distorted anatomy."
+
 def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
     """
     Queries Pexels API for vertical stock videos or photos.
@@ -32,7 +58,7 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
                 data = r.json()
                 videos = data.get("videos", [])
                 if videos:
-                    # Pick a random video from the top results for variety
+                    # Pick from top 5 most relevant results for quality and variety
                     video = random.choice(videos[:5])
                     video_files = video.get("video_files", [])
                     
@@ -46,14 +72,20 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
                         valid_files = video_files
                         
                     if valid_files:
-                        # Sort by width to get good resolution but not too large
-                        valid_files.sort(key=lambda x: x.get("width", 0))
-                        # Take standard HD (around 720p or 1080p width < height)
-                        selected_file = valid_files[0]
+                        # Prefer crisp vertical HD (700p to 1080p width) for pristine mobile display
+                        hd_candidates = [vf for vf in valid_files if 700 <= vf.get("width", 0) <= 1080]
+                        if hd_candidates:
+                            hd_candidates.sort(key=lambda x: x.get("width", 0), reverse=True)
+                            selected_file = hd_candidates[0]
+                        else:
+                            # Fallback: pick closest to 1080 width
+                            valid_files.sort(key=lambda x: abs(x.get("width", 0) - 1080))
+                            selected_file = valid_files[0]
+                            
                         download_url = selected_file.get("link")
                         
                         output_path = os.path.join(OUTPUT_DIR, f"pexels_video_{TODAY}_{random.randint(1000, 9999)}.mp4")
-                        print(f"📥 [pexels] Downloading stock video for '{query}': {download_url[:60]}...")
+                        print(f"📥 [pexels] Downloading HD vertical stock video ({selected_file.get('width')}x{selected_file.get('height')}) for '{query}'...")
                         
                         resp = requests.get(download_url, stream=True, timeout=30)
                         if resp.status_code == 200:
@@ -300,42 +332,69 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
                     print(f"     ✅ Tech Visual Agent: Mentions '{kw}'. Assigned {info_type} infographic.")
                     break
 
-        # Build provider list for this chunk (each provider is tried independently per chunk)
+        # Build provider list for this chunk (Smart Hybrid strategy)
+        category_name = script_data.get("sub_category", "") if script_data else ""
+        
+        # Determine if this chunk is a motion candidate (where real video b-roll shines)
+        v_type_lower = str(chunk.get("visual_type", "")).lower()
+        cam_motion = str(chunk.get("camera_motion", "")).lower()
+        has_cam_motion = cam_motion not in ("", "none", "still")
+        is_video_hint = any(t in v_type_lower for t in ["video", "cinematic", "b-roll", "clip"])
+        
+        # Action/nature keywords that look vastly superior in real motion video
+        action_keywords = [
+            "water", "ocean", "sea", "swim", "dive", "wave", "shark", "fish", "animal", "bird", "fly",
+            "sky", "cloud", "star", "galaxy", "space", "sun", "rain", "storm", "boil", "steam",
+            "fire", "flame", "ice", "heat", "cook", "food", "plant", "tree", "forest", "city",
+            "car", "traffic", "run", "speed", "light", "screen", "phone", "lab", "microscope"
+        ]
+        text_lower = text.lower()
+        prompt_lower = (prompt or "").lower()
+        has_action_subject = any(w in text_lower or w in prompt_lower for w in action_keywords)
+        
+        # Smart Hybrid Strategy: Motion candidates & alternating chunks prioritize real HD stock video
+        # Conceptual / abstract candidates prioritize 8K AI generation
+        is_motion_candidate = has_pexels and (is_video_hint or has_cam_motion or has_action_subject or (i % 2 == 0))
+        
         providers = []
-        
-        # Priority 1: Veo 3.1 AI Video
-        if veo_generate and prompt:
-            providers.append(("Veo 3.1 AI", lambda: _try_veo(veo_generate, prompt, cid, aspect_ratio)))
-        
-        # Priority 2: Imagen AI Image
-        if has_gemini and prompt:
-            providers.append(("Imagen AI", lambda: _try_imagen(prompt, cid, aspect_ratio)))
-        
-        # Priority 3: Cloudflare Workers AI (FLUX.1 Schnell)
-        if has_cloudflare and prompt:
-            providers.append(("Cloudflare FLUX", lambda: _try_cloudflare_flux(prompt, cid, aspect_ratio)))
-        
-        # Priority 4: Pollinations AI (Free, no key required)
-        if prompt:
-            providers.append(("Pollinations AI", lambda: _try_pollinations(prompt, cid, aspect_ratio)))
+        if is_motion_candidate:
+            # ── MOTION FIRST: Real HD Stock Video -> 8K AI Image -> Fallbacks ──
+            if has_pexels and pexels_query:
+                providers.append(("Pexels Video", lambda: fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)))
+            if veo_generate and prompt:
+                providers.append(("Veo 3.1 AI", lambda: _try_veo(veo_generate, prompt, cid, aspect_ratio, category=category_name)))
+            if has_gemini and prompt:
+                providers.append(("Imagen AI", lambda: _try_imagen(prompt, cid, aspect_ratio, category=category_name)))
+            if has_cloudflare and prompt:
+                providers.append(("Cloudflare FLUX", lambda: _try_cloudflare_flux(prompt, cid, aspect_ratio, category=category_name)))
+            if prompt:
+                providers.append(("Pollinations AI", lambda: _try_pollinations(prompt, cid, aspect_ratio, category=category_name)))
+            if has_pexels and pexels_query:
+                providers.append(("Pexels Photo", lambda: fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)))
+        else:
+            # ── CONCEPT FIRST: 8K AI Image -> Real Stock Video -> Fallbacks ──
+            if veo_generate and prompt:
+                providers.append(("Veo 3.1 AI", lambda: _try_veo(veo_generate, prompt, cid, aspect_ratio, category=category_name)))
+            if has_gemini and prompt:
+                providers.append(("Imagen AI", lambda: _try_imagen(prompt, cid, aspect_ratio, category=category_name)))
+            if has_cloudflare and prompt:
+                providers.append(("Cloudflare FLUX", lambda: _try_cloudflare_flux(prompt, cid, aspect_ratio, category=category_name)))
+            if has_pexels and pexels_query:
+                providers.append(("Pexels Video", lambda: fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)))
+            if prompt:
+                providers.append(("Pollinations AI", lambda: _try_pollinations(prompt, cid, aspect_ratio, category=category_name)))
+            if has_pexels and pexels_query:
+                providers.append(("Pexels Photo", lambda: fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)))
         
         # Priority 5: DeepAI (Free tier, optional)
         if has_deepseek and prompt:
             providers.append(("DeepAI", lambda: _try_deepai(prompt, cid, aspect_ratio)))
         
-        # Priority 6: Pexels Stock Video
-        if has_pexels:
-            providers.append(("Pexels Video", lambda: fetch_pexels_media(pexels_query, media_type="video", aspect_ratio=aspect_ratio)))
-        
-        # Priority 7: Pexels Stock Photo
-        if has_pexels:
-            providers.append(("Pexels Photo", lambda: fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)))
-        
-        # Priority 8: Fallback to Screenshot
+        # Priority: Fallback to Screenshot
         if ENABLE_EVIDENCE_SCREENSHOTS and not visual_path and script_data and script_data.get("screenshot_path") and os.path.exists(script_data["screenshot_path"]):
             providers.append(("Fallback Screenshot", lambda: script_data["screenshot_path"]))
         
-        # Priority 9: Reuse last successful visual
+        # Priority: Reuse last successful visual
         providers.append(("Reused Visual", lambda: last_successful_path if last_successful_path else None))
 
         # Try each provider in order, stop at first success
@@ -372,39 +431,30 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     return chunks
 
 
-def _try_veo(veo_generate, prompt, cid, aspect_ratio):
-    """Try Veo 3.1 video generation."""
-    enhanced_prompt = (
-        f"{prompt}. Art style: 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting. "
-        f"Color grading: Vibrant colors, depth of field, warm volume lighting, no dialogue or text overlays, "
-        f"no watermarks, stylized 3D cartoon style character, smooth camera movement, "
-        f"9:16 aspect ratio, vertical video format, highly dynamic."
-    )
+def _try_veo(veo_generate, prompt, cid, aspect_ratio, category=""):
+    """Try Veo 3.1 video generation with Photorealistic 8K documentary direction."""
+    enhanced_prompt = enhance_prompt_for_documentary(prompt, category=category)
     output_mp4 = os.path.join(OUTPUT_DIR, f"veo_scene_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.mp4")
     return veo_generate(enhanced_prompt, output_mp4, aspect_ratio=aspect_ratio)
 
 
-def _try_imagen(prompt, cid, aspect_ratio):
-    """Try Imagen AI image generation."""
+def _try_imagen(prompt, cid, aspect_ratio, category=""):
+    """Try Imagen AI image generation with Photorealistic 8K documentary direction."""
     output_jpg = os.path.join(OUTPUT_DIR, f"nano_scene_{cid}_{time.strftime('%Y%m%d_%H%M%S')}.jpg")
-    enhanced_imagen_prompt = prompt
-    if not any(w in prompt.lower() for w in ["cartoon", "pixar", "claymation", "3d"]):
-        enhanced_imagen_prompt = (
-            f"{prompt}. 3D Pixar/Disney cartoon style, clay textures, expressive eyes, warm volume lighting, "
-            f"depth of field, vibrant colors, high contrast."
-        )
+    enhanced_imagen_prompt = enhance_prompt_for_documentary(prompt, category=category)
     return _generate_imagen_image(enhanced_imagen_prompt, output_jpg, aspect_ratio=aspect_ratio)
 
 
-def _try_cloudflare_flux(prompt, cid, aspect_ratio):
-    """Try Cloudflare Workers AI FLUX.1 Schnell image generation."""
+def _try_cloudflare_flux(prompt, cid, aspect_ratio, category=""):
+    """Try Cloudflare Workers AI FLUX.1 Schnell image generation with 8K documentary direction."""
     if not CLOUDFLARE_API_TOKEN or not CLOUDFLARE_ACCOUNT_ID:
         return None
     
     width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell"
     headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "Content-Type": "application/json"}
-    payload = {"prompt": prompt, "width": width, "height": height, "num_inference_steps": 4}
+    enhanced_prompt = enhance_prompt_for_documentary(prompt, category=category)
+    payload = {"prompt": enhanced_prompt, "width": width, "height": height, "num_inference_steps": 4}
     
     try:
         resp = requests.post(url, headers=headers, json=payload, timeout=60)
@@ -422,10 +472,11 @@ def _try_cloudflare_flux(prompt, cid, aspect_ratio):
     return None
 
 
-def _try_pollinations(prompt, cid, aspect_ratio):
-    """Try Pollinations AI image generation."""
+def _try_pollinations(prompt, cid, aspect_ratio, category=""):
+    """Try Pollinations AI image generation with 8K documentary direction."""
     width, height = (1080, 1920) if aspect_ratio == "9:16" else (1920, 1080)
-    encoded_prompt = requests.utils.quote(prompt)
+    enhanced_prompt = enhance_prompt_for_documentary(prompt, category=category)
+    encoded_prompt = requests.utils.quote(enhanced_prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
     
     try:

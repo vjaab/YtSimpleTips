@@ -162,35 +162,59 @@ _CG_SAT_FACTOR = _COLOR_GRADE_SEED.uniform(0.85, 0.95)    # Saturation: 0.85-0.9
 _CG_GAMMA = _COLOR_GRADE_SEED.uniform(1.15, 1.25)          # Gamma: 1.15-1.25
 _CG_CONTRAST = _COLOR_GRADE_SEED.uniform(1.12, 1.18)       # Contrast: 1.12-1.18
 
-def desaturate_frame(frame, factor=0.85):
-    """Reduces saturation of an RGB frame by factor (0.85 = 15% desaturation)."""
-    hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
-    hsv[:, :, 1] *= factor
-    hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
-    return cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+_vignette_mask = None
 
+def get_vignette_mask(w, h, intensity=0.30):
+    """Computes or returns cached oval radial vignette mask for vertical video."""
+    global _vignette_mask
+    if _vignette_mask is not None and _vignette_mask.shape[:2] == (h, w):
+        return _vignette_mask
+    
+    x = np.linspace(-1.0, 1.0, w, dtype=np.float32)
+    y = np.linspace(-1.0, 1.0, h, dtype=np.float32)
+    xx, yy = np.meshgrid(x, y)
+    # In 9:16 vertical format, adjust vertical scale to create an oval matching screen
+    radius = np.sqrt(xx**2 + (yy * 0.72)**2)
+    vignette = np.clip(1.0 - (radius - 0.5) / 0.8, 0.0, 1.0)
+    vignette = 0.5 * (1.0 - np.cos(vignette * np.pi))
+    mask = (1.0 - intensity) + intensity * vignette
+    _vignette_mask = np.dstack([mask, mask, mask])
+    return _vignette_mask
 
-def apply_cartoon_color_grade(frame):
+def apply_cinematic_vignette(frame, intensity=0.30):
+    """Applies a soft, cinematic radial vignette focusing viewer attention into center of mobile screen."""
+    h, w = frame.shape[:2]
+    mask = get_vignette_mask(w, h, intensity)
+    framed_float = frame.astype(np.float32) * mask
+    return np.clip(framed_float, 0, 255).astype(np.uint8)
+
+def apply_cinematic_color_grade(frame, category=""):
     """
-    Simulates Pixar-style 3D cartoon color grading with per-video randomized variation:
-    - Vibrant, warm colors (slightly varied per video)
-    - Depth-of-field lighting feel (midtones enhanced)
-    - Slightly boosted saturation/vibrancy for a high-quality claymation render
-    - Per-video variation prevents YouTube 'repetitive content' flags
+    Applies an 8K documentary-grade cinematic color grade:
+    - Preserves/enhances rich natural saturation (+8%) for mobile OLED screens
+    - Deep inky blacks with gentle S-curve tone curve (no washed-out desaturation)
+    - Category-adapted split toning (warm amber for food/nature, cool cosmic teal for science)
     """
+    # 1. Vibrant natural saturation boost (+8%)
     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV).astype(np.float32)
-    hsv[:, :, 1] *= _CG_SAT_FACTOR  # Per-video saturation variation
-    hsv[:, :, 1] = np.clip(hsv[:, :, 1], 0, 255)
-    frame = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+    hsv[:, :, 1] = np.clip(hsv[:, :, 1] * 1.08, 0, 255)
+    frame_rgb = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
     
-    frame_float = frame.astype(np.float32)
-    frame_graded = 255.0 * np.power(frame_float / 255.0, _CG_GAMMA)  # Per-video gamma
+    # 2. Gentle S-curve contrast with clean black levels
+    arr = frame_rgb.astype(np.float32) / 255.0
+    arr = arr ** 1.04  # Slight gamma for deeper, filmic blacks
+    arr = np.clip(1.05 * (arr - 0.5) + 0.5, 0.0, 1.0)  # Crisp contrast
     
-    mid = 128.0
-    frame_graded = mid + _CG_CONTRAST * (frame_graded - mid)  # Per-video contrast
-    frame_graded = np.clip(frame_graded, 0, 255).astype(np.uint8)
-    
-    return frame_graded
+    # 3. Category split-tone tint
+    cat_lower = str(category or "").lower()
+    if any(k in cat_lower for k in ["food", "history", "living", "money"]):
+        arr[:, :, 0] = np.clip(arr[:, :, 0] * 1.02, 0, 1)  # Warm red +2%
+        arr[:, :, 1] = np.clip(arr[:, :, 1] * 1.01, 0, 1)  # Warm green +1%
+    elif any(k in cat_lower for k in ["science", "psychology", "body"]):
+        shadows = (1.0 - arr[:, :, 0]) * 0.02
+        arr[:, :, 2] = np.clip(arr[:, :, 2] + shadows, 0, 1)  # Cool blue shadows +2%
+        
+    return np.clip(arr * 255.0, 0, 255).astype(np.uint8)
 
 def _apply_cartoon_flash_cut(outgoing, incoming, progress):
     """
@@ -430,40 +454,94 @@ def create_middle_title_banner_clip(title_text, duration, accent_color=(204, 255
 
 
 def build_ken_burns(img_path, duration, zoom_direction=None, target_size=None):
-    """Builds a smooth Ken Burns effect clip with randomized zoom direction."""
+    """
+    Builds a cinematic Ken Burns 2.0 multi-axis motion clip with smooth easing:
+    - Dolly In (smooth quadratic push-in toward focal center)
+    - Dolly Out (dramatic reveal from close-up to wide)
+    - Pan Left-to-Right (panoramic sweep across scene)
+    - Pan Right-to-Left (lateral tracking shot)
+    - Pedestal Up (vertical sweep revealing vertical structures/monuments)
+    """
     if target_size is None:
         target_size = (FRAME_W, FRAME_H)
-    clip = ImageClip(img_path).with_duration(duration)
-    w, h = clip.size
     target_w_val, target_h_val = target_size
-    
-    # Crop to aspect ratio first
-    target_h = int(w * target_h_val / target_w_val)
-    if target_h <= h:
-        y1 = (h - target_h) // 2
-        clip = clip.cropped(x1=0, y1=y1, x2=w, y2=y1 + target_h)
-    else:
-        target_w = int(h * target_w_val / target_h_val)
-        x1 = (w - target_w) // 2
-        clip = clip.cropped(x1=x1, y1=0, x2=x1 + target_w, y2=h)
-        
-    # Resize to match target frame dimensions
-    clip = clip.resized(new_size=(target_w_val, target_h_val))
-    
-    # Guard against zero or extremely small duration to prevent NaN division
     safe_duration = max(0.1, duration) if duration else 1.0
-    
-    # Randomize zoom direction for visual variety
-    if zoom_direction is None:
-        zoom_direction = random.choice(["in", "out"])
-    
-    if zoom_direction == "out":
-        # Zoom out: start at 1.10x and settle to 1.0x
-        clip = clip.resized(lambda t: 1.10 - 0.10 * (t / safe_duration))
-    else:
-        # Zoom in: start at 1.0x and grow to 1.10x
-        clip = clip.resized(lambda t: 1.0 + 0.10 * (t / safe_duration))
-    return clip
+
+    try:
+        img = Image.open(img_path).convert("RGB")
+        iw, ih = img.size
+        
+        # 18% extra canvas margin to enable silky-smooth multi-axis pan/tilt/zoom without black bars
+        margin = 1.18
+        base_w = int(target_w_val * margin)
+        base_h = int(target_h_val * margin)
+        
+        target_ratio = base_w / base_h
+        img_ratio = iw / ih
+        
+        if img_ratio > target_ratio:
+            crop_w = int(ih * target_ratio)
+            x1 = (iw - crop_w) // 2
+            img_cropped = img.crop((x1, 0, x1 + crop_w, ih))
+        else:
+            crop_h = int(iw / target_ratio)
+            y1 = (ih - crop_h) // 2
+            img_cropped = img.crop((0, y1, iw, y1 + crop_h))
+            
+        img_resized = img_cropped.resize((base_w, base_h), Image.Resampling.BILINEAR)
+        base_arr = np.array(img_resized)
+        
+        # Motion selection
+        motion_modes = ["dolly_in", "dolly_out", "pan_left", "pan_right", "pedestal_up"]
+        zd_str = str(zoom_direction or "").lower()
+        if zd_str in ("in", "zoom_in", "dolly_in", "dolly-in"):
+            motion = "dolly_in"
+        elif zd_str in ("out", "zoom_out", "dolly_out", "dolly-out"):
+            motion = "dolly_out"
+        elif "pan" in zd_str:
+            motion = "pan_right" if "right" in zd_str else "pan_left"
+        elif "pedestal" in zd_str or "orbit" in zd_str or "tilt" in zd_str or "up" in zd_str:
+            motion = "pedestal_up"
+        elif zd_str in motion_modes:
+            motion = zd_str
+        else:
+            motion = random.choice(motion_modes)
+            
+        max_x_shift = base_w - target_w_val
+        max_y_shift = base_h - target_h_val
+        
+        def make_frame(t):
+            prog = min(1.0, max(0.0, t / safe_duration))
+            # Smooth sinusoidal ease-in-out (organic camera operator feel)
+            e = 0.5 * (1.0 - math.cos(prog * math.pi))
+            
+            if motion in ("dolly_in", "dolly_out"):
+                cur_scale = (1.16 - 0.14 * (1.0 - e)) if motion == "dolly_in" else (1.02 + 0.14 * (1.0 - e))
+                cur_w = int(target_w_val * cur_scale)
+                cur_h = int(target_h_val * cur_scale)
+                cx = (base_w - cur_w) // 2
+                cy = (base_h - cur_h) // 2
+                sub = base_arr[cy:cy+cur_h, cx:cx+cur_w]
+                return cv2.resize(sub, (target_w_val, target_h_val), interpolation=cv2.INTER_LINEAR)
+            elif motion == "pan_left":
+                x = int(max_x_shift * (1.0 - e))
+                y = max_y_shift // 2
+                return base_arr[y:y+target_h_val, x:x+target_w_val]
+            elif motion == "pan_right":
+                x = int(max_x_shift * e)
+                y = max_y_shift // 2
+                return base_arr[y:y+target_h_val, x:x+target_w_val]
+            else: # pedestal_up
+                x = max_x_shift // 2
+                y = int(max_y_shift * (1.0 - e))
+                return base_arr[y:y+target_h_val, x:x+target_w_val]
+                
+        return VideoClip(make_frame, duration=safe_duration)
+        
+    except Exception as e:
+        print(f"⚠️ [Ken Burns 2.0] Failed to build motion: {e}. Falling back to standard clip.")
+        clip = ImageClip(img_path).with_duration(safe_duration)
+        return clip.resized(new_size=(target_w_val, target_h_val))
 
 def _gradient_overlay(duration):
     """Draws a subtle radial vignette to frame the whiteboard theme and guide the eye."""
@@ -1482,9 +1560,12 @@ def create_video(audio_path, script_json, chunks, output_path=None):
                 ss_clip = prepare_evidence_clip_with_visibility(vpath, safe_dur, visibility_ratio=0.6, url=evidence_url).with_start(c_start).with_position((0, 0))
                 background_clips.append(ss_clip)
             elif vpath.endswith((".jpg", ".jpeg", ".png")):
-                # Ken burns zoom with randomized direction for visual variety (sized to full screen)
-                zoom_dir = "in" if i % 2 == 0 else "out"
-                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=zoom_dir, target_size=(FRAME_W, FRAME_H)).with_start(c_start).with_position((0, 0))
+                # Ken Burns 2.0 multi-axis camera motion (Dolly In, Dolly Out, Pan Left/Right, Pedestal Sweep)
+                cam_mot = chunk.get("camera_motion", "")
+                if not cam_mot or cam_mot.lower() in ("none", "still"):
+                    motion_pool = ["dolly_in", "dolly_out", "pan_left", "pan_right", "pedestal_up"]
+                    cam_mot = motion_pool[i % len(motion_pool)]
+                c_clip = build_ken_burns(vpath, safe_dur, zoom_direction=cam_mot, target_size=(FRAME_W, FRAME_H)).with_start(c_start).with_position((0, 0))
                 background_clips.append(c_clip)
             elif vpath.endswith(".mp4"):
                 # Video clip (Pexels or Veo 3.1)
@@ -1684,9 +1765,9 @@ def create_video(audio_path, script_json, chunks, output_path=None):
     # Frame Assembly Loop
     def make_final_frame(t):
         frame = base_comp.get_frame(t)
-        # ── CARTOON COLOR GRADE & DESATURATION ──
-        frame = desaturate_frame(frame, 0.85)
-        frame = apply_cartoon_color_grade(frame)
+        # ── CINEMATIC COLOR GRADE & VIGNETTE (OLED-optimized 8K documentary grade) ──
+        frame = apply_cinematic_color_grade(frame, category=category)
+        frame = apply_cinematic_vignette(frame, intensity=0.30)
         
         # ── ATTENTION-GRAB SCREEN FLICKER (0:00 - 0:02) — reduced intensity ──
         if t <= 2.0:

@@ -18,20 +18,18 @@ TODAY = datetime.now().strftime("%Y%m%d_%H%M%S")
 SCENE_DURATION_TARGET = 8.0  # seconds per scene (roughly 3-4 chunks)
 CHUNKS_PER_SCENE = 3         # target chunks per scene
 
-# AI-focused visual style guide - NO cartoons, NO characters with anatomy issues
-AI_VISUAL_STYLE = (
+# 8K Photorealistic Documentary Visual Style Guide (National Geographic / IMAX aesthetic)
+DOCUMENTARY_VISUAL_STYLE = (
     "Photorealistic 8K, cinematic lighting, 9:16 vertical format. "
-    "AI/TECH AESTHETIC ONLY: Neural network visualizations, glowing data streams, "
-    "code terminal interfaces, holographic UI panels, fiber optic cables, "
-    "server racks with blinking LEDs, quantum circuit diagrams, "
-    "abstract geometric data flows, futuristic control rooms, "
-    "clean minimalist tech environments. "
-    "Color palette: Deep blues, electric cyan, emerald green, amber gold on dark backgrounds. "
-    "Volumetric lighting, depth of field, ray-traced reflections. "
-    "NO human faces, NO cartoon characters, NO anatomical figures, "
-    "NO distorted eyes, NO asymmetrical objects, NO floating nonsense geometry. "
-    "Clean, professional, Apple/Google keynote visual quality."
+    "National Geographic / IMAX cinema documentary aesthetic: "
+    "Hyper-detailed natural textures, authentic real-world subjects, "
+    "volumetric atmospheric lighting, 35mm cinema lens, shallow depth of field, "
+    "rich vibrant organic colors, razor-sharp focus. "
+    "NO human faces with uncanny valley issues, NO cartoon characters, NO claymation, "
+    "NO distorted anatomy, NO floating nonsense geometry. "
+    "Clean, professional, award-winning cinematic documentary visual quality."
 )
+AI_VISUAL_STYLE = DOCUMENTARY_VISUAL_STYLE  # Backward compatibility alias
 
 def _get_client():
     return get_gemini_client()
@@ -179,10 +177,10 @@ Return ONLY a JSON object:
         if sid not in scene_prompts:
             scene_prompts[sid] = {
                 "scene_id": sid,
-                "master_prompt": f"Professional AI visualization: {scene_focus}. Futuristic dark tech environment with glowing cyan/emerald data streams, holographic displays showing neural network architectures. Cinematic volumetric lighting, 8K, {format_desc}. Clean Apple keynote aesthetic.",
-                "key_elements": ["holographic neural display", "data stream particles", "ambient cyan lighting"],
-                "camera_base": "Slight low angle, centered on main display",
-                "lighting_base": "Dark ambient with volumetric cyan/emerald rim lights"
+                "master_prompt": f"Photorealistic 8K documentary scene: {scene_focus}. Natural volumetric lighting, cinematic 35mm lens, authentic textures, rich vibrant colors, {format_desc}. National Geographic / IMAX documentary cinematography, razor-sharp focus.",
+                "key_elements": ["cinematic lighting", "authentic textures", "atmospheric depth"],
+                "camera_base": "Medium cinematic shot, centered on main subject",
+                "lighting_base": "Dramatic volumetric natural lighting with subtle rim lights"
             }
     
     # Now assign chunk-specific variations based on master scene prompt
