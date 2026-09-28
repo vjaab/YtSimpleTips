@@ -257,6 +257,25 @@ def run_pipeline(forced_category=None, dry_run=False):
         log_message(f"Selected Fact: {fact_headline}")
         log_message(f"Source URL: {fact_url}")
 
+        # ── STEP 3a: Strict Programmatic Uniqueness Gate ──
+        from topic_tracker import check_story_uniqueness
+        is_unique, uniq_reason = check_story_uniqueness(
+            new_title=title,
+            new_headline=fact_headline,
+            new_keywords=script_data.get("keywords"),
+            new_url=fact_url
+        )
+        if not is_unique:
+            log_message(f"❌ [main.py] Duplicate topic rejected: '{title}' / '{fact_headline}'. Reason: {uniq_reason}")
+            if fact_headline:
+                failed_topics.append(fact_headline)
+            if title and title != fact_headline:
+                failed_topics.append(title)
+            script_data = None
+            attempts += 1
+            time.sleep(2)
+            continue
+
         # ── STEP 3b: Capture Evidence Screenshot (MANDATORY if enabled) ──
         if ENABLE_EVIDENCE_SCREENSHOTS:
             log_message("STEP 3b: Capturing evidence screenshot (before audio for fast fail)...")

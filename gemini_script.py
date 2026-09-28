@@ -19,15 +19,16 @@ TOPIC_SELECTOR_PROMPT = """You are a viral Tamil infotainment content strategist
 Generate 1 high-retention, curiosity-driven fact topic for a 45-60 second Tamil YouTube Short.
 
 HIGH-RETENTION VIRAL CATEGORIES (STRICTLY CHOOSE ONE - NOTE: NO PHONE/WHATSAPP HACKS):
-1. "🧠 Mind-Blowing Science Curiosities": Science facts that sound completely fake or impossible, but are 100% verified (3000-year-old edible honey, ocean waters not mixing, earth spinning 1-sec stop anomaly, microwave invention accident, speed of light wonders).
-2. "🧬 Human Body & Dark Psychology": Strange body reactions, brain hacks, sleep science, or psychological tricks everyone experiences (doorway effect, 3-sec lie detection hack, why songs get stuck in your head, sleep cycle secret, goosebumps science).
-3. "💰 Money-Saving & Smart Living Tricks": Actionable money-saving tips, hidden bank charge cancellations, consumer rights, electricity bill reducers, fake gold detection (cut electricity bill by 40%, hidden bank charges you can cancel right now, test fake gold at home in 10s, petrol pump cheating prevention).
-4. "🍳 Food, Health & Kitchen Science": Eye-opening kitchen hacks, food science, and adulteration tests that any family can test today (1-drop milk adulteration test, why onions make you cry & spoon hack to stop it, pressure cooker 4x speed science, drinking water standing myth).
-5. "🌍 Mysterious History & Culture Secrets": Awe-inspiring historical, archaeological, or architectural marvels from Tamil Nadu and ancient India (Brihadeeswarar Temple shadow & engineering mystery, Keezhadi ancient civilization water drainage, Kumari Kandam facts, Chettinad architecture natural cooling).
-6. "🐾 Nature & Animal Oddities": Unbelievable animal superpowers, backyard nature wonders, and creature survival tricks (crows remember human faces for life, octopus 3 hearts & blue blood, immortal jellyfish, trees communicating underground).
+1. "🧠 Mind-Blowing Science Curiosities": Science facts that sound completely fake or impossible, but are 100% verified (sharks are older than Saturn's rings, water triple point boiling and freezing at once, fulgurite lightning glass, cosmic background radiation static).
+2. "🧬 Human Body & Dark Psychology": Strange body reactions, brain hacks, sleep science, or psychological tricks everyone experiences (photic sneeze reflex from sunlight, Tetris effect visual dreams, phantom vibration syndrome, stomach acid mucus barrier, eye saccadic masking).
+3. "💰 Money-Saving & Smart Living Tricks": Actionable money-saving tips, hidden bank charge cancellations, consumer rights, electricity bill reducers, fake gold detection (inverter AC compressor variable speed, supermarket dairy placement psychology, credit card billing cycle float, sealing door air leaks).
+4. "🍳 Food, Health & Kitchen Science": Eye-opening kitchen hacks, food science, and adulteration tests that any family can test today (pineapples eat you back bromelain enzyme, raw cashew urushiol toxicity, coffee adenosine receptor blocking, searing meat flavor myth).
+5. "🌍 Mysterious History & Culture Secrets": Awe-inspiring historical, archaeological, or architectural marvels from Tamil Nadu and ancient India (Keezhadi terracotta drainage engineering, Delhi iron pillar misawite rust prevention, Antikythera mechanism ancient computer, whistling sling bullets).
+6. "🐾 Nature & Animal Oddities": Unbelievable animal superpowers, backyard nature wonders, and creature survival tricks (mantis shrimp punch cavitation speed, tardigrades space vacuum survival, sloths 40-min breath hold, woodpecker tongue concussion wrap).
 
 CRITICAL RULES & AVOIDANCES:
 - STRICTLY FORBIDDEN: Smartphones, WhatsApp hacks, phone settings, coding tutorials, or developer repos.
+- STRICTLY FORBIDDEN: Any topic that has ALREADY been covered on this channel or appears in the avoid list.
 - AVOID: Common knowledge everyone already knows (earth orbits sun, water boils at 100C).
 - AVOID: Robotic openers like "Oru vishayam theriyuma?", "Intha video-la...".
 - AVOID: Dry academic papers, named researchers, or textbook statistics.
@@ -36,7 +37,7 @@ CRITICAL RULES & AVOIDANCES:
 
 OUTPUT FORMAT (JSON only, no markdown):
 {
-  "topic": "Short descriptive topic in English (e.g. Ancient Honey Never Spoils - 3000 Year Old Edible Honey Found)",
+  "topic": "Short descriptive topic in English (e.g. Sharks Are 400 Million Years Old - Predate Saturn's Rings)",
   "tamil_title": "Catchy YouTube title in natural Tanglish (max 60 chars, curiosity-driven, include emoji)",
   "hook_question": "Immediate shocking hook in spoken Tamil that stops scrolling in the first 2 seconds",
   "core_concept": "The core fact explained simply with the underlying science or reason",
@@ -825,16 +826,21 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     SYSTEM_PERSONA = local_persona
     RETENTION_OPTIMIZER_TEMPLATE = local_optimizer
     
-    # ── REP AVOIDANCE ──
+    # ── REP AVOIDANCE (ACROSS ALL HISTORY) ──
     tracker = load_tracker()
-    recent_history = tracker.get("history", [])[-15:]
-    recent_titles = tracker.get("used_titles", [])[-30:]
-    avoid_items = [h.get('news_headline', h.get('title')) for h in recent_history] + recent_titles
+    all_history = tracker.get("history", [])
+    avoid_items = []
+    for h in all_history:
+        if isinstance(h, dict):
+            if h.get('title'): avoid_items.append(h['title'])
+            if h.get('news_headline'): avoid_items.append(h['news_headline'])
+    avoid_items += tracker.get("used_titles", [])
+    avoid_items += tracker.get("last_7_days_stories", [])
     if failed_topics:
         avoid_items += failed_topics
-    combined_avoid = list(set(avoid_items))
-    avoid_list_str = "\n".join([f"- {t}" for t in combined_avoid if t])
-    avoid_instruction = f"CRITICAL: RECENTLY COVERED TOPICS (DO NOT REPEAT THESE):\n{avoid_list_str}\n\n" if avoid_list_str else ""
+    combined_avoid = list(dict.fromkeys(t.strip() for t in avoid_items if t and str(t).strip()))
+    avoid_list_str = "\n".join([f"- {t}" for t in combined_avoid[:60]])
+    avoid_instruction = f"CRITICAL: PREVIOUSLY COVERED TOPICS (DO NOT REPEAT ANY OF THESE):\n{avoid_list_str}\n\n" if avoid_list_str else ""
 
     # ── GOOGLE TRENDS SIGNAL ──
     hot_topic = get_hottest_tech_topic(client, avoid_list=avoid_list_str)
@@ -977,12 +983,60 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     is_fact_slot = True
     if is_fact_slot:
         print("🧠 [Fact Shorts Path] Initializing fact pipeline...")
-        selected_category = random.choice(TOPIC_CATEGORIES)
+        selected_category = category if category else random.choice(TOPIC_CATEGORIES)
         
-        # Step 1: Select a topic using TOPIC_SELECTOR_PROMPT
-        selector_prompt = PIPELINE_PROMPTS["topic_selector"] + f"\nRotate / Focus on Category: {selected_category}\n"
-        print(f"🕵️ [AGENT 0] Topic Selector Agent: Generating fact topic for '{selected_category}'...")
-        topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True, category=selected_category, task_type="reasoning")
+        # Step 1: Select a topic - prioritize verified articles from search grounding
+        chosen_article = None
+        if articles:
+            for art in articles:
+                art_t = art.get("title", "")
+                art_u = art.get("source_url", "")
+                is_u, r = check_story_uniqueness(new_title=art_t, new_url=art_u)
+                if is_u and (not failed_topics or not any(ft.lower() in art_t.lower() for ft in failed_topics if ft)):
+                    chosen_article = art
+                    break
+        
+        if chosen_article:
+            print(f"🎯 [Fact Shorts Path] Using verified unique article: {chosen_article.get('title')}")
+            topic_data_res = {
+                "topic": chosen_article.get("title"),
+                "tamil_title": chosen_article.get("title"),
+                "hook_question": f"Did you know about {chosen_article.get('title')}?",
+                "core_concept": chosen_article.get("description"),
+                "real_world_example": "",
+                "surprising_fact": chosen_article.get("description"),
+                "source_url": chosen_article.get("source_url", "https://en.wikipedia.org"),
+                "category": selected_category
+            }
+        else:
+            selector_prompt = PIPELINE_PROMPTS["topic_selector"] + f"\nRotate / Focus on Category: {selected_category}\n{avoid_instruction}\n"
+            print(f"🕵️ [AGENT 0] Topic Selector Agent: Generating fact topic for '{selected_category}'...")
+            topic_data_res = call_gemini_api(client, selector_prompt, prefer_fallback=True, category=selected_category, task_type="reasoning")
+            
+            # Immediately validate uniqueness of LLM-generated topic
+            if topic_data_res and "topic" in topic_data_res:
+                cand_title = topic_data_res.get("tamil_title") or topic_data_res.get("topic")
+                cand_headline = topic_data_res.get("topic")
+                cand_url = topic_data_res.get("source_url")
+                is_u, reason = check_story_uniqueness(new_title=cand_title, new_headline=cand_headline, new_url=cand_url)
+                if not is_u:
+                    print(f"⚠️ [Fact Shorts Path] Topic Selector generated duplicate topic: '{cand_headline}'. Reason: {reason}. Falling back to curated unique fact...")
+                    from fetch_topics import get_curated_fallback_facts
+                    curated = get_curated_fallback_facts(selected_category)
+                    if curated:
+                        c_fact = curated[0]
+                        topic_data_res = {
+                            "topic": c_fact.get("title"),
+                            "tamil_title": c_fact.get("title"),
+                            "hook_question": f"Did you know about {c_fact.get('title')}?",
+                            "core_concept": c_fact.get("description"),
+                            "real_world_example": "",
+                            "surprising_fact": c_fact.get("description"),
+                            "source_url": c_fact.get("source_url"),
+                            "category": selected_category
+                        }
+                    else:
+                        topic_data_res = None
         
         if topic_data_res and "topic" in topic_data_res:
             selected_headline = topic_data_res.get("topic")
@@ -1596,35 +1650,44 @@ def get_offline_fallback_script(category, failed_topics=None):
         elif is_unique and word_count < MIN_WORDS:
             print(f"⚠️ [offline_fallback] Script '{s_title}' has only {word_count} words (min {MIN_WORDS}). Skipping.")
     
-    # If no unique scripts meet word count, fall back to matching scripts that meet MIN_WORDS
+    # If no unique scripts in matching category, check ALL scripts across all categories for ANY unique script
     if not unused:
-        print(f"⚠️ [offline_fallback] No unique scripts meet strict {MIN_WORDS} words with uniqueness. Checking all matching meeting word count...")
-        for s in matching:
-            if s.get("_word_count", 0) >= MIN_WORDS:
+        print("⚠️ [offline_fallback] No unique scripts in requested category. Searching across all categories...")
+        for s in scripts:
+            s_title = s.get("title", "")
+            s_news = s.get("original_news_headline", "")
+            is_unique, _ = check_story_uniqueness(
+                new_title=s_title,
+                new_headline=s_news,
+                new_url=s.get("original_news_url") or s.get("use_case_evidence_url", "")
+            )
+            if is_unique and failed_topics:
+                for ft in failed_topics:
+                    if ft and (ft.lower() in s_title.lower() or ft.lower() in s_news.lower()):
+                        is_unique = False
+                        break
+            if is_unique and s.get("_word_count", 0) >= MIN_WORDS:
                 unused.append(s)
 
-    # If still none, check all scripts in repository meeting MIN_WORDS
     if not unused:
-        for s in scripts:
-            if s.get("_word_count", 0) >= MIN_WORDS:
-                unused.append(s)
-    
-    # Absolute safety fallback: if every pre-packaged script was covered in history,
-    # generate a unique rotated variant so the pipeline NEVER crashes!
-    if not unused:
-        print("⚠️ [offline_fallback] All pre-packaged scripts were recently used. Creating fresh rotated variant to ensure pipeline completion.")
-        import copy, time
-        valid_length_scripts = [s for s in scripts if s.get("_word_count", 0) >= MIN_WORDS]
-        base_script = random.choice(valid_length_scripts or matching or scripts)
-        selected = copy.deepcopy(base_script)
-        ts = int(time.time())
-        date_str = datetime.now().strftime("%d %b")
-        selected["title"] = f"{selected.get('title', 'Simple Tip')} ({date_str})"
-        selected["original_news_headline"] = selected["title"]
-        selected["original_news_url"] = f"https://en.wikipedia.org/wiki/Special:Random?v={ts}"
-        selected["use_case_evidence_url"] = selected["original_news_url"]
-        selected["relevant_links"] = [selected["original_news_url"]]
-        return selected
+        print("🚨 [offline_fallback] All pre-packaged scripts were previously covered. Checking curated fallback facts...")
+        from fetch_topics import get_curated_fallback_facts
+        curated_facts = get_curated_fallback_facts(category)
+        if curated_facts:
+            cf = curated_facts[0]
+            # Convert curated fact into a structured fallback script object
+            import copy, time
+            base = copy.deepcopy(scripts[0])
+            ts = int(time.time())
+            base["title"] = cf["title"]
+            base["original_news_headline"] = cf["title"]
+            base["original_news_url"] = cf["source_url"]
+            base["use_case_evidence_url"] = cf["source_url"]
+            base["relevant_links"] = [cf["source_url"]]
+            base["keywords"] = cf.get("keywords", ["Tamil Facts", "Did You Know"])
+            base["sub_category"] = category
+            return base
+        return None
 
     # Prefer scripts with higher word count
     unused.sort(key=lambda s: s.get("_word_count", 0), reverse=True)

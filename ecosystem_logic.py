@@ -74,7 +74,9 @@ def get_category_prompt_enhancement(category, slot):
         "HOOK RULE: Start with the shocking result, pain point, or mind-bending question in the first 2 seconds. "
         "NO robotic clichés (BAN: 'Oru vishayam theriyuma?', 'Intha video-la...', 'Nee yaarukkum theriyadhu...').\n"
         "TONE: Energetic, friendly, conversational elder-brother/friend (VJ style). Spoken Tamil with natural English terms.\n"
-        "PACING: Rapid, punchy sentences (under 10 words). Use commas and ellipses for breathing pauses."
+        "PACING: Rapid, punchy sentences (under 10 words). Use commas and ellipses for breathing pauses.\n"
+        "CRITICAL UNIQUENESS: You MUST NEVER repeat previously covered facts or topics from the avoid list. "
+        "Choose a completely novel, verified, unexpected phenomenon."
     )
     
     enhancements = {
@@ -82,49 +84,43 @@ def get_category_prompt_enhancement(category, slot):
             {base_instructions}
             CATEGORY: 🧠 Mind-Blowing Science Curiosities
             GOAL: Explain a mind-bending science fact that sounds completely fake or impossible, but is 100% verified.
-            TOPICS: Ancient edible honey, ocean waters not mixing, earth spinning stop anomaly, speed of light, microwave invention accident, sound in space.
-            VIRAL HOOK STYLE: State the impossible-sounding fact directly with shock:
-            Example: "3000 வருஷம் பழமையான தேனை இன்னமும் கெட்டுப்போகாம சாப்பிட முடியுமா? அட ஆமாங்க!"
+            TOPICS: Sharks predate Saturn's rings, water triple point boiling and freezing at once, fulgurite lightning glass tubes, cosmic radiation television static, glass amorphous solid physics.
+            VIRAL HOOK STYLE: State the impossible-sounding fact directly with shock.
         """,
         "🧬 Human Body & Dark Psychology": f"""
             {base_instructions}
             CATEGORY: 🧬 Human Body & Dark Psychology
             GOAL: Share a fascinating human body reaction, brain trick, sleep hack, or psychological behavior that viewers experience daily.
-            TOPICS: Why we forget why we entered a room (doorway effect), 3-second lie detection hack, why songs get stuck in your head, sleep cycle trick, goosebumps science.
-            VIRAL HOOK STYLE: Call out the exact daily phenomenon everyone experiences:
-            Example: "ஒரு ரூம்க்குள்ள நுழைஞ்ச உடனே எதுக்கு வந்தோம்னு மூளைக்கு மறந்து போகுதா? இதுக்கு பின்னாடி ஒரு செம சயின்ஸ் இருக்கு!"
+            TOPICS: Photic sneeze reflex from bright sunlight, Tetris effect visual dreams, phantom vibration syndrome, stomach acid mucus barrier, eye saccadic masking.
+            VIRAL HOOK STYLE: Call out the exact daily phenomenon everyone experiences.
         """,
         "💰 Money-Saving & Smart Living Tricks": f"""
             {base_instructions}
             CATEGORY: 💰 Money-Saving & Smart Living Tricks
             GOAL: Deliver an immediate, actionable money-saving tip, hidden bank charge cancellation, electricity bill reducer, or consumer protection hack.
-            TOPICS: 40% electricity bill reduction, hidden bank SMS/ATM charges you can turn off, fake gold detection at home, petrol pump cheat prevention, free government welfare schemes.
-            VIRAL HOOK STYLE: Immediate wallet saving or loss prevention:
-            Example: "உங்க கரண்ட் பில்லை 40% வரைக்கும் குறைக்க இந்த ஒரு சின்ன பழக்கத்தை மாத்துங்க போதும்!"
+            TOPICS: Inverter AC compressor variable speed power savings, supermarket dairy placement psychology, credit card 50-day billing cycle float, sealing door air leaks.
+            VIRAL HOOK STYLE: Immediate wallet saving or loss prevention.
         """,
         "🍳 Food, Health & Kitchen Science": f"""
             {base_instructions}
             CATEGORY: 🍳 Food, Health & Kitchen Science
             GOAL: Explain fascinating everyday food science, kitchen cooking hacks, or food adulteration tests that any family can try today.
-            TOPICS: 1-drop milk adulteration test, why onions make you cry and the spoon hack to stop it, pressure cooker 4x speed science, drinking water standing myth, fermentation secrets.
-            VIRAL HOOK STYLE: Household test or eye-opening kitchen revelation:
-            Example: "நீங்க குடிக்கிற பால்ல கலப்படம் இருக்கான்னு வெறும் 1 சொட்டு தண்ணில ஈஸியா கண்டுபிடிச்சிடலாம்!"
+            TOPICS: Fresh pineapple bromelain enzyme eating you back, raw cashew urushiol oil toxicity, coffee adenosine receptor blocking, searing meat flavor myth.
+            VIRAL HOOK STYLE: Household test or eye-opening kitchen revelation.
         """,
         "🌍 Mysterious History & Culture Secrets": f"""
             {base_instructions}
             CATEGORY: 🌍 Mysterious History & Culture Secrets
             GOAL: Reveal a mind-blowing historical, archaeological, or architectural marvel from Tamil Nadu or ancient India.
-            TOPICS: Brihadeeswarar Temple shadow & engineering mystery, Keezhadi ancient civilization water drainage, Kumari Kandam facts, Chettinad houses natural cooling, floating stones of Rameshwaram.
-            VIRAL HOOK STYLE: Ancient mystery that modern science is still studying:
-            Example: "1000 வருஷத்துக்கு முன்னாடி எந்த சிமெண்ட்டும் இல்லாம கட்டப்பட்ட தஞ்சை பெரிய கோவில் நிழல் தரையில விழாதா? உண்மை என்ன தெரியுமா?"
+            TOPICS: Keezhadi ancient civilization terracotta underground drainage, Delhi iron pillar 1600-year misawite rust resistance, Antikythera mechanism 2000-year analog computer.
+            VIRAL HOOK STYLE: Ancient mystery that modern science is still studying.
         """,
         "🐾 Nature & Animal Oddities": f"""
             {base_instructions}
             CATEGORY: 🐾 Nature & Animal Oddities
             GOAL: Unveil an unbelievable animal ability, strange creature survival trick, or backyard nature wonder.
-            TOPICS: Crows remember human faces for life, octopus with 3 hearts and blue blood, the immortal jellyfish, trees communicating underground through fungal networks.
-            VIRAL HOOK STYLE: Unbelievable superpower in animals:
-            Example: "நம்ம வீட்டு வாசல்ல வர்ற காகத்துக்கு மனுஷங்களோட முகத்தை ஆயுசுக்கும் ஞாபகம் வச்சுக்கிற பவர் இருக்குன்னு சொன்னா நம்புவீங்களா?"
+            TOPICS: Mantis shrimp punch cavitation speed, tardigrades space vacuum survival, sloths 40-minute underwater breath hold, woodpecker tongue concussion wrap.
+            VIRAL HOOK STYLE: Unbelievable superpower in animals.
         """
     }
     
