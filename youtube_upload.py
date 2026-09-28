@@ -206,11 +206,17 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
     if "#Shorts" not in description and "#shorts" not in description:
         description = description.rstrip() + "\n\n#Shorts #SimpleTipsByVJ #TamilTips"
 
+    # Sanitize and pack tags within YouTube's 500-char limit (target <= 480 for absolute safety)
+    from ecosystem_logic import sanitize_and_fit_tags
+    sanitized_tags = sanitize_and_fit_tags(tags, max_chars=480)
+    tag_chars = sum(len(t) for t in sanitized_tags) + max(0, len(sanitized_tags) - 1)
+    print(f"🏷️ Attaching {len(sanitized_tags)} YouTube tags ({tag_chars}/500 chars): {', '.join(sanitized_tags[:6])}...")
+
     body = {
         "snippet": {
             "title":                title[:100],
             "description":          description[:5000],
-            "tags":                 tags[:15],
+            "tags":                 sanitized_tags,
             "categoryId":           category_id,  # 28 = Science & Tech
             "defaultLanguage":      "ta",
             "defaultAudioLanguage": "ta",

@@ -466,7 +466,16 @@ def run_pipeline(forced_category=None, dry_run=False):
         unique_angle=unique_angle, category=category, video_number=video_number
     )
     
-    tags = list(set(keywords + [t.replace("#", "") for t in hashtags] + ["Shorts", "SimpleTipsByVJ", "TamilTips"]))[:15]
+    from ecosystem_logic import generate_youtube_tags
+    tags = generate_youtube_tags(
+        title=selected_title,
+        keywords=keywords,
+        hashtags=hashtags,
+        category=category,
+        max_chars=480
+    )
+    tag_chars = sum(len(t) for t in tags) + max(0, len(tags) - 1)
+    log_message(f"🏷️ Generated {len(tags)} YouTube tags ({tag_chars}/500 chars): {', '.join(tags[:6])}...")
     
     if dry_run:
         log_message("🚀 [DRY-RUN] Simulating YouTube Upload and Instagram Reels cross-posting...")

@@ -171,4 +171,180 @@ def get_session_length_cap():
     return None
 
 
+# ==============================================================================
+# YOUTUBE SHORTS TAG ENGINE (Multi-Intent SEO & Character Optimization)
+# ==============================================================================
+
+CATEGORY_TAG_POOLS = {
+    "🧠 Mind-Blowing Science Curiosities": [
+        "Science Facts Tamil", "Science Curiosities", "Amazing Science", "Ariviyal Thagaval",
+        "Physics Facts", "Science In Tamil", "அறிவியல் உண்மைகள்", "அறிவியல் தகவல்கள்",
+        "Science Experiments", "Daily Science Facts", "Science Wonder", "Unknown Science Facts"
+    ],
+    "🧬 Human Body & Dark Psychology": [
+        "Human Body Facts", "Psychology Facts Tamil", "Brain Facts Tamil", "Body Secrets",
+        "Dark Psychology Tamil", "Mental Tricks", "மனித உடல் ரகசியங்கள்", "Human Biology",
+        "Psychology Tricks", "Brain Secrets", "உடல் அறிவியல்", "Mind Facts Tamil"
+    ],
+    "💰 Money-Saving & Smart Living Tricks": [
+        "Money Saving Tips", "Smart Living Hacks", "Tamil Life Hacks", "Savings Tips Tamil",
+        "Daily Life Hacks", "Money Tricks", "பணம் சேமிக்கும் வழிகள்", "Life Hacks Tamil",
+        "Personal Finance Tamil", "Smart Tips Tamil", "Home Hacks Tamil", "Budget Tips Tamil"
+    ],
+    "🍳 Food, Health & Kitchen Science": [
+        "Kitchen Science", "Food Facts Tamil", "Cooking Hacks", "Kitchen Tips Tamil",
+        "Health Tips Tamil", "Food Science Tamil", "உணவு உண்மைகள்", "Daily Health Tips",
+        "Cooking Tips Tamil", "Food Secrets", "சமையல் குறிப்புகள்", "Healthy Living Tips"
+    ],
+    "🌍 Mysterious History & Culture Secrets": [
+        "History Mysteries", "Ancient Tamil History", "Mysterious Facts Tamil", "Keezhadi Facts",
+        "Historical Secrets", "வரலாற்று உண்மைகள்", "Tamil Culture", "Ancient Secrets",
+        "History Facts Tamil", "Tamil Heritage", "Mystery Stories Tamil", "Ancient Wonders"
+    ],
+    "🐾 Nature & Animal Oddities": [
+        "Animal Facts Tamil", "Nature Curiosities", "Wild Animals Facts", "Shocking Animal Facts",
+        "Nature Wonders", "விலங்கு உண்மைகள்", "Wildlife Tamil", "Animal Secrets",
+        "Strange Animals", "Nature Facts Tamil", "வனவிலங்கு ரகசியங்கள்", "Animal Superpowers"
+    ],
+    "🤖 AI Demystified & Future Tech": [
+        "AI Tools Tamil", "Artificial Intelligence", "Tech Tips Tamil", "Future Tech",
+        "AI Hacks Tamil", "Tech Shorts Tamil", "செயற்கை நுண்ணறிவு", "AI In Tamil",
+        "Useful AI Tools", "Tamil Tech Videos", "Smart Tech Tips", "Tech Hacks"
+    ],
+    "🤖 Practical AI Tools & Jobs": [
+        "AI Tools Tamil", "Productivity AI", "AI For Students", "AI Jobs Tamil",
+        "Tech Tips Tamil", "AI Hacks", "Top AI Websites", "Free AI Tools"
+    ],
+    "🤖 Simple AI Hacks for Everyone": [
+        "AI Hacks Tamil", "Daily AI Tips", "Smartphone AI", "Smart Life AI",
+        "Best AI Prompts", "Tech Tips Tamil", "AI Tricks Tamil"
+    ]
+}
+
+TAMIL_DISCOVERY_TAGS = [
+    "தெரியுமா", "விசித்திர உண்மைகள்", "வியக்கவைக்கும் உண்மைகள்", "தமிழ் ஷார்ட்ஸ்",
+    "பொது அறிவு", "சுவாரஸ்யமான தகவல்கள்", "Theriyuma", "Tamil Facts",
+    "Tamil Science Facts", "Unbelievable Facts Tamil", "Amazing Facts in Tamil",
+    "Tamil Info", "Unknown Facts Tamil", "Interesting Facts Tamil", "Tamil Knowledge"
+]
+
+VIRAL_SHORTS_TAGS = [
+    "Shorts", "YouTubeShorts", "ShortsFeed", "ShortsVideo", "ViralShorts",
+    "TrendingShorts", "ShortsTamil", "YTShorts", "ShortsTrend", "ViralVideo"
+]
+
+CHANNEL_TAGS = [
+    "SimpleTipsByVJ", "Simple Tips by VJ", "VJ Tips", "VJ Shorts", "TamilTips"
+]
+
+def sanitize_and_fit_tags(tags: list, max_chars: int = 480) -> list:
+    """
+    Sanitizes, deduplicates, and greedily packs as many tags as possible into YouTube's
+    snippet.tags character limit. YouTube strictly limits the total character count
+    (comma-separated) to 500 characters. Keeping max_chars <= 480 prevents 400 Bad Request.
+    """
+    if not tags:
+        return ["Shorts", "SimpleTipsByVJ", "TamilTips"]
+
+    seen = set()
+    fitted_tags = []
+    current_chars = 0
+
+    for tag in tags:
+        if not tag:
+            continue
+        # Clean tag: strip whitespace, remove hashtags, angle brackets, commas
+        clean_tag = str(tag).strip().lstrip("#").replace("<", "").replace(">", "").replace(",", " ").strip()
+        if not clean_tag or len(clean_tag) < 2:
+            continue
+
+        lower_tag = clean_tag.lower()
+        if lower_tag in seen:
+            continue
+
+        # In YouTube's API, tags are joined by commas internally: len(clean_tag) + 1 (for comma)
+        tag_cost = len(clean_tag) + (1 if fitted_tags else 0)
+        if current_chars + tag_cost > max_chars:
+            # Check if this tag exceeds budget; continue to see if any shorter subsequent tag fits
+            continue
+
+        seen.add(lower_tag)
+        fitted_tags.append(clean_tag)
+        current_chars += tag_cost
+
+    return fitted_tags
+
+def _extract_title_tags(title: str) -> list:
+    """Extracts 2-3 high-value keyword entities from video title for direct topic alignment."""
+    if not title:
+        return []
+    import re
+    # Remove emojis and punctuation except letters/numbers/spaces/Tamil unicode
+    clean = re.sub(r'[^\w\s\u0B80-\u0BFF]', ' ', title)
+    words = [w.strip() for w in clean.split() if len(w.strip()) > 3]
+    stop_words = {
+        "this", "that", "with", "from", "your", "what", "when", "where", "how",
+        "tips", "video", "shorts", "about", "have", "more", "will", "simple"
+    }
+    extracted = []
+    for w in words:
+        if w.lower() not in stop_words and len(w) <= 25:
+            extracted.append(w)
+    return extracted[:3]
+
+def generate_youtube_tags(title: str = "", keywords: list = None, hashtags: list = None, category: str = "", max_chars: int = 480) -> list:
+    """
+    Generates an expansive, multi-intent tag portfolio for YouTube Shorts:
+    1. Direct Topic keywords & hashtags (highest ranking power)
+    2. Extracted title entities
+    3. Category-tailored evergreen SEO search tags
+    4. Bilingual Tamil & Tanglish high-volume discovery queries
+    5. Viral Shorts algorithm feed tags
+    6. Channel identity tags
+    
+    Returns 25-40 optimized tags safely packed within max_chars (default 480, limit is 500).
+    """
+    keywords = keywords or []
+    hashtags = hashtags or []
+
+    candidate_tags = []
+
+    # 1. Cleaned direct keywords & hashtags
+    for kw in keywords:
+        if kw:
+            candidate_tags.append(str(kw))
+
+    for ht in hashtags:
+        if ht:
+            candidate_tags.append(str(ht).lstrip("#"))
+
+    # 2. Extracted title key phrases
+    if title:
+        candidate_tags.extend(_extract_title_tags(title))
+
+    # 3. Category-specific tags
+    category_pool = []
+    if category:
+        for cat_key, pool in CATEGORY_TAG_POOLS.items():
+            if cat_key in category or any(word in category for word in cat_key.split() if len(word) > 4):
+                category_pool = pool
+                break
+    if not category_pool:
+        category_pool = CATEGORY_TAG_POOLS.get("🧠 Mind-Blowing Science Curiosities", [])
+    candidate_tags.extend(category_pool)
+
+    # 4. Bilingual Tamil & Tanglish high-volume discovery queries
+    candidate_tags.extend(TAMIL_DISCOVERY_TAGS)
+
+    # 5. Viral Shorts algorithm discovery
+    candidate_tags.extend(VIRAL_SHORTS_TAGS)
+
+    # 6. Channel Identity
+    candidate_tags.extend(CHANNEL_TAGS)
+
+    # Greedily pack and sanitize to fit YouTube's limit safely
+    return sanitize_and_fit_tags(candidate_tags, max_chars=max_chars)
+
+
+
 
