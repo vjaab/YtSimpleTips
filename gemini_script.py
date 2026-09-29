@@ -670,6 +670,31 @@ def normalize_storyboard(raw_storyboard):
 
     return normalized
 
+def normalize_llm_json_dict(parsed):
+    """
+    Ensures that when a JSON object (dict) is expected from an LLM call, a dict is returned.
+    Handles common LLM quirks where a list is returned instead of a dict:
+    - Dict inside a single-element list: [{"title": ..., "storyboard": ...}] -> unwrap to dict.
+    - List of scenes: [{"scene_number": 1, "narration": ...}, ...] -> wrap into {"storyboard": [...]}.
+    - If empty or invalid, returns a safe empty dict {}.
+    """
+    if isinstance(parsed, dict):
+        return parsed
+    if isinstance(parsed, list):
+        if not parsed:
+            return {}
+        if isinstance(parsed[0], dict):
+            # If the first item has typical top-level script/metadata keys, unwrap it
+            if any(k in parsed[0] for k in ["title", "script", "optimized_script", "storyboard", "topic", "hooks", "title_variants", "story_continuity_score"]):
+                return parsed[0]
+            # If items look like storyboard scenes, wrap in storyboard dict
+            if any(k in parsed[0] for k in ["scene_number", "narration", "visual_prompt", "visual_type", "text"]):
+                return {"storyboard": parsed}
+            # Default to unwrapping the first dict
+            return parsed[0]
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
 def sanitize_script_against_ai_cliches(text: str) -> str:
     """
     Cleans up stubborn AI clichés, repetitive bot phrases, and stiff senthamizh
@@ -1109,9 +1134,11 @@ Return ONLY a JSON object matching the required schema:
 """
                 print("🎬 [AGENT 3] Storyboard Agent: Generating storyboard layout...")
                 final_script = call_gemini_api(client, storyboard_prompt, model=GEMINI_FLASH_MODEL, category=selected_category, task_type="reasoning")
+                if final_script and not isinstance(final_script, dict):
+                    final_script = normalize_llm_json_dict(final_script)
                 
                 try:
-                    if final_script and "storyboard" in final_script:
+                    if final_script and isinstance(final_script, dict) and "storyboard" in final_script:
                         storyboard = normalize_storyboard(final_script.get("storyboard"))
                         final_script["storyboard"] = storyboard
                         total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
@@ -1139,7 +1166,9 @@ Return ONLY a JSON object matching the required schema:
 """
                             print("🔄 [Fact Shorts Path] Retrying Storyboard Agent with length correction...")
                             final_script = call_gemini_api(client, correction_prompt, model=GEMINI_FLASH_MODEL, category=selected_category, task_type="reasoning")
-                            if not final_script or "storyboard" not in final_script:
+                            if final_script and not isinstance(final_script, dict):
+                                final_script = normalize_llm_json_dict(final_script)
+                            if not final_script or not isinstance(final_script, dict) or "storyboard" not in final_script:
                                 print("⚠️ [Fact Shorts Path] Correction retry failed. Falling back to default generation path...")
                             else:
                                 # Re-check length after correction
@@ -1152,7 +1181,7 @@ Return ONLY a JSON object matching the required schema:
                                     print(f"⚠️ [Fact Shorts Path] Still too short after retry: {scene_count} scenes / {total_words} words. Falling back...")
                                     final_script = None
                         
-                        if final_script and "storyboard" in final_script and length_ok:
+                        if final_script and isinstance(final_script, dict) and "storyboard" in final_script and length_ok:
                             final_script["storyboard"] = normalize_storyboard(final_script.get("storyboard"))
                             final_script["title"] = metadata_res.get("title") or topic_data_res.get("tamil_title") or final_script.get("title")
                             final_script["description"] = metadata_res.get("description") or final_script.get("description")
@@ -1368,8 +1397,10 @@ Return ONLY a JSON object matching the required schema:
     )
     
     final_script = call_gemini_api(client, humanizer_prompt, model=GEMINI_FLASH_MODEL, category=category, task_type="reasoning")
+    if final_script and not isinstance(final_script, dict):
+        final_script = normalize_llm_json_dict(final_script)
     
-    if final_script and "storyboard" in final_script:
+    if final_script and isinstance(final_script, dict) and "storyboard" in final_script:
         # ── AGENT 6: VALIDATOR & SELF-CORRECTION LOOP ──
         print("🔍 [AGENT 6] Validator Agent: Checking storyboard quality and continuity...")
         validation_attempts = 0
@@ -1381,8 +1412,10 @@ Return ONLY a JSON object matching the required schema:
                 storyboard_json=json.dumps(final_script, ensure_ascii=False)
             )
             validation_result = call_gemini_api(client, validator_prompt, model=GEMINI_FLASH_MODEL, category=category, task_type="reasoning")
+            if validation_result and not isinstance(validation_result, dict):
+                validation_result = normalize_llm_json_dict(validation_result)
             
-            if not validation_result:
+            if not validation_result or not isinstance(validation_result, dict):
                 print("⚠️ Validator Agent failed to respond. Proceeding with current storyboard.")
                 break
                 
@@ -1453,24 +1486,40 @@ Return ONLY a JSON object matching the required schema:
                 
                 correction_prompt = HUMANIZER_AGENT_TEMPLATE.format(
                     persona=SYSTEM_PERSONA,
-                    optimized_script=optimized.get("optimized_script", ""),
+                    optimized_script=optimized.get("optimized_script", "") if isinstance(optimized, dict) else "",
                     schema_requirements=refined_requirements
                 ) + f"\n\nCRITICAL FEEDBACK FROM AUDITOR (YOU MUST CORRECT THESE ISSUES AND RETRY):\n{feedback}"
                 
                 corrected_script = call_gemini_api(client, correction_prompt, model=GEMINI_FLASH_MODEL, category=category, task_type="reasoning")
                 if corrected_script:
-                    final_script = corrected_script
+                    if not isinstance(corrected_script, dict):
+                        corrected_script = normalize_llm_json_dict(corrected_script)
+                    if isinstance(corrected_script, dict):
+                        if "storyboard" in corrected_script and "title" not in corrected_script and isinstance(final_script, dict):
+                            final_script["storyboard"] = corrected_script["storyboard"]
+                        else:
+                            final_script = corrected_script
                 validation_attempts += 1
 
         # ── AGENT 7: TITLE VARIANTS ──
-        if final_script:
+        if final_script and not isinstance(final_script, dict):
+            final_script = normalize_llm_json_dict(final_script)
+
+        if final_script and isinstance(final_script, dict):
             print("🧠 [AGENT 7] Title Variants Agent: Generating 3 click-worthy title options...")
+            script_text = (
+                final_script.get("script")
+                or final_script.get("optimized_script")
+                or (optimized.get("optimized_script", "") if isinstance(optimized, dict) else "")
+            )
             title_variants_prompt = TITLE_VARIANTS_AGENT_TEMPLATE.format(
                 persona=SYSTEM_PERSONA,
-                script_text=final_script.get("script") or final_script.get("optimized_script") or optimized.get("optimized_script", "")
+                script_text=script_text
             )
             title_variants_res = call_gemini_api(client, title_variants_prompt, prefer_fallback=True, category=category, task_type="metadata")
-            if title_variants_res and "title_variants" in title_variants_res:
+            if title_variants_res and not isinstance(title_variants_res, dict):
+                title_variants_res = normalize_llm_json_dict(title_variants_res)
+            if title_variants_res and isinstance(title_variants_res, dict) and "title_variants" in title_variants_res:
                 final_script["title_variants"] = title_variants_res["title_variants"]
             else:
                 final_script["title_variants"] = [
@@ -1481,11 +1530,17 @@ Return ONLY a JSON object matching the required schema:
 
     # Ensure final_script meets basic minimum scene count / word count requirements
     if final_script:
-        storyboard = normalize_storyboard(final_script.get("storyboard", []))
-        total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
-        if len(storyboard) < 15 or total_words < 70:
-            print(f"⚠️ [gemini_script] Script failed length/scene gates ({len(storyboard)} scenes, {total_words} words; min 15 scenes / 70 words). Rejecting generated script.")
+        if not isinstance(final_script, dict):
+            final_script = normalize_llm_json_dict(final_script)
+        if not isinstance(final_script, dict):
+            print(f"⚠️ [gemini_script] Script failed dictionary validation ({type(final_script)}). Rejecting.")
             final_script = None
+        else:
+            storyboard = normalize_storyboard(final_script.get("storyboard", []))
+            total_words = sum(len(s.get("narration", "").split()) for s in storyboard if isinstance(s, dict))
+            if len(storyboard) < 15 or total_words < 70:
+                print(f"⚠️ [gemini_script] Script failed length/scene gates ({len(storyboard)} scenes, {total_words} words; min 15 scenes / 70 words). Rejecting generated script.")
+                final_script = None
 
     if not final_script:
         print("⚠️ [gemini_script] Agent pipeline failed or rejected. Attempting offline fallback script...")
@@ -1795,13 +1850,15 @@ def call_fallback_model(prompt, category="", task_type="reasoning", expect_json=
             raw = raw[raw.find("```")+3:raw.rfind("```")]
         raw = raw.strip()
         try:
-            return json.loads(raw)
+            parsed = json.loads(raw)
         except Exception:
             start = raw.find("{")
             end = raw.rfind("}")
             if start != -1 and end != -1 and end > start:
-                return json.loads(raw[start:end+1])
-            raise
+                parsed = json.loads(raw[start:end+1])
+            else:
+                raise
+        return normalize_llm_json_dict(parsed)
 
     # 0. OpenRouter with prioritized models based on category & task
     openrouter_key = os.getenv("OPENROUTER_API_KEY")
@@ -2242,13 +2299,15 @@ def call_gemini_api(client_arg, prompt, model=None, prefer_fallback=False, categ
             
             raw = raw.strip()
             try:
-                return json.loads(raw)
+                parsed = json.loads(raw)
             except Exception:
                 start = raw.find("{")
                 end = raw.rfind("}")
                 if start != -1 and end != -1 and end > start:
-                    return json.loads(raw[start:end+1])
-                raise
+                    parsed = json.loads(raw[start:end+1])
+                else:
+                    raise
+            return normalize_llm_json_dict(parsed)
         except Exception as e:
             err_str = str(e).lower()
             is_rate_limit_or_overload = any(
