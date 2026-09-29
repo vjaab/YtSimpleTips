@@ -466,15 +466,15 @@ def run_pipeline(forced_category=None, dry_run=False):
         unique_angle=unique_angle, category=category, video_number=video_number
     )
     
-    from ecosystem_logic import generate_youtube_tags
+    from ecosystem_logic import generate_youtube_tags, calculate_youtube_tags_length
     tags = generate_youtube_tags(
         title=selected_title,
         keywords=keywords,
         hashtags=hashtags,
         category=category,
-        max_chars=480
+        max_chars=400
     )
-    tag_chars = sum(len(t) for t in tags) + max(0, len(tags) - 1)
+    tag_chars = calculate_youtube_tags_length(tags)
     log_message(f"🏷️ Generated {len(tags)} YouTube tags ({tag_chars}/500 chars): {', '.join(tags[:6])}...")
     
     if dry_run:

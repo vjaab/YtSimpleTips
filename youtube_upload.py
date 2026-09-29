@@ -206,10 +206,10 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
     if "#Shorts" not in description and "#shorts" not in description:
         description = description.rstrip() + "\n\n#Shorts #SimpleTipsByVJ #TamilTips"
 
-    # Sanitize and pack tags within YouTube's 500-char limit (target <= 480 for absolute safety)
-    from ecosystem_logic import sanitize_and_fit_tags
-    sanitized_tags = sanitize_and_fit_tags(tags, max_chars=480)
-    tag_chars = sum(len(t) for t in sanitized_tags) + max(0, len(sanitized_tags) - 1)
+    # Sanitize and pack tags within YouTube's 500-char limit (target <= 400 for absolute safety)
+    from ecosystem_logic import sanitize_and_fit_tags, calculate_youtube_tags_length
+    sanitized_tags = sanitize_and_fit_tags(tags, max_chars=400)
+    tag_chars = calculate_youtube_tags_length(sanitized_tags)
     print(f"🏷️ Attaching {len(sanitized_tags)} YouTube tags ({tag_chars}/500 chars): {', '.join(sanitized_tags[:6])}...")
 
     body = {
@@ -229,50 +229,64 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
         },
     }
 
-    media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
-    request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
-
-    try:
-        response = request.execute()
-        video_id = response.get("id")
-        print(f"🎉 Video uploaded successfully: https://youtu.be/{video_id}")
-
-        # 1. Upload Thumbnail
-        if thumbnail_path and os.path.exists(thumbnail_path):
-            try:
-                set_thumbnail(youtube, video_id, thumbnail_path)
-            except Exception as e:
-                print(f"⚠️ Thumbnail upload failed (non-fatal): {e}")
-
-        # 2. Post Pinned Comment
+    video_id = None
+    # Resilient upload with automatic recovery if tags trigger 400 invalidTags error
+    for attempt in range(2):
+        media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
+        request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
         try:
-            pinned_text = _get_pinned_comment(title)
-            if comment_bait_question:
-                full_comment = f"❓ {comment_bait_question}\n\n{pinned_text}"
-            elif comment_hook:
-                full_comment = f"{comment_hook}\n\n{pinned_text}"
-            else:
-                full_comment = pinned_text
-            post_and_pin_comment(youtube, video_id, full_comment)
+            response = request.execute()
+            video_id = response.get("id")
+            print(f"🎉 Video uploaded successfully: https://youtu.be/{video_id}")
+            break
+        except googleapiclient.errors.HttpError as e:
+            print(f"❌ YouTube upload error {e.resp.status}: {e.content}")
+            err_content = str(e.content)
+            if attempt == 0 and e.resp.status == 400 and ("invalidTags" in err_content or "invalid video keywords" in err_content):
+                print("🔄 [RETRY] Detected invalidTags error from YouTube. Retrying with ultra-safe minimal tags...")
+                body["snippet"]["tags"] = ["Shorts", "SimpleTipsByVJ", "TamilTips", "TamilFacts"]
+                continue
+            return False, str(e)
+        except Exception as ge:
+            print(f"❌ YouTube upload error: {ge}")
+            return False, str(ge)
+
+    if not video_id:
+        return False, "Upload failed to produce a valid video ID"
+
+    # 1. Upload Thumbnail
+    if thumbnail_path and os.path.exists(thumbnail_path):
+        try:
+            set_thumbnail(youtube, video_id, thumbnail_path)
         except Exception as e:
-            print(f"⚠️ Pinned comment failed (non-fatal): {e}")
+            print(f"⚠️ Thumbnail upload failed (non-fatal): {e}")
 
-        # 3. Instagram Reels Cross-Post
-        if not is_longform:
-            try:
-                cropped_video = crop_for_instagram(video_path)
-                crosspost_to_instagram(cropped_video, f"{title}\n\n{description[:100]}...")
-                if cropped_video and os.path.exists(cropped_video):
-                    os.remove(cropped_video)
-            except Exception as ie:
-                print(f"⚠️ Instagram cross-posting failed (non-fatal): {ie}")
+    # 2. Post Pinned Comment
+    try:
+        pinned_text = _get_pinned_comment(title)
+        if comment_bait_question:
+            full_comment = f"❓ {comment_bait_question}\n\n{pinned_text}"
+        elif comment_hook:
+            full_comment = f"{comment_hook}\n\n{pinned_text}"
         else:
-            print("ℹ️ Widescreen longform video detected. Skipping Instagram Reels cross-posting.")
+            full_comment = pinned_text
+        post_and_pin_comment(youtube, video_id, full_comment)
+    except Exception as e:
+        print(f"⚠️ Pinned comment failed (non-fatal): {e}")
 
-        return True, video_id
-    except googleapiclient.errors.HttpError as e:
-        print(f"❌ YouTube upload error {e.resp.status}: {e.content}")
-        return False, str(e)
+    # 3. Instagram Reels Cross-Post
+    if not is_longform:
+        try:
+            cropped_video = crop_for_instagram(video_path)
+            crosspost_to_instagram(cropped_video, f"{title}\n\n{description[:100]}...")
+            if cropped_video and os.path.exists(cropped_video):
+                os.remove(cropped_video)
+        except Exception as ie:
+            print(f"⚠️ Instagram cross-posting failed (non-fatal): {ie}")
+    else:
+        print("ℹ️ Widescreen longform video detected. Skipping Instagram Reels cross-posting.")
+
+    return True, video_id
 
 def post_and_pin_comment(youtube, video_id, comment_text):
     comment_response = youtube.commentThreads().insert(

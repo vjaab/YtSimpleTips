@@ -237,11 +237,22 @@ CHANNEL_TAGS = [
     "SimpleTipsByVJ", "Simple Tips by VJ", "VJ Tips", "VJ Shorts", "TamilTips"
 ]
 
-def sanitize_and_fit_tags(tags: list, max_chars: int = 480) -> list:
+def calculate_youtube_tags_length(tags: list) -> int:
     """
-    Sanitizes, deduplicates, and greedily packs as many tags as possible into YouTube's
-    snippet.tags character limit. YouTube strictly limits the total character count
-    (comma-separated) to 500 characters. Keeping max_chars <= 480 prevents 400 Bad Request.
+    Calculates the exact character count YouTube Data API v3 charges against the 500-char limit.
+    YouTube rules:
+    - Multi-word tags (containing spaces) are internally enclosed in quotes: "word1 word2" (+2 chars).
+    - Tags are joined by commas (+1 char for each tag after the first).
+    """
+    if not tags:
+        return 0
+    return sum(len(t) + (2 if " " in t else 0) for t in tags) + max(0, len(tags) - 1)
+
+def sanitize_and_fit_tags(tags: list, max_chars: int = 400) -> list:
+    """
+    Sanitizes, deduplicates, and greedily packs tags into YouTube's snippet.tags character limit.
+    YouTube strictly limits the total character count (with quotes for spaced tags + commas) to 500.
+    Using max_chars=400 ensures ample safety margin and completely prevents 400 invalidTags errors.
     """
     if not tags:
         return ["Shorts", "SimpleTipsByVJ", "TamilTips"]
@@ -253,17 +264,21 @@ def sanitize_and_fit_tags(tags: list, max_chars: int = 480) -> list:
     for tag in tags:
         if not tag:
             continue
-        # Clean tag: strip whitespace, remove hashtags, angle brackets, commas
-        clean_tag = str(tag).strip().lstrip("#").replace("<", "").replace(">", "").replace(",", " ").strip()
-        if not clean_tag or len(clean_tag) < 2:
+        # Clean tag: strip whitespace, remove hashtags, angle brackets, quotes, commas
+        import re
+        clean_tag = str(tag).strip().lstrip("#").replace("<", "").replace(">", "").replace('"', '').replace("'", "").replace(",", " ").strip()
+        clean_tag = re.sub(r"\s+", " ", clean_tag)
+        if not clean_tag or len(clean_tag) < 2 or len(clean_tag) > 100:
             continue
 
         lower_tag = clean_tag.lower()
         if lower_tag in seen:
             continue
 
-        # In YouTube's API, tags are joined by commas internally: len(clean_tag) + 1 (for comma)
-        tag_cost = len(clean_tag) + (1 if fitted_tags else 0)
+        # In YouTube's API:
+        # If tag has spaces, YouTube surrounds it in double quotes (+2 chars)
+        # If not the first tag, a separating comma is added (+1 char)
+        tag_cost = len(clean_tag) + (2 if " " in clean_tag else 0) + (1 if fitted_tags else 0)
         if current_chars + tag_cost > max_chars:
             # Check if this tag exceeds budget; continue to see if any shorter subsequent tag fits
             continue
@@ -272,7 +287,7 @@ def sanitize_and_fit_tags(tags: list, max_chars: int = 480) -> list:
         fitted_tags.append(clean_tag)
         current_chars += tag_cost
 
-    return fitted_tags
+    return fitted_tags if fitted_tags else ["Shorts", "SimpleTipsByVJ", "TamilTips"]
 
 def _extract_title_tags(title: str) -> list:
     """Extracts 2-3 high-value keyword entities from video title for direct topic alignment."""
@@ -292,7 +307,7 @@ def _extract_title_tags(title: str) -> list:
             extracted.append(w)
     return extracted[:3]
 
-def generate_youtube_tags(title: str = "", keywords: list = None, hashtags: list = None, category: str = "", max_chars: int = 480) -> list:
+def generate_youtube_tags(title: str = "", keywords: list = None, hashtags: list = None, category: str = "", max_chars: int = 400) -> list:
     """
     Generates an expansive, multi-intent tag portfolio for YouTube Shorts:
     1. Direct Topic keywords & hashtags (highest ranking power)
@@ -302,7 +317,7 @@ def generate_youtube_tags(title: str = "", keywords: list = None, hashtags: list
     5. Viral Shorts algorithm feed tags
     6. Channel identity tags
     
-    Returns 25-40 optimized tags safely packed within max_chars (default 480, limit is 500).
+    Returns 20-30 optimized tags safely packed within max_chars (default 400, limit is 500).
     """
     keywords = keywords or []
     hashtags = hashtags or []
