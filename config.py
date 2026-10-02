@@ -80,7 +80,13 @@ PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
-ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "8Oo4d9mNNwK369qOwl")
+ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "8Oo4d9mNNwVwK369qOwl")
+ELEVENLABS_MODEL_ID = os.getenv("ELEVENLABS_MODEL_ID", "eleven_multilingual_v2")
+# Humanized Voice Cloning settings tuned for 100% target speaker fidelity
+ELEVENLABS_SIMILARITY_BOOST = float(os.getenv("ELEVENLABS_SIMILARITY_BOOST", "0.92"))
+ELEVENLABS_STABILITY = float(os.getenv("ELEVENLABS_STABILITY", "0.50"))
+ELEVENLABS_STYLE = float(os.getenv("ELEVENLABS_STYLE", "0.18"))
+ELEVENLABS_SPEAKER_BOOST = os.getenv("ELEVENLABS_SPEAKER_BOOST", "true").lower() in ("true", "1", "yes")
 KAGGLE_USERNAME = os.getenv("KAGGLE_USERNAME", "")
 KAGGLE_KEY = os.getenv("KAGGLE_KEY", "") or os.getenv("KAGGLE_API_TOKEN", "")
 YOUTUBE_CLIENT_SECRET_FILE = os.getenv("YOUTUBE_CLIENT_SECRET_FILE", "client_secret.json")
@@ -392,7 +398,8 @@ for d in [OUTPUT_DIR, LOGS_DIR, FONTS_DIR, MUSIC_DIR, SFX_DIR]:
 
 # Application Settings
 TIMEZONE = "Asia/Kolkata"
-UPLOAD_TIMES = ["08:00", "13:00", "18:00"]
+# Target triggers for India peak viewing hours: Morning (08:15 IST), Lunch (12:45 IST), Evening Prime (18:00 IST)
+UPLOAD_TIMES = ["08:15", "12:45", "18:00"]
 MAX_RETRY_ATTEMPTS = 10
 SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3

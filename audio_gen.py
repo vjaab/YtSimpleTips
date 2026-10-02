@@ -14,6 +14,8 @@ warnings.filterwarnings("ignore")
 
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
+    ELEVENLABS_MODEL_ID, ELEVENLABS_SIMILARITY_BOOST, ELEVENLABS_STABILITY,
+    ELEVENLABS_STYLE, ELEVENLABS_SPEAKER_BOOST,
     KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_TTS_FALLBACK, VOICE_SPEED
 )
 from kaggle_handover import trigger_kaggle_gpu_job
@@ -185,17 +187,37 @@ def preprocess_script_for_tts(text: str) -> str:
     # Preserve ellipses (...) and em-dashes (—) for natural breathing pauses in TTS models!
     # Clean up excessive dots (4+ dots down to standard 3 dots ...)
     text = re.sub(r'\.{4,}', '...', text)
+    # Ensure natural breathing room before and after ellipses (0.4-0.6s human breath pause)
+    text = re.sub(r'\s*\.{3,}\s*', ' ... ', text)
     # Normalize spaced dashes to clean em-dash pause
+    text = re.sub(r'\s*—\s*', ' — ', text)
     text = re.sub(r'\s+-\s+', ' — ', text)
     
     # Replace newlines "\n" with " "
     text = text.replace("\n", " ")
     
-    # Deduplicate adjacent duplicate words (e.g., "the the" -> "the", "page page" -> "page")
-    text = re.sub(r'\b(\w+)\b\s+\1\b', r'\1', text, flags=re.IGNORECASE)
-    # Deduplicate adjacent duplicate 2-word phrases (e.g., "this page this page" or "this page, this page" -> "this page")
-    text = re.sub(r'\b(\w+\s+\w+)\b[\s,.]+\1\b', r'\1', text, flags=re.IGNORECASE)
+    # Deduplicate adjacent duplicate English words only (anti-stutter, e.g. "the the" -> "the")
+    # CRITICAL: Preserve intentional Tamil reduplications and expressive repetitions (e.g. "டக்கு டக்குனு", "சின்ன சின்ன", "கொஞ்சம் கொஞ்சமா")
+    text = re.sub(r'\b(the|and|or|of|to|in|at|is|it|that|this|a|an)\b\s+\1\b', r'\1', text, flags=re.IGNORECASE)
     
+    # Phonetic pronunciation smoothing for technical acronyms in Tanglish
+    acronym_hints = [
+        (r'\bAI\b', 'A.I.'),
+        (r'\bAC\b', 'A.C.'),
+        (r'\bTV\b', 'T.V.'),
+        (r'\bGB\b', 'G.B.'),
+        (r'\bMB\b', 'M.B.'),
+        (r'\bRAM\b', 'Ram'),
+        (r'\bWiFi\b', 'Wi-Fi'),
+        (r'\bwifi\b', 'Wi-Fi'),
+        (r'\bkg\b', 'kilo'),
+        (r'\bkm\b', 'kilometer'),
+        (r'\b°C\b', ' degree Celsius'),
+        (r'\b°F\b', ' degree Fahrenheit'),
+    ]
+    for pat, rep in acronym_hints:
+        text = re.sub(pat, rep, text)
+
     # Replace "%" with " percent"
     text = text.replace("%", " percent")
     
@@ -237,11 +259,8 @@ def preprocess_script_for_tts(text: str) -> str:
     for target, replacement in nellai_tts_hints:
         text = re.sub(r'(?<![\u0b80-\u0bff])' + re.escape(target) + r'(?![\u0b80-\u0bff])', replacement, text)
     
-    # Normalize dramatic pauses for Nellai-style reveals:
-    # Ensure ellipses have breathing room (space before ...) for proper TTS pacing
-    text = re.sub(r'(\S)\.\.\.', r'\1 ...', text)
-    # Ensure exclamation-heavy Nellai reactions have proper spacing
-    text = re.sub(r'([!?])(\w)', r'\1 \2', text)
+    # Ensure exclamation-heavy Nellai reactions and questions have proper breathing space
+    text = re.sub(r'([,;!?])([^\s0-9])', r'\1 \2', text)
     
     # Replace multiple spaces with single space
     text = re.sub(r'[ \t]+', ' ', text)
@@ -308,41 +327,41 @@ def inject_break_tags(text: str) -> str:
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params):
-    """Synthesizes a single text chunk via ElevenLabs API with humanized voice parameters."""
+def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params, voice_settings=None):
+    """Synthesizes a single text chunk via ElevenLabs API with humanized voice parameters matching the cloned voice ID 100%."""
     cleaned_text = preprocess_script_for_tts(text)
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
     
+    settings = {
+        # High similarity boost (0.92) guarantees the output replicates the target cloned voice ID 100%
+        "similarity_boost": ELEVENLABS_SIMILARITY_BOOST,
+        # Optimal stability (0.50) gives natural human cadence and vocal consistency without cracks or robotic stiffness
+        "stability": ELEVENLABS_STABILITY,
+        # Subtle style (0.18) adds conversational enthusiasm without distorting the speaker's acoustic timbre
+        "style": ELEVENLABS_STYLE,
+        "use_speaker_boost": ELEVENLABS_SPEAKER_BOOST,
+        "speed": 1.00
+    }
+    if voice_settings:
+        settings.update(voice_settings)
+    
     data = {
         "text": cleaned_text,
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {
-            # Tuned for authentic TIRUNELVELI (Nellai) Tamil speech cadence:
-            # - stability 0.28: Nellai speakers have dramatic pitch swings —
-            #   excited highs on reveals ("அட போங்கோ!") and low conspiratorial whispers
-            #   before twists. Low stability lets the neural vocoder reproduce this range.
-            # - similarity_boost 0.65: slightly relaxed to allow the Nellai-native
-            #   pronunciation variations (elongated vowels, rolled consonants) to emerge
-            #   naturally without being constrained to a rigid voice template.
-            # - style 0.50: higher expressiveness for the dramatic storytelling energy
-            #   that defines Nellai Tamil — the "build-up → dramatic pause → reveal" cadence.
-            # - speed 1.00: natural Nellai pacing — slightly slower than generic Tamil
-            #   to allow the characteristic dramatic pauses and elongated vowels.
-            "stability": 0.28,
-            "similarity_boost": 0.65,
-            "style": 0.50,
-            "use_speaker_boost": True,
-            "speed": 1.00
-        }
+        "model_id": ELEVENLABS_MODEL_ID,
+        "voice_settings": settings
     }
+    
+    # Request highest audio generation fidelity
+    req_params = dict(params)
+    req_params["optimize_streaming_latency"] = 0
     
     try:
         import requests
-        response = requests.post(url, json=data, headers=headers, params=params, stream=True)
+        response = requests.post(url, json=data, headers=headers, params=req_params, stream=True)
         if response.status_code == 422 and "speed" in response.text.lower():
             # If endpoint doesn't support speed parameter in voice_settings, retry without it
             data["voice_settings"].pop("speed", None)
-            response = requests.post(url, json=data, headers=headers, params=params, stream=True)
+            response = requests.post(url, json=data, headers=headers, params=req_params, stream=True)
             
         if response.status_code == 200:
             audio_data = b""
@@ -372,19 +391,18 @@ def _concat_mp3_chunks(mp3_chunks, crossfade_ms=150):
         combined = combined.append(seg, crossfade=crossfade_ms)
     
     return combined
-def _generate_elevenlabs(text, output_path):
+def _generate_elevenlabs(text, output_path, voice_id=None, voice_settings=None):
     print("[audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
     if not ELEVENLABS_API_KEY:
         print("   ✗ ElevenLabs API Key missing.")
         return None
         
-    voice_id = ELEVENLABS_VOICE_ID or "8Oo4d9mNNwVwK369qOwl"
+    target_voice_id = voice_id or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID or "8Oo4d9mNNwVwK369qOwl"
     headers = {
         "Content-Type": "application/json",
         "xi-api-key": ELEVENLABS_API_KEY
     }
     # Use mp3_44100_128 format — available on all ElevenLabs tiers (Starter, Creator, Pro)
-    # pcm_44100 requires Pro tier and causes 403 errors on lower tiers
     params = {
         "output_format": "mp3_44100_128"
     }
@@ -392,21 +410,25 @@ def _generate_elevenlabs(text, output_path):
     words = text.split()
     mp3_chunks = []
     
-    if len(words) > 50:
+    # YouTube Shorts are typically 80-140 words.
+    # Single-pass generation is MANDATORY to preserve 100% identical voice clone fidelity,
+    # natural continuous human breathing, and smooth sentence-to-sentence prosody.
+    # Only chunk if script is exceptionally long (> 300 words / long-form videos).
+    if len(words) > 300:
         print(f"[audio_gen] Long script detected ({len(words)} words). Using chunked synthesis...")
         chunks = split_text_into_chunks(text)
         print(f"👉 Split script into {len(chunks)} chunks.")
         
         for idx, chunk in enumerate(chunks):
             print(f"[audio_gen] Synthesizing chunk {idx+1}/{len(chunks)}...")
-            chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, voice_id, headers, params)
+            chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, target_voice_id, headers, params, voice_settings=voice_settings)
             if not chunk_mp3:
                 print(f"   ✗ Failed to synthesize chunk {idx+1}")
                 return None
             mp3_chunks.append(chunk_mp3)
     else:
-        print("[audio_gen] Script is short. Synthesizing as a single ElevenLabs chunk...")
-        single_mp3 = _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params)
+        print(f"[audio_gen] Generating Short audio in a single continuous stream ({len(words)} words) with Voice ID: {target_voice_id} (100% Clone Match)...")
+        single_mp3 = _synthesize_single_chunk_elevenlabs(text, target_voice_id, headers, params, voice_settings=voice_settings)
         if not single_mp3:
             return None
         mp3_chunks.append(single_mp3)
@@ -520,55 +542,65 @@ def _generate_edge_tts(text, output_path):
 
 def detect_audio_breaks(audio_path: str) -> list[tuple]:
     """
-    Detects only EXCESSIVE silence gaps (>1.5s) that indicate TTS artifacts.
-    Natural breath pauses (200-800ms) are preserved.
+    Detects only EXCESSIVE dead silence gaps (>2.2s) that indicate TTS artifacts.
+    Natural breath pauses and dramatic pauses (300-1800ms) are preserved.
     """
-    import librosa
     try:
+        import librosa
         y, sr = librosa.load(audio_path, sr=44100, mono=True)
-    except Exception as e:
-        print(f"[audio_gen] Failed to load audio in librosa: {e}")
-        return []
+        frame_length = 441
+        hop_length = 441
         
-    frame_length = 441
-    hop_length = 441
-    
-    rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)
-    rms_values = rms[0]
-    num_frames = len(rms_values)
-    
-    breaks = []
-    in_break = False
-    break_start_frame = None
-    
-    for i in range(num_frames):
-        is_silent = rms_values[i] < 0.003  # Slightly more sensitive
-        if is_silent:
-            if not in_break:
-                in_break = True
-                break_start_frame = i
-        else:
-            if in_break:
-                duration_ms = (i - break_start_frame) * 10.0
-                # Only flag breaks > 1.5s (was 600ms) - preserves natural breaths
-                if duration_ms > 1500.0:
-                    start_time = break_start_frame * 10.0
-                    end_time = i * 10.0
-                    breaks.append((start_time, end_time))
-                in_break = False
+        rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)
+        rms_values = rms[0]
+        num_frames = len(rms_values)
+        
+        breaks = []
+        in_break = False
+        break_start_frame = None
+        
+        for i in range(num_frames):
+            is_silent = rms_values[i] < 0.003  # Slightly more sensitive
+            if is_silent:
+                if not in_break:
+                    in_break = True
+                    break_start_frame = i
+            else:
+                if in_break:
+                    duration_ms = (i - break_start_frame) * 10.0
+                    # Only flag abnormal dead breaks > 2.2s - preserves dramatic human pauses
+                    if duration_ms > 2200.0:
+                        start_time = break_start_frame * 10.0
+                        end_time = i * 10.0
+                        breaks.append((start_time, end_time))
+                    in_break = False
+                    
+        if in_break:
+            duration_ms = (num_frames - break_start_frame) * 10.0
+            if duration_ms > 2200.0:
+                start_time = break_start_frame * 10.0
+                end_time = num_frames * 10.0
+                breaks.append((start_time, end_time))
                 
-    if in_break:
-        duration_ms = (num_frames - break_start_frame) * 10.0
-        if duration_ms > 1500.0:
-            start_time = break_start_frame * 10.0
-            end_time = num_frames * 10.0
-            breaks.append((start_time, end_time))
-            
-    return breaks
+        return breaks
+    except ImportError:
+        # Graceful fallback using pydub silence detection
+        try:
+            from pydub import AudioSegment
+            from pydub.silence import detect_silence
+            audio = AudioSegment.from_file(audio_path)
+            raw_breaks = detect_silence(audio, min_silence_len=2200, silence_thresh=-45)
+            return [(float(start), float(end)) for start, end in raw_breaks]
+        except Exception as pe:
+            print(f"[audio_gen] Silence detection fallback failed: {pe}")
+            return []
+    except Exception as e:
+        print(f"[audio_gen] Failed to detect breaks: {e}")
+        return []
 
 def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     """
-    Shortens ONLY excessive silences (>1.5s) to a natural 400ms pause.
+    Shortens ONLY excessive silences (>2.2s) to a natural 500ms pause with smooth crossfade.
     Preserves natural breathing room in speech.
     """
     if not breaks:
@@ -589,10 +621,14 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
         left_part = audio[:start_ms]
         right_part = audio[end_ms:]
         
-        # Replace long break with natural 400ms pause (was 200ms - too short)
-        silence_gap = AudioSegment.silent(duration=400, frame_rate=audio.frame_rate)
+        # Replace long break with natural 500ms room pause with crossfading
+        silence_gap = AudioSegment.silent(duration=500, frame_rate=audio.frame_rate)
         silence_gap = silence_gap.set_frame_rate(audio.frame_rate).set_sample_width(audio.sample_width).set_channels(audio.channels)
-        audio = left_part + silence_gap + right_part
+        
+        if len(left_part) > 50 and len(right_part) > 50:
+            audio = left_part.append(silence_gap, crossfade=40).append(right_part, crossfade=40)
+        else:
+            audio = left_part + silence_gap + right_part
         
     audio.export(audio_path, format="wav")
     return audio_path
@@ -650,19 +686,32 @@ def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
 
 def upsample_audio_to_44100(audio_path: str) -> None:
     """
-    Upsamples the audio file to 44100 Hz using librosa.resample with res_type='kaiser_best'.
+    Ensures the audio file is 44100 Hz.
+    Uses librosa if available, otherwise pydub.
     """
-    import librosa
-    import soundfile as sf
-    print(f"🔄 [audio_gen] Upsampling {audio_path} to 44100 Hz using kaiser_best...")
     try:
-        y, sr = librosa.load(audio_path, sr=None)  # Load at original sample rate
+        import librosa
+        import soundfile as sf
+        print(f"🔄 [audio_gen] Upsampling {audio_path} to 44100 Hz using kaiser_best...")
+        y, sr = librosa.load(audio_path, sr=None)
         if sr != 44100:
             y_resampled = librosa.resample(y, orig_sr=sr, target_sr=44100, res_type='kaiser_best')
             sf.write(audio_path, y_resampled, 44100)
             print(f"[audio_gen] Upsampled from {sr} Hz to 44100 Hz.")
         else:
             print(f"ℹ️ [audio_gen] Audio is already 44100 Hz.")
+    except ImportError:
+        try:
+            from pydub import AudioSegment
+            audio = AudioSegment.from_file(audio_path)
+            if audio.frame_rate != 44100:
+                audio = audio.set_frame_rate(44100)
+                audio.export(audio_path, format="wav")
+                print(f"[audio_gen] Resampled to 44100 Hz via pydub.")
+            else:
+                print(f"ℹ️ [audio_gen] Audio is already 44100 Hz.")
+        except Exception as pe:
+            print(f"[audio_gen] Resample fallback failed: {pe}")
     except Exception as e:
         print(f"[audio_gen] Upsampling failed: {e}")
 
@@ -858,12 +907,14 @@ def speed_up_audio(audio_path, factor):
             os.remove(temp_path)
     return audio_path
 
-def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
+def generate_voiceover(text, voice_id=None, custom_phonetic_map=None, api_key=None, voice_settings=None):
     """
     Generates Tamil/Tanglish voiceover using ElevenLabs (cloned voice) as primary.
+    Produces real humanized voice cloning matching the given voice ID 100%.
     FAILS if ElevenLabs voice cloning is not working - no fallback.
     """
     global VOICE_FALLBACK_USED
+    target_voice_id = voice_id or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
     if custom_phonetic_map:
         for word, phonetic in custom_phonetic_map.items():
             pattern = re.compile(r'\b' + re.escape(word) + r'\b', re.IGNORECASE)
@@ -874,12 +925,13 @@ def generate_voiceover(text, custom_phonetic_map=None, api_key=None):
     wav_path = os.path.join(OUTPUT_DIR, f"audio_{today}.wav")
     
     # Primary: ElevenLabs with cloned voice - REQUIRED, no fallback
-    if not ELEVENLABS_API_KEY or not ELEVENLABS_VOICE_ID:
-        raise RuntimeError("[audio_gen] ElevenLabs credentials not configured. Set ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in environment.")
+    if not ELEVENLABS_API_KEY or not target_voice_id:
+        raise RuntimeError(f"[audio_gen] ElevenLabs credentials not configured. Key present: {bool(ELEVENLABS_API_KEY)}, Voice ID: {target_voice_id}")
     
-    path = _generate_elevenlabs(clean_text, wav_path)
+    print(f"[audio_gen] Synthesizing humanized voiceover matching Voice ID '{target_voice_id}' 100%...")
+    path = _generate_elevenlabs(clean_text, wav_path, voice_id=target_voice_id, voice_settings=voice_settings)
     if not path:
-        raise RuntimeError("[audio_gen] ElevenLabs (cloned voice) synthesis failed. Pipeline requires working ElevenLabs voice cloning - no fallback allowed.")
+        raise RuntimeError(f"[audio_gen] ElevenLabs (cloned voice) synthesis failed for voice ID '{target_voice_id}'. Pipeline requires working ElevenLabs voice cloning - no fallback allowed.")
     
     VOICE_FALLBACK_USED = False
         

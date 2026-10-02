@@ -8,7 +8,7 @@ import traceback
 from datetime import datetime
 import re
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED
+from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ELEVENLABS_VOICE_ID
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url
 from gemini_script import pick_and_generate_script, is_offline_mode_active, reset_offline_mode
@@ -353,8 +353,13 @@ def run_pipeline(forced_category=None, dry_run=False):
         # Local fallback generation (runs if Kaggle failed or not available)
         if 'kaggle_failed' in locals() and kaggle_failed:
             try:
+                target_vid = script_data.get("voice_id") or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+                log_message(f"🎙️ Generating voiceover with voice ID: {target_vid}")
                 audio_path, duration, word_timestamps = generate_voiceover(
-                    script, custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}), api_key=GEMINI_API_KEY
+                    script,
+                    voice_id=target_vid,
+                    custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}),
+                    api_key=GEMINI_API_KEY
                 )
             except Exception as e:
                 log_message(f"❌ Local voiceover failed: {e}")

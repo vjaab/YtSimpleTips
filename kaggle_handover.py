@@ -67,7 +67,7 @@ def trigger_kaggle_gpu_job(script_data, custom_map):
         "script": script_data.get("script"),
         "custom_map": custom_map or {},
         "elevenlabs_api_key": ELEVENLABS_API_KEY,
-        "elevenlabs_voice_id": ELEVENLABS_VOICE_ID
+        "elevenlabs_voice_id": script_data.get("voice_id") or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
     }
     
     worker_script_path = os.path.join(scripts_dir, "kaggle_worker.py")

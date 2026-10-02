@@ -5,7 +5,10 @@ import pytz
 def get_slot_info():
     """
     Returns (day_name, slot, category) based on current IST time.
-    3 uploads per day (Morning 08:00 IST, Afternoon 13:00 IST, Evening 18:00 IST).
+    3 uploads per day aligned with India peak consumption:
+    - Slot A: Morning Commute / Breakfast Peak (08:15–08:30 IST)
+    - Slot B: College / Office Lunch Break Peak (12:45–13:15 IST)
+    - Slot C: Evening Prime Golden Window (18:00–18:30 IST)
     """
     ist_now = datetime.datetime.now(pytz.timezone(TIMEZONE))
     day_name = ist_now.strftime("%a")  # Mon, Tue, etc.

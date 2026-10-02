@@ -1019,7 +1019,9 @@ def process_job():
             import numpy as np
             print(f"🔍 NumPy at runtime: {np.__version__}")
             audio_path, duration, word_timestamps = generate_voiceover(
-                script, custom_phonetic_map=custom_map
+                script,
+                voice_id=job_data.get("elevenlabs_voice_id") or os.environ.get("ELEVENLABS_VOICE_ID"),
+                custom_phonetic_map=custom_map
             )
         except Exception as e:
             print(f"⚠️ GPU Voiceover generation had issues: {e}")
