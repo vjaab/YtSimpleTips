@@ -66,7 +66,7 @@ def fetch_facts_from_llm_fallback(category, avoid_titles):
     Generate 5 highly viral, surprising "Did You Know" facts, life hacks, or mind-blowing curiosities that Tamil audiences would find fascinating, related to {category}.
     Category focus: "{category}"
     These topics must align with high-performing infotainment trends in YouTube Shorts history for global Tamil audiences.
-    They must be surprising, accurate, and optimized for a 45-60 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
+    They must be surprising, accurate, and optimized for a 38-48 second faceless Tamil infotainment YouTube Short titled "Simple Tips by VJ".
     
     VIRAL CRITERIA:
     1. Every topic MUST be a verified fact or actionable tip with a credible source URL (Wikipedia, Britannica, Nature, reputable news/science sites, government sites).
@@ -262,10 +262,12 @@ def fetch_facts_for_category(category):
     try:
         # Map category to a clean category for VidIQ
         vidiq_category_map = {
+            "📱 Digital Safety, Phone Secrets & Scam Alerts": "Technology",
             "🧠 Mind-Blowing Science Curiosities": "Science",
             "🌍 Mysterious History & Culture Secrets": "History",
             "🔬 Tech & Innovation Wonders": "Technology",
             "🌌 Space & Universe Mysteries": "Space",
+            "🧬 Human Body & Dark Psychology": "Health",
             "🧬 Human Body & Psychology": "Health",
             "🐾 Nature & Animal Oddities": "Nature",
             "💡 Mind-Blowing Did You Know": "Education",

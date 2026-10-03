@@ -209,6 +209,16 @@ def preprocess_script_for_tts(text: str) -> str:
         (r'\bAI\b', 'A.I.'),
         (r'\bAC\b', 'A.C.'),
         (r'\bTV\b', 'T.V.'),
+        (r'\bUPI\b', 'U.P.I.'),
+        (r'\bOTP\b', 'O.T.P.'),
+        (r'\bATM\b', 'A.T.M.'),
+        (r'\bPIN\b', 'Pin'),
+        (r'\bGPS\b', 'G.P.S.'),
+        (r'\bSIM\b', 'Sim'),
+        (r'\bSMS\b', 'S.M.S.'),
+        (r'\bURL\b', 'U.R.L.'),
+        (r'\b5G\b', '5 G'),
+        (r'\b4G\b', '4 G'),
         (r'\bGB\b', 'G.B.'),
         (r'\bMB\b', 'M.B.'),
         (r'\bRAM\b', 'Ram'),
@@ -243,24 +253,24 @@ def preprocess_script_for_tts(text: str) -> str:
     # Remove markdown symbols: **, *, #, _, ~
     text = re.sub(r'[*#_~]', '', text)
     
-    # ── TIRUNELVELI (NELLAI) DIALECT TTS OPTIMIZATION ──
-    # ElevenLabs Multilingual v2 processes Tamil+English code-switching well,
-    # but Nellai-specific elongated vowels and rolled consonants benefit from
-    # explicit phonetic hints via spelling normalization.
-    nellai_tts_hints = [
-        # Ensure Nellai suffix -ங்கோ is preserved (not normalized to -ங்க by upstream)
-        ('பண்ணுங்க', 'பண்ணுங்கோ'),
-        ('பாருங்க', 'பாருங்கோ'),
-        ('கேளுங்க', 'கேளுங்கோ'),
-        ('சொல்லுங்க', 'சொல்லுங்கோ'),
-        ('வாங்க', 'வாங்கோ'),
-        # Nellai vowel elongations for natural pronunciation
-        ('தெரியுமா', 'தெர்யுமா'),
-        ('கொஞ்சம்', 'கொஞ்சூம்'),
-        ('அப்படி', 'அப்புடி'),
-        ('இல்லையா', 'இல்லியா'),
+    # ── UNIVERSAL SPOKEN TAMIL TTS NORMALIZATION ──
+    # Standardize pronunciation for natural global Tamil comprehension
+    universal_tts_hints = [
+        ('பண்ணுங்கோ', 'பண்ணுங்க'),
+        ('பாருங்கோ', 'பாருங்க'),
+        ('கேளுங்கோ', 'கேளுங்க'),
+        ('சொல்லுங்கோ', 'சொல்லுங்க'),
+        ('வாங்கோ', 'வாங்க'),
+        ('தெர்யுமா', 'தெரியுமா'),
+        ('கொஞ்சூம்', 'கொஞ்சம்'),
+        ('அப்புடி', 'அப்படி'),
+        ('இல்லியா', 'இல்லையா'),
+        ('என்னா', 'என்ன'),
+        ('என்னாது', 'என்னது'),
+        ('தெரிஞ்சுக்கோங்கோ', 'தெரிஞ்சுக்கோங்க'),
+        ('மறந்துடாதீங்கோ', 'மறந்துடாதீங்க'),
     ]
-    for target, replacement in nellai_tts_hints:
+    for target, replacement in universal_tts_hints:
         text = re.sub(r'(?<![\u0b80-\u0bff])' + re.escape(target) + r'(?![\u0b80-\u0bff])', replacement, text)
     
     # Ensure exclamation-heavy Nellai reactions and questions have proper breathing space

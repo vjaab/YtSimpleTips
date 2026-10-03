@@ -405,7 +405,7 @@ SIMILARITY_THRESHOLD = 75
 CATEGORY_COOLDOWN_DAYS = 3
 BGM_VOLUME = 0.08
 VOICE_SPEED = 1.0  # Native neural speed (1.03x) is handled directly inside ElevenLabs; avoids robotic atempo phase distortion
-TARGET_AUDIO_DURATION = (60, 80)
+TARGET_AUDIO_DURATION = (38, 48)  # Optimized to 38-48s for maximum retention (>100% APVD)
 
 # Global Feature Flags
 ENABLE_LONGFORM = False
@@ -427,7 +427,7 @@ ENABLE_CATEGORY_COLORS = True
 ENABLE_FACT_COUNTER = False          
 ENABLE_COUNTDOWN_TIMER = True        
 ENABLE_SOUND_ON_INDICATOR = False    
-ENABLE_SEAMLESS_LOOP = False          
+ENABLE_SEAMLESS_LOOP = True           # Enabled for viral infinite-loop re-watch retention
 ENABLE_WATERMARK = True               # Channel watermark overlay on video
 ENABLE_AI_DISCLOSURE_LABEL = True     # AI Human-in-the-loop production label (YPP compliance)
 ENABLE_FLASH_TRANSITIONS = True       # Flash transition effects between scenes
@@ -435,7 +435,7 @@ ENABLE_EMOJI_OVERLAYS = False         # Emoji overlays on video (DISABLED - caus
 ENABLE_STOCK_FOOTAGE = True          # Control whether to include stock footage (Pexels)
 
 # Retention Engine Settings
-VISUAL_CUT_TARGET_SECONDS = 2.0
+VISUAL_CUT_TARGET_SECONDS = 1.8
 ENABLE_CINEMATIC_TRANSITIONS = True
 ENABLE_STRATEGIC_SFX = True
 ENABLE_DYNAMIC_BGM_CURVE = True

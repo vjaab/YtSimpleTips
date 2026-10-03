@@ -15,41 +15,41 @@ def get_slot_info():
     hour = ist_now.hour
     
     morning_categories = {
-        "Mon": "🧠 Mind-Blowing Science Curiosities",
-        "Tue": "🧬 Human Body & Dark Psychology",
+        "Mon": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+        "Tue": "🧠 Mind-Blowing Science Curiosities",
         "Wed": "💰 Money-Saving & Smart Living Tricks",
-        "Thu": "🍳 Food, Health & Kitchen Science",
+        "Thu": "🧬 Human Body & Dark Psychology",
         "Fri": "🌍 Mysterious History & Culture Secrets",
-        "Sat": "🐾 Nature & Animal Oddities",
-        "Sun": "🧠 Mind-Blowing Science Curiosities"
+        "Sat": "🍳 Food, Health & Kitchen Science",
+        "Sun": "🐾 Nature & Animal Oddities"
     }
     
     afternoon_categories = {
-        "Mon": "🧬 Human Body & Dark Psychology",
+        "Mon": "🧠 Mind-Blowing Science Curiosities",
         "Tue": "💰 Money-Saving & Smart Living Tricks",
-        "Wed": "🍳 Food, Health & Kitchen Science",
+        "Wed": "🧬 Human Body & Dark Psychology",
         "Thu": "🌍 Mysterious History & Culture Secrets",
-        "Fri": "🐾 Nature & Animal Oddities",
-        "Sat": "🧠 Mind-Blowing Science Curiosities",
-        "Sun": "🧬 Human Body & Dark Psychology"
+        "Fri": "🍳 Food, Health & Kitchen Science",
+        "Sat": "🐾 Nature & Animal Oddities",
+        "Sun": "📱 Digital Safety, Phone Secrets & Scam Alerts"
     }
     
     evening_categories = {
         "Mon": "💰 Money-Saving & Smart Living Tricks",
-        "Tue": "🍳 Food, Health & Kitchen Science",
+        "Tue": "📱 Digital Safety, Phone Secrets & Scam Alerts",
         "Wed": "🌍 Mysterious History & Culture Secrets",
-        "Thu": "🐾 Nature & Animal Oddities",
-        "Fri": "🧠 Mind-Blowing Science Curiosities",
-        "Sat": "🧬 Human Body & Dark Psychology",
-        "Sun": "💰 Money-Saving & Smart Living Tricks"
+        "Thu": "🧠 Mind-Blowing Science Curiosities",
+        "Fri": "🧬 Human Body & Dark Psychology",
+        "Sat": "💰 Money-Saving & Smart Living Tricks",
+        "Sun": "📱 Digital Safety, Phone Secrets & Scam Alerts"
     }
     
     if hour < 12:
         slot = "Slot A (Morning)"
-        category = morning_categories.get(day_name, "🧠 Mind-Blowing Science Curiosities")
+        category = morning_categories.get(day_name, "📱 Digital Safety, Phone Secrets & Scam Alerts")
     elif hour < 16:
         slot = "Slot B (Afternoon)"
-        category = afternoon_categories.get(day_name, "🧬 Human Body & Dark Psychology")
+        category = afternoon_categories.get(day_name, "🧠 Mind-Blowing Science Curiosities")
     else:
         slot = "Slot C (Evening)"
         category = evening_categories.get(day_name, "💰 Money-Saving & Smart Living Tricks")
@@ -57,9 +57,9 @@ def get_slot_info():
     return day_name, slot, category
 
 SERIES_MAP = {
-    "Slot A": {"name": "Simple Tips by VJ", "tagline": "அறிவியல் & இயற்கை ஆச்சரியங்கள்! Science & Nature Wonders!"},
-    "Slot B": {"name": "Simple Tips by VJ", "tagline": "மனித உடல் & மன மர்மங்கள்! Human Body & Mind Mysteries!"},
-    "Slot C": {"name": "Simple Tips by VJ", "tagline": "பணம் சேமிப்பு & வீட்டு குறிப்புகள்! Money & Smart Life Hacks!"},
+    "Slot A": {"name": "Simple Tips by VJ", "tagline": "போன் & டிஜிட்டல் ரகசியங்கள்! Digital Safety & Phone Tricks!"},
+    "Slot B": {"name": "Simple Tips by VJ", "tagline": "அறிவியல் & மனித உடல் மர்மங்கள்! Science & Mind Mysteries!"},
+    "Slot C": {"name": "Simple Tips by VJ", "tagline": "பணம் சேமிப்பு & அன்றாட குறிப்புகள்! Money & Smart Life Hacks!"},
 }
 
 def get_series_identity(slot):
@@ -73,8 +73,8 @@ def get_category_prompt_enhancement(category, slot):
     Returns specific instructions and viral formatting for the given high-yield Tamil infotainment category.
     """
     base_instructions = (
-        "FOCUS: High curiosity gap, mind-blowing and verified facts, or extremely high-utility daily hacks.\n"
-        "HOOK RULE: Start with the shocking result, pain point, or mind-bending question in the first 2 seconds. "
+        "FOCUS: High curiosity gap, immediate digital danger, mind-blowing verified facts, or high-utility daily hacks.\n"
+        "HOOK RULE: Start with the shocking result, warning alert, pain point, or mind-bending question in the first 2 seconds. "
         "NO robotic clichés (BAN: 'Oru vishayam theriyuma?', 'Intha video-la...', 'Nee yaarukkum theriyadhu...').\n"
         "TONE: Energetic, friendly, conversational elder-brother/friend (VJ style). Spoken Tamil with natural English terms.\n"
         "PACING: Rapid, punchy sentences (under 10 words). Use commas and ellipses for breathing pauses.\n"
@@ -83,11 +83,18 @@ def get_category_prompt_enhancement(category, slot):
     )
     
     enhancements = {
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": f"""
+            {base_instructions}
+            CATEGORY: 📱 Digital Safety, Phone Secrets & Scam Alerts
+            GOAL: Deliver an urgent, high-value digital safety warning, smartphone hidden setting, UPI fraud prevention trick, or privacy hack.
+            TOPICS: Stop this 1 phone camera/mic background permission immediately, how UPI QR code payment scams work, hidden battery-draining settings, detect fake call/SMS, secret Google Maps offline feature.
+            VIRAL HOOK STYLE: Immediate danger/fear-of-loss alert or counterintuitive setting warning (e.g. '❌ உங்க போன்ல இந்த 1 செட்டிங் ஆன்ல இருந்தா... உடனே ஆஃப் பண்ணுங்க!').
+        """,
         "🧠 Mind-Blowing Science Curiosities": f"""
             {base_instructions}
             CATEGORY: 🧠 Mind-Blowing Science Curiosities
             GOAL: Explain a mind-bending science fact that sounds completely fake or impossible, but is 100% verified.
-            TOPICS: Sharks predate Saturn's rings, water triple point boiling and freezing at once, fulgurite lightning glass tubes, cosmic radiation television static, glass amorphous solid physics.
+            TOPICS: Sharks predate Saturn's rings, water triple point boiling and freezing at once, fulgurite lightning glass tubes, cosmic radiation television static, black hole acoustic frequencies.
             VIRAL HOOK STYLE: State the impossible-sounding fact directly with shock.
         """,
         "🧬 Human Body & Dark Psychology": f"""
@@ -131,6 +138,15 @@ def get_category_prompt_enhancement(category, slot):
 
 # Curated Category Color Palette System
 _CATEGORY_PALETTES = {
+    "📱 Digital Safety, Phone Secrets & Scam Alerts": {
+        "name": "Electric Amber & Cyan",
+        "primary": (255, 107, 53),
+        "secondary": (15, 15, 10),
+        "caption_highlight": (0, 212, 255),
+        "progress_bar": (255, 107, 53),
+        "thumbnail_accent": (0, 212, 255),
+        "emoji": "📱",
+    },
     "🤖 AI Demystified & Future Tech": {
         "name": "Electric Purple",
         "primary": (180, 80, 255),
@@ -161,7 +177,7 @@ _CATEGORY_PALETTES = {
 }
 
 # Default palette
-_DEFAULT_PALETTE = _CATEGORY_PALETTES["🤖 AI Demystified & Future Tech"]
+_DEFAULT_PALETTE = _CATEGORY_PALETTES["📱 Digital Safety, Phone Secrets & Scam Alerts"]
 
 def get_category_color_palette(category):
     """
@@ -171,7 +187,7 @@ def get_category_color_palette(category):
     return _CATEGORY_PALETTES.get(category, _DEFAULT_PALETTE)
 
 def get_session_length_cap():
-    return None
+    return 115
 
 
 # ==============================================================================
@@ -179,6 +195,11 @@ def get_session_length_cap():
 # ==============================================================================
 
 CATEGORY_TAG_POOLS = {
+    "📱 Digital Safety, Phone Secrets & Scam Alerts": [
+        "Tech In Tamil", "Tamil Tech", "Phone Settings", "Smartphone Tricks Tamil",
+        "Digital Safety Tamil", "Scam Alert Tamil", "போன் ரகசியங்கள்", "Tech Hacks Tamil",
+        "Mobile Security", "UPI Fraud Alert", "Useful Tech Tips", "Simple Tips Tech"
+    ],
     "🧠 Mind-Blowing Science Curiosities": [
         "Science Facts Tamil", "Science Curiosities", "Amazing Science", "Ariviyal Thagaval",
         "Physics Facts", "Science In Tamil", "அறிவியல் உண்மைகள்", "அறிவியல் தகவல்கள்",
