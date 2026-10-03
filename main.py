@@ -24,6 +24,11 @@ from youtube_upload import upload_video
 from telegram_selector import notify_telegram, send_upload_consent
 from entity_fetcher import fetch_all_entities, get_retention_layers_config
 from x_upload import upload_video_to_x
+from did_you_know import (
+    FORMAT_ID as DYK_FORMAT_ID, DYK_DURATION_BOUNDS, generate_dyk_script, fetch_dyk_facts, get_dyk_category
+)
+
+SHORTS_FORMATS = ("standard", "didyouknow")
 
 def log_message(msg):
     today = datetime.now().strftime("%Y-%m-%d")
@@ -131,8 +136,10 @@ Daily Useful Tips & Hacks in Tamil:
 
     return templates[template_idx]
 
-def run_pipeline(forced_category=None, dry_run=False):
+def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
+    is_dyk = shorts_format == "didyouknow"
     log_message("=== STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===")
+    log_message(f"🎞️ Shorts format: {'தெரியுமா? / Did You Know (stock footage)' if is_dyk else 'Standard'}")
 
     # ── Clean output folder before starting ──
     if os.path.exists(OUTPUT_DIR):
@@ -148,11 +155,15 @@ def run_pipeline(forced_category=None, dry_run=False):
     day_name, slot, category = get_slot_info()
     if forced_category:
         category = forced_category
+    if is_dyk:
+        category = get_dyk_category(category)
     log_message(f"STEP 1: Strategy Check -> Day: {day_name}, Slot: {slot}, Category: {category}")
     
     # ── STEP 2: Fetch Trending facts via search grounding ──
     log_message(f"STEP 2: Fetching facts using Search Grounding for '{category}'...")
-    facts = fetch_facts_for_category(category)
+    facts = fetch_dyk_facts(category) if is_dyk else []
+    if not facts:
+        facts = fetch_facts_for_category(category)
     if not facts:
         log_message("🚨 Failed to fetch facts! Aborting.")
         return False
@@ -167,6 +178,8 @@ def run_pipeline(forced_category=None, dry_run=False):
     min_dur, max_dur = TARGET_AUDIO_DURATION
     MIN_DURATION_SEC = 25  # absolute minimum allowed (reduced to accommodate fallback scripts ~70-100 words)
     MAX_DURATION_SEC = max_dur  # absolute maximum allowed (do not allow any shorts more than max_dur)
+    if is_dyk:
+        MIN_DURATION_SEC, MAX_DURATION_SEC = DYK_DURATION_BOUNDS
     
     while attempts < MAX_RETRY_ATTEMPTS:
         # Recalculate max_attempts each iteration to respect offline mode changes
@@ -177,9 +190,18 @@ def run_pipeline(forced_category=None, dry_run=False):
             
         log_message(f"STEP 3 (Attempt {attempts+1}/{current_max_attempts}): Multi-Agent Tanglish Script Generation...")
         
-        script_data = pick_and_generate_script(
-            articles=facts, extra_instruction="", forced_article=None, topic_type="research", failed_topics=failed_topics
-        )
+        script_data = None
+        if is_dyk:
+            script_data = generate_dyk_script(category, facts=facts, failed_topics=failed_topics)
+            if not script_data:
+                log_message("⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...")
+        if not script_data:
+            script_data = pick_and_generate_script(
+                articles=facts, extra_instruction="", forced_article=None, topic_type="research", failed_topics=failed_topics
+            )
+            if script_data and is_dyk:
+                # Keep the DYK look (stock-only visuals) even when the standard writer produced the script
+                script_data["visual_mode"] = "stock_only"
 
         if not script_data:
             if is_offline_mode_active():
@@ -553,8 +575,8 @@ def run_pipeline(forced_category=None, dry_run=False):
     log_message("=== PIPELINE COMPLETED SUCCESSFULLY ===")
     return True
 
-def run_local(category=None, dry_run=False):
-    success = run_pipeline(forced_category=category, dry_run=dry_run)
+def run_local(category=None, dry_run=False, shorts_format="standard"):
+    success = run_pipeline(forced_category=category, dry_run=dry_run, shorts_format=shorts_format)
     if not success:
         print("❌ Pipeline failed.")
         sys.exit(1)
@@ -564,10 +586,15 @@ if __name__ == "__main__":
     parser.add_argument("--now", action="store_true", help="Run pipeline immediately.")
     parser.add_argument("--category", type=str, default=None, help="Force a specific daily category")
     parser.add_argument("--dry-run", action="store_true", help="Run dry run verification.")
+    parser.add_argument(
+        "--format", type=str, choices=SHORTS_FORMATS,
+        default=os.environ.get("SHORTS_FORMAT", "standard").strip().lower() or "standard",
+        help="Shorts format: 'standard' or 'didyouknow' (தெரியுமா? fact-checked facts + stock footage). Env: SHORTS_FORMAT"
+    )
     args = parser.parse_args()
 
     if args.now:
-        run_local(category=args.category, dry_run=args.dry_run)
+        run_local(category=args.category, dry_run=args.dry_run, shorts_format=args.format)
     else:
-        print("Usage: python main.py --now")
+        print("Usage: python main.py --now [--format didyouknow]")
         print("For scheduled runs: python scheduler.py")

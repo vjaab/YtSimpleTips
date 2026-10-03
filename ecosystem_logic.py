@@ -209,6 +209,11 @@ CATEGORY_TAG_POOLS = {
         "Nature Wonders", "விலங்கு உண்மைகள்", "Wildlife Tamil", "Animal Secrets",
         "Strange Animals", "Nature Facts Tamil", "வனவிலங்கு ரகசியங்கள்", "Animal Superpowers"
     ],
+    "🇮🇳 Tamil Nadu & India Did You Know": [
+        "Tamil Nadu Facts", "India Facts Tamil", "Did You Know Tamil", "Tamil Nadu Records",
+        "தமிழ்நாடு உண்மைகள்", "இந்தியா தகவல்கள்", "Tamil History Facts", "Amazing India Facts",
+        "Tamil Pride", "Unknown Facts About India", "தெரியுமா தகவல்கள்", "Tamil GK"
+    ],
     "🤖 AI Demystified & Future Tech": [
         "AI Tools Tamil", "Artificial Intelligence", "Tech Tips Tamil", "Future Tech",
         "AI Hacks Tamil", "Tech Shorts Tamil", "செயற்கை நுண்ணறிவு", "AI In Tamil",

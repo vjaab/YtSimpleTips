@@ -11,6 +11,18 @@ from config import (
 
 TODAY = time.strftime("%Y%m%d_%H%M%S")
 
+# Pexels asset IDs already used in the current video (reset per fetch_all_chunk_visuals run)
+_USED_PEXELS_IDS = set()
+
+def _pick_unused(items, top_n=8):
+    """Prefer a random unused result from the top-N most relevant; fall back to any if all used."""
+    top = items[:top_n]
+    fresh = [it for it in top if it.get("id") not in _USED_PEXELS_IDS]
+    choice = random.choice(fresh or top)
+    if choice.get("id") is not None:
+        _USED_PEXELS_IDS.add(choice.get("id"))
+    return choice
+
 def enhance_prompt_for_documentary(prompt, category=""):
     """
     Enhance visual prompt for Photorealistic 8K Documentary aesthetic (National Geographic / IMAX style).
@@ -58,8 +70,8 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
                 data = r.json()
                 videos = data.get("videos", [])
                 if videos:
-                    # Pick from top 5 most relevant results for quality and variety
-                    video = random.choice(videos[:5])
+                    # Pick an unused clip from the most relevant results for quality and variety
+                    video = _pick_unused(videos)
                     video_files = video.get("video_files", [])
                     
                     # Filter for vertical SD/HD mp4 files
@@ -100,7 +112,7 @@ def fetch_pexels_media(query, media_type="video", aspect_ratio="9:16"):
                 data = r.json()
                 photos = data.get("photos", [])
                 if photos:
-                    photo = random.choice(photos[:5])
+                    photo = _pick_unused(photos)
                     download_url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
                     
                     if download_url:
@@ -233,6 +245,13 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
     print(f"\n🎬 VISUAL RESOLVER ENGINE: Processing {len(chunks)} chunks...")
     
     aspect_ratio = "16:9" if is_longform else "9:16"
+    _USED_PEXELS_IDS.clear()
+    
+    # Stock-only mode (e.g. "Did You Know" format): real Pexels footage only, no AI generation
+    stock_only = bool(script_data and script_data.get("visual_mode") == "stock_only")
+    visual_subjects = [s for s in ((script_data or {}).get("visual_subjects") or []) if isinstance(s, str) and s.strip()]
+    if stock_only:
+        print("  📼 Stock-only visual mode: Pexels footage only (AI image/video providers disabled).")
     
     last_successful_path = None
     last_successful_type = "photo"
@@ -243,7 +262,7 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
 
     # Lazy import Veo only if enabled
     veo_generate = None
-    if ENABLE_VEO_VIDEO:
+    if ENABLE_VEO_VIDEO and not stock_only:
         try:
             from veo_scene_gen import generate_veo_clip
             veo_generate = generate_veo_clip
@@ -295,6 +314,50 @@ def fetch_all_chunk_visuals(chunks, topic_context="", script_data=None, is_longf
             visual_path = script_data["screenshot_path"]
             visual_type = "photo"
             source = "Evidence Screenshot"
+
+        # ── STOCK-ONLY MODE: Pexels video (scene query → subject → topic subjects) → Pexels photo → reuse ──
+        if stock_only and not visual_path:
+            queries = [pexels_query]
+            first_word = pexels_query.split()[0] if pexels_query.split() else ""
+            if len(first_word) > 3:
+                queries.append(first_word)
+            if visual_subjects:
+                queries.append(visual_subjects[i % len(visual_subjects)])
+            queries.append(generic_query)
+            queries = [q for q in dict.fromkeys(q.strip() for q in queries if q and q.strip())]
+            
+            stock_providers = [(f"Pexels Video '{q}'", (lambda q=q: fetch_pexels_media(q, media_type="video", aspect_ratio=aspect_ratio))) for q in queries]
+            stock_providers.append((f"Pexels Photo '{pexels_query}'", lambda: fetch_pexels_media(pexels_query, media_type="photo", aspect_ratio=aspect_ratio)))
+            stock_providers.append(("Reused Visual", lambda: last_successful_path if last_successful_path else None))
+            
+            for provider_name, provider_fn in stock_providers:
+                print(f"     → Attempting {provider_name}...")
+                try:
+                    result = provider_fn()
+                except Exception as e:
+                    print(f"     ❌ {provider_name} failed: {e}")
+                    result = None
+                if result:
+                    visual_path = result
+                    if provider_name.startswith("Pexels Video"):
+                        visual_type = "video"
+                    elif provider_name == "Reused Visual":
+                        visual_type = last_successful_type
+                    else:
+                        visual_type = "photo"
+                    source = provider_name.split(" '")[0]
+                    print(f"     ✅ Visual resolved: {provider_name}")
+                    break
+            
+            if visual_path:
+                chunk["visual_path"] = visual_path
+                chunk["visual_type"] = visual_type
+                chunk["source"] = source
+                last_successful_path = visual_path
+                last_successful_type = visual_type
+            else:
+                print(f"     🚨 Stock-only visual fetch failure. Will gap-fill.")
+            continue
 
         # ── PRIORITY 0.5: Programmatic settings UI simulation ──
         if not visual_path:

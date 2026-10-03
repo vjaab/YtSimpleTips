@@ -12,6 +12,15 @@ on:
     # Weekly Sunday Cron at 6:00 AM IST (00:30 UTC) for analytics feedback loop
     - cron: '30 0 * * 0'
   workflow_dispatch: # Allow manual triggers from GitHub Actions UI
+    inputs:
+      shorts_format:
+        description: "Shorts format"
+        required: false
+        default: "didyouknow"
+        type: choice
+        options:
+          - didyouknow
+          - standard
 
 jobs:
   run-pipeline:
@@ -169,6 +178,8 @@ jobs:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_KEY }}
+          # தெரியுமா? / Did You Know format (fact-checked facts + Pexels stock footage). Set to 'standard' to revert.
+          SHORTS_FORMAT: ${{ github.event.inputs.shorts_format || 'didyouknow' }}
         run: |
           python main.py --now
           
