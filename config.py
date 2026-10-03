@@ -444,3 +444,4 @@ TRENDING_NICHE_BIAS = 0.15
 # YouTube Partner Program (YPP) compliance settings
 DEFAULT_PRIVACY_STATUS = "private"
 ENABLE_TTS_FALLBACK = False
+ENABLE_OFFLINE_TOPIC_FALLBACK = False  # Completely disable fallback to offline topics/scripts

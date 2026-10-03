@@ -23,6 +23,10 @@ from kaggle_handover import trigger_kaggle_gpu_job
 # Global status tracking for voice fallback
 VOICE_FALLBACK_USED = False
 
+class ElevenLabsVoiceError(RuntimeError):
+    """Raised when ElevenLabs voice generation fails (API key missing, quota exceeded, network error, or synthesis failure)."""
+    pass
+
 def _apply_stable_ts(audio_path, text):
     """
     Applies stable-ts locally on CPU/GPU to get word-level timestamps if available.
@@ -370,11 +374,15 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params, voice_s
                     audio_data += chunk
             return audio_data
         else:
-            print(f"   ✗ ElevenLabs API error: {response.status_code} - {response.text}")
-            return None
+            err_msg = f"ElevenLabs API error: {response.status_code} - {response.text}"
+            print(f"   ✗ {err_msg}")
+            raise ElevenLabsVoiceError(err_msg)
+    except ElevenLabsVoiceError:
+        raise
     except Exception as e:
-        print(f"   ✗ ElevenLabs chunk synthesis failed: {e}")
-        return None
+        err_msg = f"ElevenLabs chunk synthesis failed: {e}"
+        print(f"   ✗ {err_msg}")
+        raise ElevenLabsVoiceError(err_msg) from e
 def _concat_mp3_chunks(mp3_chunks, crossfade_ms=150):
     """Concatenates MP3 chunks with crossfades (not silence) for seamless flow."""
     from pydub import AudioSegment
@@ -394,8 +402,9 @@ def _concat_mp3_chunks(mp3_chunks, crossfade_ms=150):
 def _generate_elevenlabs(text, output_path, voice_id=None, voice_settings=None):
     print("[audio_gen] Synthesizing with ElevenLabs (Cloned Voice)...")
     if not ELEVENLABS_API_KEY:
-        print("   ✗ ElevenLabs API Key missing.")
-        return None
+        err_msg = "ElevenLabs API Key missing or not configured."
+        print(f"   ✗ {err_msg}")
+        raise ElevenLabsVoiceError(err_msg)
         
     target_voice_id = voice_id or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID or "8Oo4d9mNNwVwK369qOwl"
     headers = {
@@ -423,14 +432,13 @@ def _generate_elevenlabs(text, output_path, voice_id=None, voice_settings=None):
             print(f"[audio_gen] Synthesizing chunk {idx+1}/{len(chunks)}...")
             chunk_mp3 = _synthesize_single_chunk_elevenlabs(chunk, target_voice_id, headers, params, voice_settings=voice_settings)
             if not chunk_mp3:
-                print(f"   ✗ Failed to synthesize chunk {idx+1}")
-                return None
+                raise ElevenLabsVoiceError(f"Failed to synthesize ElevenLabs chunk {idx+1}")
             mp3_chunks.append(chunk_mp3)
     else:
         print(f"[audio_gen] Generating Short audio in a single continuous stream ({len(words)} words) with Voice ID: {target_voice_id} (100% Clone Match)...")
         single_mp3 = _synthesize_single_chunk_elevenlabs(text, target_voice_id, headers, params, voice_settings=voice_settings)
         if not single_mp3:
-            return None
+            raise ElevenLabsVoiceError("Failed to synthesize ElevenLabs audio stream.")
         mp3_chunks.append(single_mp3)
             
     try:
@@ -448,9 +456,13 @@ def _generate_elevenlabs(text, output_path, voice_id=None, voice_settings=None):
         audio_seg.export(output_path, format="wav")
         print(f"[audio_gen] ElevenLabs synthesis complete: {output_path}")
         return output_path
+    except ElevenLabsVoiceError:
+        raise
     except Exception as e:
-        print(f"   ✗ ElevenLabs output conversion failed: {e}")
-        return None
+        err_msg = f"ElevenLabs output conversion failed: {e}"
+        print(f"   ✗ {err_msg}")
+        raise ElevenLabsVoiceError(err_msg) from e
+
 
 def _generate_elevenlabs_standard(text, output_path):
     """Generate audio using ElevenLabs with a standard (non-cloned) multilingual voice."""
@@ -926,12 +938,12 @@ def generate_voiceover(text, voice_id=None, custom_phonetic_map=None, api_key=No
     
     # Primary: ElevenLabs with cloned voice - REQUIRED, no fallback
     if not ELEVENLABS_API_KEY or not target_voice_id:
-        raise RuntimeError(f"[audio_gen] ElevenLabs credentials not configured. Key present: {bool(ELEVENLABS_API_KEY)}, Voice ID: {target_voice_id}")
+        raise ElevenLabsVoiceError(f"[audio_gen] ElevenLabs credentials not configured. Key present: {bool(ELEVENLABS_API_KEY)}, Voice ID: {target_voice_id}")
     
     print(f"[audio_gen] Synthesizing humanized voiceover matching Voice ID '{target_voice_id}' 100%...")
     path = _generate_elevenlabs(clean_text, wav_path, voice_id=target_voice_id, voice_settings=voice_settings)
-    if not path:
-        raise RuntimeError(f"[audio_gen] ElevenLabs (cloned voice) synthesis failed for voice ID '{target_voice_id}'. Pipeline requires working ElevenLabs voice cloning - no fallback allowed.")
+    if not path or not os.path.exists(path):
+        raise ElevenLabsVoiceError(f"[audio_gen] ElevenLabs (cloned voice) synthesis failed for voice ID '{target_voice_id}'. Pipeline requires working ElevenLabs voice cloning - no fallback allowed.")
     
     VOICE_FALLBACK_USED = False
         

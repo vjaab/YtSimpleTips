@@ -250,6 +250,10 @@ def fetch_facts_for_category(category):
 
     # Check offline mode first
     if is_offline_mode_active():
+        from config import ENABLE_OFFLINE_TOPIC_FALLBACK
+        if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+            print("🔴 [OFFLINE MODE] Skipping search grounding. Offline topic fallback is disabled. Returning empty.")
+            return []
         print("🔴 [OFFLINE MODE] Skipping search grounding. Returning curated fallback facts.")
         return get_curated_fallback_facts(category)
 
@@ -431,6 +435,10 @@ def fetch_facts_for_category(category):
     if unique_fallback_facts:
         return unique_fallback_facts
         
+    from config import ENABLE_OFFLINE_TOPIC_FALLBACK
+    if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+        print("🚨 [fetch_topics] LLM fallback failed and offline topic fallback is disabled. Returning empty.")
+        return []
     print("🚨 [fetch_topics] LLM fallback failed. Loading curated backup as absolute last resort...")
     curated_fallback = get_curated_fallback_facts(category)
     return curated_fallback
@@ -440,7 +448,12 @@ def get_curated_fallback_facts(category):
     """
     Returns curated, verified facts for each category that are guaranteed
     never to have been uploaded before, checked strictly against topic_tracker.
+    Disabled when ENABLE_OFFLINE_TOPIC_FALLBACK is False.
     """
+    from config import ENABLE_OFFLINE_TOPIC_FALLBACK
+    if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+        print("⚠️ [fetch_topics] Curated offline fallback facts are DISABLED. Returning empty list.")
+        return []
     curated_facts_pool = {
         "🧠 Mind-Blowing Science Curiosities": [
             {

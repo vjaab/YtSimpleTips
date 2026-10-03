@@ -7,7 +7,8 @@ import time
 import random
 from config import (
     GEMINI_API_KEY, LOGS_DIR, get_gemini_client, rotate_gemini_api_key, GEMINI_API_KEYS,
-    GEMINI_PRO_MODEL, GEMINI_FLASH_MODEL, GEMINI_FLASH_LITE_MODEL, GEMINI_RPM_SLEEP
+    GEMINI_PRO_MODEL, GEMINI_FLASH_MODEL, GEMINI_FLASH_LITE_MODEL, GEMINI_RPM_SLEEP,
+    ENABLE_OFFLINE_TOPIC_FALLBACK
 )
 from topic_tracker import load_tracker, check_story_uniqueness, check_cooldowns
 from ecosystem_logic import get_slot_info, get_category_prompt_enhancement
@@ -816,14 +817,20 @@ def pick_and_generate_script(articles=None, extra_instruction="", forced_article
     day_name, slot, category = get_slot_info()
     
     # ── OFFLINE MODE CHECK ──
-    # If all LLM providers are exhausted, immediately use offline fallback
+    # If all LLM providers are exhausted, check offline fallback
     if _OFFLINE_MODE_ACTIVE:
+        if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+            print("🔴 [OFFLINE MODE] All LLM providers exhausted. Offline topic fallback is disabled. Aborting script generation.")
+            return None
         print("🔴 [OFFLINE MODE] All LLM providers exhausted. Using offline fallback script immediately.")
         return get_offline_fallback_script(category, failed_topics)
     
     # Check if all providers are exhausted at config level (no API keys)
     check_all_providers_exhausted()
     if _OFFLINE_MODE_ACTIVE:
+        if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+            print("🔴 [OFFLINE MODE] No LLM API keys configured. Offline topic fallback is disabled. Aborting script generation.")
+            return None
         print("🔴 [OFFLINE MODE] No LLM API keys configured. Using offline fallback script immediately.")
         return get_offline_fallback_script(category, failed_topics)
     
@@ -1638,7 +1645,12 @@ def get_offline_fallback_script(category, failed_topics=None):
     Loads a pre-packaged script from fallback_scripts.json matching the category.
     Avoids already used titles and previously failed topics if possible.
     Ensures script meets minimum word count (103+ words for 35s at 2.67 wps).
+    Disabled when ENABLE_OFFLINE_TOPIC_FALLBACK is False.
     """
+    if not ENABLE_OFFLINE_TOPIC_FALLBACK:
+        print("⚠️ [gemini_script] Offline topic fallback is DISABLED. Will not load from fallback_scripts.json.")
+        return None
+
     if failed_topics is None:
         failed_topics = []
         

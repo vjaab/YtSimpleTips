@@ -8,13 +8,17 @@ import traceback
 from datetime import datetime
 import re
 
-from config import TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY, ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ELEVENLABS_VOICE_ID
+from config import (
+    TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY,
+    ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ELEVENLABS_VOICE_ID,
+    ELEVENLABS_API_KEY, ENABLE_OFFLINE_TOPIC_FALLBACK
+)
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url
 from gemini_script import pick_and_generate_script, is_offline_mode_active, reset_offline_mode
 from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
-from audio_gen import generate_voiceover, clean_tts_text
+from audio_gen import generate_voiceover, clean_tts_text, ElevenLabsVoiceError
 from chunk_builder import build_chunks, redistribute_to_audio_duration
 from pexels_fetcher import fetch_all_chunk_visuals
 from video_gen import create_video
@@ -151,6 +155,12 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
                 pass
         log_message(f"Output folder cleaned: {OUTPUT_DIR}")
 
+    # ── ElevenLabs Mandatory Voice Check ──
+    if not ELEVENLABS_API_KEY:
+        log_message("🚨 [FATAL] ELEVENLABS_API_KEY is not configured in environment or config.")
+        log_message("🛑 Aborting shorts generation pipeline immediately. Working ElevenLabs voice cloning is required.")
+        return False
+
     # ── STEP 1: Content Ecosystem Check ──
     day_name, slot, category = get_slot_info()
     if forced_category:
@@ -204,7 +214,7 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
                 script_data["visual_mode"] = "stock_only"
 
         if not script_data:
-            if is_offline_mode_active():
+            if is_offline_mode_active() and ENABLE_OFFLINE_TOPIC_FALLBACK:
                 log_message("🔄 Script generation returned None in offline mode. Loading direct offline fallback...")
                 from gemini_script import get_offline_fallback_script
                 script_data = get_offline_fallback_script(category, failed_topics)
@@ -383,19 +393,23 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
                     custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}),
                     api_key=GEMINI_API_KEY
                 )
+            except ElevenLabsVoiceError as e:
+                log_message(f"🚨 [FATAL] ElevenLabs voice generation failed: {e}")
+                log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
+                return False
             except Exception as e:
-                log_message(f"❌ Local voiceover failed: {e}")
-                audio_path = None
+                log_message(f"🚨 [FATAL] Local voiceover generation failed: {e}")
+                log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
+                return False
             
         # Propagate Voice Fallback Status
         import audio_gen
         script_data["voice_fallback_used"] = getattr(audio_gen, "VOICE_FALLBACK_USED", False)
         
-        if not audio_path:
-            log_message("❌ Audio generation failed. Retrying...")
-            failed_topics.append(fact_headline)
-            attempts += 1
-            continue
+        if not audio_path or not os.path.exists(audio_path):
+            log_message("🚨 [FATAL] ElevenLabs voice output missing or failed to generate.")
+            log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
+            return False
 
         if duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC:
             actual_wps = word_count / duration
