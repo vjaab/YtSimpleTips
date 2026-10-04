@@ -147,7 +147,9 @@
         "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
         "SIM‑Swap Fraud Bypasses 2FA",
         "❌ 0% Pairing இல்லாமும் போன் ஹாக்! 😱 தெரியுமா?",
-        "BlueBorne: Bluetooth Can Be Hacked Without Pairing"
+        "BlueBorne: Bluetooth Can Be Hacked Without Pairing",
+        "❌ QR code-ல் app auto‑install? 😱 #shorts",
+        "QR Codes Can Hide Malicious Links That Auto‑Install Apps"
     ],
     "used_keywords": [
         "Artificial Intelligence",
@@ -367,10 +369,9 @@
         "💰 Money-Saving & Smart Living Tricks": 3,
         "🌍 Mysterious History & Culture Secrets": 1,
         "🍳 Food, Health & Kitchen Science": 2,
-        "📱 Digital Safety, Phone Secrets & Scam Alerts": 2
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 3
     },
     "last_7_days_stories": [
-        "ஃபோன் பேட்டரி சீக்கிரம் குறையுதா? 🔋 நெல்லை ஸ்பெஷல் ட்ரிக்ஸ்!",
         "தஞ்சை பெரிய கோவில் நிழல் தரையில் விழாதா? Thanjavur Mystery! 🏛️",
         "காலை தண்ணிக்கு மிஞ்சு! லிவரில் Shocking மாற்றம் 🤯🔥",
         "7 டிகிரி குறைஞ்சா பில் குறையுமா? 💡⚡",
@@ -383,9 +384,10 @@
         "Fast Beats அதிகரிக்கும் 5-10 BPM? 🎧💥 தெரியுமா?",
         "⚡ டிவி ஆஃப்ல இருந்தாலும் கரண்ட் பில் ஏறுது!",
         "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
-        "❌ 0% Pairing இல்லாமும் போன் ஹாக்! 😱 தெரியுமா?"
+        "❌ 0% Pairing இல்லாமும் போன் ஹாக்! 😱 தெரியுமா?",
+        "❌ QR code-ல் app auto‑install? 😱 #shorts"
     ],
-    "total_uploaded": 77,
+    "total_uploaded": 78,
     "last_upload": "2026-10-04",
     "history": [
         {
@@ -1641,6 +1643,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/nk_fx34JbYQ",
             "source_url": "https://www.armis.com/blog/blueborne/"
+        },
+        {
+            "date": "2026-10-04",
+            "title": "❌ QR code-ல் app auto‑install? 😱 #shorts",
+            "news_headline": "QR Codes Can Hide Malicious Links That Auto‑Install Apps",
+            "category": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/y6B06nvJXOc",
+            "source_url": "https://www.kaspersky.com/resource-center/threats/qr-code-scams"
         }
     ]
 }
