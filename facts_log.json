@@ -143,7 +143,9 @@
         "Fast Beats அதிகரிக்கும் 5-10 BPM? 🎧💥 தெரியுமா?",
         "Music Beats Sync Your Heart, Bias Your Choices",
         "⚡ டிவி ஆஃப்ல இருந்தாலும் கரண்ட் பில் ஏறுது!",
-        "Power Strips with Switches Save Energy"
+        "Power Strips with Switches Save Energy",
+        "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
+        "SIM‑Swap Fraud Bypasses 2FA"
     ],
     "used_keywords": [
         "Future Skills",
@@ -357,10 +359,10 @@
         "🧬 Human Body & Dark Psychology": 2,
         "💰 Money-Saving & Smart Living Tricks": 3,
         "🌍 Mysterious History & Culture Secrets": 1,
-        "🍳 Food, Health & Kitchen Science": 2
+        "🍳 Food, Health & Kitchen Science": 2,
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 1
     },
     "last_7_days_stories": [
-        "தண்ணீரில் உப்பு போட்டா சீக்கிரம் கொதிக்குமா? Boiling Secret! 🧂",
         "ரூம்குள்ள போனதும் ஏன் விஷயம் மறந்து போகுது? Doorway Effect! 🚪",
         "ஃபோன் பேட்டரி சீக்கிரம் குறையுதா? 🔋 நெல்லை ஸ்பெஷல் ட்ரிக்ஸ்!",
         "தஞ்சை பெரிய கோவில் நிழல் தரையில் விழாதா? Thanjavur Mystery! 🏛️",
@@ -373,10 +375,11 @@
         "AI என்றால் என்ன? Robot-ஆ? உண்மை விளக்கம்! 🤔",
         "AI எல்லாமே செய்யுமா? AI-க்கு தெரியாத உண்மைகள்! 🤯",
         "Fast Beats அதிகரிக்கும் 5-10 BPM? 🎧💥 தெரியுமா?",
-        "⚡ டிவி ஆஃப்ல இருந்தாலும் கரண்ட் பில் ஏறுது!"
+        "⚡ டிவி ஆஃப்ல இருந்தாலும் கரண்ட் பில் ஏறுது!",
+        "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!"
     ],
-    "total_uploaded": 75,
-    "last_upload": "2026-10-03",
+    "total_uploaded": 76,
+    "last_upload": "2026-10-04",
     "history": [
         {
             "date": "2026-06-28",
@@ -1601,6 +1604,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/RDQUje6zcR8",
             "source_url": "https://www.energystar.gov/products/standby_power"
+        },
+        {
+            "date": "2026-10-04",
+            "title": "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
+            "news_headline": "SIM‑Swap Fraud Bypasses 2FA",
+            "category": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/amo4iEBwW8s",
+            "source_url": "https://www.consumer.ftc.gov/articles/what-sim-swap-fraud"
         }
     ]
 }
