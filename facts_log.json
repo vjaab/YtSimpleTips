@@ -153,7 +153,9 @@
         "❌ 400 பில்லியன் நட்சத்திரங்கள் vs மரங்கள்... 😱 தெரியுமா?",
         "There Are More Trees on Earth Than Stars in the Milky Way",
         "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts",
-        "Cold-Water Laundry Cuts Energy Use by Up to 90%"
+        "Cold-Water Laundry Cuts Energy Use by Up to 90%",
+        "❌ மூளை 2.5Peta! நூலகங்கள் எல்லாம் போய்விட்டா 😱",
+        "Human Brain Can Store More Data Than All Libraries Combined"
     ],
     "used_keywords": [
         "Astronomy Tamil",
@@ -372,7 +374,7 @@
         "🧪 Science & Education": 1,
         "🧪 Science & Technology": 1,
         "🌍 Science & Nature Facts": 1,
-        "🧠 Mind-Blowing Science Curiosities": 2,
+        "🧠 Mind-Blowing Science Curiosities": 3,
         "🧬 Human Body & Dark Psychology": 2,
         "💰 Money-Saving & Smart Living Tricks": 3,
         "🌍 Mysterious History & Culture Secrets": 1,
@@ -381,7 +383,6 @@
         "🇮🇳 Tamil Nadu & India Did You Know": 1
     },
     "last_7_days_stories": [
-        "7 டிகிரி குறைஞ்சா பில் குறையுமா? 💡⚡",
         "☕ நெஞ்சு எரிச்சலா? இந்த trick-ஐ பண்ணுங்கோ!",
         "Neural Network - மனித மூளை போல் இயங்குமா? 🧠",
         "AI எப்படி learn பண்ணுது? எளிமையான விளக்கம்! 📚",
@@ -394,9 +395,10 @@
         "❌ 0% Pairing இல்லாமும் போன் ஹாக்! 😱 தெரியுமா?",
         "❌ QR code-ல் app auto‑install? 😱 #shorts",
         "❌ 400 பில்லியன் நட்சத்திரங்கள் vs மரங்கள்... 😱 தெரியுமா?",
-        "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts"
+        "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts",
+        "❌ மூளை 2.5Peta! நூலகங்கள் எல்லாம் போய்விட்டா 😱"
     ],
-    "total_uploaded": 80,
+    "total_uploaded": 81,
     "last_upload": "2026-10-05",
     "history": [
         {
@@ -1691,6 +1693,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/DndK8DzF0kI",
             "source_url": "https://www.energy.gov/articles/energy-saver-tips-washing-clothes"
+        },
+        {
+            "date": "2026-10-05",
+            "title": "❌ மூளை 2.5Peta! நூலகங்கள் எல்லாம் போய்விட்டா 😱",
+            "news_headline": "Human Brain Can Store More Data Than All Libraries Combined",
+            "category": "🧠 Mind-Blowing Science Curiosities",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/rCPq2Zdci7w",
+            "source_url": "https://www.scientificamerican.com/article/how-much-information-can-the-human-brain-store/"
         }
     ]
 }
