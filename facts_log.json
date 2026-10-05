@@ -151,7 +151,9 @@
         "❌ QR code-ல் app auto‑install? 😱 #shorts",
         "QR Codes Can Hide Malicious Links That Auto‑Install Apps",
         "❌ 400 பில்லியன் நட்சத்திரங்கள் vs மரங்கள்... 😱 தெரியுமா?",
-        "There Are More Trees on Earth Than Stars in the Milky Way"
+        "There Are More Trees on Earth Than Stars in the Milky Way",
+        "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts",
+        "Cold-Water Laundry Cuts Energy Use by Up to 90%"
     ],
     "used_keywords": [
         "Astronomy Tamil",
@@ -375,10 +377,10 @@
         "💰 Money-Saving & Smart Living Tricks": 3,
         "🌍 Mysterious History & Culture Secrets": 1,
         "🍳 Food, Health & Kitchen Science": 2,
-        "📱 Digital Safety, Phone Secrets & Scam Alerts": 3
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 3,
+        "🇮🇳 Tamil Nadu & India Did You Know": 1
     },
     "last_7_days_stories": [
-        "காலை தண்ணிக்கு மிஞ்சு! லிவரில் Shocking மாற்றம் 🤯🔥",
         "7 டிகிரி குறைஞ்சா பில் குறையுமா? 💡⚡",
         "☕ நெஞ்சு எரிச்சலா? இந்த trick-ஐ பண்ணுங்கோ!",
         "Neural Network - மனித மூளை போல் இயங்குமா? 🧠",
@@ -391,9 +393,10 @@
         "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
         "❌ 0% Pairing இல்லாமும் போன் ஹாக்! 😱 தெரியுமா?",
         "❌ QR code-ல் app auto‑install? 😱 #shorts",
-        "❌ 400 பில்லியன் நட்சத்திரங்கள் vs மரங்கள்... 😱 தெரியுமா?"
+        "❌ 400 பில்லியன் நட்சத்திரங்கள் vs மரங்கள்... 😱 தெரியுமா?",
+        "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts"
     ],
-    "total_uploaded": 79,
+    "total_uploaded": 80,
     "last_upload": "2026-10-05",
     "history": [
         {
@@ -1678,6 +1681,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/BzkLqHi6srk",
             "source_url": "https://www.nature.com/articles/nature14967"
+        },
+        {
+            "date": "2026-10-05",
+            "title": "❌ சூடுநீர் வாஷ்? 90% பவர் சேமிப்பு! 😱 #shorts",
+            "news_headline": "Cold-Water Laundry Cuts Energy Use by Up to 90%",
+            "category": "🇮🇳 Tamil Nadu & India Did You Know",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/DndK8DzF0kI",
+            "source_url": "https://www.energy.gov/articles/energy-saver-tips-washing-clothes"
         }
     ]
 }
