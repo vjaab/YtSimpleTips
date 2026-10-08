@@ -165,7 +165,9 @@
         "❌ 24 பெரிய குகைகள்! China's Alien Megaliths தெரியுமா? 😱",
         "The Longyou Caves: China's 'Alien' Megaliths Carved By Hand With Zero Records",
         "0.25 செகண்ட் டேப்... போன் போட்டோ ப்ரோ லெவல் ஆகுமா? 📱✨",
-        "Hidden Smartphone Camera Tap Trick for Pro Photos"
+        "Hidden Smartphone Camera Tap Trick for Pro Photos",
+        "🌊 Poompuhar: Sunken Tamil City Unveiled! 🤯",
+        "Poompuhar: The Sunken Tamil Capital Proven by Science"
     ],
     "used_keywords": [
         "AI Hack",
@@ -405,14 +407,13 @@
         "🧠 Mind-Blowing Science Curiosities": 3,
         "🧬 Human Body & Dark Psychology": 2,
         "💰 Money-Saving & Smart Living Tricks": 3,
-        "🌍 Mysterious History & Culture Secrets": 2,
+        "🌍 Mysterious History & Culture Secrets": 3,
         "🍳 Food, Health & Kitchen Science": 2,
         "📱 Digital Safety, Phone Secrets & Scam Alerts": 4,
         "🇮🇳 Tamil Nadu & India Did You Know": 3,
         "📱 Tech & Smartphone Hacks": 1
     },
     "last_7_days_stories": [
-        "AI எல்லாமே செய்யுமா? AI-க்கு தெரியாத உண்மைகள்! 🤯",
         "Fast Beats அதிகரிக்கும் 5-10 BPM? 🎧💥 தெரியுமா?",
         "⚡ டிவி ஆஃப்ல இருந்தாலும் கரண்ட் பில் ஏறுது!",
         "⚠️ SIM PIN தவறா set பண்ணீங்களா? 3 லட்சம் போகும்!",
@@ -425,10 +426,11 @@
         "🚨 Emergency SOS: Silent Alert Shock! 😱 #shorts",
         "❌ 1,900 ஆண்டு பழைய Kallanai! தெரியுமா? 😱",
         "❌ 24 பெரிய குகைகள்! China's Alien Megaliths தெரியுமா? 😱",
-        "0.25 செகண்ட் டேப்... போன் போட்டோ ப்ரோ லெவல் ஆகுமா? 📱✨"
+        "0.25 செகண்ட் டேப்... போன் போட்டோ ப்ரோ லெவல் ஆகுமா? 📱✨",
+        "🌊 Poompuhar: Sunken Tamil City Unveiled! 🤯"
     ],
-    "total_uploaded": 86,
-    "last_upload": "2026-10-07",
+    "total_uploaded": 87,
+    "last_upload": "2026-10-08",
     "history": [
         {
             "date": "2026-06-28",
@@ -1820,6 +1822,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/vtiyb8nJaMY",
             "source_url": "https://en.wikipedia.org/wiki/Smartphone_photography"
+        },
+        {
+            "date": "2026-10-08",
+            "title": "🌊 Poompuhar: Sunken Tamil City Unveiled! 🤯",
+            "news_headline": "Poompuhar: The Sunken Tamil Capital Proven by Science",
+            "category": "🌍 Mysterious History & Culture Secrets",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/WCHpRcJhhfI",
+            "source_url": "https://en.wikipedia.org/wiki/Poompuhar"
         }
     ]
 }
