@@ -16,7 +16,6 @@ from config import (
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url
 from gemini_script import pick_and_generate_script, is_offline_mode_active, reset_offline_mode
-from kaggle_handover import trigger_kaggle_gpu_job
 from ecosystem_logic import get_slot_info, get_series_identity
 from audio_gen import generate_voiceover, clean_tts_text, ElevenLabsVoiceError
 from chunk_builder import build_chunks, redistribute_to_audio_duration
@@ -240,26 +239,25 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
         title = script_data.get("title") or ""
         if not str(title).strip():
             title = script_data.get("original_news_headline") or "Tamil Fact!"
-        # Rebuild script from subtitle_chunks to guarantee 100% word-for-word alignment
-        raw_sub_chunks = script_data.get("subtitle_chunks", [])
-        sub_chunks = []
-        for sc in raw_sub_chunks:
-            if isinstance(sc, list):
-                for item in sc:
-                    if isinstance(item, dict):
-                        sub_chunks.append(item)
-            elif isinstance(sc, dict):
-                sub_chunks.append(sc)
-        
-        if sub_chunks:
-            rebuilt_script = " ".join(sc.get("text", "").strip() for sc in sub_chunks if sc.get("text"))
-            if rebuilt_script:
-                log_message("Aligning script text with subtitle chunks...")
-                script = rebuilt_script
-            else:
-                script = script_data.get("script", "")
+        # Prioritize the full natural human script for voiceover synthesis
+        full_script = (script_data.get("script") or "").strip()
+        if full_script:
+            script = full_script
         else:
-            script = script_data.get("script", "")
+            # Fallback only if the script field is empty
+            raw_sub_chunks = script_data.get("subtitle_chunks", [])
+            sub_chunks = []
+            for sc in raw_sub_chunks:
+                if isinstance(sc, list):
+                    for item in sc:
+                        if isinstance(item, dict):
+                            sub_chunks.append(item)
+                elif isinstance(sc, dict):
+                    sub_chunks.append(sc)
+            if sub_chunks:
+                script = " ".join(sc.get("text", "").strip() for sc in sub_chunks if sc.get("text"))
+            else:
+                script = ""
         
         # Dynamically scaled based on VOICE_SPEED configuration (baseline of 2.55 wps at 1.05 speed)
         base_wps = 2.55
@@ -309,106 +307,33 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
             continue
 
         # ── STEP 3b: Capture Evidence Screenshot (MANDATORY if enabled) ──
-        if ENABLE_EVIDENCE_SCREENSHOTS:
-            log_message("STEP 3b: Capturing evidence screenshot (before audio for fast fail)...")
-            screenshot_captured = False
+        # ── STEP 4: Generate Cloned Voice Audio (ElevenLabs Voice Cloning Only) ──
+        log_message("STEP 4: Generating Tamil cloned voiceover via ElevenLabs...")
+        target_vid = script_data.get("voice_id") or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+        log_message(f"🎙️ Synthesizing voiceover with ElevenLabs Voice ID: {target_vid}")
+        try:
+            audio_path, duration, word_timestamps = generate_voiceover(
+                script,
+                voice_id=target_vid,
+                custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}),
+                api_key=GEMINI_API_KEY
+            )
+        except ElevenLabsVoiceError as e:
+            log_message(f"🚨 [FATAL] ElevenLabs voice generation failed: {e}")
+            log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.")
+            return False
+        except Exception as e:
+            log_message(f"🚨 [FATAL] Local voiceover generation failed: {e}")
+            log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.")
+            return False
             
-            if fact_url:
-                screenshot_filename = f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-                screenshot_path = capture_article_screenshot(fact_url, screenshot_filename)
-                if screenshot_path:
-                    script_data["screenshot_path"] = screenshot_path
-                    log_message(f"✅ Screenshot captured: {screenshot_path}")
-                    screenshot_captured = True
-            
-            if not screenshot_captured:
-                log_message(f"❌ Screenshot failed for: {fact_headline}. Rejecting topic.")
-                failed_topics.append(fact_headline)
-                script_data = None
-                attempts += 1
-                continue
-        else:
-            log_message("STEP 3b: Evidence screenshots are disabled in config. Skipping.")
-
-        # ── STEP 4: Generate Cloned Voice Audio ──
-        log_message("STEP 4: Generating Tamil cloned voiceover...")
-        
-
-        
-        has_kaggle = os.path.exists(os.path.expanduser("~/.kaggle/kaggle.json"))
-        use_local_only = os.environ.get("USE_LOCAL_ONLY") == "true"
-        
-        if has_kaggle and not use_local_only:
-            log_message("🚀 Triggering Kaggle GPU Handover for voice generation...")
-            custom_map = script_data.get("phonetic_pronunciation_map", {})
-            results = trigger_kaggle_gpu_job(script_data, custom_map)
-            
-            kaggle_failed = False
-            if results is None:
-                kaggle_failed = True
-                log_message("❌ Kaggle Handover returned None.")
-            elif isinstance(results, dict) and "error" in results:
-                kaggle_failed = True
-                log_message(f"❌ Kaggle Handover failed: {results.get('error')} - {results.get('message', '')}")
-                
-            if not kaggle_failed:
-                audio_path = results.get("audio_path")
-                duration = results.get("duration")
-                word_timestamps = results.get("word_timestamps")
-                
-                audio_received = audio_path and os.path.exists(audio_path)
-                
-                if audio_received:
-                    log_message("✅ Received Audio from Kaggle GPU!")
-                else:
-                    log_message("❌ Kaggle job finished but critical audio output is missing.")
-                    kaggle_failed = True
-                
-                # ── LAYER 2: Post-Kaggle actual duration check with recalibration ──
-                if audio_received and duration is not None and (duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC):
-                    actual_wps = word_count / duration
-                    log_message(f"⚠️ Kaggle returned {duration:.1f}s audio. Pre-check estimate was {estimated_duration:.1f}s.")
-                    log_message(f"   Observed pace: {actual_wps:.2f} words/sec (vs estimate {WORDS_PER_SEC_ESTIMATE}). Recalibrating for next run.")
-                    # Update the estimate for future runs (could persist this)
-                    WORDS_PER_SEC_ESTIMATE = actual_wps
-                    kaggle_failed = True  # Treat as failure to trigger retry with adjusted script length
-                
-                if kaggle_failed:
-                    log_message("⚠️ Kaggle GPU execution failed. Falling back to local audio generation...")
-                    # Don't return False, fall through to local generation below
-            else:
-                log_message("⚠️ Kaggle GPU handover failed. Falling back to local audio generation...")
-        else:
-            log_message("ℹ️ Kaggle credentials not found or USE_LOCAL_ONLY=true. Using local audio generation.")
-            kaggle_failed = True  # Force local fallback
-        
-        # Local fallback generation (runs if Kaggle failed or not available)
-        if 'kaggle_failed' in locals() and kaggle_failed:
-            try:
-                target_vid = script_data.get("voice_id") or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
-                log_message(f"🎙️ Generating voiceover with voice ID: {target_vid}")
-                audio_path, duration, word_timestamps = generate_voiceover(
-                    script,
-                    voice_id=target_vid,
-                    custom_phonetic_map=script_data.get("phonetic_pronunciation_map", {}),
-                    api_key=GEMINI_API_KEY
-                )
-            except ElevenLabsVoiceError as e:
-                log_message(f"🚨 [FATAL] ElevenLabs voice generation failed: {e}")
-                log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
-                return False
-            except Exception as e:
-                log_message(f"🚨 [FATAL] Local voiceover generation failed: {e}")
-                log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
-                return False
-            
-        # Propagate Voice Fallback Status
+        # Propagate Voice Fallback Status (always False since only ElevenLabs voice cloning is permitted)
         import audio_gen
-        script_data["voice_fallback_used"] = getattr(audio_gen, "VOICE_FALLBACK_USED", False)
+        script_data["voice_fallback_used"] = False
         
         if not audio_path or not os.path.exists(audio_path):
             log_message("🚨 [FATAL] ElevenLabs voice output missing or failed to generate.")
-            log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice is required and no fallback is permitted.")
+            log_message("🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.")
             return False
 
         if duration < MIN_DURATION_SEC or duration > MAX_DURATION_SEC:

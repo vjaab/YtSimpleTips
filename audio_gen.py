@@ -254,13 +254,15 @@ def preprocess_script_for_tts(text: str) -> str:
     text = re.sub(r'[*#_~]', '', text)
     
     # ── UNIVERSAL SPOKEN TAMIL TTS NORMALIZATION ──
-    # Standardize pronunciation for natural global Tamil comprehension
+    # Enforce 100% natural conversational spoken Tamil across all TTS synthesis
     universal_tts_hints = [
+        # Conversational verb & pronoun standardizations
         ('பண்ணுங்கோ', 'பண்ணுங்க'),
         ('பாருங்கோ', 'பாருங்க'),
         ('கேளுங்கோ', 'கேளுங்க'),
         ('சொல்லுங்கோ', 'சொல்லுங்க'),
         ('வாங்கோ', 'வாங்க'),
+        ('தட்டுங்கோ', 'தட்டுங்க'),
         ('தெர்யுமா', 'தெரியுமா'),
         ('கொஞ்சூம்', 'கொஞ்சம்'),
         ('அப்புடி', 'அப்படி'),
@@ -269,11 +271,50 @@ def preprocess_script_for_tts(text: str) -> str:
         ('என்னாது', 'என்னது'),
         ('தெரிஞ்சுக்கோங்கோ', 'தெரிஞ்சுக்கோங்க'),
         ('மறந்துடாதீங்கோ', 'மறந்துடாதீங்க'),
+        ('சொல்றேங்', 'சொல்றேன்'),
+        ('அட போங்கோ', 'அட போங்க'),
+        ('நெல்லை மக்களே', 'மக்களே'),
+        # Ban textbook / formal written Tamil (எழுத்துத் தமிழ்) -> convert to spoken Tamil
+        ('செய்கிறது', 'பண்ணுது'),
+        ('செய்கின்றன', 'பண்ணுதுங்க'),
+        ('செய்யுங்கள்', 'பண்ணுங்க'),
+        ('பாருங்கள்', 'பாருங்க'),
+        ('சொல்லுங்கள்', 'சொல்லுங்க'),
+        ('கேளுங்கள்', 'கேளுங்க'),
+        ('வாருங்கள்', 'வாங்க'),
+        ('பாதுகாக்கப்படுகிறது', 'காப்பாத்துது'),
+        ('பாதுகாக்க உதவுகிறது', 'காப்பாத்த உதவுது'),
+        ('என்று அழைக்கப்படுகிறது', 'அப்டின்னு சொல்லுவாங்க'),
+        ('இதன் மூலம்', 'இதனால'),
+        ('பயன்படுத்தப்படுகிறது', 'யூஸ் பண்றாங்க'),
+        ('பயன்படுத்துங்கள்', 'யூஸ் பண்ணுங்க'),
+        ('பயன்படுத்தலாம்', 'யூஸ் பண்ணலாம்'),
+        ('அறியப்படுகிறது', 'தெரியுது'),
+        ('உள்ளது', 'இருக்கு'),
+        ('உள்ளன', 'இருக்கு'),
+        ('வருகிறது', 'வருது'),
+        ('வருகின்றன', 'வருதுங்க'),
+        ('ஆகிறது', 'ஆகுது'),
+        ('இருக்கிறது', 'இருக்கு'),
+        ('தெரிந்து கொள்ளுங்கள்', 'தெரிஞ்சுக்கோங்க'),
+        ('தெரிந்து கொள்ள', 'தெரிஞ்சுக்க'),
+        ('நினைவில் கொள்ளுங்கள்', 'மறந்துடாதீங்க'),
+        ('பதிவிறக்கம்', 'டவுன்லோடு'),
+        ('செயலி', 'ஆப்'),
+        ('செயல்படுகிறது', 'வேலை செய்யுது'),
+        ('செயல்படும்', 'வேலை செய்யும்'),
+        ('நடைபெறுகிறது', 'நடக்குது'),
+        ('கூறப்படுகிறது', 'சொல்றாங்க'),
+        ('இதனை நீங்கள்', 'நீங்க இத'),
+        ('இதை நீங்கள்', 'நீங்க இத'),
+        ('உடனடியாக', 'டக்குனு'),
+        ('மிகவும்', 'ரொம்பவே'),
+        ('அதிகமாக', 'நிறைய'),
     ]
     for target, replacement in universal_tts_hints:
         text = re.sub(r'(?<![\u0b80-\u0bff])' + re.escape(target) + r'(?![\u0b80-\u0bff])', replacement, text)
     
-    # Ensure exclamation-heavy Nellai reactions and questions have proper breathing space
+    # Ensure exclamation-heavy reactions and questions have proper breathing space
     text = re.sub(r'([,;!?])([^\s0-9])', r'\1 \2', text)
     
     # Replace multiple spaces with single space
@@ -1048,17 +1089,10 @@ if __name__ == "__main__":
         test_wav = os.path.join(OUTPUT_DIR, "test_output.wav")
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         
-        print(f"Test text: '{test_text}'")
-        
-        # 1. Synthesize the text
         clean_text = preprocess_script_for_tts(test_text)
         path = _generate_elevenlabs(clean_text, test_wav)
-        if not path:
-            print("ElevenLabs failed or not configured, using Edge TTS for dry-run test.")
-            path = _generate_edge_tts(clean_text, test_wav)
-            
-        if not path:
-            print("Test failed: Could not generate audio using ElevenLabs or Edge TTS fallback.")
+        if not path or not os.path.exists(path):
+            print("Test failed: ElevenLabs voice cloning failed to produce audio.")
             sys.exit(1)
             
         # 2. Run break detection
