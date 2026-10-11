@@ -11,7 +11,7 @@ import re
 from config import (
     TARGET_AUDIO_DURATION, MAX_RETRY_ATTEMPTS, LOGS_DIR, OUTPUT_DIR, GEMINI_API_KEY,
     ENABLE_EVIDENCE_SCREENSHOTS, ENABLE_LONGFORM, VOICE_SPEED, ELEVENLABS_VOICE_ID,
-    ELEVENLABS_API_KEY, ENABLE_OFFLINE_TOPIC_FALLBACK
+    ELEVENLABS_API_KEY, ENABLE_OFFLINE_TOPIC_FALLBACK, ELEVENLABS_PRESERVE_ORIGINAL_VOICE
 )
 from fetch_topics import fetch_facts_for_category
 from topic_tracker import record_story, update_youtube_url
@@ -309,7 +309,9 @@ def run_pipeline(forced_category=None, dry_run=False, shorts_format="standard"):
         # ── STEP 3b: Capture Evidence Screenshot (MANDATORY if enabled) ──
         # ── STEP 4: Generate Cloned Voice Audio (ElevenLabs Voice Cloning Only) ──
         log_message("STEP 4: Generating Tamil cloned voiceover via ElevenLabs...")
-        target_vid = script_data.get("voice_id") or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+        target_vid = os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+        if not ELEVENLABS_PRESERVE_ORIGINAL_VOICE:
+            target_vid = script_data.get("voice_id") or target_vid
         log_message(f"🎙️ Synthesizing voiceover with ElevenLabs Voice ID: {target_vid}")
         try:
             audio_path, duration, word_timestamps = generate_voiceover(

@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore")
 from config import (
     GEMINI_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID,
     ELEVENLABS_MODEL_ID, ELEVENLABS_SIMILARITY_BOOST, ELEVENLABS_STABILITY,
-    ELEVENLABS_STYLE, ELEVENLABS_SPEAKER_BOOST,
+    ELEVENLABS_STYLE, ELEVENLABS_SPEAKER_BOOST, ELEVENLABS_PRESERVE_ORIGINAL_VOICE,
     KAGGLE_USERNAME, KAGGLE_KEY, OUTPUT_DIR, ASSETS_DIR, ENABLE_TTS_FALLBACK, VOICE_SPEED
 )
 from kaggle_handover import trigger_kaggle_gpu_job
@@ -382,29 +382,64 @@ def inject_break_tags(text: str) -> str:
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
+_ORIGINAL_VOICE_SETTINGS_CACHE = {}
+
+def _fetch_original_voice_settings(voice_id, headers):
+    """
+    Fetches the voice's OWN saved settings from ElevenLabs (as configured on the voice page).
+    Returns None if unavailable — in that case the voice_settings field is omitted from the
+    TTS request and ElevenLabs applies the voice's stored settings server-side.
+    """
+    if voice_id in _ORIGINAL_VOICE_SETTINGS_CACHE:
+        return _ORIGINAL_VOICE_SETTINGS_CACHE[voice_id]
+    settings = None
+    try:
+        import requests
+        resp = requests.get(
+            f"https://api.elevenlabs.io/v1/voices/{voice_id}/settings",
+            headers={"xi-api-key": headers.get("xi-api-key", "")},
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            settings = {k: v for k, v in resp.json().items() if v is not None}
+            print(f"[audio_gen] 🎙️ Using ORIGINAL ElevenLabs voice settings for '{voice_id}': {settings}")
+        else:
+            print(f"[audio_gen] Could not fetch voice settings ({resp.status_code}); ElevenLabs will apply the voice's stored settings.")
+    except Exception as e:
+        print(f"[audio_gen] Could not fetch voice settings ({e}); ElevenLabs will apply the voice's stored settings.")
+    _ORIGINAL_VOICE_SETTINGS_CACHE[voice_id] = settings
+    return settings
+
 def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params, voice_settings=None):
     """Synthesizes a single text chunk via ElevenLabs API with humanized voice parameters matching the cloned voice ID 100%."""
     cleaned_text = preprocess_script_for_tts(text)
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
     
-    settings = {
-        # High similarity boost (0.92) guarantees the output replicates the target cloned voice ID 100%
-        "similarity_boost": ELEVENLABS_SIMILARITY_BOOST,
-        # Optimal stability (0.50) gives natural human cadence and vocal consistency without cracks or robotic stiffness
-        "stability": ELEVENLABS_STABILITY,
-        # Subtle style (0.18) adds conversational enthusiasm without distorting the speaker's acoustic timbre
-        "style": ELEVENLABS_STYLE,
-        "use_speaker_boost": ELEVENLABS_SPEAKER_BOOST,
-        "speed": 1.00
-    }
-    if voice_settings:
-        settings.update(voice_settings)
+    if ELEVENLABS_PRESERVE_ORIGINAL_VOICE:
+        # Keep the cloned voice exactly as it is in ElevenLabs — no hardcoded/per-call overrides
+        if voice_settings:
+            print(f"[audio_gen] Preserve-original mode: ignoring voice_settings override {voice_settings}")
+        settings = _fetch_original_voice_settings(voice_id, headers)
+    else:
+        settings = {
+            # High similarity boost (0.92) guarantees the output replicates the target cloned voice ID 100%
+            "similarity_boost": ELEVENLABS_SIMILARITY_BOOST,
+            # Optimal stability (0.50) gives natural human cadence and vocal consistency without cracks or robotic stiffness
+            "stability": ELEVENLABS_STABILITY,
+            # Subtle style (0.18) adds conversational enthusiasm without distorting the speaker's acoustic timbre
+            "style": ELEVENLABS_STYLE,
+            "use_speaker_boost": ELEVENLABS_SPEAKER_BOOST,
+            "speed": 1.00
+        }
+        if voice_settings:
+            settings.update(voice_settings)
     
     data = {
         "text": cleaned_text,
         "model_id": ELEVENLABS_MODEL_ID,
-        "voice_settings": settings
     }
+    if settings:
+        data["voice_settings"] = dict(settings)
     
     # Request highest audio generation fidelity
     req_params = dict(params)
@@ -413,7 +448,7 @@ def _synthesize_single_chunk_elevenlabs(text, voice_id, headers, params, voice_s
     try:
         import requests
         response = requests.post(url, json=data, headers=headers, params=req_params, stream=True)
-        if response.status_code == 422 and "speed" in response.text.lower():
+        if response.status_code == 422 and "speed" in response.text.lower() and "voice_settings" in data:
             # If endpoint doesn't support speed parameter in voice_settings, retry without it
             data["voice_settings"].pop("speed", None)
             response = requests.post(url, json=data, headers=headers, params=req_params, stream=True)
@@ -696,7 +731,7 @@ def fix_audio_breaks(audio_path: str, breaks: list) -> str:
     audio.export(audio_path, format="wav")
     return audio_path
 
-def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
+def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True, preserve_original: bool = False) -> None:
     """
     Applies the exact professional FFmpeg mastering filter chain for vocal clarity.
     Uses t=h (Hz width type) instead of t=o (octave) because widths of 200, 800, 2000
@@ -705,7 +740,14 @@ def apply_mastering_chain(audio_path: str, is_elevenlabs: bool = True) -> None:
     If is_elevenlabs is True, bypasses denoising (afftdn) and harsh EQ to preserve voice clone characteristics.
     """
     temp_path = audio_path + ".mastered.wav"
-    if is_elevenlabs:
+    if preserve_original:
+        # Keep the original ElevenLabs voice timbre untouched: no high-pass, EQ or compression.
+        # Only a loudness level match for Shorts (does not color the voice).
+        filter_str = (
+            "loudnorm=I=-14:TP=-1.5:LRA=11,"
+            "aresample=44100"
+        )
+    elif is_elevenlabs:
         # ElevenLabs generates pristine studio-quality audio.
         # Warm, natural human broadcast profile (warm chest body, smooth presence, no harsh sibilance)
         filter_str = (
@@ -977,7 +1019,14 @@ def generate_voiceover(text, voice_id=None, custom_phonetic_map=None, api_key=No
     FAILS if ElevenLabs voice cloning is not working - no fallback.
     """
     global VOICE_FALLBACK_USED
-    target_voice_id = voice_id or os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+    configured_voice_id = os.environ.get("ELEVENLABS_VOICE_ID") or ELEVENLABS_VOICE_ID
+    if ELEVENLABS_PRESERVE_ORIGINAL_VOICE and configured_voice_id:
+        # Lock to the original cloned voice — ignore per-script / per-job voice overrides
+        if voice_id and voice_id != configured_voice_id:
+            print(f"[audio_gen] Preserve-original mode: ignoring voice_id override '{voice_id}', using original '{configured_voice_id}'")
+        target_voice_id = configured_voice_id
+    else:
+        target_voice_id = voice_id or configured_voice_id
     if custom_phonetic_map:
         for word, phonetic in custom_phonetic_map.items():
             pattern = re.compile(r'\b' + re.escape(word) + r'\b', re.IGNORECASE)
@@ -999,7 +1048,8 @@ def generate_voiceover(text, voice_id=None, custom_phonetic_map=None, api_key=No
     VOICE_FALLBACK_USED = False
         
     # Speed up audio to match the energetic pacing of reference short
-    if VOICE_SPEED != 1.0:
+    # (skipped in preserve-original mode: atempo alters the natural voice character)
+    if VOICE_SPEED != 1.0 and not ELEVENLABS_PRESERVE_ORIGINAL_VOICE:
         path = speed_up_audio(path, VOICE_SPEED)
         
     # ── UNIFIED POST-PROCESSING PIPELINE ──
@@ -1021,7 +1071,7 @@ def generate_voiceover(text, voice_id=None, custom_phonetic_map=None, api_key=No
         word_timestamps = _estimate_timestamps(clean_text, dur)
         
     # Step 4: Apply professional FFmpeg mastering chain
-    apply_mastering_chain(path, is_elevenlabs=True)
+    apply_mastering_chain(path, is_elevenlabs=True, preserve_original=ELEVENLABS_PRESERVE_ORIGINAL_VOICE)
     
     # Step 5: Trim audio silence and optimize gaps
     dur, word_timestamps = trim_audio_silence(path, word_timestamps)
@@ -1106,7 +1156,7 @@ if __name__ == "__main__":
             path = fix_audio_breaks(path, breaks)
             
         # 3. Run mastering chain
-        apply_mastering_chain(path)
+        apply_mastering_chain(path, preserve_original=ELEVENLABS_PRESERVE_ORIGINAL_VOICE)
         
         # 4. Measure and print results
         lufs, tp, sr = measure_loudness_and_peaks(path)

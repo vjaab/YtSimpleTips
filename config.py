@@ -87,6 +87,11 @@ ELEVENLABS_SIMILARITY_BOOST = float(os.getenv("ELEVENLABS_SIMILARITY_BOOST", "0.
 ELEVENLABS_STABILITY = float(os.getenv("ELEVENLABS_STABILITY", "0.40"))
 ELEVENLABS_STYLE = float(os.getenv("ELEVENLABS_STYLE", "0.35"))
 ELEVENLABS_SPEAKER_BOOST = os.getenv("ELEVENLABS_SPEAKER_BOOST", "true").lower() in ("true", "1", "yes")
+# Preserve Original Voice: keep the cloned voice 100% as it sounds in ElevenLabs.
+#  - Voice ID is locked to ELEVENLABS_VOICE_ID (no per-script / per-job overrides)
+#  - Uses the voice's OWN saved settings from ElevenLabs (the overrides above are ignored)
+#  - No speed change, no EQ / compression coloring (only loudness normalization)
+ELEVENLABS_PRESERVE_ORIGINAL_VOICE = os.getenv("ELEVENLABS_PRESERVE_ORIGINAL_VOICE", "true").lower() in ("true", "1", "yes")
 KAGGLE_USERNAME = os.getenv("KAGGLE_USERNAME", "")
 KAGGLE_KEY = os.getenv("KAGGLE_KEY", "") or os.getenv("KAGGLE_API_TOKEN", "")
 YOUTUBE_CLIENT_SECRET_FILE = os.getenv("YOUTUBE_CLIENT_SECRET_FILE", "client_secret.json")
