@@ -192,8 +192,8 @@ def crosspost_to_instagram(cropped_video_path, caption):
         print(f"⚠️ Instagram cross-posting failed with exception: {e}")
         return False, str(e)
 
-def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None, comment_bait_question=None, is_longform=False):
-    """Uploads the generated Shorts video to YouTube with Tamil metadata and Altered Content flag."""
+def upload_video(video_path, title, description, tags, thumbnail_path=None, category_id="28", comment_hook=None, comment_bait_question=None, is_longform=False, privacy_status=None):
+    """Uploads video to YouTube with Tamil metadata, Altered Content flag, and selectable privacy."""
     youtube = get_authenticated_service()
     if not youtube:
         return False, "Failed to authenticate with YouTube API"
@@ -202,15 +202,18 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
     # Sanitize the title by removing them to prevent 400 Bad Request errors.
     title = title.replace("<", "").replace(">", "").strip()
 
-    # Ensure #Shorts is in the description for algorithm classification
-    if "#Shorts" not in description and "#shorts" not in description:
-        description = description.rstrip() + "\n\n#Shorts #SimpleTipsByVJ #TamilTips"
+    # Ensure #Shorts is in the description ONLY for shorts videos
+    if not is_longform:
+        if "#Shorts" not in description and "#shorts" not in description:
+            description = description.rstrip() + "\n\n#Shorts #SimpleTipsByVJ #TamilTips"
 
     # Sanitize and pack tags within YouTube's 500-char limit (target <= 400 for absolute safety)
     from ecosystem_logic import sanitize_and_fit_tags, calculate_youtube_tags_length
     sanitized_tags = sanitize_and_fit_tags(tags, max_chars=400)
     tag_chars = calculate_youtube_tags_length(sanitized_tags)
     print(f"🏷️ Attaching {len(sanitized_tags)} YouTube tags ({tag_chars}/500 chars): {', '.join(sanitized_tags[:6])}...")
+
+    target_privacy = privacy_status if privacy_status else DEFAULT_PRIVACY_STATUS
 
     body = {
         "snippet": {
@@ -222,7 +225,7 @@ def upload_video(video_path, title, description, tags, thumbnail_path=None, cate
             "defaultAudioLanguage": "ta",
         },
         "status": {
-            "privacyStatus":            DEFAULT_PRIVACY_STATUS,
+            "privacyStatus":            target_privacy,
             "selfDeclaredMadeForKids":    False,
             # AI disclosure ("Altered Content"): Automatically set via containsSyntheticMedia for YPP compliance.
             "containsSyntheticMedia":     True,

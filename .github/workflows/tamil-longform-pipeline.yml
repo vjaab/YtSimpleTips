@@ -1,0 +1,175 @@
+name: Simple Tips by VJ Tamil Longform Pipeline
+
+on:
+  schedule:
+    # ── 1 LONGFORM VIDEO PER DAY (2-3 MINS) — PRIME EVENING WINDOW IN INDIA (IST / UTC+5:30) ──
+    # Triggers daily at 14:00 UTC (07:30 PM IST)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Allow manual triggers from GitHub Actions UI
+    inputs:
+      niche:
+        description: "Infotainment niche (or 'auto' for today's weekday schedule)"
+        required: false
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - mystery
+          - tamil_history
+          - space_science
+          - psychology
+          - what_if
+          - smart_living
+          - nature_food_body
+      privacy:
+        description: "YouTube upload privacy status"
+        required: false
+        default: "unlisted"
+        type: choice
+        options:
+          - unlisted
+          - private
+          - public
+      dry_run:
+        description: "Dry run (test compilation without uploading)"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  run-longform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180 # 3 hours max
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          df -h
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Cache U2Net model
+        uses: actions/cache@v4
+        with:
+          path: ~/.u2net
+          key: u2net-model-v1
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk espeak-ng wget
+
+      - name: Verify FFmpeg Installation
+        run: ffmpeg -version
+
+      - name: Install Project Python Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install "numpy<2.0"
+          pip install -r requirements.txt
+          pip install --upgrade imageio imageio-ffmpeg moviepy
+
+      - name: Install Playwright Chromium (Screenshot Evidence)
+        run: npx -y playwright install --with-deps chromium
+
+      - name: Setup Environment Secrets (.env)
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_2 }}" ]; then
+            echo "GEMINI_API_KEY_2=${{ secrets.GEMINI_API_KEY_2 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_3 }}" ]; then
+            echo "GEMINI_API_KEY_3=${{ secrets.GEMINI_API_KEY_3 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_4 }}" ]; then
+            echo "GEMINI_API_KEY_4=${{ secrets.GEMINI_API_KEY_4 }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.GEMINI_API_KEY_5 }}" ]; then
+            echo "GEMINI_API_KEY_5=${{ secrets.GEMINI_API_KEY_5 }}" >> .env
+          fi
+          echo "ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}" >> .env
+          echo "ELEVENLABS_VOICE_ID=${{ secrets.ELEVENLABS_VOICE_ID }}" >> .env
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+          if [ ! -z "${{ secrets.OPENROUTER_API_KEY }}" ]; then
+            echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }}" >> .env
+          fi
+          if [ ! -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" >> .env
+          fi
+          # Model priorities
+          echo "MODEL_PRIORITY_1=nvidia/nemotron-3-ultra-550b-a55b:free" >> .env
+          echo "MODEL_PRIORITY_2=poolside/laguna-s-2.1:free" >> .env
+          echo "MODEL_PRIORITY_3=nvidia/nemotron-3.5-lightning:free" >> .env
+          echo "MODEL_PRIORITY_4=inclusionai/ling-3.0-flash-fin:free" >> .env
+          echo "MODEL_PRIORITY_5=Existing Gemini" >> .env
+
+      - name: Setup YouTube Auth Files
+        run: |
+          echo '${{ secrets.CLIENT_SECRET_JSON }}' > client_secret.json
+          echo '${{ secrets.TOKEN_JSON }}' > token.json
+
+      - name: Run Longform Pipeline
+        run: |
+          EXTRA_ARGS=""
+          if [ "${{ github.event.inputs.niche }}" != "" ] && [ "${{ github.event.inputs.niche }}" != "auto" ]; then
+            EXTRA_ARGS="$EXTRA_ARGS --niche ${{ github.event.inputs.niche }}"
+          fi
+          if [ "${{ github.event.inputs.privacy }}" != "" ]; then
+            EXTRA_ARGS="$EXTRA_ARGS --privacy ${{ github.event.inputs.privacy }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            EXTRA_ARGS="$EXTRA_ARGS --dry-run"
+          fi
+          python main_longform.py --now $EXTRA_ARGS
+
+      - name: Commit Updated Tracking File & Logs
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Pull latest changes first
+          git pull origin main --rebase --autostash || echo "Pull skipped"
+
+          # Add tracking files and technical logs
+          git add facts_log.json || echo "Facts log missing"
+          if [ -d "logs" ]; then
+            git add -f logs/*.txt 2>/dev/null || echo "No logs to commit"
+          fi
+
+          if ! git diff --cached --quiet; then
+            git commit -m "[Bot] Auto-update longform tracking and logs"
+
+            for i in {1..5}; do
+              echo "Push attempt $i..."
+              if git push origin main; then
+                echo "✅ Successfully pushed logs."
+                exit 0
+              fi
+              sleep 10
+              git pull origin main --rebase
+            done
+            echo "❌ Failed to push logs after 5 attempts."
+          else
+            echo "✅ No changes to logs detected."
+          fi
