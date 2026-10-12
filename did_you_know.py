@@ -109,9 +109,14 @@ def _grounded_call(prompt, temperature=0.4, want="object", label="grounded"):
         except Exception as e:
             err = str(e).lower()
             print(f"⚠️ [DYK:{label}] Attempt {attempt}/{max_attempts} failed: {e}")
-            if ("429" in err or "resource exhausted" in err) and len(GEMINI_API_KEYS) > 1:
-                rotate_gemini_api_key()
-                client = get_gemini_client()
+            if ("429" in err or "resource exhausted" in err):
+                if len(GEMINI_API_KEYS) > 1:
+                    rotate_gemini_api_key()
+                    client = get_gemini_client()
+                sleep_sec = 4 * attempt
+                print(f"⏳ [DYK:{label}] Rate limited (429). Sleeping {sleep_sec}s before retry...")
+                import time
+                time.sleep(sleep_sec)
                 continue
             if "prepayment credits" in err:
                 from config import disable_gemini
