@@ -668,11 +668,20 @@ def normalize_llm_json_dict(parsed):
             # If the first item has typical top-level script/metadata keys, unwrap it
             if any(k in parsed[0] for k in ["title", "script", "optimized_script", "storyboard", "topic", "hooks", "title_variants", "story_continuity_score"]):
                 return parsed[0]
+            # If items look like hook variants, wrap in hooks dict
+            if any(k in parsed[0] for k in ["curiosity_score", "emotional_trigger_score", "swipe_stop_power", "swipe_stop_score", "topic_specificity_score"]):
+                return {"hooks": parsed}
             # If items look like storyboard scenes, wrap in storyboard dict
-            if any(k in parsed[0] for k in ["scene_number", "narration", "visual_prompt", "visual_type", "text"]):
+            if any(k in parsed[0] for k in ["scene_number", "narration", "visual_prompt", "visual_type"]):
                 return {"storyboard": parsed}
+            if "text" in parsed[0]:
+                if any(k in parsed[0] for k in ["visual", "image", "prompt", "duration", "narration"]):
+                    return {"storyboard": parsed}
+                return {"hooks": parsed}
             # Default to unwrapping the first dict
             return parsed[0]
+        if all(isinstance(x, str) for x in parsed):
+            return {"items": parsed, "hooks": parsed}
         return {}
     return parsed if isinstance(parsed, dict) else {}
 
@@ -1279,8 +1288,8 @@ Return ONLY a JSON object matching the required schema:
         if not selection or "selected_headline" not in selection:
             print("⚠️ Selector Agent failed. Attempting offline fallback script...")
             return get_offline_fallback_script(category, failed_topics)
-        selected_headline = selection["selected_headline"]
-        selected_url = selection["selected_url"]
+        selected_headline = selection.get("selected_headline", "")
+        selected_url = selection.get("selected_url") or (articles[0].get("source_url", "") if articles else "")
         
         # Verify the uniqueness of the Selector Agent's choice
         is_unique, reason = check_story_uniqueness(new_title=selected_headline, new_url=selected_url)
@@ -1340,24 +1349,110 @@ Return ONLY a JSON object matching the required schema:
     print("🪝 [AGENT 2] Hook Agent: Generating Tanglish hooks...")
     hook_prompt = HOOK_AGENT_TEMPLATE.format(
         persona=SYSTEM_PERSONA,
-        research_json=json.dumps(research)
+        research_json=json.dumps(research) if not isinstance(research, str) else research
     )
     hooks_data = call_gemini_api(client, hook_prompt, prefer_fallback=True, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
-    if not hooks_data or "hooks" not in hooks_data:
-        print("⚠️ Hook Agent failed. Attempting offline fallback script...")
+
+    def _extract_score(val, default=5.0):
+        if val is None:
+            return default
+        if isinstance(val, (int, float)):
+            return float(val)
+        if isinstance(val, str):
+            val_clean = val.split("/")[0].strip()
+            digits = "".join(c for c in val_clean if c.isdigit() or c == ".")
+            try:
+                return float(digits) if digits else default
+            except (ValueError, TypeError):
+                return default
+        return default
+
+    raw_hooks = []
+    if isinstance(hooks_data, dict):
+        if isinstance(hooks_data.get("hooks"), list):
+            raw_hooks = hooks_data["hooks"]
+        elif isinstance(hooks_data.get("hooks"), (dict, str)):
+            raw_hooks = [hooks_data["hooks"]]
+        elif isinstance(hooks_data.get("hook"), (dict, str)):
+            raw_hooks = [hooks_data["hook"]]
+        elif isinstance(hooks_data.get("ab_test_variants"), list):
+            raw_hooks = hooks_data["ab_test_variants"]
+        elif isinstance(hooks_data.get("hook_variants"), list):
+            raw_hooks = hooks_data["hook_variants"]
+        elif isinstance(hooks_data.get("options"), list):
+            raw_hooks = hooks_data["options"]
+        elif isinstance(hooks_data.get("variants"), list):
+            raw_hooks = hooks_data["variants"]
+        else:
+            text_val = hooks_data.get("text") or hooks_data.get("hook")
+            if text_val:
+                raw_hooks = [hooks_data]
+    elif isinstance(hooks_data, list):
+        raw_hooks = hooks_data
+    elif isinstance(hooks_data, str) and hooks_data.strip():
+        raw_hooks = [hooks_data]
+
+    normalized_hooks = []
+    for item in raw_hooks:
+        if isinstance(item, dict):
+            text = (
+                item.get("text")
+                or item.get("hook")
+                or item.get("hook_text")
+                or item.get("title")
+                or item.get("content")
+                or ""
+            )
+            if not text:
+                for k, v in item.items():
+                    if isinstance(v, str) and k not in ("reason", "pattern", "variant_id") and len(v.strip()) > 5:
+                        text = v
+                        break
+            if text and str(text).strip():
+                normalized_hooks.append({
+                    "text": str(text).strip(),
+                    "curiosity_score": _extract_score(item.get("curiosity_score"), 5.0),
+                    "emotional_trigger_score": _extract_score(item.get("emotional_trigger_score"), 5.0),
+                    "swipe_stop_power": _extract_score(item.get("swipe_stop_power") or item.get("swipe_stop_score"), 5.0),
+                    "topic_specificity_score": _extract_score(item.get("topic_specificity_score"), 5.0),
+                    "universal_appeal_score": _extract_score(item.get("universal_appeal_score"), 5.0),
+                    "reason": str(item.get("reason", ""))
+                })
+        elif isinstance(item, str) and item.strip():
+            normalized_hooks.append({
+                "text": item.strip(),
+                "curiosity_score": 5.0,
+                "emotional_trigger_score": 5.0,
+                "swipe_stop_power": 5.0,
+                "topic_specificity_score": 5.0,
+                "universal_appeal_score": 5.0,
+                "reason": ""
+            })
+
+    if not normalized_hooks:
+        print("⚠️ Hook Agent failed to produce valid hooks. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
     
     # Pick highest curiosity score hook
-    best_hook = max(hooks_data["hooks"], key=lambda h: h.get("curiosity_score", 0) + h.get("emotional_trigger_score", 0) + h.get("swipe_stop_power", 0) + h.get("topic_specificity_score", 0))
-    print(f"🎯 Selected Hook: {best_hook.get('text')}")
+    best_hook = max(
+        normalized_hooks,
+        key=lambda h: (
+            h["curiosity_score"]
+            + h["emotional_trigger_score"]
+            + h["swipe_stop_power"]
+            + h["topic_specificity_score"]
+        )
+    )
+    best_hook_text = best_hook.get("text", "")
+    print(f"🎯 Selected Hook: {best_hook_text}")
 
     # ── AGENT 3: NARRATIVE ──
     print("📖 [AGENT 3] Narrative Agent: Creating script draft...")
     narrative_prompt = NARRATIVE_AGENT_TEMPLATE.format(
         persona=SYSTEM_PERSONA,
-        research_json=json.dumps(research),
-        selected_hook=best_hook.get("text"),
+        research_json=json.dumps(research) if not isinstance(research, str) else research,
+        selected_hook=best_hook_text,
         selection_instruction=selection_instruction
     )
     narrative = call_gemini_api(client, narrative_prompt, category=category, task_type="reasoning")
@@ -1370,9 +1465,9 @@ Return ONLY a JSON object matching the required schema:
     print("⚡ [AGENT 4] Pacing Optimizer: Shortening sentences...")
     retention_prompt = RETENTION_OPTIMIZER_TEMPLATE.format(
         persona=SYSTEM_PERSONA,
-        narrative_json=json.dumps(narrative),
+        narrative_json=json.dumps(narrative) if not isinstance(narrative, str) else narrative,
         word_count_limit_str=word_count_limit_str,
-        best_hook=best_hook.get("text")
+        best_hook=best_hook_text
     )
     optimized = call_gemini_api(client, retention_prompt, prefer_fallback=True, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
@@ -1380,22 +1475,31 @@ Return ONLY a JSON object matching the required schema:
         print("⚠️ Pacing Optimizer failed. Attempting offline fallback script...")
         return get_offline_fallback_script(category, failed_topics)
 
+    if isinstance(optimized, str):
+        optimized = {"optimized_script": optimized}
+    elif isinstance(optimized, dict) and "optimized_script" not in optimized:
+        if "script" in optimized:
+            optimized["optimized_script"] = optimized["script"]
+        else:
+            optimized["optimized_script"] = ""
+
     # ── AGENT 4.5: RETENTION SCIENTIST ──
     print("🧬 [AGENT 4.5] Retention Scientist: Injecting proven retention patterns...")
     retention_sci_prompt = RETENTION_SCIENTIST_TEMPLATE.format(
         persona=SYSTEM_PERSONA,
-        optimized_script=optimized.get("optimized_script", "")
+        optimized_script=optimized.get("optimized_script", "") if isinstance(optimized, dict) else ""
     )
     retention_result = call_gemini_api(client, retention_sci_prompt, model=GEMINI_PRO_MODEL, category=category, task_type="reasoning")
     if GEMINI_RPM_SLEEP > 0: time.sleep(GEMINI_RPM_SLEEP)
     
     retention_map = {}
-    if retention_result and "retention_enhanced_script" in retention_result:
-        optimized["optimized_script"] = retention_result["retention_enhanced_script"]
+    if retention_result and isinstance(retention_result, dict) and "retention_enhanced_script" in retention_result:
+        if isinstance(optimized, dict):
+            optimized["optimized_script"] = retention_result["retention_enhanced_script"]
         retention_map = retention_result.get("retention_map", {})
-        cgr = retention_map.get("curiosity_gap_ratio", 0)
-        loops = len(retention_map.get("open_loops", []))
-        interrupts = len(retention_map.get("pattern_interrupts", []))
+        cgr = retention_map.get("curiosity_gap_ratio", 0) if isinstance(retention_map, dict) else 0
+        loops = len(retention_map.get("open_loops", [])) if isinstance(retention_map, dict) else 0
+        interrupts = len(retention_map.get("pattern_interrupts", [])) if isinstance(retention_map, dict) else 0
         print(f"   ✅ Retention: {loops} open loops, {interrupts} pattern interrupts, {cgr:.0%} curiosity gap ratio")
     else:
         print("   ⚠️ Retention Scientist failed (non-fatal). Using optimizer output directly.")
