@@ -19,7 +19,9 @@
         "வோம்பட்கு குப்பை சத்தம்? 😱 இது காரணம் தெரியும்! #shorts",
         "Wombats Poop Perfect Cubes — And Science Finally Knows Why",
         "❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?",
-        "Salt Makes Coffee Taste Sweeter"
+        "Salt Makes Coffee Taste Sweeter",
+        "போன் டிம்... ஆனா போன் இல்லை? 📱🧠 #TamilFacts",
+        "The Illusion of Truth: Three Repetitions Make Lies Feel Real"
     ],
     "used_keywords": [
         "preservation",
@@ -80,7 +82,7 @@
     "used_categories": {
         "📱 Digital Safety, Phone Secrets & Scam Alerts": 1,
         "🇮🇳 Tamil Nadu & India Did You Know": 1,
-        "🧬 Human Body & Dark Psychology": 1,
+        "🧬 Human Body & Dark Psychology": 2,
         "🌍 Mysterious History & Culture Secrets": 2,
         "📱 Tech Hacks & Mobile Secrets": 1,
         "🚀 Space, Science & Universe Explained": 1,
@@ -97,9 +99,10 @@
         "⚠️ 2 லட்சம் டன் மலை 18 ஆண்டில் குத்தியது! தெரியுமா? 🤯",
         "3000 வருடம் பழமை தேன் சாப்பிட்டாங்க! 😱 தெரியுமா?",
         "வோம்பட்கு குப்பை சத்தம்? 😱 இது காரணம் தெரியும்! #shorts",
-        "❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?"
+        "❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?",
+        "போன் டிம்... ஆனா போன் இல்லை? 📱🧠 #TamilFacts"
     ],
-    "total_uploaded": 10,
+    "total_uploaded": 11,
     "last_upload": "2026-10-16",
     "history": [
         {
@@ -285,6 +288,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/pov-xvIrOQQ",
             "source_url": "https://www.scientificamerican.com/article/salt-makes-coffee-sweeter/"
+        },
+        {
+            "date": "2026-10-16",
+            "title": "போன் டிம்... ஆனா போன் இல்லை? 📱🧠 #TamilFacts",
+            "news_headline": "The Illusion of Truth: Three Repetitions Make Lies Feel Real",
+            "category": "🧬 Human Body & Dark Psychology",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/xNFa3yYJ_Bk",
+            "source_url": "https://www.apa.org/monitor/2016/01/illusion-truth"
         }
     ]
 }
