@@ -23,7 +23,9 @@
         "போன் டிம்... ஆனா போன் இல்லை? 📱🧠 #TamilFacts",
         "The Illusion of Truth: Three Repetitions Make Lies Feel Real",
         "⚡️ உங்கள் மூளை 0.2 செகன்டில் மாயை பிடிக்குமா? தெரியுமா?",
-        "Your Brain Detects Lies in a Voice in 0.2 Seconds"
+        "Your Brain Detects Lies in a Voice in 0.2 Seconds",
+        "🔍 16‑Color Phone Hack: Hidden Shades Revealed!",
+        "Mantis Shrimp See a World Humans Can't Imagine"
     ],
     "used_keywords": [
         "environment",
@@ -92,7 +94,8 @@
         "📱 Tech Hacks & Mobile Secrets": 1,
         "🚀 Space, Science & Universe Explained": 1,
         "🧠 Mind-Blowing Science Curiosities": 2,
-        "🍳 Food, Health & Kitchen Science": 1
+        "🍳 Food, Health & Kitchen Science": 1,
+        "🐾 Nature & Animal Oddities": 1
     },
     "last_7_days_stories": [
         "🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?",
@@ -106,10 +109,11 @@
         "வோம்பட்கு குப்பை சத்தம்? 😱 இது காரணம் தெரியும்! #shorts",
         "❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?",
         "போன் டிம்... ஆனா போன் இல்லை? 📱🧠 #TamilFacts",
-        "⚡️ உங்கள் மூளை 0.2 செகன்டில் மாயை பிடிக்குமா? தெரியுமா?"
+        "⚡️ உங்கள் மூளை 0.2 செகன்டில் மாயை பிடிக்குமா? தெரியுமா?",
+        "🔍 16‑Color Phone Hack: Hidden Shades Revealed!"
     ],
-    "total_uploaded": 12,
-    "last_upload": "2026-10-16",
+    "total_uploaded": 13,
+    "last_upload": "2026-10-17",
     "history": [
         {
             "date": "2026-10-13",
@@ -322,6 +326,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/_TbPid6lap0",
             "source_url": "https://www.nature.com/articles/s41598-018-23638-3"
+        },
+        {
+            "date": "2026-10-17",
+            "title": "🔍 16‑Color Phone Hack: Hidden Shades Revealed!",
+            "news_headline": "Mantis Shrimp See a World Humans Can't Imagine",
+            "category": "🐾 Nature & Animal Oddities",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/aW97eGrtPUA",
+            "source_url": "https://en.wikipedia.org/wiki/Mantis_shrimp#Vision"
         }
     ]
 }
