@@ -1,0 +1,14 @@
+[08:06:18] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[08:06:18] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[08:06:18] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[08:06:18] STEP 1: Strategy Check -> Day: Tue, Slot: Slot B (Afternoon), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[08:06:18] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[08:07:29] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[08:14:19] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[08:14:19] 📊 Script length check passed: 78 words → ~35.9s estimated (bounds [25s - 55s])
+[08:14:19] Selected Fact: The Legendary 'Damascus Steel' Swords Were Actually Made from Tamil Nadu's 'Wootz Steel'
+[08:14:19] Source URL: https://www.nature.com/articles/nature04452
+[08:14:19] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[08:14:19] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[08:14:19] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"f139294fd9352d873dec8ff3a06bffef"}}
+[08:14:19] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
