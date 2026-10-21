@@ -12,3 +12,17 @@
 [08:12:49] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [08:12:49] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"2e98f3898f50dd05e1aeedc42313ff03"}}
 [08:12:49] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[13:07:52] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[13:07:52] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[13:07:52] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[13:07:52] STEP 1: Strategy Check -> Day: Wed, Slot: Slot C (Evening), Category: 🌍 Mysterious History & Culture Secrets
+[13:07:52] STEP 2: Fetching facts using Search Grounding for '🌍 Mysterious History & Culture Secrets'...
+[13:09:12] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[13:15:30] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:15:30] 📊 Script length check passed: 79 words → ~37.5s estimated (bounds [25s - 55s])
+[13:15:30] Selected Fact: Why the World's Largest Physics Lab (CERN) Has a 2m Tall Nataraja Statue
+[13:15:30] Source URL: https://home.cern/news/photo/community/statue-lord-shiva-cern
+[13:15:30] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[13:15:30] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[13:15:31] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"146b1f47904bc2e36a9ac30dfdcb94b0"}}
+[13:15:31] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
