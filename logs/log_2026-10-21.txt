@@ -1,0 +1,14 @@
+[08:04:53] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[08:04:53] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[08:04:53] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[08:04:53] STEP 1: Strategy Check -> Day: Wed, Slot: Slot B (Afternoon), Category: 🧬 Human Body & Dark Psychology
+[08:04:53] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[08:05:40] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[08:12:49] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[08:12:49] 📊 Script length check passed: 88 words → ~40.7s estimated (bounds [25s - 55s])
+[08:12:49] Selected Fact: Your Stomach Gets a New Lining Every 3-4 Days to Avoid Digesting Itself
+[08:12:49] Source URL: https://www.ncbi.nlm.nih.gov/books/NBK268762/
+[08:12:49] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[08:12:49] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[08:12:49] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"2e98f3898f50dd05e1aeedc42313ff03"}}
+[08:12:49] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
