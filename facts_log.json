@@ -55,7 +55,9 @@
         "கோலா விரலடை 99% மனிதருக்கு சமம்! தெரியுமா? 😱 #Shorts",
         "Koalas Have Fingerprints Almost Identical to Humans",
         "❌ 60W விளக்கு? LED-க்கு மாறி பில் 60% குறை! 😱",
-        "Switch to LED Bulbs: Up to 60% Electricity Savings in Indian Homes"
+        "Switch to LED Bulbs: Up to 60% Electricity Savings in Indian Homes",
+        "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱",
+        "Microwave Defrost Saves Energy Over Stovetop"
     ],
     "used_keywords": [
         "ancient technology",
@@ -169,7 +171,7 @@
     ],
     "used_categories": {
         "📱 Digital Safety, Phone Secrets & Scam Alerts": 4,
-        "🇮🇳 Tamil Nadu & India Did You Know": 3,
+        "🇮🇳 Tamil Nadu & India Did You Know": 4,
         "🧬 Human Body & Dark Psychology": 5,
         "🌍 Mysterious History & Culture Secrets": 3,
         "📱 Tech Hacks & Mobile Secrets": 1,
@@ -181,7 +183,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "12 மீட்டர் 3D-பிரிண்ட் பாலம் IIT-Madras-ல் 😱 தெரியுமா?",
         "Scam Call +234 இருந்து வந்தால் தெரியுமா? 😱",
         "⚠️ 3 நொடி! போலீஸ் போன் திறக்க முடியாது தெரியுமா?",
         "QR ஸ்கேனில் ₹50K மோசடி! உல்டா பணம் கெட்சு, தெரியுமா? 😱",
@@ -194,9 +195,10 @@
         "❌ 30 விநாடி சுவாசம் = Memory Boost! 😱",
         "SIM Swap Fraud அதிர்ச்சி உண்மை | How to Protect Bank Account",
         "கோலா விரலடை 99% மனிதருக்கு சமம்! தெரியுமா? 😱 #Shorts",
-        "❌ 60W விளக்கு? LED-க்கு மாறி பில் 60% குறை! 😱"
+        "❌ 60W விளக்கு? LED-க்கு மாறி பில் 60% குறை! 😱",
+        "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱"
     ],
-    "total_uploaded": 28,
+    "total_uploaded": 29,
     "last_upload": "2026-10-24",
     "history": [
         {
@@ -663,6 +665,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/UhKVSgknK7Y",
             "source_url": "https://en.wikipedia.org/wiki/LED_lighting"
+        },
+        {
+            "date": "2026-10-24",
+            "title": "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱",
+            "news_headline": "Microwave Defrost Saves Energy Over Stovetop",
+            "category": "🇮🇳 Tamil Nadu & India Did You Know",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/f7wNqcuIPC4",
+            "source_url": "https://www.energy.gov/articles/microwave-oven-energy-savings"
         }
     ]
 }
