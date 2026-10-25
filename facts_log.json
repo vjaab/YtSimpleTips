@@ -61,7 +61,9 @@
         "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱",
         "Public USB Ports Can Steal Your Data: The 'Juice Jacking' Trap",
         "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
-        "SIM cards can be cloned via NFC without removing them"
+        "SIM cards can be cloned via NFC without removing them",
+        "WhatsApp Live Location: Stop It Fast! 🚫📍",
+        "WhatsApp Live Location link stays active after you stop sharing"
     ],
     "used_keywords": [
         "ancient technology",
@@ -174,7 +176,7 @@
         "glow in the dark"
     ],
     "used_categories": {
-        "📱 Digital Safety, Phone Secrets & Scam Alerts": 6,
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 7,
         "🇮🇳 Tamil Nadu & India Did You Know": 4,
         "🧬 Human Body & Dark Psychology": 5,
         "🌍 Mysterious History & Culture Secrets": 3,
@@ -187,7 +189,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "QR ஸ்கேனில் ₹50K மோசடி! உல்டா பணம் கெட்சு, தெரியுமா? 😱",
         "மழை மணம் = பாக்டீரியா வமிச்சு?! 🤯 #Shorts",
         "📱 போன் 10 மணி நேரத்துல டெட் ஆகுதா? இந்த 0.2V ட்ரிக் தெரியுமா?",
         "Stop Charging Your Phone to 100%! 🔋😱",
@@ -200,9 +201,10 @@
         "❌ 60W விளக்கு? LED-க்கு மாறி பில் 60% குறை! 😱",
         "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱",
         "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱",
-        "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀"
+        "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
+        "WhatsApp Live Location: Stop It Fast! 🚫📍"
     ],
-    "total_uploaded": 31,
+    "total_uploaded": 32,
     "last_upload": "2026-10-25",
     "history": [
         {
@@ -699,6 +701,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/B4gZ6LqnsDY",
             "source_url": "https://thehackernews.com/2022/03/sim-card-cloning-using-nfc.html"
+        },
+        {
+            "date": "2026-10-25",
+            "title": "WhatsApp Live Location: Stop It Fast! 🚫📍",
+            "news_headline": "WhatsApp Live Location link stays active after you stop sharing",
+            "category": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/mS7csUX45Jw",
+            "source_url": "https://www.androidauthority.com/whatsapp-live-location-issues-3023314/"
         }
     ]
 }
