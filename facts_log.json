@@ -59,7 +59,9 @@
         "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱",
         "Microwave Defrost Saves Energy Over Stovetop",
         "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱",
-        "Public USB Ports Can Steal Your Data: The 'Juice Jacking' Trap"
+        "Public USB Ports Can Steal Your Data: The 'Juice Jacking' Trap",
+        "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
+        "SIM cards can be cloned via NFC without removing them"
     ],
     "used_keywords": [
         "ancient technology",
@@ -172,7 +174,7 @@
         "glow in the dark"
     ],
     "used_categories": {
-        "📱 Digital Safety, Phone Secrets & Scam Alerts": 5,
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 6,
         "🇮🇳 Tamil Nadu & India Did You Know": 4,
         "🧬 Human Body & Dark Psychology": 5,
         "🌍 Mysterious History & Culture Secrets": 3,
@@ -185,7 +187,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "⚠️ 3 நொடி! போலீஸ் போன் திறக்க முடியாது தெரியுமா?",
         "QR ஸ்கேனில் ₹50K மோசடி! உல்டா பணம் கெட்சு, தெரியுமா? 😱",
         "மழை மணம் = பாக்டீரியா வமிச்சு?! 🤯 #Shorts",
         "📱 போன் 10 மணி நேரத்துல டெட் ஆகுதா? இந்த 0.2V ட்ரிக் தெரியுமா?",
@@ -198,9 +199,10 @@
         "கோலா விரலடை 99% மனிதருக்கு சமம்! தெரியுமா? 😱 #Shorts",
         "❌ 60W விளக்கு? LED-க்கு மாறி பில் 60% குறை! 😱",
         "❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱",
-        "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱"
+        "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱",
+        "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀"
     ],
-    "total_uploaded": 30,
+    "total_uploaded": 31,
     "last_upload": "2026-10-25",
     "history": [
         {
@@ -687,6 +689,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/9VkXlFttWsU",
             "source_url": "https://www.fcc.gov/consumers/guides/avoid-juice-jacking-charging-devices-public-usb-ports"
+        },
+        {
+            "date": "2026-10-25",
+            "title": "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
+            "news_headline": "SIM cards can be cloned via NFC without removing them",
+            "category": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/B4gZ6LqnsDY",
+            "source_url": "https://thehackernews.com/2022/03/sim-card-cloning-using-nfc.html"
         }
     ]
 }
