@@ -42,6 +42,7 @@
 [09:19:53] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [09:19:53] STEP 12: Cleaning up output files...
 [09:19:53] === PIPELINE COMPLETED SUCCESSFULLY ===
+<<<<<<< Updated upstream
 [18:53:36] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
 [18:53:36] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
 [18:53:36] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
@@ -110,3 +111,33 @@
 [20:06:46] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [20:06:46] STEP 12: Cleaning up output files...
 [20:06:46] === PIPELINE COMPLETED SUCCESSFULLY ===
+=======
+[14:27:02] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[14:27:02] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[14:27:02] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[14:27:02] STEP 1: Strategy Check -> Day: Mon, Slot: Slot C (Evening), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[14:27:02] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[14:27:33] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[14:28:36] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:28:36] 📊 Script length check passed: 89 words → ~41.1s estimated (bounds [25s - 55s])
+[14:28:36] Selected Fact: Muppandal Wind Farm Powers Over 1 Million Homes
+[14:28:36] Source URL: https://en.wikipedia.org/wiki/Muppandal_Wind_Farm
+[14:28:36] ❌ [main.py] Duplicate topic rejected: '1,500MW மின் பவர்? முப்பாண்டல் விந்த் ஃபார்ம் 😱 தெரியுமா?' / 'Muppandal Wind Farm Powers Over 1 Million Homes'. Reason: Keyword overlap (tamil facts, tamil nadu, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[14:28:38] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[14:30:17] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:30:17] 📊 Script length check passed: 96 words → ~44.2s estimated (bounds [25s - 55s])
+[14:30:17] Selected Fact: Vedanthangal Bird Sanctuary: India's Oldest Water‑Bird Haven (1798)
+[14:30:17] Source URL: https://en.wikipedia.org/wiki/Vedanthangal_Bird_Sanctuary
+[14:30:17] ❌ [main.py] Duplicate topic rejected: '40,000 பறவைகள்! Vedanthangal ரகசியம் தெரியுமா? 😱' / 'Vedanthangal Bird Sanctuary: India's Oldest Water‑Bird Haven (1798)'. Reason: Keyword overlap (tamil facts, tamil nadu, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[14:30:19] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[14:31:16] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:31:16] 📊 Script length check passed: 86 words → ~39.5s estimated (bounds [25s - 55s])
+[14:31:16] Selected Fact: Zero First Appeared as a Numeral in a 9th‑Century Tamil Nadu Inscription
+[14:31:16] Source URL: https://www.britannica.com/science/zero-mathematics
+[14:31:16] ❌ [main.py] Duplicate topic rejected: '0 எண் 9-ம் நூற்றாண்டு? 😱 தெரியுமா?' / 'Zero First Appeared as a Numeral in a 9th‑Century Tamil Nadu Inscription'. Reason: Keyword overlap (tamil facts, tamil nadu, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[14:31:18] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[14:31:43] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[14:42:57] ❌ Script generation failed. Retrying...
+[14:43:02] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[14:43:26] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+>>>>>>> Stashed changes
