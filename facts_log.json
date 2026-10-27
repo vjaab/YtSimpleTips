@@ -67,7 +67,9 @@
         "100 Elephants in a cloud? தெரியுமா? 😱",
         "A Single Cloud Weighs as Much as 100 Elephants",
         "42 மடித்தால் நிலா வந்துவிடுமா? 😱 #shorts",
-        "Fold a Sheet 42 Times and It Reaches the Moon"
+        "Fold a Sheet 42 Times and It Reaches the Moon",
+        "2000 வருடம் பழமையான அணை இப்போ வேலை செய்கிறது?! 😱 #shorts",
+        "The World's Oldest Functional Dam (2nd Century AD) Still Supplies Water to Tamil Nadu Farms Today"
     ],
     "used_keywords": [
         "SIM swap fraud Tamil",
@@ -188,7 +190,7 @@
     ],
     "used_categories": {
         "📱 Digital Safety, Phone Secrets & Scam Alerts": 7,
-        "🇮🇳 Tamil Nadu & India Did You Know": 4,
+        "🇮🇳 Tamil Nadu & India Did You Know": 5,
         "🧬 Human Body & Dark Psychology": 5,
         "🌍 Mysterious History & Culture Secrets": 3,
         "📱 Tech Hacks & Mobile Secrets": 1,
@@ -200,7 +202,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "Stop Charging Your Phone to 100%! 🔋😱",
         "❌ Korkai முத்த ரகசியம்! 😱 #shorts",
         "ரைஸ் 12 மணி கூலிங் பண்ணினா 2.5x ஸ்டார்ச்?! தெரியுமா? 😱",
         "உடல் 1000× வெளிச்சம் தருகிறது! தெரியுமா? 😱 #Shorts",
@@ -213,10 +214,11 @@
         "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
         "WhatsApp Live Location: Stop It Fast! 🚫📍",
         "100 Elephants in a cloud? தெரியுமா? 😱",
-        "42 மடித்தால் நிலா வந்துவிடுமா? 😱 #shorts"
+        "42 மடித்தால் நிலா வந்துவிடுமா? 😱 #shorts",
+        "2000 வருடம் பழமையான அணை இப்போ வேலை செய்கிறது?! 😱 #shorts"
     ],
-    "total_uploaded": 34,
-    "last_upload": "2026-10-26",
+    "total_uploaded": 35,
+    "last_upload": "2026-10-27",
     "history": [
         {
             "date": "2026-10-13",
@@ -757,6 +759,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/cBmoC1SXUxc",
             "source_url": "https://en.wikipedia.org/wiki/Paper_folding#Exponential_growth"
+        },
+        {
+            "date": "2026-10-27",
+            "title": "2000 வருடம் பழமையான அணை இப்போ வேலை செய்கிறது?! 😱 #shorts",
+            "news_headline": "The World's Oldest Functional Dam (2nd Century AD) Still Supplies Water to Tamil Nadu Farms Today",
+            "category": "🇮🇳 Tamil Nadu & India Did You Know",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/6ufK8vvnIy4",
+            "source_url": "https://en.wikipedia.org/wiki/Kallanai_Dam"
         }
     ]
 }
