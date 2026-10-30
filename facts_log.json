@@ -85,7 +85,9 @@
         "❌ ரொட்டி பிரிஜ்ல 6x விரைவா பழையிடும் தெரியுமா? 😱 #shorts",
         "NEVER Put Bread in the Fridge: It Stales 6x Faster There",
         "திறமை உள்ளவன் தவறしたら 2x பிடிப்பு? தெரியுமா? 🤯",
-        "The Pratfall Effect: Making Mistakes Makes You More Likeable"
+        "The Pratfall Effect: Making Mistakes Makes You More Likeable",
+        "Phone Notification Kill Brain! 🚫⚡ Simple Trick",
+        "Negative News Triggers a Dopamine Rush"
     ],
     "used_keywords": [
         "fingerprints",
@@ -243,7 +245,7 @@
     "used_categories": {
         "📱 Digital Safety, Phone Secrets & Scam Alerts": 8,
         "🇮🇳 Tamil Nadu & India Did You Know": 5,
-        "🧬 Human Body & Dark Psychology": 7,
+        "🧬 Human Body & Dark Psychology": 8,
         "🌍 Mysterious History & Culture Secrets": 6,
         "📱 Tech Hacks & Mobile Secrets": 1,
         "🚀 Space, Science & Universe Explained": 1,
@@ -254,7 +256,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "❌ USB சார்ஜ் செய்யும் போது ஹேக் ஆக்காங்கா? 😱",
         "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
         "WhatsApp Live Location: Stop It Fast! 🚫📍",
         "100 Elephants in a cloud? தெரியுமா? 😱",
@@ -267,9 +268,10 @@
         "0% மரணம்! இம்மார்டல் ஜெல்லிஃபிஷ் தெரியுமா? 😱",
         "18-Story, 85மீ ஆழம்! டெரின்கயு ரகசியம் 😱 தெரியுமா?",
         "❌ ரொட்டி பிரிஜ்ல 6x விரைவா பழையிடும் தெரியுமா? 😱 #shorts",
-        "திறமை உள்ளவன் தவறしたら 2x பிடிப்பு? தெரியுமா? 🤯"
+        "திறமை உள்ளவன் தவறしたら 2x பிடிப்பு? தெரியுமா? 🤯",
+        "Phone Notification Kill Brain! 🚫⚡ Simple Trick"
     ],
-    "total_uploaded": 43,
+    "total_uploaded": 44,
     "last_upload": "2026-10-30",
     "history": [
         {
@@ -973,6 +975,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/l_lVfR_IzU4",
             "source_url": "https://www.apa.org/monitor/2019/03/pratfall-effect"
+        },
+        {
+            "date": "2026-10-30",
+            "title": "Phone Notification Kill Brain! 🚫⚡ Simple Trick",
+            "news_headline": "Negative News Triggers a Dopamine Rush",
+            "category": "🧬 Human Body & Dark Psychology",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/6itJmebb0fU",
+            "source_url": "https://www.nature.com/articles/s41562-018-0416-9"
         }
     ]
 }
