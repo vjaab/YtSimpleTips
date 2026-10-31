@@ -87,7 +87,9 @@
         "திறமை உள்ளவன் தவறしたら 2x பிடிப்பு? தெரியுமா? 🤯",
         "The Pratfall Effect: Making Mistakes Makes You More Likeable",
         "Phone Notification Kill Brain! 🚫⚡ Simple Trick",
-        "Negative News Triggers a Dopamine Rush"
+        "Negative News Triggers a Dopamine Rush",
+        "இரத்தம் 90% லிவர்ல பாக்கு?! 🤯 #shorts",
+        "Glass Frogs Hide 90% of Their Blood in Their Liver to Become Invisible"
     ],
     "used_keywords": [
         "fingerprints",
@@ -251,12 +253,11 @@
         "🚀 Space, Science & Universe Explained": 1,
         "🧠 Mind-Blowing Science Curiosities": 8,
         "🍳 Food, Health & Kitchen Science": 3,
-        "🐾 Nature & Animal Oddities": 2,
+        "🐾 Nature & Animal Oddities": 3,
         "💰 Money-Saving & Smart Living Tricks": 1,
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "🔐 NFC ஆஃப் பண்ணி OTP பாதுகாப்பு! 🚀",
         "WhatsApp Live Location: Stop It Fast! 🚫📍",
         "100 Elephants in a cloud? தெரியுமா? 😱",
         "42 மடித்தால் நிலா வந்துவிடுமா? 😱 #shorts",
@@ -269,10 +270,11 @@
         "18-Story, 85மீ ஆழம்! டெரின்கயு ரகசியம் 😱 தெரியுமா?",
         "❌ ரொட்டி பிரிஜ்ல 6x விரைவா பழையிடும் தெரியுமா? 😱 #shorts",
         "திறமை உள்ளவன் தவறしたら 2x பிடிப்பு? தெரியுமா? 🤯",
-        "Phone Notification Kill Brain! 🚫⚡ Simple Trick"
+        "Phone Notification Kill Brain! 🚫⚡ Simple Trick",
+        "இரத்தம் 90% லிவர்ல பாக்கு?! 🤯 #shorts"
     ],
-    "total_uploaded": 44,
-    "last_upload": "2026-10-30",
+    "total_uploaded": 45,
+    "last_upload": "2026-10-31",
     "history": [
         {
             "date": "2026-10-13",
@@ -985,6 +987,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/6itJmebb0fU",
             "source_url": "https://www.nature.com/articles/s41562-018-0416-9"
+        },
+        {
+            "date": "2026-10-31",
+            "title": "இரத்தம் 90% லிவர்ல பாக்கு?! 🤯 #shorts",
+            "news_headline": "Glass Frogs Hide 90% of Their Blood in Their Liver to Become Invisible",
+            "category": "🐾 Nature & Animal Oddities",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/sZtxuPKpLOw",
+            "source_url": "https://www.science.org/doi/10.1126/science.abo6404"
         }
     ]
 }
