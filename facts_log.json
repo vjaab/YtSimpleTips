@@ -97,7 +97,9 @@
         "9 மில்லியன் மோசடி சிம்கள் ப்ளாக்! உங்க ID லும் இருக்கா? தெரியுமா? 😱",
         "Sanchar Saathi TAF-COP: Find and Block Ghost SIMs Issued Under Your ID",
         "Digital Arrest Scam Alert! 🚨 தப்பிக்க இந்த 2 Steps பண்ணுங்க!",
-        "The 'Digital Arrest' Scam: Fake Police Video Calls Stealing Crores"
+        "The 'Digital Arrest' Scam: Fake Police Video Calls Stealing Crores",
+        "❌ Find My Device offline? Google’s secret 😲",
+        "Find My Device Works Even Offline via Nearby Android Phones"
     ],
     "used_keywords": [
         "glow in the dark",
@@ -262,7 +264,7 @@
         "fact"
     ],
     "used_categories": {
-        "📱 Digital Safety, Phone Secrets & Scam Alerts": 10,
+        "📱 Digital Safety, Phone Secrets & Scam Alerts": 11,
         "🇮🇳 Tamil Nadu & India Did You Know": 7,
         "🧬 Human Body & Dark Psychology": 8,
         "🌍 Mysterious History & Culture Secrets": 6,
@@ -275,7 +277,6 @@
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "❌ Call Recording Icon Alert! 🔍 #shorts",
         "❌ 1 கோரிக்கை கொடுத்து எதிரியை கைப்பற்று! தெரியுமா? 🤯",
         "2000 ஆண்டுக்கு முன் எகிப்தில் தமிழ் வியாபாரி! தெரியுமா? 😱",
         "9000 கிமீ தூரம் தமிழ் மணி கண்டு தெரியுமா? 😱",
@@ -288,9 +289,10 @@
         "❌ 40% Wind Power இங்கuthான்! 😱 #shorts",
         "❌ 70% Gas Save? Pressure Cooker ரகசியம் 😱",
         "9 மில்லியன் மோசடி சிம்கள் ப்ளாக்! உங்க ID லும் இருக்கா? தெரியுமா? 😱",
-        "Digital Arrest Scam Alert! 🚨 தப்பிக்க இந்த 2 Steps பண்ணுங்க!"
+        "Digital Arrest Scam Alert! 🚨 தப்பிக்க இந்த 2 Steps பண்ணுங்க!",
+        "❌ Find My Device offline? Google’s secret 😲"
     ],
-    "total_uploaded": 49,
+    "total_uploaded": 50,
     "last_upload": "2026-11-01",
     "history": [
         {
@@ -1069,6 +1071,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "https://youtu.be/3wAo2lY84cE",
             "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1990000"
+        },
+        {
+            "date": "2026-11-01",
+            "title": "❌ Find My Device offline? Google’s secret 😲",
+            "news_headline": "Find My Device Works Even Offline via Nearby Android Phones",
+            "category": "📱 Digital Safety, Phone Secrets & Scam Alerts",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/WvEcwR1N1_4",
+            "source_url": "https://support.google.com/android/answer/9075920"
         }
     ]
 }
