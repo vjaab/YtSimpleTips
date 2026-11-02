@@ -1,0 +1,46 @@
+[10:00:49] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[10:00:49] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[10:00:49] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[10:00:49] STEP 1: Strategy Check -> Day: Mon, Slot: Slot B (Afternoon), Category: 🧠 Mind-Blowing Science Curiosities
+[10:00:49] STEP 2: Fetching facts using Search Grounding for '🧠 Mind-Blowing Science Curiosities'...
+[10:02:46] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:12:41] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:12:41] 📊 Script length check passed: 85 words → ~40.7s estimated (bounds [25s - 55s])
+[10:12:41] Selected Fact: The Largest Living Organism Is a Mushroom Spanning 3.7 Square Miles
+[10:12:41] Source URL: https://www.fs.usda.gov/detail/r6/naturewatch/?cid=stelprdb5314179
+[10:12:41] ❌ [main.py] Duplicate topic rejected: '35,000 டன் மஷ்ரூம்?! 8,650 வருடம் பழமை! தெரியுமா? 😱 #Shorts' / 'The Largest Living Organism Is a Mushroom Spanning 3.7 Square Miles'. Reason: Distinctive keywords (பழமை, வருடம், 000) overlap with: '3000 வருடம் பழமை தேன் சாப்பிட்டாங்க! 😱 தெரியுமா?'
+[10:12:43] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[10:21:34] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:21:34] 📊 Script length check passed: 84 words → ~38.2s estimated (bounds [25s - 55s])
+[10:21:34] Selected Fact: A Day on Venus Is Longer Than a Year on Venus
+[10:21:34] Source URL: https://solarsystem.nasa.gov/planets/venus/in-depth/
+[10:21:34] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:21:34] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:21:57] STEP 4.5: Logging fact in topic tracker...
+[10:21:57] STEP 5: Matching word timestamps to visual chunks...
+[10:21:57] STEP 5.5: Fetching entity photos and company logos...
+[10:21:57] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[10:21:57] STEP 6: Resolving background visual clips...
+[10:22:16] STEP 7: Invoking video rendering engine...
+[10:22:16] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261102_100049_5495.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+    comment         : FUJIFILM DIGITAL CAMERA GFX100S
+  Duration: 00:00:11.01, start: 0.000000, bitrate: 11118 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, smpte170m/bt709/smpte170m, progressive), 1080x1920, 11113 kb/s, 59.94 fps, 59.94 tbr, 60k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 04:50:33;50
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : TimeCodeHandler
+        timecode        : 04:50:33;50
+At least one output file must be specified
+
