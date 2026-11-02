@@ -44,3 +44,42 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 04:50:33;50
 At least one output file must be specified
 
+[17:11:43] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[17:11:43] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[17:11:43] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[17:11:43] STEP 1: Strategy Check -> Day: Mon, Slot: Slot C (Evening), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[17:11:43] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[17:14:01] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[17:26:36] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:26:36] 📊 Script length check passed: 86 words → ~39.6s estimated (bounds [25s - 55s])
+[17:26:36] Selected Fact: Chennai's ICF is the World's Largest Railway Coach Manufacturer
+[17:26:36] Source URL: https://en.wikipedia.org/wiki/Integral_Coach_Factory
+[17:26:36] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[17:26:36] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[17:27:05] STEP 4.5: Logging fact in topic tracker...
+[17:27:05] STEP 5: Matching word timestamps to visual chunks...
+[17:27:05] STEP 5.5: Fetching entity photos and company logos...
+[17:27:05] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[17:27:05] STEP 6: Resolving background visual clips...
+[17:27:39] STEP 7: Invoking video rendering engine...
+[17:27:40] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261102_171143_8250.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:08.24, start: 0.000000, bitrate: 13302 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 13298 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 15:13:36;04
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 15:13:36;04
+At least one output file must be specified
+
