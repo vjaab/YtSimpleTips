@@ -88,3 +88,69 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 01:00:55:07
 At least one output file must be specified
 
+[19:52:54] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[19:52:54] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[19:52:54] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[19:52:54] STEP 1: Strategy Check -> Day: Wed, Slot: Slot A (Morning), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[19:52:54] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[19:53:24] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[19:54:32] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[19:54:32] 📊 Script length check passed: 85 words → ~39.0s estimated (bounds [25s - 55s])
+[19:54:32] Selected Fact: Tamil Brahmi: The Earliest Script of South India
+[19:54:32] Source URL: https://en.wikipedia.org/wiki/Tamil_Brahmi
+[19:54:32] ❌ [main.py] Duplicate topic rejected: '3-ஆம் நூற்றாண்டு BCE-ல் Tamil Brahmi கண்டுபிடிப்பு தெரியுமா? 😱' / 'Tamil Brahmi: The Earliest Script of South India'. Reason: Keyword overlap (tamil nadu, tamil facts, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[19:54:34] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[19:55:42] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[19:55:42] 📊 Script length check passed: 89 words → ~41.6s estimated (bounds [25s - 55s])
+[19:55:42] Selected Fact: Vedaranyam Mangrove: Nature’s Tsunami Shield
+[19:55:42] Source URL: https://www.thehindu.com/news/national/tamil-nadu/vedaranyam-mangrove-protects-coastal-communities/article65872145.ece
+[19:55:42] ❌ [main.py] Duplicate topic rejected: '70% Wave Height குறைக்கிறதா? Vedaranyam Mangrove தெரியுமா?' / 'Vedaranyam Mangrove: Nature’s Tsunami Shield'. Reason: Keyword overlap (tamil nadu, environment, tamil facts) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[19:55:44] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[19:56:08] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:00:03] ❌ Script generation failed. Retrying...
+[20:00:08] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[20:00:32] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:01:19] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:01:19] 📊 Script length check passed: 99 words → ~46.3s estimated (bounds [25s - 55s])
+[20:01:19] Selected Fact: Vinegar‑Water Cleaner Beats Expensive Store Brands
+[20:01:19] Source URL: https://www.epa.gov/greenerproducts/cleaning-products
+[20:01:19] ❌ [main.py] Duplicate topic rejected: '❌ வெினிகர்-வாட்டர் கிளீனர் 😱 செலவுகள் 2k குறை!' / 'Vinegar‑Water Cleaner Beats Expensive Store Brands'. Reason: Distinctive keywords (வாட்டர், water) overlap with: 'முகம்மேல் ஐஸ் வாட்டர் -> 10-25% ஹார்ட் ரேட் ட்ராப்! தெரியுமா? 🧊'
+[20:01:21] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[20:01:45] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:02:30] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:02:30] 📊 Script length check passed: 98 words → ~48.5s estimated (bounds [25s - 55s])
+[20:02:30] Selected Fact: Bulk Buying & Freezing Saves Up to 30% on Groceries
+[20:02:30] Source URL: https://www.consumerreports.org/cro/money-saving-tips/buying-in-bulk/index.htm
+[20:02:30] ❌ [main.py] Duplicate topic rejected: '❌ Bulk வாங்கி Freeze பண்ணி 30% சேமி! 😱 #shorts' / 'Bulk Buying & Freezing Saves Up to 30% on Groceries'. Reason: Distinctive keywords (சேமி, saves) overlap with: '❌ மைக்ரோவேவ் டிஃப்ராஸ்ட் ரகசியம்! 80% எலக்ட்ரிசிட்டி சேமி 😱'
+[20:02:32] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[20:02:56] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:04:09] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:04:09] 📊 Script length check passed: 102 words → ~47.5s estimated (bounds [25s - 55s])
+[20:04:09] Selected Fact: Bulk‑Buy & Freeze to Cut Grocery Waste by 30%
+[20:04:09] Source URL: https://www.theguardian.com/lifeandstyle/2020/aug/12/how-bulk-buying-can-save-money
+[20:04:09] ❌ [main.py] Duplicate topic rejected: '❌ 30% Grocery Waste? Bulk & Freeze எப்படி? 😱 #shorts' / 'Bulk‑Buy & Freeze to Cut Grocery Waste by 30%'. Reason: Keyword overlap (vj videos, tamil facts) with story: '42 மடித்தால் நிலா வந்துவிடுமா? 😱 #shorts'
+[20:04:11] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[20:04:36] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:08:27] ❌ Script generation failed. Retrying...
+[20:08:32] STEP 3 (Attempt 8/10): Multi-Agent Tanglish Script Generation...
+[20:08:57] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:10:52] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:10:52] 📊 Script length check passed: 100 words → ~47.5s estimated (bounds [25s - 55s])
+[20:10:52] Selected Fact: Unplug Chargers to Cut Up to ₹400 a Year
+[20:10:52] Source URL: https://en.wikipedia.org/wiki/Standby_power
+[20:10:52] ❌ [main.py] Duplicate topic rejected: '❌ சார்ஜர் பிளக் விட்டு ₹400 சேமிக்கலாமா? 😱' / 'Unplug Chargers to Cut Up to ₹400 a Year'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[20:10:54] STEP 3 (Attempt 9/10): Multi-Agent Tanglish Script Generation...
+[20:11:18] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:14:31] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:14:31] 📊 Script length check passed: 76 words → ~38.5s estimated (bounds [25s - 55s])
+[20:14:31] Selected Fact: Smart Power Strip Cuts Standby Power by 90%
+[20:14:31] Source URL: https://www.energy.gov/eere/articles/standby-power-what-are-standby-power-consumption
+[20:14:31] ❌ [main.py] Duplicate topic rejected: '⚡ கரண்ட் பில் 30% குறையணுமா? இந்த Trick ட்ரை பண்ணுங்க!' / 'Smart Power Strip Cuts Standby Power by 90%'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[20:14:33] STEP 3 (Attempt 10/10): Multi-Agent Tanglish Script Generation...
+[20:14:57] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:15:52] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:15:52] 📊 Script length check passed: 106 words → ~50.1s estimated (bounds [25s - 55s])
+[20:15:52] Selected Fact: Freeze Coffee Beans to Keep Them Fresh 6 Months
+[20:15:52] Source URL: https://www.ncausa.org/About-Coffee/FAQ/How-to-Store-Coffee
+[20:15:52] ❌ [main.py] Duplicate topic rejected: '❌ காபி பீன்ஸ் ஃப்ரீசில்? 6 மாதம் Fresh! 😱 #shorts' / 'Freeze Coffee Beans to Keep Them Fresh 6 Months'. Reason: Distinctive keywords (coffee, காபி) overlap with: '❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?'
+[20:15:54] 🚨 Pipeline failed to build core assets after multiple attempts.
