@@ -1,0 +1,45 @@
+[10:14:03] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[10:14:03] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[10:14:03] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[10:14:03] STEP 1: Strategy Check -> Day: Tue, Slot: Slot B (Afternoon), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[10:14:03] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[10:16:13] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:21:54] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:21:54] 📊 Script length check passed: 89 words → ~40.2s estimated (bounds [25s - 55s])
+[10:21:54] Selected Fact: Ancient Tamil 'MNCs' Had HQs in Thailand 1,000 Years Ago
+[10:21:54] Source URL: https://www.thehindu.com/news/national/tamil-nadu/tamil-inscription-found-in-thailand/article67450000.ece
+[10:21:54] ❌ [main.py] Duplicate topic rejected: '500 பேரின் பழைய தமிழ் MNC தாய்லாந்தில் தெரியுமா? 🔥' / 'Ancient Tamil 'MNCs' Had HQs in Thailand 1,000 Years Ago'. Reason: Distinctive keywords (தமிழ், ancient) overlap with: '2000 ஆண்டுக்கு முன் எகிப்தில் தமிழ் வியாபாரி! தெரியுமா? 😱'
+[10:21:56] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[10:28:57] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:28:57] 📊 Script length check passed: 90 words → ~41.3s estimated (bounds [25s - 55s])
+[10:28:57] Selected Fact: The Nilgiri Train 'Bites' the Track to Climb Mountains (Only One in India)
+[10:28:57] Source URL: https://en.wikipedia.org/wiki/Nilgiri_Mountain_Railway
+[10:28:57] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:28:57] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:29:26] STEP 4.5: Logging fact in topic tracker...
+[10:29:26] STEP 5: Matching word timestamps to visual chunks...
+[10:29:26] STEP 5.5: Fetching entity photos and company logos...
+[10:29:26] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[10:29:26] STEP 6: Resolving background visual clips...
+[10:30:15] STEP 7: Invoking video rendering engine...
+[10:30:17] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261103_101403_2878.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf62.12.101
+  Duration: 00:00:09.22, start: 0.000000, bitrate: 3300 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 3297 kb/s, 23.98 fps, 23.98 tbr, 24k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc62.28.101 libx264
+        timecode        : 00:09:55:21
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 00:09:55:21
+At least one output file must be specified
+
