@@ -1,0 +1,39 @@
+[09:54:19] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[09:54:19] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[09:54:19] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[09:54:19] STEP 1: Strategy Check -> Day: Thu, Slot: Slot B (Afternoon), Category: 🌍 Mysterious History & Culture Secrets
+[09:54:19] STEP 2: Fetching facts using Search Grounding for '🌍 Mysterious History & Culture Secrets'...
+[10:03:20] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:19:58] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:19:58] 📊 Script length check passed: 86 words → ~40.8s estimated (bounds [25s - 55s])
+[10:19:58] Selected Fact: Lepakshi Temple’s Floating Hanging Pillar
+[10:19:58] Source URL: https://en.wikipedia.org/wiki/Lepakshi_Temple
+[10:19:58] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:19:58] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:20:19] STEP 4.5: Logging fact in topic tracker...
+[10:20:19] STEP 5: Matching word timestamps to visual chunks...
+[10:20:19] STEP 5.5: Fetching entity photos and company logos...
+[10:20:19] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[10:20:19] STEP 6: Resolving background visual clips...
+[10:20:42] STEP 7: Invoking video rendering engine...
+[10:20:45] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261105_095419_2975.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:06.04, start: 0.000000, bitrate: 15814 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 15810 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 17:25:07;03
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 17:25:07;03
+At least one output file must be specified
+
