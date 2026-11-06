@@ -82,3 +82,72 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 01:04:16:09
 At least one output file must be specified
 
+[19:46:02] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[19:46:02] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[19:46:02] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[19:46:02] STEP 1: Strategy Check -> Day: Sat, Slot: Slot A (Morning), Category: 🍳 Food, Health & Kitchen Science
+[19:46:02] STEP 2: Fetching facts using Search Grounding for '🍳 Food, Health & Kitchen Science'...
+[19:46:31] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[19:47:19] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[19:47:19] 📊 Script length check passed: 93 words → ~43.2s estimated (bounds [25s - 55s])
+[19:47:19] Selected Fact: Soaking Rice Before Cooking Cuts Arsenic Absorption
+[19:47:19] Source URL: https://www.fda.gov/food/food-ingredients-packaging/arsenic-rice
+[19:47:19] ❌ [main.py] Duplicate topic rejected: '40% அரிசி நீக்கலாம்? தெரியுமா? ⚠️' / 'Soaking Rice Before Cooking Cuts Arsenic Absorption'. Reason: Keyword overlap (food, tamil facts, did you know) with story: '❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?'
+[19:47:21] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[19:48:50] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[19:48:50] 📊 Script length check passed: 89 words → ~42.0s estimated (bounds [25s - 55s])
+[19:48:50] Selected Fact: Refrigerate Onions to Reduce Eye‑Irritation Gas
+[19:48:50] Source URL: https://www.usda.gov/media/blog/2019/03/05/how-store-onions
+[19:48:50] ❌ [main.py] Duplicate topic rejected: '❌ 1️⃣ ரெஃப் Onions வைத்தா கண்ணீர் வரமாட்டாங்க தெரியுமா?' / 'Refrigerate Onions to Reduce Eye‑Irritation Gas'. Reason: Keyword overlap (food, tamil facts, did you know) with story: '❌ ¼ tsp உப்பால் காபி இனிப்பு? தெரியுமா?'
+[19:48:52] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[19:49:18] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:11:30] ❌ Script generation failed. Retrying...
+[20:11:35] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[20:11:59] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:14:56] ❌ Script generation failed. Retrying...
+[20:15:01] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[20:15:25] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:16:13] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:16:13] 📊 Script length check passed: 99 words → ~46.2s estimated (bounds [25s - 55s])
+[20:16:13] Selected Fact: Baking Soda Slashes Bean Cooking Time
+[20:16:13] Source URL: https://extension.illinois.edu/blog/2020-06-24-how-use-baking-soda-cook-beans
+[20:16:13] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[20:16:13] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[20:16:40] ⚠️ Local TTS returned 55.7s audio. Pre-check estimate was 46.2s.
+[20:16:40]    Observed pace: 1.78 words/sec (vs estimate 2.4285714285714284). Recalibrating for next run.
+[20:16:40] ⚠️ Generated audio duration (55.7s) is out of bounds [25s - 55s]. Retrying...
+[20:16:40] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[20:17:05] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:31:40] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:31:40] 📊 Script length check passed: 78 words → ~37.5s estimated (bounds [25s - 55s])
+[20:31:40] Selected Fact: Baking Soda: A Quick Fix for Heartburn and Gas
+[20:31:40] Source URL: https://www.healthline.com/health/digestive-health/baking-soda
+[20:31:40] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[20:31:40] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[20:31:46] STEP 4.5: Logging fact in topic tracker...
+[20:31:46] STEP 5: Matching word timestamps to visual chunks...
+[20:31:46] STEP 5.5: Fetching entity photos and company logos...
+[20:31:46] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[20:31:46] STEP 6: Resolving background visual clips...
+[20:32:00] STEP 7: Invoking video rendering engine...
+[20:32:03] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261106_194602_2442.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:11.48, start: 0.000000, bitrate: 1996 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 1993 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:02:42:06
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Core Media Video
+        timecode        : 01:02:42:06
+At least one output file must be specified
+
