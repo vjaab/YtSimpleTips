@@ -37,3 +37,48 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 01:00:00:00
 At least one output file must be specified
 
+[15:11:34] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[15:11:34] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[15:11:34] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[15:11:35] STEP 1: Strategy Check -> Day: Fri, Slot: Slot C (Evening), Category: 🧬 Human Body & Dark Psychology
+[15:11:35] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[15:13:36] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[15:23:26] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[15:23:26] 📊 Script length check passed: 86 words → ~41.0s estimated (bounds [25s - 55s])
+[15:23:26] Selected Fact: The 'Door-in-the-Face' Trick: Get a 'Yes' By Asking for a 'No' First
+[15:23:26] Source URL: https://en.wikipedia.org/wiki/Door-in-the-face_technique
+[15:23:26] ❌ [main.py] Duplicate topic rejected: 'Meta-analyses show it increases compliance by roughly 1.5–2× compared to direct requests, not a guaranteed doubling. தெரியுமா? 🤯' / 'The 'Door-in-the-Face' Trick: Get a 'Yes' By Asking for a 'No' First'. Reason: Distinctive keywords (get, compliance) overlap with: '❌ 93% பேர் ஒப்புக்கொள்வார்! ‘Because’ ஹாக் தெரியுமா?'
+[15:23:28] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[15:36:46] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[15:36:46] 📊 Script length check passed: 90 words → ~41.6s estimated (bounds [25s - 55s])
+[15:36:46] Selected Fact: Moral Licensing: Why Being 'Good' Gives You Permission to Be 'Bad'
+[15:36:46] Source URL: https://en.wikipedia.org/wiki/Moral_licensing
+[15:36:46] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[15:36:46] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[15:37:13] STEP 4.5: Logging fact in topic tracker...
+[15:37:13] STEP 5: Matching word timestamps to visual chunks...
+[15:37:13] STEP 5.5: Fetching entity photos and company logos...
+[15:37:13] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[15:37:13] STEP 6: Resolving background visual clips...
+[15:37:31] STEP 7: Invoking video rendering engine...
+[15:37:34] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261106_151134_5692.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:13.52, start: 0.000000, bitrate: 2659 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 2657 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:04:16:09
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Core Media Video
+        timecode        : 01:04:16:09
+At least one output file must be specified
+
