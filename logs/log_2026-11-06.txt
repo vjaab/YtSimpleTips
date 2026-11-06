@@ -1,0 +1,39 @@
+[09:57:09] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[09:57:09] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[09:57:09] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[09:57:09] STEP 1: Strategy Check -> Day: Fri, Slot: Slot B (Afternoon), Category: 🍳 Food, Health & Kitchen Science
+[09:57:09] STEP 2: Fetching facts using Search Grounding for '🍳 Food, Health & Kitchen Science'...
+[09:59:24] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:04:56] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:04:56] 📊 Script length check passed: 95 words → ~44.2s estimated (bounds [25s - 55s])
+[10:04:56] Selected Fact: Crushed Garlic Must 'Rest' 10 Mins Before Cooking or You Lose Its Medicine
+[10:04:56] Source URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6156113/
+[10:04:56] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:04:56] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:05:17] STEP 4.5: Logging fact in topic tracker...
+[10:05:17] STEP 5: Matching word timestamps to visual chunks...
+[10:05:17] STEP 5.5: Fetching entity photos and company logos...
+[10:05:17] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[10:05:17] STEP 6: Resolving background visual clips...
+[10:06:16] STEP 7: Invoking video rendering engine...
+[10:06:18] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261106_095708_2473.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:18.72, start: 0.000000, bitrate: 3408 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 3404 kb/s, 50 fps, 50 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:00:00:00
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 01:00:00:00
+At least one output file must be specified
+
