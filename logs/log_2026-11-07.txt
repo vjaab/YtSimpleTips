@@ -26,3 +26,64 @@
 [09:37:22] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [09:37:22] STEP 12: Cleaning up output files...
 [09:37:22] === PIPELINE COMPLETED SUCCESSFULLY ===
+[14:13:31] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[14:13:31] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[14:13:31] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[14:13:31] STEP 1: Strategy Check -> Day: Sat, Slot: Slot C (Evening), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[14:13:31] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[14:15:47] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[14:18:31] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:18:31] 📊 Script length check passed: 83 words → ~38.4s estimated (bounds [25s - 55s])
+[14:18:31] Selected Fact: The Nilgiris Turn Blue Once Every 12 Years — The 'Kurinji' Miracle
+[14:18:31] Source URL: https://en.wikipedia.org/wiki/Strobilanthes_kunthiana
+[14:18:31] ❌ [main.py] Duplicate topic rejected: '❌ 12 ஆண்டுகளுக்கு ஒருமுறை தான் நீலக்குறிஞ்சி! தெரியுமா? 😱' / 'The Nilgiris Turn Blue Once Every 12 Years — The 'Kurinji' Miracle'. Reason: Keyword overlap (tamil facts, tamil nadu, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[14:18:33] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[14:26:18] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:26:18] 📊 Script length check passed: 95 words → ~43.9s estimated (bounds [25s - 55s])
+[14:26:18] Selected Fact: Sivakasi: The Tiny Town Producing 90% of India's Fireworks & 80% of Safety Matches
+[14:26:18] Source URL: https://en.wikipedia.org/wiki/Sivakasi
+[14:26:18] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[14:26:18] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[14:26:38] ⚠️ Local TTS returned 55.7s audio. Pre-check estimate was 43.9s.
+[14:26:38]    Observed pace: 1.70 words/sec (vs estimate 2.4285714285714284). Recalibrating for next run.
+[14:26:38] ⚠️ Generated audio duration (55.7s) is out of bounds [25s - 55s]. Retrying...
+[14:26:38] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[14:32:45] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:32:45] 📊 Script length check passed: 87 words → ~41.2s estimated (bounds [25s - 55s])
+[14:32:45] Selected Fact: The 'Zero Rupee Note': A Fake Currency Note That Actually Fights Corruption
+[14:32:45] Source URL: https://en.wikipedia.org/wiki/Zero_rupee_note
+[14:32:45] ❌ [main.py] Duplicate topic rejected: '10 லட்சம் 'Zero Rupee' Notes வச்சாரு! தெரியுமா? 😱' / 'The 'Zero Rupee Note': A Fake Currency Note That Actually Fights Corruption'. Reason: Keyword overlap (tamil facts, tamil nadu, did you know) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[14:32:47] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[14:41:05] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[14:41:05] 📊 Script length check passed: 93 words → ~42.8s estimated (bounds [25s - 55s])
+[14:41:05] Selected Fact: Kamuthi Solar Park: 2,500 Acres Cleaned Daily by Robots Without a Drop of Water
+[14:41:05] Source URL: https://en.wikipedia.org/wiki/Kamuthi_Solar_Power_Project
+[14:41:05] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[14:41:05] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[14:41:11] STEP 4.5: Logging fact in topic tracker...
+[14:41:11] STEP 5: Matching word timestamps to visual chunks...
+[14:41:11] STEP 5.5: Fetching entity photos and company logos...
+[14:41:11] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[14:41:11] STEP 6: Resolving background visual clips...
+[14:41:35] STEP 7: Invoking video rendering engine...
+[14:41:38] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261107_141331_3445.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:32.50, start: 0.000000, bitrate: 9045 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 9043 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 00:58:07:11
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        timecode        : 00:58:07:11
+At least one output file must be specified
+
