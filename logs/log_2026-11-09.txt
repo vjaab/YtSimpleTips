@@ -73,3 +73,87 @@
 [12:28:18] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [12:28:18] STEP 12: Cleaning up output files...
 [12:28:18] === PIPELINE COMPLETED SUCCESSFULLY ===
+[17:38:56] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[17:38:56] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[17:38:56] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[17:38:56] STEP 1: Strategy Check -> Day: Mon, Slot: Slot C (Evening), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[17:38:56] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[17:39:26] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[17:40:23] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:40:23] 📊 Script length check passed: 97 words → ~44.6s estimated (bounds [25s - 55s])
+[17:40:23] Selected Fact: Srirangam Temple: Largest Living Hindu Temple Complex
+[17:40:23] Source URL: https://en.wikipedia.org/wiki/Srirangam_Temple
+[17:40:23] ❌ [main.py] Duplicate topic rejected: '156 ஏக்கர் ரங்கநாதஸ்வாமி மடம் 😱 தெரியுமா?' / 'Srirangam Temple: Largest Living Hindu Temple Complex'. Reason: Keyword overlap (did you know, tamil facts) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[17:40:25] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[17:41:22] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:41:22] 📊 Script length check passed: 88 words → ~41.3s estimated (bounds [25s - 55s])
+[17:41:22] Selected Fact: Nilgiri Mountain Railway: Rack‑and‑Pinion Marvel & UNESCO Heritage
+[17:41:22] Source URL: https://whc.unesco.org/en/list/944
+[17:41:22] ❌ [main.py] Duplicate topic rejected: '❌ 2,200 அடி ரெயில் ராக்‑அண்ட்‑பினியன் 🚂 தெரியுமா?' / 'Nilgiri Mountain Railway: Rack‑and‑Pinion Marvel & UNESCO Heritage'. Reason: Distinctive keywords (ரெயில், nilgiri) overlap with: '8% மலை ஏற 'பிடிக்கும்' ரெயில் இதே தெரியுமா? 😱'
+[17:41:24] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[17:41:48] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:51:37] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:51:37] 📊 Script length check passed: 82 words → ~38.6s estimated (bounds [25s - 55s])
+[17:51:37] Selected Fact: Use Rice as a Moisture Absorber to Extend Food Shelf Life
+[17:51:37] Source URL: https://www.thespruce.com/rice-as-moisture-absorber-4173497
+[17:51:37] ❌ [main.py] Duplicate topic rejected: '🔋 6 மணி நேரம் பேட்டரி? இதை எப்படி? | Simple Tips by VJ' / 'Use Rice as a Moisture Absorber to Extend Food Shelf Life'. Reason: Distinctive keywords (மணி, rice) overlap with: 'ரைஸ் 12 மணி கூலிங் பண்ணினா 2.5x ஸ்டார்ச்?! தெரியுமா? 😱'
+[17:51:39] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[17:52:04] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:53:07] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:53:07] 📊 Script length check passed: 115 words → ~54.3s estimated (bounds [25s - 55s])
+[17:53:07] Selected Fact: Heat Recovery Ventilators: Reheat Your Home for 30% Less
+[17:53:07] Source URL: https://www.energy.gov/eere/ventilation/heat-recovery-ventilators
+[17:53:07] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[17:53:07] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[17:53:29] ⚠️ Local TTS returned 62.3s audio. Pre-check estimate was 54.3s.
+[17:53:29]    Observed pace: 1.85 words/sec (vs estimate 2.4285714285714284). Recalibrating for next run.
+[17:53:29] ⚠️ Generated audio duration (62.3s) is out of bounds [25s - 55s]. Retrying...
+[17:53:29] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[17:53:53] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:55:24] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:55:24] 📊 Script length check passed: 80 words → ~37.7s estimated (bounds [25s - 55s])
+[17:55:24] Selected Fact: Door Draft Stoppers Cut Heating Bills by 10%
+[17:55:24] Source URL: https://www.energy.gov/eere/femp/draft-stoppers
+[17:55:24] ❌ [main.py] Duplicate topic rejected: '❌ இதை உடனே மாத்துங்க! 😱 10% சேமிக்கலாம்' / 'Door Draft Stoppers Cut Heating Bills by 10%'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[17:55:26] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[17:55:51] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[18:13:41] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:13:41] 📊 Script length check passed: 63 words → ~28.9s estimated (bounds [25s - 55s])
+[18:13:41] Selected Fact: The '5-Minute Rule' to Defeat Procrastination and Save Billable Hours
+[18:13:41] Source URL: https://www.psychologytoday.com/us/blog/wired-for-happiness/201008/the-5-minute-rule
+[18:13:41] ❌ [main.py] Duplicate topic rejected: '5 நிமிஷம் போதும்! 😱 வேலை முடிக்க இது தான் ரகசியம்' / 'The '5-Minute Rule' to Defeat Procrastination and Save Billable Hours'. Reason: Distinctive keywords (தான், போதும்) overlap with: '0-click ஹேக்: 1 வீடியோ தான் போதும்! தெரியுமா? 😱'
+[18:13:43] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[18:14:07] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[18:21:20] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:21:20] 📊 Script length check passed: 103 words → ~48.1s estimated (bounds [25s - 55s])
+[18:21:20] Selected Fact: UPI AutoPay for Utilities: The Hidden 1% Discount & Zero Late Fees
+[18:21:20] Source URL: https://en.wikipedia.org/wiki/Unified_Payments_Interface
+[18:21:20] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[18:21:20] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[18:21:27] STEP 4.5: Logging fact in topic tracker...
+[18:21:27] STEP 5: Matching word timestamps to visual chunks...
+[18:21:27] STEP 5.5: Fetching entity photos and company logos...
+[18:21:27] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[18:21:27] STEP 6: Resolving background visual clips...
+[18:21:48] STEP 7: Invoking video rendering engine...
+[18:21:50] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261109_173855_4659.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:36.50, start: 0.000000, bitrate: 1627 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 1624 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 01:48:32:14
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        timecode        : 01:48:32:14
+At least one output file must be specified
+
