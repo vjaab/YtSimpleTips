@@ -157,3 +157,48 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 01:48:32:14
 At least one output file must be specified
 
+[22:46:26] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[22:46:26] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[22:46:26] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[22:46:26] STEP 1: Strategy Check -> Day: Tue, Slot: Slot A (Morning), Category: 🧠 Mind-Blowing Science Curiosities
+[22:46:26] STEP 2: Fetching facts using Search Grounding for '🧠 Mind-Blowing Science Curiosities'...
+[22:46:56] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[22:47:58] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[22:47:58] 📊 Script length check passed: 89 words → ~40.7s estimated (bounds [25s - 55s])
+[22:47:58] Selected Fact: A Teaspoon of Neutron Star Material Weighs About 6 Billion Tons
+[22:47:58] Source URL: https://en.wikipedia.org/wiki/Neutron_star
+[22:47:58] ❌ [main.py] Duplicate topic rejected: '6 பில்லியன் டன்! ஒரு Teaspoon Neutron Star 😱 தெரியுமா?' / 'A Teaspoon of Neutron Star Material Weighs About 6 Billion Tons'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[22:48:00] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[22:49:26] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[22:49:26] 📊 Script length check passed: 91 words → ~42.0s estimated (bounds [25s - 55s])
+[22:49:26] Selected Fact: Plants Talk Through Underground Fungal Networks (The "Wood Wide Web")
+[22:49:26] Source URL: https://www.nationalgeographic.com/science/article/plant-communication-fungal-networks
+[22:49:26] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[22:49:26] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[22:49:56] STEP 4.5: Logging fact in topic tracker...
+[22:49:56] STEP 5: Matching word timestamps to visual chunks...
+[22:49:56] STEP 5.5: Fetching entity photos and company logos...
+[22:49:56] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[22:49:56] STEP 6: Resolving background visual clips...
+[22:50:38] STEP 7: Invoking video rendering engine...
+[22:50:38] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261109_224626_7073.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:14.20, start: 0.000000, bitrate: 9613 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 9609 kb/s, 50 fps, 50 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 00:00:00:00
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 00:00:00:00
+At least one output file must be specified
+
