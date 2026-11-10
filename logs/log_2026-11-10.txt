@@ -76,3 +76,49 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 00:00:00:00
 At least one output file must be specified
 
+[20:04:10] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[20:04:10] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[20:04:10] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[20:04:10] STEP 1: Strategy Check -> Day: Wed, Slot: Slot A (Morning), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[20:04:10] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[20:04:40] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[20:05:06] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:08:46] ❌ Script generation failed. Retrying...
+[20:08:51] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[20:09:16] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:25:33] ❌ Script generation failed. Retrying...
+[20:25:38] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[20:26:03] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[20:26:52] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[20:26:52] 📊 Script length check passed: 100 words → ~46.1s estimated (bounds [25s - 55s])
+[20:26:52] Selected Fact: Vinegar in Your Dishwasher Saves Detergent and Time
+[20:26:52] Source URL: https://www.consumerreports.org/dishes/dishwasher-cleaning-tips/
+[20:26:52] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[20:26:52] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[20:27:22] STEP 4.5: Logging fact in topic tracker...
+[20:27:22] STEP 5: Matching word timestamps to visual chunks...
+[20:27:22] STEP 5.5: Fetching entity photos and company logos...
+[20:27:22] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[20:27:22] STEP 6: Resolving background visual clips...
+[20:27:47] STEP 7: Invoking video rendering engine...
+[20:27:48] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261110_200410_8257.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:08.88, start: 0.000000, bitrate: 3082 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 3079 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:05:07:14
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Core Media Video
+        timecode        : 01:05:07:14
+At least one output file must be specified
+
