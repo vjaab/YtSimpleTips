@@ -1,0 +1,45 @@
+[09:54:14] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[09:54:14] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[09:54:14] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[09:54:14] STEP 1: Strategy Check -> Day: Wed, Slot: Slot B (Afternoon), Category: 🧬 Human Body & Dark Psychology
+[09:54:14] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[09:55:38] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:07:28] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:07:28] 📊 Script length check passed: 98 words → ~46.1s estimated (bounds [25s - 55s])
+[10:07:28] Selected Fact: Your Stomach Grows a Brand New Lining Every 3 Days to Avoid Digesting Itself
+[10:07:28] Source URL: https://www.livescience.com/32241-stomach-lining-regeneration.html
+[10:07:28] ❌ [main.py] Duplicate topic rejected: 'வயிறு ஆண்டில் 120 முறை lining மாத்தும்! 😱 தெரியுமா? #shorts' / 'Your Stomach Grows a Brand New Lining Every 3 Days to Avoid Digesting Itself'. Reason: Keyword overlap (tamil facts, human body, did you know) with story: '35% பேர் சூரியனைப் பார்த்தா Sneeze! தெரியுமா? 😱 #shorts'
+[10:07:30] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[10:18:01] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:18:01] 📊 Script length check passed: 90 words → ~42.8s estimated (bounds [25s - 55s])
+[10:18:01] Selected Fact: Why Toxic Relationships & Reels Are Addictive: Intermittent Reinforcement (The Slot Machine Trap)
+[10:18:01] Source URL: https://www.psychologytoday.com/us/blog/the-media-psychology-effect/201809/why-intermittent-reinforcement-makes-relationships-addictive
+[10:18:01] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:18:01] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:18:33] STEP 4.5: Logging fact in topic tracker...
+[10:18:33] STEP 5: Matching word timestamps to visual chunks...
+[10:18:33] STEP 5.5: Fetching entity photos and company logos...
+[10:18:33] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[10:18:33] STEP 6: Resolving background visual clips...
+[10:18:54] STEP 7: Invoking video rendering engine...
+[10:18:56] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261111_095413_6259.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:15.00, start: 0.000000, bitrate: 10804 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 10802 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 00:00:00:00
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        timecode        : 00:00:00:00
+At least one output file must be specified
+
