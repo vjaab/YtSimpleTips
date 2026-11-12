@@ -37,3 +37,42 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 00:16:31:07
 At least one output file must be specified
 
+[16:10:01] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[16:10:01] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[16:10:01] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[16:10:01] STEP 1: Strategy Check -> Day: Thu, Slot: Slot C (Evening), Category: 🧠 Mind-Blowing Science Curiosities
+[16:10:01] STEP 2: Fetching facts using Search Grounding for '🧠 Mind-Blowing Science Curiosities'...
+[16:11:35] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[16:22:44] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[16:22:44] 📊 Script length check passed: 95 words → ~44.5s estimated (bounds [25s - 55s])
+[16:22:44] Selected Fact: It Rains Diamonds on Neptune and Uranus (Literally)
+[16:22:44] Source URL: https://www.nature.com/articles/s41550-021-01423-0
+[16:22:44] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[16:22:44] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[16:23:15] STEP 4.5: Logging fact in topic tracker...
+[16:23:15] STEP 5: Matching word timestamps to visual chunks...
+[16:23:15] STEP 5.5: Fetching entity photos and company logos...
+[16:23:15] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[16:23:15] STEP 6: Resolving background visual clips...
+[16:23:51] STEP 7: Invoking video rendering engine...
+[16:23:53] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261112_161000_6855.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:10.75, start: 0.000000, bitrate: 5286 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 5283 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:01:59:13
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 01:01:59:13
+At least one output file must be specified
+
