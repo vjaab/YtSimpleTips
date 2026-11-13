@@ -151,7 +151,9 @@
         "Operated in at least 12+ regions (not 18 countries) including Sumatra, Java, Cambodia, and China தெரியுமா? 🤯",
         "The 'Ainnurruvar' (500 Lords): The World's First Multinational Corp Had Its Own Army, Bank & Temples!",
         "150 GPa அழுத்தத்தில் டைமண்ட் மழை? தெரியுமா? 😱",
-        "It Rains Diamonds on Neptune and Uranus (Literally)"
+        "It Rains Diamonds on Neptune and Uranus (Literally)",
+        "❌ கொழி கழுவாதீங்க! Invisible Splashback 50cm! 🦠😱",
+        "STOP Washing Raw Chicken! It Spreads Bacteria 50cm"
     ],
     "used_keywords": [
         "tamil bell",
@@ -435,13 +437,12 @@
         "📱 Tech Hacks & Mobile Secrets": 1,
         "🚀 Space, Science & Universe Explained": 1,
         "🧠 Mind-Blowing Science Curiosities": 12,
-        "🍳 Food, Health & Kitchen Science": 5,
+        "🍳 Food, Health & Kitchen Science": 6,
         "🐾 Nature & Animal Oddities": 4,
         "💰 Money-Saving & Smart Living Tricks": 3,
         "📱 Digital Safety, Money & Smart Living": 1
     },
     "last_7_days_stories": [
-        "5 நிமிடத்தில் Gas போகுமா? 🤯 #Shorts",
         "4700°C பப்பிள்! சூரியனைவிட சுடு எப்படி? 😱 தெரியுமா?\n",
         "❌ 2,500 ஏக்கர் சோலார் பார் ரோபோட் சுத்தம்! தெரியுமா?",
         "0-click ஹேக்: 1 வீடியோ தான் போதும்! தெரியுமா? 😱",
@@ -454,10 +455,11 @@
         "❌ வைனிகர் போடுவீங்களா? 😱 #shorts",
         "Reels & Toxic Love: 100% Addiction Secret தெரியுமா? 😱",
         "Operated in at least 12+ regions (not 18 countries) including Sumatra, Java, Cambodia, and China தெரியுமா? 🤯",
-        "150 GPa அழுத்தத்தில் டைமண்ட் மழை? தெரியுமா? 😱"
+        "150 GPa அழுத்தத்தில் டைமண்ட் மழை? தெரியுமா? 😱",
+        "❌ கொழி கழுவாதீங்க! Invisible Splashback 50cm! 🦠😱"
     ],
-    "total_uploaded": 76,
-    "last_upload": "2026-11-12",
+    "total_uploaded": 77,
+    "last_upload": "2026-11-13",
     "history": [
         {
             "date": "2026-10-13",
@@ -1732,6 +1734,16 @@
             "voice_used": "VJ_Cloned_Voice",
             "youtube_url": "pending_upload",
             "source_url": "https://www.nature.com/articles/s41550-021-01423-0"
+        },
+        {
+            "date": "2026-11-13",
+            "title": "❌ கொழி கழுவாதீங்க! Invisible Splashback 50cm! 🦠😱",
+            "news_headline": "STOP Washing Raw Chicken! It Spreads Bacteria 50cm",
+            "category": "🍳 Food, Health & Kitchen Science",
+            "keywords": [],
+            "voice_used": "VJ_Cloned_Voice",
+            "youtube_url": "https://youtu.be/2fQ7HegkTKU",
+            "source_url": "https://www.cdc.gov/foodsafety/chicken.html"
         }
     ]
 }
