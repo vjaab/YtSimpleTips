@@ -97,3 +97,61 @@ At least one output file must be specified
 [16:49:29] ⚠️ X.com posting skipped/failed: Skipped: X.com credentials not configured in .env
 [16:49:29] STEP 12: Cleaning up output files...
 [16:49:29] === PIPELINE COMPLETED SUCCESSFULLY ===
+[18:31:32] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[18:31:32] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[18:31:32] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[18:31:32] STEP 1: Strategy Check -> Day: Sun, Slot: Slot A (Morning), Category: 🐾 Nature & Animal Oddities
+[18:31:32] STEP 2: Fetching facts using Search Grounding for '🐾 Nature & Animal Oddities'...
+[18:32:01] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[18:33:03] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:33:03] 📊 Script length check passed: 87 words → ~40.5s estimated (bounds [25s - 55s])
+[18:33:03] Selected Fact: Axolotl Can Regrow Whole Organs and Stay Youthful
+[18:33:03] Source URL: https://en.wikipedia.org/wiki/Axolotl
+[18:33:03] ❌ [main.py] Duplicate topic rejected: '❌ Axolotl 4 உறுப்புகள் மீண்டும் உருவாக்கும்! தெரியுமா?' / 'Axolotl Can Regrow Whole Organs and Stay Youthful'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[18:33:05] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[18:34:08] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:34:08] 📊 Script length check passed: 86 words → ~40.2s estimated (bounds [25s - 55s])
+[18:34:08] Selected Fact: Lyrebird Can Mimic Anything From Chainsaws to Human Speech
+[18:34:08] Source URL: https://en.wikipedia.org/wiki/Superb_lyrebird
+[18:34:08] ❌ [main.py] Duplicate topic rejected: '5 அற்புத சத்தங்கள், Lyrebird! 😱 தெரியுமா?' / 'Lyrebird Can Mimic Anything From Chainsaws to Human Speech'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[18:34:10] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[18:49:07] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:49:07] 📊 Script length check passed: 91 words → ~41.1s estimated (bounds [25s - 55s])
+[18:49:07] Selected Fact: Exploding Ant Self‑Destructs to Defend Its Colony
+[18:49:07] Source URL: https://en.wikipedia.org/wiki/Colobopsis_saundersi
+[18:49:07] ❌ [main.py] Duplicate topic rejected: '10% கெடுக்கும் எறும்பு? இது எப்படி வெடிக்குது 😱 தெரியுமா?' / 'Exploding Ant Self‑Destructs to Defend Its Colony'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[18:49:09] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[18:49:33] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[18:59:56] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[18:59:56] 📊 Script length check passed: 64 words → ~30.1s estimated (bounds [25s - 55s])
+[18:59:56] Selected Fact: Sloths Can Hold Their Breath Longer Than Dolphins (Up to 40 Minutes Underwater)
+[18:59:56] Source URL: https://en.wikipedia.org/wiki/Sloth
+[18:59:56] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[18:59:56] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[19:00:26] STEP 4.5: Logging fact in topic tracker...
+[19:00:26] STEP 5: Matching word timestamps to visual chunks...
+[19:00:26] STEP 5.5: Fetching entity photos and company logos...
+[19:00:26] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[19:00:26] STEP 6: Resolving background visual clips...
+[19:00:49] STEP 7: Invoking video rendering engine...
+[19:00:53] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261114_183131_1085.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:15.84, start: 0.000000, bitrate: 1668 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 1666 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 01:03:22:19
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Core Media Video
+        timecode        : 01:03:22:19
+At least one output file must be specified
+
