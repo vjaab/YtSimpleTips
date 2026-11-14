@@ -1,0 +1,45 @@
+[09:27:55] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[09:27:55] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[09:27:55] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[09:27:55] STEP 1: Strategy Check -> Day: Sat, Slot: Slot B (Afternoon), Category: 🐾 Nature & Animal Oddities
+[09:27:55] STEP 2: Fetching facts using Search Grounding for '🐾 Nature & Animal Oddities'...
+[09:29:34] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[09:37:23] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[09:37:23] 📊 Script length check passed: 90 words → ~41.9s estimated (bounds [25s - 55s])
+[09:37:23] Selected Fact: Parrotfish Sleep Inside a Gross 'Snot Bubble' Every Night
+[09:37:23] Source URL: https://www.nationalgeographic.com/animals/facts/parrotfish-mucus-cocoon
+[09:37:23] ❌ [main.py] Duplicate topic rejected: '30-60 நிமிடம்! மீன் தூங்கும் 'நாக்கு கூடு' 😱 தெரியுமா? 🤯' / 'Parrotfish Sleep Inside a Gross 'Snot Bubble' Every Night'. Reason: Keyword overlap (tamil facts, marine biology, did you know) with story: '0% மரணம்! இம்மார்டல் ஜெல்லிஃபிஷ் தெரியுமா? 😱'
+[09:37:25] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[09:47:00] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[09:47:00] 📊 Script length check passed: 98 words → ~46.1s estimated (bounds [25s - 55s])
+[09:47:00] Selected Fact: Platypuses Glow Blue-Green Under UV Light (Biofluorescence)
+[09:47:00] Source URL: https://www.smithsonianmag.com/smart-news/platypuses-glow-blue-green-under-uv-light-180976142/
+[09:47:00] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[09:47:00] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[09:47:19] STEP 4.5: Logging fact in topic tracker...
+[09:47:19] STEP 5: Matching word timestamps to visual chunks...
+[09:47:19] STEP 5.5: Fetching entity photos and company logos...
+[09:47:19] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[09:47:19] STEP 6: Resolving background visual clips...
+[09:47:50] STEP 7: Invoking video rendering engine...
+[09:47:53] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261114_092755_1040.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:07.71, start: 0.000000, bitrate: 3586 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuvj420p(pc, bt709, progressive), 1080x1920, 3581 kb/s, 59.94 fps, 59.94 tbr, 60k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc61.19.100 libx264
+        timecode        : 16:24:59;38
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : TimeCodeHandler
+        timecode        : 16:24:59;38
+At least one output file must be specified
+
