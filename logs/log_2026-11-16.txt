@@ -50,3 +50,52 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimple
         timecode        : 08:30:31;20
 At least one output file must be specified
 
+[17:11:53] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[17:11:53] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[17:11:53] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[17:11:53] STEP 1: Strategy Check -> Day: Mon, Slot: Slot C (Evening), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[17:11:53] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[17:16:32] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[17:21:24] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:21:24] 📊 Script length check passed: 81 words → ~36.8s estimated (bounds [25s - 55s])
+[17:21:24] Selected Fact: Madurai's Aravind Eye Care: The 'McDonald's of Surgery' Performs 1,000+ Free Surgeries Daily
+[17:21:24] Source URL: https://www.aravind.org/about-us/history/
+[17:21:24] ❌ [main.py] Duplicate topic rejected: 'மெக்டோனால்ட்ஸ் மாதிரி 1000+ இலவச கண் உதிர்வு?! தெரியுமா? 😱' / 'Madurai's Aravind Eye Care: The 'McDonald's of Surgery' Performs 1,000+ Free Surgeries Daily'. Reason: Keyword overlap (did you know, tamil facts, tamil nadu) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[17:21:26] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[17:25:28] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:39:07] ❌ Script generation failed. Retrying...
+[17:39:12] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[17:39:54] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:43:26] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:43:26] 📊 Script length check passed: 70 words → ~28.8s estimated (bounds [25s - 55s])
+[17:43:26] Selected Fact: Air Conditioning - Energy Saver
+[17:43:26] Source URL: https://www.energy.gov/eere/ssl/air-conditioning
+[17:43:26] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[17:43:26] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[17:43:45] STEP 4.5: Logging fact in topic tracker...
+[17:43:45] STEP 5: Matching word timestamps to visual chunks...
+[17:43:45] STEP 5.5: Fetching entity photos and company logos...
+[17:43:45] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[17:43:45] STEP 6: Resolving background visual clips...
+[17:44:07] STEP 7: Invoking video rendering engine...
+[17:44:09] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261116_171152_7422.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:15.04, start: 0.000000, bitrate: 15749 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 15747 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 00:00:00:00
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : Apple Video Media Handler
+        timecode        : 00:00:00:00
+At least one output file must be specified
+
