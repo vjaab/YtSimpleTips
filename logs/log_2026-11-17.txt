@@ -1,0 +1,39 @@
+[11:11:57] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[11:11:57] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[11:11:57] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[11:11:57] STEP 1: Strategy Check -> Day: Tue, Slot: Slot C (Evening), Category: 📱 Digital Safety, Phone Secrets & Scam Alerts
+[11:11:57] STEP 2: Fetching facts using Search Grounding for '📱 Digital Safety, Phone Secrets & Scam Alerts'...
+[11:13:36] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[11:19:07] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[11:19:07] 📊 Script length check passed: 81 words → ~37.0s estimated (bounds [25s - 55s])
+[11:19:07] Selected Fact: Dial 1930 Within 1 Hour of Financial Fraud — The 'Golden Hour' Freezes Stolen Money
+[11:19:07] Source URL: https://cybercrime.gov.in/
+[11:19:07] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[11:19:07] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[11:19:34] STEP 4.5: Logging fact in topic tracker...
+[11:19:34] STEP 5: Matching word timestamps to visual chunks...
+[11:19:34] STEP 5.5: Fetching entity photos and company logos...
+[11:19:34] Engagement Layers Active: ['kinetic_captions', 'audio_ducking', 'camera_cuts', 'pacing_mode']
+[11:19:34] STEP 6: Resolving background visual clips...
+[11:19:48] STEP 7: Invoking video rendering engine...
+[11:19:50] 🚨 Video rendering failed: Error passing `ffmpeg -i` command output:
+
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/runner/work/YtSimpleTips/YtSimpleTips/output/pexels_video_20261117_111157_9053.mp4':
+  Metadata:
+    major_brand     : iso5
+    minor_version   : 512
+    compatible_brands: iso5iso6mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:00:17.05, start: 0.000000, bitrate: 10741 kb/s
+  Stream group #0:0[0x2]: Track Reference:
+    Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 10738 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        encoder         : Lavc60.31.102 libx264
+        timecode        : 01:00:00:00
+    Stream #0:1[0x2](eng): Data: none (tmcd / 0x64636D74), 0 kb/s
+      Metadata:
+        handler_name    : VideoHandler
+        timecode        : 01:00:00:00
+At least one output file must be specified
+
