@@ -91,3 +91,24 @@ At least one output file must be specified
 [18:10:27] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [18:10:27] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"invalid_request","code":"quota_exceeded","message":"This request exceeds your quota of 49751. You have 204 credits remaining, while 300 credits are required for this request.","status":"quota_exceeded","request_id":"5d29394bb9a13a61ca002db49a174e8c"}}
 [18:10:27] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[21:21:01] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[21:21:01] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[21:21:01] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[21:21:01] STEP 1: Strategy Check -> Day: Wed, Slot: Slot A (Morning), Category: 🇮🇳 Tamil Nadu & India Did You Know
+[21:21:01] STEP 2: Fetching facts using Search Grounding for '🇮🇳 Tamil Nadu & India Did You Know'...
+[21:21:33] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[21:22:47] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[21:22:47] 📊 Script length check passed: 97 words → ~45.5s estimated (bounds [25s - 55s])
+[21:22:47] Selected Fact: Marina Beach – Longest Natural Urban Beach on Earth
+[21:22:47] Source URL: https://en.wikipedia.org/wiki/Marina_Beach
+[21:22:47] ❌ [main.py] Duplicate topic rejected: '❌ Marina Beach 13km நீளமா? 😱 தெரியுமா?' / 'Marina Beach – Longest Natural Urban Beach on Earth'. Reason: Keyword overlap (tamil facts, did you know, tamil nadu) with story: '❌ சென்னையில் 80 ஹெக்டர் marsh! தெரியுமா? 😱'
+[21:22:49] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[21:23:15] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[21:39:20] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[21:39:20] 📊 Script length check passed: 72 words → ~37.1s estimated (bounds [25s - 55s])
+[21:39:20] Selected Fact: Refrigerate Batteries to Double Their Lifespan
+[21:39:20] Source URL: https://batteryuniversity.com/article/bu-808-how-to-store-batteries
+[21:39:20] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[21:39:20] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[21:39:21] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"invalid_request","code":"quota_exceeded","message":"This request exceeds your quota of 49751. You have 30 credits remaining, while 162 credits are required for this request.","status":"quota_exceeded","request_id":"f027fa85068420fab293c520c9e00395"}}
+[21:39:21] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
