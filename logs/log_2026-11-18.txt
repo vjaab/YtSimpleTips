@@ -35,3 +35,24 @@
 [13:13:27] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [13:13:28] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"invalid_request","code":"quota_exceeded","message":"This request exceeds your quota of 49751. You have 30 credits remaining, while 217 credits are required for this request.","status":"quota_exceeded","request_id":"d41c47441c579595e84c4eee26120107"}}
 [13:13:28] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[16:33:50] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[16:33:50] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[16:33:50] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[16:33:50] STEP 1: Strategy Check -> Day: Wed, Slot: Slot C (Evening), Category: 🌍 Mysterious History & Culture Secrets
+[16:33:50] STEP 2: Fetching facts using Search Grounding for '🌍 Mysterious History & Culture Secrets'...
+[16:34:21] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[16:35:18] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[16:35:18] 📊 Script length check passed: 108 words → ~49.4s estimated (bounds [25s - 55s])
+[16:35:18] Selected Fact: Chola Navy’s Secret Monsoon Trade Routes
+[16:35:18] Source URL: https://en.wikipedia.org/wiki/Chola_navy
+[16:35:18] ❌ [main.py] Duplicate topic rejected: '❌ 12-ஆம் நூற்றாண்டு ரகசியம்! Chola Navy எப்படி? தெரியுமா?' / 'Chola Navy’s Secret Monsoon Trade Routes'. Reason: Keyword overlap (did you know, tamil facts) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[16:35:20] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[16:35:46] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[16:36:40] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[16:36:40] 📊 Script length check passed: 96 words → ~43.1s estimated (bounds [25s - 55s])
+[16:36:40] Selected Fact: Mahabalipuram Temples Align with the Equinox Sunrise
+[16:36:40] Source URL: https://whc.unesco.org/en/list/250/
+[16:36:40] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[16:36:40] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[16:36:56] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"invalid_request","code":"quota_exceeded","message":"This request exceeds your quota of 49751. You have 30 credits remaining, while 295 credits are required for this request.","status":"quota_exceeded","request_id":"9102201840c60871471f370f001ee6f2"}}
+[16:36:56] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
