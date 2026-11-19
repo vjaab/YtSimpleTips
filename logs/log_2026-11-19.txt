@@ -1,0 +1,20 @@
+[10:55:19] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[10:55:19] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[10:55:19] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[10:55:19] STEP 1: Strategy Check -> Day: Thu, Slot: Slot C (Evening), Category: 🧠 Mind-Blowing Science Curiosities
+[10:55:19] STEP 2: Fetching facts using Search Grounding for '🧠 Mind-Blowing Science Curiosities'...
+[10:56:37] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[11:01:30] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[11:01:30] 📊 Script length check passed: 80 words → ~36.7s estimated (bounds [25s - 55s])
+[11:01:30] Selected Fact: Cleopatra Lived Closer to the iPhone Than the Great Pyramid
+[11:01:30] Source URL: https://en.wikipedia.org/wiki/Cleopatra
+[11:01:30] ❌ [main.py] Duplicate topic rejected: 'Cleopatra iPhone-க்கு 2037 ஆண்டுகள் தான்! தெரியுமா? 😱' / 'Cleopatra Lived Closer to the iPhone Than the Great Pyramid'. Reason: Distinctive keywords (க்கு, iphone) overlap with: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[11:01:32] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[11:06:56] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[11:06:56] 📊 Script length check passed: 86 words → ~38.3s estimated (bounds [25s - 55s])
+[11:06:56] Selected Fact: The "Zombie Ant Fungus" That Hijacks Brains & Forces Suicide
+[11:06:56] Source URL: https://www.nationalgeographic.com/science/article/zombie-ant-fungus-parasite-behavior
+[11:06:56] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[11:06:56] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[11:06:56] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"invalid_request","code":"quota_exceeded","message":"This request exceeds your quota of 49751. You have 30 credits remaining, while 257 credits are required for this request.","status":"quota_exceeded","request_id":"febdc732f4e6a0d9f4390e18ebbe434b"}}
+[11:06:56] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
