@@ -1,0 +1,20 @@
+[10:38:03] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[10:38:03] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[10:38:03] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[10:38:03] STEP 1: Strategy Check -> Day: Fri, Slot: Slot C (Evening), Category: 🧬 Human Body & Dark Psychology
+[10:38:03] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[10:39:06] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[10:44:42] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:44:42] 📊 Script length check passed: 85 words → ~38.3s estimated (bounds [25s - 55s])
+[10:44:42] Selected Fact: The 'Doorway Effect': Why You Forget Why You Entered a Room
+[10:44:42] Source URL: https://www.scientificamerican.com/article/why-walking-through-a-doorway-makes-you-forget/
+[10:44:42] ❌ [main.py] Duplicate topic rejected: '⚠️ 3 மடங்கு மறக்கும் ரிஸ்கு! கதவு கடந்தா போச்சு 😱 தெரியுமா? #Shorts' / 'The 'Doorway Effect': Why You Forget Why You Entered a Room'. Reason: Keyword overlap (tamil facts, did you know, psychology) with story: '⚡️ உங்கள் மூளை 0.2 செகன்டில் மாயை பிடிக்குமா? தெரியுமா?'
+[10:44:44] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[10:48:08] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[10:48:08] 📊 Script length check passed: 79 words → ~37.0s estimated (bounds [25s - 55s])
+[10:48:08] Selected Fact: Aphantasia: 1 in 50 People Have a 'Blind Mind's Eye' & Can't Visualize Anything
+[10:48:08] Source URL: https://en.wikipedia.org/wiki/Aphantasia
+[10:48:08] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[10:48:08] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[10:48:09] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"803ba1079c2a03a8b65764054e69442d"}}
+[10:48:09] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
