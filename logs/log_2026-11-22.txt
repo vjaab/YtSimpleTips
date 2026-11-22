@@ -12,3 +12,17 @@
 [10:28:46] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [10:28:47] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"67fc8f6c29f73547702fb1aeacdbde78"}}
 [10:28:47] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[15:30:57] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[15:30:57] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[15:30:57] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[15:30:57] STEP 1: Strategy Check -> Day: Sun, Slot: Slot C (Evening), Category: 📱 Digital Safety, Phone Secrets & Scam Alerts
+[15:30:57] STEP 2: Fetching facts using Search Grounding for '📱 Digital Safety, Phone Secrets & Scam Alerts'...
+[15:32:22] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[15:42:18] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[15:42:18] 📊 Script length check passed: 89 words → ~42.0s estimated (bounds [25s - 55s])
+[15:42:18] Selected Fact: Passwords Are Dying: Your Face/Fingerprint Is Now The Key (Passkeys) 🔑
+[15:42:18] Source URL: https://fidoalliance.org/passkeys/
+[15:42:18] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[15:42:18] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[15:42:19] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"598fa22df883ca597e11cbffa53bd278"}}
+[15:42:19] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
