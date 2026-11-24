@@ -1,0 +1,33 @@
+[00:18:16] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[00:18:16] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[00:18:16] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[00:18:16] STEP 1: Strategy Check -> Day: Tue, Slot: Slot A (Morning), Category: 🧠 Mind-Blowing Science Curiosities
+[00:18:16] STEP 2: Fetching facts using Search Grounding for '🧠 Mind-Blowing Science Curiosities'...
+[00:20:55] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[00:27:28] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[00:27:28] 📊 Script length check passed: 93 words → ~42.3s estimated (bounds [25s - 55s])
+[00:27:28] Selected Fact: Your Stomach Gets a Fresh Lining Every Few Days
+[00:27:28] Source URL: https://en.wikipedia.org/wiki/Stomach#Mucosal_barrier
+[00:27:28] ❌ [main.py] Duplicate topic rejected: '3-5 நாட்களுக்கு வயிறு முழுவதும் மாறுது! தெரியுமா? 🤯' / 'Your Stomach Gets a Fresh Lining Every Few Days'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[00:27:30] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[00:33:05] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[00:33:05] 📊 Script length check passed: 82 words → ~37.4s estimated (bounds [25s - 55s])
+[00:33:05] Selected Fact: All Humans Compressed Into a Sugar Cube
+[00:33:05] Source URL: https://www.scientificamerican.com/article/if-we-could-squeeze-all-the-matter-in-the-universe-into-a-cube-what-would-it-look-like/
+[00:33:05] ❌ [main.py] Duplicate topic rejected: '8 பில்லியன் மக்கள் 1.3 செமி க்யூப் லே?! தெரியுமா? 🤯' / 'All Humans Compressed Into a Sugar Cube'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[00:33:07] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[00:40:13] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[00:40:13] 📊 Script length check passed: 93 words → ~44.7s estimated (bounds [25s - 55s])
+[00:40:13] Selected Fact: The World’s Quietest Room Lets You Hear Your Own Blood
+[00:40:13] Source URL: https://www.guinnessworldrecords.com/world-records/quietest-room
+[00:40:13] ❌ [main.py] Duplicate topic rejected: '-9.4 dBA ரூம்ல உங்க இரத்த சத்தம் கேட்கலாம்! தெரியுமா? 🤯' / 'The World’s Quietest Room Lets You Hear Your Own Blood'. Reason: Distinctive keywords (உங்க, your) overlap with: '9 மில்லியன் மோசடி சிம்கள் ப்ளாக்! உங்க ID லும் இருக்கா? தெரியுமா? 😱'
+[00:40:15] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[00:40:40] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[01:01:58] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[01:01:58] 📊 Script length check passed: 106 words → ~51.0s estimated (bounds [25s - 55s])
+[01:01:58] Selected Fact: Why You Forget Why You Walked Into a Room — The 'Doorway Effect'
+[01:01:58] Source URL: https://www.scientificamerican.com/article/why-walking-through-a-doorway-makes-you-forget/
+[01:01:58] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[01:01:58] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[01:01:58] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"d27d830a06f287714d284a30f0ae09d1"}}
+[01:01:58] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
