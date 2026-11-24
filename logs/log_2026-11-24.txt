@@ -31,3 +31,48 @@
 [01:01:58] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [01:01:58] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"d27d830a06f287714d284a30f0ae09d1"}}
 [01:01:58] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[13:02:17] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[13:02:17] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[13:02:17] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[13:02:17] STEP 1: Strategy Check -> Day: Tue, Slot: Slot C (Evening), Category: 📱 Digital Safety, Phone Secrets & Scam Alerts
+[13:02:17] STEP 2: Fetching facts using Search Grounding for '📱 Digital Safety, Phone Secrets & Scam Alerts'...
+[13:02:47] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[13:04:13] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:04:13] 📊 Script length check passed: 78 words → ~35.7s estimated (bounds [25s - 55s])
+[13:04:13] Selected Fact: iOS Safety Check instantly revokes app permissions after abuse
+[13:04:13] Source URL: https://support.apple.com/en-us/HT212954
+[13:04:13] ❌ [main.py] Duplicate topic rejected: '⚠️ 1 Tap-ல iOS Safety Check, எல்லா Permissions பறிக்குது! தெரியுமா?' / 'iOS Safety Check instantly revokes app permissions after abuse'. Reason: Keyword overlap (digital safety, did you know, tamil facts) with story: 'Scam Call +234 இருந்து வந்தால் தெரியுமா? 😱'
+[13:04:15] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[13:04:40] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:08:22] ❌ Script generation failed. Retrying...
+[13:08:27] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[13:08:51] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:09:41] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:09:41] 📊 Script length check passed: 97 words → ~44.9s estimated (bounds [25s - 55s])
+[13:09:41] Selected Fact: Block WhatsApp’s “View Once” screenshots permanently
+[13:09:41] Source URL: https://faq.whatsapp.com/android/chats/how-to-disable-screen-capture
+[13:09:41] ❌ [main.py] Duplicate topic rejected: '❌ WhatsApp View Once Screenshot? Stop it now! 😱' / 'Block WhatsApp’s “View Once” screenshots permanently'. Reason: Distinctive keywords (whatsapp, stop) overlap with: 'WhatsApp Live Location: Stop It Fast! 🚫📍'
+[13:09:43] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[13:10:07] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:32:38] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:32:38] 📊 Script length check passed: 81 words → ~39.5s estimated (bounds [25s - 55s])
+[13:32:38] Selected Fact: Android 12+ Lets You View Your Saved Wi‑Fi Passwords Straight From Settings
+[13:32:38] Source URL: https://support.google.com/android/answer/7664853?hl=en
+[13:32:38] ❌ [main.py] Duplicate topic rejected: 'Phone Wi-Fi Password காண்பிக்கும் Secret Trick! 📱🔥 #TamilShorts' / 'Android 12+ Lets You View Your Saved Wi‑Fi Passwords Straight From Settings'. Reason: Distinctive keywords (phone, your) overlap with: 'Stop Charging Your Phone to 100%! 🔋😱'
+[13:32:40] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[13:33:04] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:34:05] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:34:05] 📊 Script length check passed: 105 words → ~48.2s estimated (bounds [25s - 55s])
+[13:34:05] Selected Fact: Google Play Protect Blocks Clipboard‑Stealing Apps by Default
+[13:34:05] Source URL: https://security.googleblog.com/2022/02/play-protect-helps-protect-against-clipboard.html
+[13:34:05] ❌ [main.py] Duplicate topic rejected: '❌ Play Protect Clipboard Block-ஐ தெரிந்தா? 😱' / 'Google Play Protect Blocks Clipboard‑Stealing Apps by Default'. Reason: Distinctive keywords (block, apps) overlap with: '1 Setting-ல அனைத்து App Ads-மு Block! தெரியுமா? 🤯'
+[13:34:07] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[13:34:31] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:57:09] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:57:09] 📊 Script length check passed: 80 words → ~39.5s estimated (bounds [25s - 55s])
+[13:57:09] Selected Fact: iOS Safety Check Instantly Revokes App Permissions After Abuse
+[13:57:09] Source URL: https://support.apple.com/en-us/HT213096
+[13:57:09] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[13:57:09] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[13:57:09] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"d6e8614aecbab23fc52e6fbe311dd61d"}}
+[13:57:09] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
