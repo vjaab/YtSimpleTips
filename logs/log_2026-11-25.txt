@@ -1,0 +1,50 @@
+[11:50:10] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[11:50:10] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[11:50:10] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[11:50:10] STEP 1: Strategy Check -> Day: Wed, Slot: Slot C (Evening), Category: 🌍 Mysterious History & Culture Secrets
+[11:50:10] STEP 2: Fetching facts using Search Grounding for '🌍 Mysterious History & Culture Secrets'...
+[11:54:47] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[12:05:29] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[12:05:29] 📊 Script length check passed: 88 words → ~40.6s estimated (bounds [25s - 55s])
+[12:05:29] Selected Fact: Sunken City of Poompuhar Revealed by Underwater Archaeology
+[12:05:29] Source URL: https://www.nationalgeographic.com/history/article/poompuhar-indian-archaeology
+[12:05:29] ❌ [main.py] Duplicate topic rejected: 'No numerical claim to correct. தெரியுமா? 🤯' / 'Sunken City of Poompuhar Revealed by Underwater Archaeology'. Reason: Keyword overlap (archaeology, tamil facts, did you know) with story: '2000 ஆண்டுக்கு முன் எகிப்தில் தமிழ் வியாபாரி! தெரியுமா? 😱'
+[12:05:31] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[12:12:57] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[12:12:57] 📊 Script length check passed: 95 words → ~44.2s estimated (bounds [25s - 55s])
+[12:12:57] Selected Fact: Stone Circles of Kodaikanal Align with Solstices
+[12:12:57] Source URL: https://www.scientificamerican.com/article/ancient-indian-stone-circles/
+[12:12:57] ❌ [main.py] Duplicate topic rejected: 'கோடையில் 1500-500 BCE கல் வட்டம்!? தெரியுமா? 😱' / 'Stone Circles of Kodaikanal Align with Solstices'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[12:12:59] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[12:29:07] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[12:29:07] 📊 Script length check passed: 86 words → ~39.5s estimated (bounds [25s - 55s])
+[12:29:07] Selected Fact: Siddha Medicine Used Copper Sulfate as Antimicrobial Centuries Before Antibiotics
+[12:29:07] Source URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3611626/
+[12:29:07] ❌ [main.py] Duplicate topic rejected: 'சித்தர் 100% Antibacterial Copper Secret! 🤯 தெரியுமா? #shorts' / 'Siddha Medicine Used Copper Sulfate as Antimicrobial Centuries Before Antibiotics'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[12:29:09] STEP 3 (Attempt 4/10): Multi-Agent Tanglish Script Generation...
+[12:29:34] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:00:11] ❌ Script generation failed. Retrying...
+[13:00:16] STEP 3 (Attempt 5/10): Multi-Agent Tanglish Script Generation...
+[13:00:40] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:01:07] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:01:07] 📊 Script length check passed: 104 words → ~48.5s estimated (bounds [25s - 55s])
+[13:01:07] Selected Fact: Ancient Keezhadi City Had Sophisticated Drainage System
+[13:01:07] Source URL: https://en.wikipedia.org/wiki/Keezhadi
+[13:01:07] ❌ [main.py] Duplicate topic rejected: 'Keezhadi's Hidden Drainage: 2,300 Years Old ⚠️' / 'Ancient Keezhadi City Had Sophisticated Drainage System'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[13:01:09] STEP 3 (Attempt 6/10): Multi-Agent Tanglish Script Generation...
+[13:01:33] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:03:04] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:03:04] 📊 Script length check passed: 69 words → ~31.6s estimated (bounds [25s - 55s])
+[13:03:04] Selected Fact: Pre‑Christian Tamil‑Brahmi Inscriptions Reveal Lost Trade Routes
+[13:03:04] Source URL: https://en.wikipedia.org/wiki/Tamil-Brahmi
+[13:03:04] ❌ [main.py] Duplicate topic rejected: '❌ 2300 ஆண்டு பழைமையான கல்வெட்டுகள்! 😱 #shorts' / 'Pre‑Christian Tamil‑Brahmi Inscriptions Reveal Lost Trade Routes'. Reason: Keyword overlap (tamil facts, did you know) with story: '🚨 iPhone SOS-ல் 3 contacts-க்கு GPS பாக்கும்! தெரியுமா?'
+[13:03:06] STEP 3 (Attempt 7/10): Multi-Agent Tanglish Script Generation...
+[13:03:31] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[13:04:20] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[13:04:20] 📊 Script length check passed: 105 words → ~48.5s estimated (bounds [25s - 55s])
+[13:04:20] Selected Fact: Tamil Seafarers Used a Star Compass for Ocean Navigation
+[13:04:20] Source URL: https://en.wikipedia.org/wiki/Maritime_history_of_India
+[13:04:20] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[13:04:20] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[13:04:20] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"1ff978bc864205812c997dccaacbf4da"}}
+[13:04:20] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
