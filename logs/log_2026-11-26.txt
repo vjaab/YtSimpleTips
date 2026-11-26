@@ -32,3 +32,24 @@
 [19:13:44] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [19:13:45] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"074532c86b614707f12c67db182f16ff"}}
 [19:13:45] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[21:56:18] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[21:56:18] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[21:56:18] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[21:56:18] STEP 1: Strategy Check -> Day: Fri, Slot: Slot A (Morning), Category: 🌍 Mysterious History & Culture Secrets
+[21:56:18] STEP 2: Fetching facts using Search Grounding for '🌍 Mysterious History & Culture Secrets'...
+[21:56:48] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[21:58:14] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[21:58:14] 📊 Script length check passed: 93 words → ~42.9s estimated (bounds [25s - 55s])
+[21:58:14] Selected Fact: Tamil‑Brahmi Inscriptions on Ashoka’s Edicts
+[21:58:14] Source URL: https://en.wikipedia.org/wiki/Tamil-Brahmi
+[21:58:14] ❌ [main.py] Duplicate topic rejected: '⚡️ 300 BC-ல் Ashoka Edicts Tamil Nadu-ல்? 😱 தெரியுமா?' / 'Tamil‑Brahmi Inscriptions on Ashoka’s Edicts'. Reason: Keyword overlap (history, did you know, tamil facts) with story: '6 மில்லியன் கொரியன்ஸ் தமிழ் ராணியின் சந்ததி! தெரியுமா? 😱'
+[21:58:16] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[21:58:42] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[22:01:59] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[22:01:59] 📊 Script length check passed: 72 words → ~37.3s estimated (bounds [25s - 55s])
+[22:01:59] Selected Fact: Muziris: Lost Port of the Sangam Era Confirmed by Underwater Archaeology
+[22:01:59] Source URL: https://en.wikipedia.org/wiki/Muziris
+[22:01:59] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[22:01:59] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[22:01:59] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"91d6fb64173bf2dd128851b02d6b7c92"}}
+[22:01:59] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
