@@ -1,0 +1,23 @@
+[11:35:15] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[11:35:15] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[11:35:15] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[11:35:15] STEP 1: Strategy Check -> Day: Fri, Slot: Slot C (Evening), Category: 🧬 Human Body & Dark Psychology
+[11:35:15] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[11:36:36] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[11:39:15] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[12:12:44] ❌ Script generation failed. Retrying...
+[12:12:49] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[12:21:54] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[12:21:54] 📊 Script length check passed: 90 words → ~41.0s estimated (bounds [25s - 55s])
+[12:21:54] Selected Fact: Door-in-the-Face Technique: Get a 'Yes' by Asking for a 'No' First
+[12:21:54] Source URL: https://en.wikipedia.org/wiki/Door-in-the-face_technique
+[12:21:54] ❌ [main.py] Duplicate topic rejected: '100% அதிகம் வாங்க 'Door-in-the-Face' ட்ரிக் தெரியுமா? 😱' / 'Door-in-the-Face Technique: Get a 'Yes' by Asking for a 'No' First'. Reason: Keyword overlap (tamil facts, dark psychology, did you know) with story: '❌ 1 கோரிக்கை கொடுத்து எதிரியை கைப்பற்று! தெரியுமா? 🤯'
+[12:21:56] STEP 3 (Attempt 3/10): Multi-Agent Tanglish Script Generation...
+[12:27:20] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[12:27:20] 📊 Script length check passed: 86 words → ~41.1s estimated (bounds [25s - 55s])
+[12:27:20] Selected Fact: Baader-Meinhof Phenomenon: Why You Suddenly See Your New Car Everywhere
+[12:27:20] Source URL: https://en.wikipedia.org/wiki/Frequency_illusion
+[12:27:20] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[12:27:20] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[12:27:20] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"e0717c90ad77395b21cad330c370a3a8"}}
+[12:27:20] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
