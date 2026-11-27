@@ -21,3 +21,24 @@
 [12:27:20] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
 [12:27:20] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"e0717c90ad77395b21cad330c370a3a8"}}
 [12:27:20] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
+[17:40:00] === STARTING TAMIL SHORTS PIPELINE — SIMPLE TIPS BY VJ ===
+[17:40:00] 🎞️ Shorts format: தெரியுமா? / Did You Know (stock footage)
+[17:40:00] Output folder cleaned: /home/runner/work/YtSimpleTips/YtSimpleTips/output
+[17:40:00] STEP 1: Strategy Check -> Day: Fri, Slot: Slot C (Evening), Category: 🧬 Human Body & Dark Psychology
+[17:40:00] STEP 2: Fetching facts using Search Grounding for '🧬 Human Body & Dark Psychology'...
+[17:40:30] STEP 3 (Attempt 1/10): Multi-Agent Tanglish Script Generation...
+[17:42:15] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:42:15] 📊 Script length check passed: 88 words → ~41.5s estimated (bounds [25s - 55s])
+[17:42:15] Selected Fact: Your Gut Microbes Manufacture Mood Chemicals
+[17:42:15] Source URL: https://www.nature.com/articles/s41586-020-03038-4
+[17:42:15] ❌ [main.py] Duplicate topic rejected: '❌ 7 குடல் பாக்டீரியா Mood Makers! 😱 தெரியுமா?' / 'Your Gut Microbes Manufacture Mood Chemicals'. Reason: Keyword overlap (tamil facts, did you know, psychology) with story: '⚡️ உங்கள் மூளை 0.2 செகன்டில் மாயை பிடிக்குமா? தெரியுமா?'
+[17:42:17] STEP 3 (Attempt 2/10): Multi-Agent Tanglish Script Generation...
+[17:42:42] ⚠️ [DYK] Did-You-Know generation failed this attempt. Falling back to standard script generator...
+[17:43:17] ℹ️ Calibrated pacing gate: 2.43 words/sec (VOICE_SPEED=1.0)
+[17:43:17] 📊 Script length check passed: 98 words → ~45.0s estimated (bounds [25s - 55s])
+[17:43:17] Selected Fact: You Can Feel a Punch Before It Happens
+[17:43:17] Source URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3786542/
+[17:43:17] STEP 4: Generating Tamil cloned voiceover via ElevenLabs...
+[17:43:17] 🎙️ Synthesizing voiceover with ElevenLabs Voice ID: 9ebDuCWUuBE6opsuSrhG
+[17:43:17] 🚨 [FATAL] ElevenLabs voice generation failed: ElevenLabs API error: 401 - {"detail":{"type":"payment_required","code":"payment_issue","message":"Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage.","status":"payment_issue","request_id":"039dbc119664f08d14d957a9a3da4d05"}}
+[17:43:17] 🛑 Aborting shorts generation pipeline immediately. ElevenLabs voice cloning is required and no fallback is permitted.
